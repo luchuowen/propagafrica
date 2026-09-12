@@ -1,0 +1,286 @@
+---
+// Internal quotation request list. Protected by Firebase Authentication (email-link sign-in)
+// plus a server-side allow-list — the page never reads Firestore directly, it calls the
+// `listQuotations` Cloud Function (see functions/src/admin.ts) which enforces the allow-list.
+//
+// The Firebase Auth Web SDK is loaded from Google's CDN at runtime rather than as an npm
+// dependency, per this session's "no new front-end dependencies" constraint — see
+// .factory/decisions/session-6.md. PUBLIC_FIREBASE_* are public client identifiers, not secrets
+// (documented in .env.example).
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TitleBlock from '../../components/TitleBlock.astro';
+---
+
+<BaseLayout title="Admin — quotation requests" description="Internal quotation request list.">
+  <section class="admin">
+    <div class="admin-inner">
+      <p class="eyebrow">PROPAGAFRICA TECHNOLOGIES · INTERNAL</p>
+      <h1>Quotation requests</h1>
+      <TitleBlock drawingNo="PA-900" subject="Admin — quotation requests" />
+
+      <p id="admin-status" class="status" role="status" aria-live="polite"></p>
+
+      <div id="sign-in-panel" class="panel">
+        <form id="sign-in-form">
+          <label for="sign-in-email">Work email</label>
+          <input id="sign-in-email" name="email" type="email" autocomplete="email" required />
+          <button type="submit">Send sign-in link</button>
+        </form>
+      </div>
+
+      <div id="list-panel" class="panel" hidden>
+        <p class="who">
+          Signed in as <span id="who-am-i"></span> ·{' '}
+          <button type="button" id="sign-out">
+            Sign out
+          </button>
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Received</th>
+              <th scope="col">Status</th>
+              <th scope="col">Farm or company</th>
+              <th scope="col">Contact</th>
+              <th scope="col">Email</th>
+              <th scope="col">Country</th>
+              <th scope="col">Crop</th>
+              <th scope="col">Stage</th>
+            </tr>
+          </thead>
+          <tbody id="requests-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  interface QuotationListItem {
+    id: string;
+    name: string;
+    farmOrCompany: string;
+    email: string;
+    country: string;
+    crop: string;
+    stage: string[];
+    status: string;
+    createdAt: string | null;
+  }
+
+  const FIREBASE_CONFIG = {
+    apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY,
+    authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID,
+  };
+  const FUNCTIONS_REGION = 'europe-west1';
+  const STORAGE_KEY = 'pa-admin-sign-in-email';
+  const SDK_VERSION = '12.3.0';
+
+  function setStatus(message: string) {
+    const el = document.getElementById('admin-status');
+    if (el) el.textContent = message;
+  }
+
+  function renderRequests(requests: QuotationListItem[]) {
+    const tbody = document.getElementById('requests-body');
+    if (!tbody) return;
+    tbody.textContent = '';
+
+    if (requests.length === 0) {
+      const row = document.createElement('tr');
+      const cell = document.createElement('td');
+      cell.colSpan = 8;
+      cell.textContent = 'No quotation requests visible to this account.';
+      row.appendChild(cell);
+      tbody.appendChild(row);
+      return;
+    }
+
+    for (const r of requests) {
+      const row = document.createElement('tr');
+      const values = [
+        r.createdAt ? new Date(r.createdAt).toLocaleString('en-GB') : '—',
+        r.status,
+        r.farmOrCompany,
+        r.name,
+        r.email,
+        r.country,
+        r.crop,
+        r.stage.join(', '),
+      ];
+      for (const value of values) {
+        const cell = document.createElement('td');
+        cell.textContent = value;
+        row.appendChild(cell);
+      }
+      tbody.appendChild(row);
+    }
+  }
+
+  async function main() {
+    if (!FIREBASE_CONFIG.apiKey) {
+      setStatus('Admin sign-in is not configured on this deployment.');
+      return;
+    }
+
+    // CDN-hosted Firebase Web SDK — see the frontmatter comment above for why this isn't a
+    // package.json dependency. Untyped (a dynamic URL specifier, so TS treats it as `any`
+    // rather than trying and failing to resolve it).
+    const { initializeApp } = await import(
+      `https://www.gstatic.com/firebasejs/${SDK_VERSION}/firebase-app.js`
+    );
+    const authMod = await import(
+      `https://www.gstatic.com/firebasejs/${SDK_VERSION}/firebase-auth.js`
+    );
+    const functionsMod = await import(
+      `https://www.gstatic.com/firebasejs/${SDK_VERSION}/firebase-functions.js`
+    );
+
+    const app = initializeApp(FIREBASE_CONFIG);
+    const auth = authMod.getAuth(app);
+    const functions = functionsMod.getFunctions(app, FUNCTIONS_REGION);
+
+    const signInForm = document.getElementById('sign-in-form') as HTMLFormElement | null;
+    const signInEmailInput = document.getElementById('sign-in-email') as HTMLInputElement | null;
+    const signInPanel = document.getElementById('sign-in-panel');
+    const listPanel = document.getElementById('list-panel');
+    const signOutButton = document.getElementById('sign-out');
+    const whoAmI = document.getElementById('who-am-i');
+
+    if (authMod.isSignInWithEmailLink(auth, window.location.href)) {
+      let email = window.localStorage.getItem(STORAGE_KEY);
+      if (!email) email = window.prompt('Confirm your email to finish signing in:');
+      if (email) {
+        try {
+          await authMod.signInWithEmailLink(auth, email, window.location.href);
+          window.localStorage.removeItem(STORAGE_KEY);
+          window.history.replaceState({}, '', window.location.pathname);
+        } catch {
+          setStatus('That sign-in link is invalid or has expired. Request a new one below.');
+        }
+      }
+    }
+
+    signInForm?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const email = signInEmailInput?.value.trim();
+      if (!email) return;
+      try {
+        await authMod.sendSignInLinkToEmail(auth, email, {
+          url: window.location.href,
+          handleCodeInApp: true,
+        });
+        window.localStorage.setItem(STORAGE_KEY, email);
+        setStatus(`Check ${email} for a sign-in link.`);
+      } catch {
+        setStatus('Could not send a sign-in link. Try again.');
+      }
+    });
+
+    signOutButton?.addEventListener('click', () => authMod.signOut(auth));
+
+    authMod.onAuthStateChanged(auth, async (user: { email: string | null } | null) => {
+      if (!user) {
+        if (signInPanel) signInPanel.hidden = false;
+        if (listPanel) listPanel.hidden = true;
+        return;
+      }
+      if (signInPanel) signInPanel.hidden = true;
+      if (listPanel) listPanel.hidden = false;
+      if (whoAmI) whoAmI.textContent = user.email ?? '';
+
+      try {
+        const listQuotations = functionsMod.httpsCallable(functions, 'listQuotations');
+        const result = await listQuotations();
+        renderRequests((result.data as { requests: QuotationListItem[] }).requests ?? []);
+      } catch {
+        setStatus('Could not load quotation requests.');
+      }
+    });
+  }
+
+  main();
+</script>
+
+<style>
+  .admin {
+    padding: var(--space-6) 0;
+  }
+  .admin-inner {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 0 var(--side-gutter);
+  }
+  .admin-inner .eyebrow {
+    margin-bottom: var(--space-2);
+  }
+  .admin-inner :global(dl) {
+    margin-top: var(--space-4);
+  }
+  .status {
+    font-family: var(--f-mono);
+    font-size: 13px;
+    color: var(--ink);
+    min-height: 1.2em;
+    margin-top: var(--space-3);
+  }
+  .panel {
+    margin-top: var(--space-4);
+  }
+  #sign-in-form {
+    display: flex;
+    gap: var(--space-2);
+    align-items: end;
+    flex-wrap: wrap;
+  }
+  #sign-in-form label {
+    display: block;
+    font-family: var(--f-mono);
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  #sign-in-form input {
+    font-size: 16px;
+    padding: 10px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 0;
+  }
+  #sign-in-form button,
+  #sign-out {
+    background: var(--green);
+    color: var(--paper);
+    border: 1px solid var(--green);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 10px 18px;
+    cursor: pointer;
+  }
+  #sign-out {
+    background: var(--paper);
+    color: var(--ink);
+    border-color: var(--rule);
+    padding: 2px 10px;
+    font-size: 12px;
+  }
+  .who {
+    color: var(--ink-soft);
+    font-size: 14px;
+    margin-bottom: var(--space-2);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th,
+  td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--rule);
+    font-size: 12px;
+  }
+  th {
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+</style>

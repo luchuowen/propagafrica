@@ -1,0 +1,21 @@
+rules_version = '2';
+
+// The website never talks to Firestore directly — every read and write goes through a Cloud
+// Function using the Admin SDK, which bypasses these rules entirely. So this file's only job is
+// to deny every client (authenticated or not) outright. No exceptions, ever.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /quotationRequests/{requestId} {
+      allow read, write: if false;
+    }
+
+    match /rateLimits/{identifierHash} {
+      allow read, write: if false;
+    }
+
+    // Default deny for anything added later without an explicit rule above.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

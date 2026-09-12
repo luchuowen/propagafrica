@@ -1,0 +1,436 @@
+---
+// The quotation request form: progressively enhanced, works with JavaScript disabled via a
+// plain POST to the submitQuotation function (routed same-origin through the Hosting rewrite at
+// /api/submit-quotation — see firebase.json), and enhances to a fetch-based submit that replaces
+// itself with the success state in place when JavaScript is available.
+//
+// Copy (labels, options, button text, success/error states, the note below the form) is per
+// docs/content/copy-reference.md, section "/contact · SHEET 14 OF 14".
+import { QUOTATION_FIELDS, HONEYPOT_FIELD, TIMESTAMP_FIELD } from '../../lib/quotation/schema';
+
+// Query-string prefill (contract documented in schema.ts, next to QUOTATION_FIELDS) happens in
+// the <script> below, not here: this site builds to static HTML (no server-rendering per
+// request — see blueprint.md §2), so Astro.url carries no query string at build time. It is
+// therefore unavailable with JavaScript disabled — a documented limitation, not an oversight;
+// see .factory/decisions/session-6.md.
+---
+
+<form id="quote-form" class="quote-form" method="post" action="/api/submit-quotation">
+  <p id="quote-form-status" class="form-status" role="alert" aria-live="assertive"></p>
+
+  {QUOTATION_FIELDS.map((field) => {
+    const errorId = `${field.name}-error`;
+    return (
+      <div class="field" data-field={field.name}>
+        {field.type === 'multi-select' ? (
+          <fieldset aria-describedby={errorId}>
+            <legend>
+              {field.label}
+              {field.required && (
+                <span class="required" aria-hidden="true">
+                  *
+                </span>
+              )}
+            </legend>
+            {field.options?.map((option, i) => {
+              const optionId = `${field.name}-${i}`;
+              return (
+                <div class="checkbox-option">
+                  <input type="checkbox" id={optionId} name={field.name} value={option} />
+                  <label for={optionId}>{option}</label>
+                </div>
+              );
+            })}
+          </fieldset>
+        ) : (
+          <label for={field.name}>
+            {field.label}
+            {field.required && (
+              <span class="required" aria-hidden="true">
+                *
+              </span>
+            )}
+          </label>
+        )}
+        {field.type === 'textarea' ? (
+          <textarea
+            id={field.name}
+            name={field.name}
+            autocomplete={field.autocomplete}
+            placeholder={field.placeholder}
+            maxlength={field.maxLength}
+            required={field.required}
+            rows={5}
+            aria-describedby={errorId}
+            aria-required={field.required}
+          ></textarea>
+        ) : field.type === 'select' ? (
+          <select
+            id={field.name}
+            name={field.name}
+            autocomplete={field.autocomplete}
+            required={field.required}
+            aria-describedby={errorId}
+            aria-required={field.required}
+          >
+            <option value="" disabled selected>
+              Select…
+            </option>
+            {field.options?.map((option) => (
+              <option value={option}>{option}</option>
+            ))}
+          </select>
+        ) : field.type === 'multi-select' ? null : (
+          <input
+            id={field.name}
+            name={field.name}
+            type={field.type}
+            autocomplete={field.autocomplete}
+            placeholder={field.placeholder}
+            maxlength={field.maxLength}
+            required={field.required}
+            value=""
+            aria-describedby={errorId}
+            aria-required={field.required}
+          />
+        )}
+        <p id={errorId} class="field-error" aria-live="polite"></p>
+      </div>
+    );
+  })}
+
+  <div class="honeypot" aria-hidden="true">
+    <label for={HONEYPOT_FIELD}>Leave this field blank</label>
+    <input id={HONEYPOT_FIELD} name={HONEYPOT_FIELD} type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  <input type="hidden" id={TIMESTAMP_FIELD} name={TIMESTAMP_FIELD} value="" />
+
+  <div class="submit-row">
+    <button type="submit" class="submit">
+      Send the request
+    </button>
+    <p class="mono call-line">Or call +254 722 861 682 · info@propagafrica.com</p>
+  </div>
+
+  <p class="mono privacy-note">WE USE WHAT YOU SEND HERE TO PREPARE A QUOTATION. NOTHING ELSE.</p>
+</form>
+
+<div id="quote-form-success" class="success" hidden tabindex="-1" role="status">
+  <h2>Request received.</h2>
+  <p>We reply within one working day. If it is urgent, call +254 722 861 682.</p>
+</div>
+
+<script>
+  import { validateField, validateMultiField } from '../../lib/quotation/validate';
+  import { HONEYPOT_FIELD, TIMESTAMP_FIELD, QUOTATION_FIELDS } from '../../lib/quotation/schema';
+  import type { QuotationFieldName } from '../../lib/quotation/schema';
+
+  const GENERIC_ERROR =
+    'That did not send. Check your connection and try again, or email info@propagafrica.com directly.';
+
+  const form = document.getElementById('quote-form') as HTMLFormElement | null;
+  const statusEl = document.getElementById('quote-form-status');
+  const successEl = document.getElementById('quote-form-success');
+  if (form && statusEl && successEl) {
+    // Native HTML validation (required/type/maxlength) is the only validation a no-JS browser
+    // gets, so it must stay on until we know JavaScript is running and our own inline-error UI
+    // (which needs it off, to suppress the browser's native validation bubbles) can take over.
+    form.setAttribute('novalidate', 'true');
+
+    // Stamp the render time now that we know JavaScript is running — see schema.ts on why an
+    // absent value (no JS) is treated as "cannot check", not "reject".
+    const tsInput = form.elements.namedItem(TIMESTAMP_FIELD) as HTMLInputElement | null;
+    if (tsInput) tsInput.value = String(Date.now());
+
+    // Query-string prefill. This site builds to static HTML, so there is no per-request server
+    // to read the query string at — it can only happen here, client-side, and so only applies
+    // with JavaScript enabled. See the frontmatter comment above.
+    function applyPrefill() {
+      const params = new URLSearchParams(window.location.search);
+      for (const field of QUOTATION_FIELDS) {
+        if (field.type === 'multi-select') {
+          const repeated = params.getAll(field.name);
+          const wanted = new Set(
+            (repeated.length > 0 ? repeated : (params.get(field.name)?.split(',') ?? []))
+              .map((v) => v.trim())
+              .filter(Boolean),
+          );
+          form?.querySelectorAll<HTMLInputElement>(`input[name="${field.name}"]`).forEach((el) => {
+            if (wanted.has(el.value)) el.checked = true;
+          });
+          continue;
+        }
+
+        const raw = params.get(field.name);
+        if (raw === null) continue;
+        const value = raw.trim().slice(0, field.maxLength);
+        if (field.type === 'select') {
+          if (!field.options?.includes(value)) continue;
+          const el = form?.elements.namedItem(field.name) as HTMLSelectElement | null;
+          if (el) el.value = value;
+          continue;
+        }
+        const el = form?.elements.namedItem(field.name) as
+          HTMLInputElement | HTMLTextAreaElement | null;
+        if (el) el.value = value;
+      }
+    }
+    applyPrefill();
+
+    function showFieldError(name: QuotationFieldName, message: string | undefined) {
+      const errorEl = document.getElementById(`${name}-error`);
+      if (errorEl) errorEl.textContent = message ?? '';
+    }
+
+    function readValue(name: QuotationFieldName): string {
+      const el = form?.elements.namedItem(name) as
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | null;
+      return el ? el.value : '';
+    }
+
+    function readMultiValues(name: QuotationFieldName): string[] {
+      if (!form) return [];
+      return Array.from(
+        form.querySelectorAll<HTMLInputElement>(`input[name="${name}"]:checked`),
+      ).map((el) => el.value);
+    }
+
+    function validateVisible(): boolean {
+      let ok = true;
+      for (const field of QUOTATION_FIELDS) {
+        const message =
+          field.type === 'multi-select'
+            ? validateMultiField(field.name, readMultiValues(field.name))
+            : validateField(field.name, readValue(field.name));
+        showFieldError(field.name, message);
+        if (message) ok = false;
+      }
+      return ok;
+    }
+
+    for (const field of QUOTATION_FIELDS) {
+      if (field.type === 'multi-select') {
+        form.querySelectorAll<HTMLInputElement>(`input[name="${field.name}"]`).forEach((el) => {
+          el.addEventListener('change', () =>
+            showFieldError(field.name, validateMultiField(field.name, readMultiValues(field.name))),
+          );
+        });
+      } else {
+        const el = form.elements.namedItem(field.name) as HTMLElement | null;
+        el?.addEventListener('blur', () =>
+          showFieldError(field.name, validateField(field.name, readValue(field.name))),
+        );
+      }
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      statusEl.textContent = '';
+
+      const honeypot = form.elements.namedItem(HONEYPOT_FIELD) as HTMLInputElement | null;
+      if (honeypot && honeypot.value.trim() !== '') {
+        // Bot filled the trap. Pretend success and stop — never tip it off.
+        form.hidden = true;
+        successEl.hidden = false;
+        return;
+      }
+
+      if (!validateVisible()) {
+        statusEl.textContent = 'Please fix the highlighted fields before sending.';
+        return;
+      }
+
+      const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+      if (submitButton) submitButton.disabled = true;
+
+      try {
+        const formData = new FormData(form);
+        const payload: Record<string, unknown> = {};
+        for (const field of QUOTATION_FIELDS) {
+          payload[field.name] =
+            field.type === 'multi-select'
+              ? formData.getAll(field.name)
+              : (formData.get(field.name) ?? '');
+        }
+        payload[HONEYPOT_FIELD] = formData.get(HONEYPOT_FIELD) ?? '';
+        payload[TIMESTAMP_FIELD] = formData.get(TIMESTAMP_FIELD) ?? '';
+
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json().catch(() => null);
+
+        if (response.ok && result?.ok) {
+          form.hidden = true;
+          successEl.hidden = false;
+          successEl.focus?.();
+        } else {
+          statusEl.textContent = result?.message ?? GENERIC_ERROR;
+        }
+      } catch {
+        statusEl.textContent = GENERIC_ERROR;
+      } finally {
+        if (submitButton) submitButton.disabled = false;
+      }
+    });
+  }
+</script>
+
+<style>
+  .quote-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    max-width: 640px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  label,
+  legend {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink);
+    padding: 0;
+  }
+
+  fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .checkbox-option label {
+    font-family: var(--f-sans);
+    font-size: 15px;
+    font-weight: 400;
+  }
+
+  .required {
+    color: var(--ink-soft);
+  }
+
+  input,
+  select,
+  textarea {
+    font-family: var(--f-sans);
+    font-size: 16px;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 0;
+    padding: 10px 12px;
+  }
+
+  .checkbox-option input {
+    width: auto;
+    padding: 0;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  .field-error {
+    margin: 0;
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    color: var(--ink);
+    min-height: 1em;
+  }
+
+  .field-error:not(:empty)::before {
+    content: '▲ ';
+  }
+
+  .honeypot {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .form-status {
+    margin: 0;
+    font-family: var(--f-mono);
+    font-size: 13px;
+    color: var(--ink);
+  }
+
+  .form-status:empty {
+    display: none;
+  }
+
+  .submit-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .submit {
+    text-decoration: none;
+    background: var(--green);
+    color: var(--paper);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 12px 22px;
+    border: 1px solid var(--green);
+    cursor: pointer;
+  }
+
+  .submit:hover {
+    opacity: 0.92;
+  }
+
+  .submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .call-line {
+    margin: 0;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .privacy-note {
+    margin: 0;
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+  }
+
+  .success {
+    max-width: 640px;
+    border: 1px solid var(--rule);
+    padding: var(--space-3);
+  }
+
+  .success h2 {
+    font-size: 1.1rem;
+  }
+
+  .success p {
+    margin-top: var(--space-1);
+    color: var(--ink-soft);
+  }
+</style>
