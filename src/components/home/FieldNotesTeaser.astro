@@ -1,0 +1,138 @@
+---
+interface NoteRow {
+  category: string;
+  title: string;
+  standfirst: string;
+  readingMinutes: number;
+}
+
+// TODO(session-8): src/data/field-notes/ has not landed yet (checked at
+// build time this session — the directory does not exist). Once it does,
+// read the three most recent articles from there instead of this
+// hard-coded fallback. The three below are the first three entries in
+// docs/content/field-notes.md, in file order — the deck's only ordering
+// signal, since articles carry no publication date.
+const notes: NoteRow[] = [
+  {
+    category: 'Technique',
+    title: 'How a graft actually knits together',
+    standfirst:
+      'What is happening inside the sleeve for four weeks, why nothing is visible from the bench, and where the losses really occur.',
+    readingMinutes: 8,
+  },
+  {
+    category: 'Compliance',
+    title: 'What the European rose rules mean inside your propagation house',
+    standfirst:
+      'The systems approach, in plain terms — what is actually being audited, what has to be recorded, and which of it lands on propagation rather than on the pack house.',
+    readingMinutes: 11,
+  },
+  {
+    category: 'Specification',
+    title: 'Choosing a sleeve bore against a measured stem',
+    standfirst:
+      'Why one size over slips and one size under starves the join, how to sample a batch of rootstock properly, and what tolerance actually means on a silicone sleeve.',
+    readingMinutes: 6,
+  },
+];
+---
+
+<section class="field-notes-teaser">
+  <div class="wrap">
+    <p class="eyebrow">FIELD NOTES</p>
+    <h2>Written for the person who has to make it work on a Monday.</h2>
+    <ul class="note-list">
+      {notes.map((note) => (
+        <li class="note-row">
+          <span class="note-category mono">{note.category}</span>
+          <span class="note-body">
+            <h3 class="note-title">{note.title}</h3>
+            <p class="note-standfirst">{note.standfirst}</p>
+          </span>
+          <span class="note-time mono">{note.readingMinutes} MIN READ</span>
+        </li>
+      ))}
+    </ul>
+    <a class="link" href="/field-notes">
+      All Field Notes →
+    </a>
+  </div>
+</section>
+
+<style>
+  .field-notes-teaser {
+    padding: var(--space-6) 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .wrap {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 0 var(--side-gutter);
+  }
+
+  .note-list {
+    list-style: none;
+    margin: var(--space-5) 0 0;
+    padding: 0;
+  }
+
+  .note-row {
+    display: grid;
+    grid-template-columns: 8em 1fr 6em;
+    gap: var(--space-3);
+    padding: var(--space-3) 0;
+    border-top: 1px solid var(--rule);
+    align-items: baseline;
+  }
+
+  .note-row:first-child {
+    border-top: none;
+  }
+
+  @media (max-width: 700px) {
+    .note-row {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+  }
+
+  .note-category {
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+  }
+
+  .note-title {
+    font-size: 17px;
+    letter-spacing: -0.018em;
+    margin: 0;
+  }
+
+  .note-standfirst {
+    margin: 4px 0 0;
+    color: var(--ink-soft);
+    font-size: 15px;
+    max-width: 42em;
+  }
+
+  .note-time {
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    text-align: right;
+  }
+
+  @media (max-width: 700px) {
+    .note-time {
+      text-align: left;
+    }
+  }
+
+  .link {
+    display: inline-block;
+    margin-top: var(--space-4);
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--green);
+  }
+</style>

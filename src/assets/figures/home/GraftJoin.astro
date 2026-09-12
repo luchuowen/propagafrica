@@ -1,0 +1,106 @@
+---
+// Hand-authored technical drawing of the graft join (deck §3). Inlined
+// directly into the page (not loaded as an external <img>) so the
+// var(--token) colours below resolve against the page's own tokens.css.
+---
+
+<svg
+  viewBox="0 0 900 250"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label="Technical drawing of a graft join. A rootstock stem below meets a scion stem above at a cut face angled thirty degrees, shown in orange. The join is enclosed by a green silicone sleeve, drawn as a rounded rectangle at eight percent fill. Dimension lines mark a four point five millimetre bore and a twenty millimetre sleeve length. Leader lines label the scion, the rootstock and the sleeve."
+>
+  <rect
+    x="242"
+    y="92"
+    width="104"
+    height="84"
+    rx="18"
+    ry="18"
+    style="fill: var(--green); fill-opacity: 0.08; stroke: var(--green); stroke-width: 1;"
+  ></rect>
+
+  <line
+    x1="280"
+    y1="228"
+    x2="280"
+    y2="158"
+    style="stroke: var(--ink); stroke-width: 14; stroke-linecap: round;"
+  ></line>
+  <line
+    x1="280"
+    y1="158"
+    x2="308"
+    y2="110"
+    style="stroke: var(--signal); stroke-width: 14; stroke-linecap: round;"
+  ></line>
+  <line
+    x1="308"
+    y1="110"
+    x2="308"
+    y2="24"
+    style="stroke: var(--ink); stroke-width: 14; stroke-linecap: round;"
+  ></line>
+
+  <!-- Cut angle -->
+  <path
+    d="M280,132 A26,26 0 0 1 293,135"
+    fill="none"
+    style="stroke: var(--signal); stroke-width: 1;"
+  ></path>
+  <text x="300" y="126" style="fill: var(--signal); font-family: var(--f-mono); font-size: 13px;">
+    30°
+  </text>
+
+  <!-- Bore dimension -->
+  <line x1="273" y1="202" x2="273" y2="208" style="stroke: var(--signal); stroke-width: 1;"></line>
+  <line x1="287" y1="202" x2="287" y2="208" style="stroke: var(--signal); stroke-width: 1;"></line>
+  <line x1="273" y1="205" x2="287" y2="205" style="stroke: var(--signal); stroke-width: 1;"></line>
+  <text x="300" y="209" style="fill: var(--signal); font-family: var(--f-mono); font-size: 13px;">
+    &#8960; 4.5 mm
+  </text>
+
+  <!-- Sleeve length dimension -->
+  <line x1="219" y1="92" x2="225" y2="92" style="stroke: var(--signal); stroke-width: 1;"></line>
+  <line x1="219" y1="176" x2="225" y2="176" style="stroke: var(--signal); stroke-width: 1;"></line>
+  <line x1="222" y1="92" x2="222" y2="176" style="stroke: var(--signal); stroke-width: 1;"></line>
+  <text
+    x="214"
+    y="138"
+    text-anchor="end"
+    style="fill: var(--signal); font-family: var(--f-mono); font-size: 13px;"
+  >
+    20 mm
+  </text>
+
+  <!-- Leaders -->
+  <circle cx="308" cy="55" r="2.5" style="fill: var(--signal);"></circle>
+  <line x1="308" y1="55" x2="560" y2="55" style="stroke: var(--signal); stroke-width: 1;"></line>
+  <text
+    x="572"
+    y="59"
+    style="fill: var(--ink); font-family: var(--f-mono); font-size: 13px; letter-spacing: 0.08em;"
+  >
+    SCION
+  </text>
+
+  <circle cx="346" cy="134" r="2.5" style="fill: var(--signal);"></circle>
+  <line x1="346" y1="134" x2="560" y2="134" style="stroke: var(--signal); stroke-width: 1;"></line>
+  <text
+    x="572"
+    y="138"
+    style="fill: var(--ink); font-family: var(--f-mono); font-size: 13px; letter-spacing: 0.08em;"
+  >
+    SLEEVE
+  </text>
+
+  <circle cx="280" cy="195" r="2.5" style="fill: var(--signal);"></circle>
+  <line x1="280" y1="195" x2="560" y2="195" style="stroke: var(--signal); stroke-width: 1;"></line>
+  <text
+    x="572"
+    y="199"
+    style="fill: var(--ink); font-family: var(--f-mono); font-size: 13px; letter-spacing: 0.08em;"
+  >
+    ROOTSTOCK
+  </text>
+</svg>
