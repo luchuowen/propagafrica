@@ -1,0 +1,142 @@
+@import './tokens.css';
+
+/* Self-hosted fonts. Latin subset. font-display: swap per the brand spec. */
+@font-face {
+  font-family: 'Inter Variable';
+  src: url('/fonts/inter-var-latin.woff2') format('woff2-variations');
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrains-mono-400-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrains-mono-500-latin.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrains-mono-700-latin.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--f-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+main {
+  flex: 1;
+}
+
+h1,
+h2,
+h3,
+p,
+figure {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+/* Type scale */
+.h1,
+h1 {
+  font-family: var(--f-sans);
+  font-weight: 800;
+  font-size: clamp(30px, 5vw, 56px);
+  letter-spacing: -0.037em;
+  line-height: 1.08;
+}
+
+.h2,
+h2 {
+  font-family: var(--f-sans);
+  font-weight: 800;
+  font-size: clamp(22px, 3vw, 34px);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.h3,
+h3 {
+  font-family: var(--f-sans);
+  font-weight: 700;
+  font-size: clamp(18px, 2.2vw, 23px);
+  letter-spacing: -0.024em;
+  line-height: 1.25;
+}
+
+.eyebrow {
+  font-family: var(--f-mono);
+  font-weight: 400;
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.mono,
+table,
+.spec,
+.figure-label {
+  font-family: var(--f-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+table {
+  font-size: 11px;
+  border-collapse: collapse;
+}
+
+/* Focus visibility. Never suppressed. */
+:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

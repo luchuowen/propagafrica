@@ -1,0 +1,135 @@
+---
+// Site footer: four columns, then a mono baseline row. No founding year,
+// no company registration line (none supplied).
+import Wordmark from './Wordmark.astro';
+
+const columns = [
+  {
+    heading: 'Supplies',
+    links: [
+      { label: 'Prepare', href: '/supplies/prepare' },
+      { label: 'Graft', href: '/supplies/graft' },
+      { label: 'Root', href: '/supplies/root' },
+      { label: 'Protect', href: '/supplies/protect' },
+      { label: 'Record', href: '/supplies/record' },
+    ],
+  },
+  {
+    heading: 'Tools',
+    links: [
+      { label: 'Sleeve selector', href: '/supplies/graft' },
+      { label: 'Consumables planner', href: '/ordering' },
+      { label: 'Ordering', href: '/ordering' },
+    ],
+  },
+  {
+    heading: 'Documents',
+    links: [
+      { label: 'Product data sheets', href: '/specifications' },
+      { label: 'Safety data sheets', href: '/specifications' },
+      { label: 'Certificates of analysis', href: '/specifications' },
+      { label: 'Field Notes', href: '/field-notes' },
+    ],
+  },
+];
+---
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      {columns.map((col) => (
+        <div class="footer-col">
+          <p class="eyebrow">{col.heading}</p>
+          <ul>
+            {col.links.map((link) => (
+              <li>
+                <a href={link.href}>{link.label}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+      <div class="footer-col footer-company">
+        <Wordmark markSize={26} />
+        <address>
+          Nairobi, Kenya
+          <br />
+          <a href="tel:+254722861682">+254 722 861 682</a>
+          <br />
+          <a href="mailto:info@propagafrica.com">info@propagafrica.com</a>
+          <br />
+          Kenya and Ethiopia
+        </address>
+      </div>
+    </div>
+    <div class="footer-baseline">
+      <p class="mono">
+        Specifications held to batch · Safety data sheets and certificates of analysis issued with
+        consignment · © 2026
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--rule);
+    margin-top: auto;
+  }
+
+  .footer-inner {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: var(--space-6) var(--side-gutter) var(--space-3);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 720px) {
+    .footer-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .footer-col ul {
+    list-style: none;
+    margin: var(--space-1) 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .footer-col a {
+    text-decoration: none;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .footer-col a:hover {
+    color: var(--green);
+  }
+
+  address {
+    font-style: normal;
+    font-size: 14px;
+    line-height: 1.8;
+    margin-top: var(--space-2);
+  }
+
+  .footer-baseline {
+    margin-top: var(--space-5);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--rule);
+  }
+
+  .footer-baseline p {
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+  }
+</style>

@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TitleBlock from '../components/TitleBlock.astro';
+---
+
+<BaseLayout
+  title="Home"
+  description="Propagation supplies for nurseries and flower farms. Stocked in Nairobi, delivered across Kenya and Ethiopia."
+>
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow">NAIROBI · SUPPLYING KENYA AND ETHIOPIA</p>
+        <h1>Propagation supplies for nurseries and flower farms.</h1>
+        <p class="subhead">
+          Grafting sleeves and clips, growing media, nursery hygiene products, trays, labels and
+          record books — every item with its size, grade and strength written down. Stocked in
+          Nairobi, delivered to farms across Kenya and Ethiopia.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="/contact">
+            Ask for a quotation
+          </a>
+          <a class="btn btn-outline" href="/supplies">
+            See what we supply
+          </a>
+        </div>
+      </div>
+      <TitleBlock drawingNo="PA-000" subject="Site overview" sku="—" dimension="—" scale="NTS" />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: var(--space-6) 0 var(--space-5);
+  }
+
+  .hero-inner {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 0 var(--side-gutter);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .hero-inner {
+      grid-template-columns: 1fr auto;
+    }
+  }
+
+  .hero-copy {
+    max-width: 46em;
+  }
+
+  .hero-copy .eyebrow {
+    margin-bottom: var(--space-2);
+  }
+
+  .subhead {
+    margin-top: var(--space-3);
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    max-width: 42em;
+  }
+
+  .hero-actions {
+    margin-top: var(--space-4);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .btn {
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 12px 22px;
+    border: 1px solid var(--green);
+  }
+
+  .btn-primary {
+    background: var(--green);
+    color: var(--paper);
+  }
+
+  .btn-primary:hover {
+    opacity: 0.92;
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--rule);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--green);
+  }
+</style>

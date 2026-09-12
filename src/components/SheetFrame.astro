@@ -1,0 +1,61 @@
+---
+// The engineering-drawing sheet border: a hairline rule inset from the
+// viewport edge, with four registration squares at the corners. Wraps the
+// entire page. One instance per page.
+---
+
+<div class="sheet-frame">
+  <span class="reg reg-tl" aria-hidden="true"></span>
+  <span class="reg reg-tr" aria-hidden="true"></span>
+  <span class="reg reg-bl" aria-hidden="true"></span>
+  <span class="reg reg-br" aria-hidden="true"></span>
+  <div class="sheet-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .sheet-frame {
+    position: relative;
+    min-height: 100vh;
+    margin: var(--sheet-inset);
+    border: 1px solid var(--rule);
+  }
+
+  @media (min-width: 640px) {
+    .sheet-frame {
+      margin: var(--sheet-inset-lg);
+    }
+  }
+
+  .reg {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--signal);
+    z-index: 1;
+  }
+
+  .reg-tl {
+    top: -3px;
+    left: -3px;
+  }
+  .reg-tr {
+    top: -3px;
+    right: -3px;
+  }
+  .reg-bl {
+    bottom: -3px;
+    left: -3px;
+  }
+  .reg-br {
+    bottom: -3px;
+    right: -3px;
+  }
+
+  .sheet-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+</style>

@@ -1,0 +1,35 @@
+# build
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+pnpm-debug.log*
+
+# environment
+.env
+.env.*
+!.env.example
+
+# testing
+playwright-report/
+test-results/
+coverage/
+
+# editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# os
+.DS_Store
+
+# firebase
+.firebase/
+firebase-debug.log
+
+# factory hook state
+.factory/.stop-gate-state

@@ -1,0 +1,38 @@
+---
+// The PropagAfrica graft-union mark. One stem, two roots, a collar across
+// the join. Do not redraw, do not add a leaf, do not round further, do not
+// place inside a circle or a badge.
+interface Props {
+  size?: number;
+  tone?: 'ink' | 'reverse';
+}
+
+const { size = 44, tone = 'ink' } = Astro.props;
+const color = tone === 'reverse' ? 'var(--paper)' : 'var(--ink)';
+const height = Math.round((size * 52) / 44);
+---
+
+<svg
+  viewBox="0 0 44 52"
+  width={size}
+  height={height}
+  role="img"
+  aria-label="PropagAfrica Technologies"
+  style={`color: ${color}`}
+>
+  <g fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="butt">
+    <path d="M22 30 V5"></path>
+    <path d="M13 47 L22 30"></path>
+    <path d="M31 47 L22 30"></path>
+  </g>
+  <rect
+    x="6.5"
+    y="18"
+    width="31"
+    height="17"
+    rx="3.5"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2.4"
+  ></rect>
+</svg>

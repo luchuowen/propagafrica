@@ -1,0 +1,56 @@
+# Decisions — current facts and lessons
+
+Loaded via `CLAUDE.md`. Cap: 250 lines. Compact into `.factory/history/` when close to the cap.
+
+## Stack (fixed by spec, session 1)
+
+- Astro 5 (pinned `^5`, not the newer major that `pnpm add astro` resolves to by default),
+  TypeScript strict, hand-written CSS with design tokens, Vitest, Playwright, ESLint flat config +
+  Prettier, pnpm, Node 22. Firebase Hosting + Cloud Functions (2nd gen) + Firestore for the
+  quotation path — not wired yet (session 2+).
+- No Tailwind, no UI library, no CSS-in-JS. No framework for the two future islands beyond
+  vanilla TS in `client:visible` Astro islands.
+
+## Fonts — self-hosted via npm, not a CDN fetch
+
+- `fonts.google.com` is not reachable from this environment (proxy returns 403). Inter and
+  JetBrains Mono were obtained instead from the `@fontsource-variable/inter` and
+  `@fontsource/jetbrains-mono` npm packages, whose Latin-subset `.woff2` files were copied into
+  `public/fonts/` and the packages then removed from `package.json` (they were a one-time source
+  for static files, not a runtime dependency). `@font-face` is declared once in
+  `src/styles/global.css`, `font-display: swap`, preloaded in `BaseLayout.astro`.
+- Inter is shipped as the single variable file (weights 400–800 via `font-variation-settings` /
+  `format('woff2-variations')`); JetBrains Mono is shipped as three static weights (400/500/700)
+  since Fontsource does not publish a JetBrains Mono variable build.
+
+## Playwright — pinned to the pre-installed browser
+
+- The sandbox pre-installs Chromium at `/opt/pw-browsers/chromium-1194` and sets
+  `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1`. `@playwright/test@1.63.0`'s bundled build id (1243)
+  doesn't match, so `playwright.config.ts` sets
+  `use.launchOptions.executablePath: '/opt/pw-browsers/chromium'` on the `chromium` project instead
+  of running `playwright install`. Do not remove this — a fresh `playwright install` will not be
+  reachable in this environment either.
+
+## Astro version pin
+
+- `pnpm add astro` resolves to Astro 7 by default (newer major already shipped). The spec fixes
+  Astro 5, so the dependency is pinned `astro@^5` in `package.json`. Re-check this pin before any
+  future `pnpm update`.
+
+## Navigation is a typed module, not inline JSX
+
+- `src/lib/nav.ts` exports `NAV_ITEMS` and `isActive()`, imported by `Header.astro` and covered by
+  a Vitest unit test (`tests/unit/nav.test.ts`). This keeps the five-item order/wording from §4 of
+  the spec testable without a browser, and gives `factory-check quick` something fast to run.
+
+## No favicon / OG image yet
+
+- Not specified for session 1. `BaseLayout.astro` ships a bare `<head>` (charset, viewport, title,
+  description, font preloads). Add favicon and social meta when the asset exists.
+
+## Session 1 scope boundary
+
+- Home page ships only the hero (eyebrow, H1, subhead, two buttons) inside the sheet frame, per
+  the brief. All 13 other routes are stubs that render the shell (header, title block, footer) so
+  navigation never 404s; no page content beyond that is in scope for this session.

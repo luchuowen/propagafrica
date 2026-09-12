@@ -1,0 +1,57 @@
+---
+// The wordmark lockup: mark + "PropagAfrica" + "TECHNOLOGIES" strap line.
+// Casing is fixed: "PropagAfrica" title case, never all-caps; one colour only.
+import Mark from './Mark.astro';
+
+interface Props {
+  tone?: 'ink' | 'reverse';
+  markSize?: number;
+}
+
+const { tone = 'ink', markSize = 34 } = Astro.props;
+const color = tone === 'reverse' ? 'var(--paper)' : 'var(--ink)';
+---
+
+<a
+  href="/"
+  class="wordmark"
+  style={`color: ${color}`}
+  aria-label="PropagAfrica Technologies — home"
+>
+  <Mark size={markSize} tone={tone} />
+  <span class="wordmark-text">
+    <span class="name">PropagAfrica</span>
+    <span class="strap">TECHNOLOGIES</span>
+  </span>
+</a>
+
+<style>
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    text-decoration: none;
+  }
+
+  .wordmark-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  .name {
+    font-family: var(--f-sans);
+    font-weight: 700;
+    letter-spacing: -0.028em;
+    font-size: 19px;
+  }
+
+  .strap {
+    font-family: var(--f-mono);
+    font-size: 6.8px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+</style>

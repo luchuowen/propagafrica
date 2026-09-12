@@ -1,0 +1,60 @@
+{
+  "playbook_version": "2.1.0",
+  "applied_migrations": ["0", "2.1.0"],
+  "project": "propagafrica",
+  "checks": {
+    "typecheck": "pnpm exec astro check",
+    "lint": "pnpm exec eslint .",
+    "format": "pnpm exec prettier --check .",
+    "test": "pnpm exec vitest run",
+    "e2e": "pnpm exec playwright test",
+    "build": "pnpm exec astro build"
+  },
+  "gates": [
+    {
+      "name": "no-hardcoded-tokens",
+      "description": "No hex colour literal outside src/styles/tokens.css. No hard-coded font-family string outside tokens.css.",
+      "pattern": "#[0-9a-fA-F]{3,8}\\b",
+      "paths": ["src/**/*.astro", "src/**/*.css", "src/**/*.ts"],
+      "exclude": ["src/styles/tokens.css"]
+    },
+    {
+      "name": "no-founding-date",
+      "description": "No founding date, company age, or 'newly established' language anywhere in copy.",
+      "pattern": "(founded in|since \\d{4}|newly established|young company|new company)",
+      "paths": ["src/**/*.astro", "src/**/*.md"],
+      "exclude": [],
+      "case_insensitive": true
+    },
+    {
+      "name": "no-banned-words",
+      "description": "Banned marketing words and constructions per the copy rules.",
+      "pattern": "(empowering|transforming|unlocking|seamless|cutting-edge|revolutionary|world-class|best-in-class|one-stop shop|Welcome to|Why choose us|at scale)",
+      "paths": ["src/**/*.astro", "src/**/*.md"],
+      "exclude": [],
+      "case_insensitive": true
+    },
+    {
+      "name": "no-forbidden-ui",
+      "description": "No border-radius above 4px (except the logo collar rx=3.5), no box-shadow, no gradient, no backdrop-filter.",
+      "pattern": "(box-shadow\\s*:|linear-gradient|radial-gradient|backdrop-filter\\s*:)",
+      "paths": ["src/**/*.astro", "src/**/*.css"],
+      "exclude": []
+    }
+  ],
+  "protected": ["src/styles/tokens.css", "src/components/Mark.astro"],
+  "append_only_dirs": [".factory/changes", ".factory/history"],
+  "critical_paths": [
+    "src/pages/contact.astro",
+    "functions/**",
+    "firestore.rules",
+    "firebase.json",
+    ".firebaserc",
+    "src/lib/quotation/**"
+  ],
+  "source_globs": ["src/**/*.astro", "src/**/*.ts", "src/**/*.css"],
+  "caps": {
+    "CLAUDE.md": 80,
+    ".factory/DECISIONS.md": 250
+  }
+}

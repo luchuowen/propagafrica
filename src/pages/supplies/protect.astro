@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TitleBlock from '../../components/TitleBlock.astro';
+---
+
+<BaseLayout title="Protect" description="Hygiene chemicals, footbaths and PPE.">
+  <section class="stub">
+    <div class="stub-inner">
+      <p class="eyebrow">PROPAGAFRICA TECHNOLOGIES</p>
+      <h1>Protect</h1>
+      <TitleBlock drawingNo="PA-104" subject="Protect" />
+      <p class="stub-note">Content for this page is built in a later session.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .stub {
+    padding: var(--space-6) 0;
+  }
+  .stub-inner {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 0 var(--side-gutter);
+  }
+  .stub-inner .eyebrow {
+    margin-bottom: var(--space-2);
+  }
+  .stub-note {
+    margin-top: var(--space-4);
+    color: var(--ink-soft);
+  }
+  .stub-inner :global(dl) {
+    margin-top: var(--space-4);
+  }
+</style>

@@ -1,0 +1,44 @@
+/*
+  Design tokens — the single source of truth for colour and type.
+  No hex literal or font-family value may appear anywhere else in the
+  codebase. Enforced by scripts/factory-check.sh (gate: no-hardcoded-tokens).
+*/
+
+:root {
+  /* Colour */
+  --paper: #ffffff; /* ground. White. Never off-white, never beige. */
+  --ink: #0e1211; /* all body and display text */
+  --ink-soft: #68716e; /* secondary text, annotation */
+  --green: #0a5c3c; /* structure, wordmark rule, primary buttons */
+  --signal: #e0521f; /* dimensions, callouts, anything carrying a measurement */
+  --rule: #dce2df; /* hairlines, sheet border */
+
+  /* Type */
+  --f-sans:
+    'Inter Variable', 'Inter', -apple-system, system-ui, 'Helvetica Neue', Arial, sans-serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+  /* Spacing scale (8px base) */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-5: 3rem;
+  --space-6: 4rem;
+  --space-7: 6rem;
+  --space-8: 9rem;
+
+  /* Sheet frame */
+  --sheet-inset: 9px;
+  --sheet-inset-lg: 10px;
+
+  /* Layout */
+  --content-max: 1180px;
+  --side-gutter: 20px;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --side-gutter: 32px;
+  }
+}

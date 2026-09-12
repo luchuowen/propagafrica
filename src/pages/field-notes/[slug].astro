@@ -1,0 +1,46 @@
+---
+// Article template for Field Notes. No articles exist yet — they are
+// written in a later session. getStaticPaths returns none for now, which
+// is correct: no navigation on this site links to a slug that doesn't
+// exist yet, so nothing 404s.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TitleBlock from '../../components/TitleBlock.astro';
+
+export async function getStaticPaths() {
+  return [];
+}
+
+const { slug } = Astro.params;
+---
+
+<BaseLayout title="Field Note" description="A PropagAfrica field note.">
+  <section class="stub">
+    <div class="stub-inner">
+      <p class="eyebrow">FIELD NOTES</p>
+      <h1>Field note</h1>
+      <TitleBlock drawingNo="PA-501" subject={slug ?? 'article'} />
+      <p class="stub-note">Content for this article is written in a later session.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .stub {
+    padding: var(--space-6) 0;
+  }
+  .stub-inner {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 0 var(--side-gutter);
+  }
+  .stub-inner .eyebrow {
+    margin-bottom: var(--space-2);
+  }
+  .stub-note {
+    margin-top: var(--space-4);
+    color: var(--ink-soft);
+  }
+  .stub-inner :global(dl) {
+    margin-top: var(--space-4);
+  }
+</style>

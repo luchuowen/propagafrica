@@ -1,0 +1,40 @@
+{
+  "effortLevel": "medium",
+  "permissions": {
+    "deny": [
+      "Bash(git push --force*)",
+      "Bash(git reset --hard*)",
+      "Bash(git rebase*)",
+      "Bash(git commit --amend*)",
+      "Bash(rm -rf /*)"
+    ],
+    "ask": ["Edit(.factory/manifest.json)", "Edit(package.json)", "Edit(firebase.json)"],
+    "allow": [
+      "Bash(pnpm exec astro check*)",
+      "Bash(pnpm exec astro build*)",
+      "Bash(pnpm exec eslint*)",
+      "Bash(pnpm exec prettier*)",
+      "Bash(pnpm exec vitest*)",
+      "Bash(pnpm exec playwright test*)",
+      "Bash(bash scripts/factory-check.sh*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [{ "type": "command", "command": "bash .claude/hooks/guard.sh" }]
+      }
+    ],
+    "Stop": [{ "hooks": [{ "type": "command", "command": "bash .claude/hooks/stop-gate.sh" }] }],
+    "SessionStart": [
+      {
+        "matcher": "compact|resume",
+        "hooks": [{ "type": "command", "command": "bash .claude/hooks/session-context.sh" }]
+      }
+    ]
+  }
+}
