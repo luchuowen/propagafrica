@@ -1,4 +1,10 @@
+import { existsSync } from 'node:fs';
 import { defineConfig, devices } from '@playwright/test';
+
+const SANDBOX_CHROMIUM = '/opt/pw-browsers/chromium';
+const chromiumPath =
+  process.env.PLAYWRIGHT_CHROMIUM_PATH ??
+  (existsSync(SANDBOX_CHROMIUM) ? SANDBOX_CHROMIUM : undefined);
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -21,12 +27,11 @@ export default defineConfig({
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        // Use Playwright's own managed browser by default so the suite runs on
-        // any machine. Set PLAYWRIGHT_CHROMIUM_PATH to point at a preinstalled
-        // binary in sandboxes or CI images that ship one.
-        ...(process.env.PLAYWRIGHT_CHROMIUM_PATH
-          ? { launchOptions: { executablePath: process.env.PLAYWRIGHT_CHROMIUM_PATH } }
-          : {}),
+        // Resolve a browser in this order: an explicit PLAYWRIGHT_CHROMIUM_PATH,
+        // then a sandbox-preinstalled binary if one exists, then Playwright's
+        // own managed download. Keeps the suite runnable locally and in cloud
+        // sessions without editing this file.
+        ...(chromiumPath ? { launchOptions: { executablePath: chromiumPath } } : {}),
       },
     },
   ],
