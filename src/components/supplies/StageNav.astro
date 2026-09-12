@@ -1,0 +1,62 @@
+---
+// Previous/next stage links at the foot of a stage page, mono.
+interface Stage {
+  slug: string;
+  label: string;
+}
+
+const STAGES: Stage[] = [
+  { slug: 'prepare', label: 'Prepare' },
+  { slug: 'graft', label: 'Graft' },
+  { slug: 'root', label: 'Root' },
+  { slug: 'protect', label: 'Protect' },
+  { slug: 'record', label: 'Record' },
+];
+
+interface Props {
+  current: 'prepare' | 'graft' | 'root' | 'protect' | 'record';
+}
+
+const { current } = Astro.props;
+const index = STAGES.findIndex((stage) => stage.slug === current);
+const previous = index > 0 ? STAGES[index - 1] : undefined;
+const next = index < STAGES.length - 1 ? STAGES[index + 1] : undefined;
+---
+
+<nav class="stage-nav" aria-label="Stage">
+  <a class="stage-link stage-prev" href={previous ? `/supplies/${previous.slug}` : '/supplies'}>
+    ← {previous ? `Previous: ${previous.label}` : 'Back to Supplies'}
+  </a>
+  {next && (
+    <a class="stage-link stage-next" href={`/supplies/${next.slug}`}>
+      Next: {next.label} →
+    </a>
+  )}
+</nav>
+
+<style>
+  .stage-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin-top: var(--space-6);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--rule);
+    font-family: var(--f-mono);
+    font-size: 12px;
+  }
+
+  .stage-link {
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  .stage-link:hover {
+    color: var(--green);
+  }
+
+  .stage-next {
+    margin-left: auto;
+  }
+</style>

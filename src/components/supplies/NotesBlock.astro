@@ -1,0 +1,25 @@
+---
+// The mono, --ink-soft notes that sit beneath a specification table.
+// Accepts one or more paragraphs via the default slot.
+---
+
+<div class="notes-block">
+  <slot />
+</div>
+
+<style>
+  .notes-block {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+
+  .notes-block :global(p) {
+    margin: 0;
+  }
+
+  .notes-block :global(p + p) {
+    margin-top: var(--space-2);
+  }
+</style>

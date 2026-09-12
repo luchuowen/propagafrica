@@ -1,36 +1,111 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import TitleBlock from '../../components/TitleBlock.astro';
+import Figure from '../../components/Figure.astro';
+import StageHeader from '../../components/supplies/StageHeader.astro';
+import SpecTable from '../../components/supplies/SpecTable.astro';
+import NotesBlock from '../../components/supplies/NotesBlock.astro';
+import StageNav from '../../components/supplies/StageNav.astro';
+import QuotationBlock from '../../components/supplies/QuotationBlock.astro';
+import DilutionFigure from '../../assets/figures/supplies/dilution.svg';
+import { PRO_SAN_DILUTIONS, HYGIENE_RANGE } from '../../data/products/protect';
 ---
 
-<BaseLayout title="Protect" description="Hygiene chemicals, footbaths and PPE.">
-  <section class="stub">
-    <div class="stub-inner">
-      <p class="eyebrow">PROPAGAFRICA TECHNOLOGIES</p>
-      <h1>Protect</h1>
-      <TitleBlock drawingNo="PA-104" subject="Protect" />
-      <p class="stub-note">Content for this page is built in a later session.</p>
-    </div>
-  </section>
+<BaseLayout
+  title="Protect"
+  description="Hygiene in a propagation house is not a cleaning routine. It is a written protocol with a strength, a contact time and a record — and for anyone exporting"
+>
+  <StageHeader
+    eyebrow="STAGE 04 · PROTECT"
+    title="Nursery hygiene."
+    standfirst="Hygiene in a propagation house is not a cleaning routine. It is a written protocol with a strength, a contact time and a record — and for anyone exporting roses to Europe, it is audited."
+    titleBlockRows={[
+      { label: 'DRAWING', value: 'PA-006' },
+      { label: 'SUBJECT', value: 'NURSERY HYGIENE' },
+      { label: 'STRENGTH', value: '10 % · 12 % AVAILABLE CHLORINE' },
+      { label: 'PACK', value: '20 L · 200 L' },
+      { label: 'SHEET', value: '06 OF 14' },
+    ]}
+  />
+
+  <div class="stage-section">
+    <Figure
+      number={6}
+      subject="DILUTION SCHEMATIC, TOOL DIP"
+      caption="The arithmetic is printed because the failure mode is a supervisor guessing a capful. A dip made at a tenth of the intended strength is not biosecurity, it is the appearance of it."
+      sheet={6}
+    >
+      <DilutionFigure />
+    </Figure>
+  </div>
+
+  <div class="stage-section">
+    <SpecTable
+      caption="PRO-SAN working dilutions from a 12 % concentrate"
+      columns={[
+        { key: 'application', label: 'Application' },
+        { key: 'target', label: 'Target' },
+        { key: 'concentratePer10L', label: 'Concentrate per 10 L' },
+        { key: 'contactTime', label: 'Contact time' },
+      ]}
+      rows={PRO_SAN_DILUTIONS}
+    />
+  </div>
+
+  <div class="stage-section">
+    <NotesBlock>
+      <p>
+        Working: 12 % available chlorine is 120 g per litre. 83 ml carries 10 g. Ten grams in 10
+        litres is 1 g/L, which is 1 000 ppm.
+      </p>
+    </NotesBlock>
+  </div>
+
+  <div class="stage-section">
+    <SpecTable
+      caption="Hygiene range"
+      columns={[
+        { key: 'sku', label: 'SKU' },
+        { key: 'product', label: 'Product' },
+        { key: 'strength', label: 'Strength' },
+        { key: 'pack', label: 'Pack' },
+      ]}
+      rows={HYGIENE_RANGE}
+    />
+  </div>
+
+  <div class="stage-section">
+    <NotesBlock>
+      <p>
+        Sodium hypochlorite, CAS 7681-52-9. HDPE packaging, compliant for road transport. Shelf life
+        90 days from manufacture at 25 °C or below, stored out of direct light — hypochlorite loses
+        strength with heat and time, so every drum is dated and stock is rotated rather than held.
+        Safety data sheet and certificate of analysis supplied with every consignment.
+      </p>
+      <p>
+        Farms exporting roses to the European Union work under a systems approach that became
+        mandatory on 26 April 2025 under Regulation (EU) 2024/2004. Nurseries certified to
+        GLOBALG.A.P. Integrated Farm Assurance for Plant Propagation Material are assessed against
+        control points covering hygiene procedure, cleaning of reusable materials, disinfection of
+        equipment between batches, and the batch number of the substrate used. Those are the
+        requirements this range is bought against.
+      </p>
+    </NotesBlock>
+  </div>
+
+  <div class="stage-section">
+    <StageNav current="protect" />
+    <QuotationBlock />
+  </div>
 </BaseLayout>
 
 <style>
-  .stub {
-    padding: var(--space-6) 0;
-  }
-  .stub-inner {
+  .stage-section {
     max-width: var(--content-max);
     margin: 0 auto;
-    padding: 0 var(--side-gutter);
+    padding: var(--space-4) var(--side-gutter) 0;
   }
-  .stub-inner .eyebrow {
-    margin-bottom: var(--space-2);
-  }
-  .stub-note {
-    margin-top: var(--space-4);
-    color: var(--ink-soft);
-  }
-  .stub-inner :global(dl) {
-    margin-top: var(--space-4);
+
+  .stage-section:last-child {
+    padding-bottom: var(--space-6);
   }
 </style>
