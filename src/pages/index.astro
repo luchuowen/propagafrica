@@ -1,11 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TitleBlock from '../components/TitleBlock.astro';
+import SupplyStages from '../components/home/SupplyStages.astro';
+import FourWeeks from '../components/home/FourWeeks.astro';
+import SpecPromise from '../components/home/SpecPromise.astro';
+import OrderingSummary from '../components/home/OrderingSummary.astro';
+import FieldNotesTeaser from '../components/home/FieldNotesTeaser.astro';
+import QuoteBlock from '../components/home/QuoteBlock.astro';
 ---
 
 <BaseLayout
-  title="Home"
-  description="Propagation supplies for nurseries and flower farms. Stocked in Nairobi, delivered across Kenya and Ethiopia."
+  title="Propagation supplies for nurseries and flower farms"
+  description="Grafting sleeves and clips, growing media, nursery hygiene products, trays and labels for commercial nurseries and flower farms in Kenya and Ethiopia. Specifications published. Stocked in Nairobi."
 >
   <section class="hero">
     <div class="hero-inner">
@@ -29,6 +35,12 @@ import TitleBlock from '../components/TitleBlock.astro';
       <TitleBlock drawingNo="PA-000" subject="Site overview" sku="—" dimension="—" scale="NTS" />
     </div>
   </section>
+  <SupplyStages />
+  <FourWeeks />
+  <SpecPromise />
+  <OrderingSummary />
+  <FieldNotesTeaser />
+  <QuoteBlock />
 </BaseLayout>
 
 <style>
