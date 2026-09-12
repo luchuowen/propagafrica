@@ -1,4 +1,10 @@
+import { existsSync } from 'node:fs';
 import { defineConfig, devices } from '@playwright/test';
+
+const SANDBOX_CHROMIUM = '/opt/pw-browsers/chromium';
+const chromiumPath =
+  process.env.PLAYWRIGHT_CHROMIUM_PATH ??
+  (existsSync(SANDBOX_CHROMIUM) ? SANDBOX_CHROMIUM : undefined);
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -33,9 +39,11 @@ export default defineConfig({
       testDir: './tests/e2e',
       use: {
         ...devices['Desktop Chrome'],
-        // Pre-installed browser in this environment; avoids a version-pinned
-        // download mismatch with @playwright/test's bundled build id.
-        launchOptions: { executablePath: '/opt/pw-browsers/chromium' },
+        // Resolve a browser in this order: an explicit PLAYWRIGHT_CHROMIUM_PATH,
+        // then a sandbox-preinstalled binary if one exists, then Playwright's
+        // own managed download. Keeps the suite runnable locally and in cloud
+        // sessions without editing this file.
+        ...(chromiumPath ? { launchOptions: { executablePath: chromiumPath } } : {}),
       },
     },
     {
