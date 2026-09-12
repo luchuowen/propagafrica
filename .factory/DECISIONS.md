@@ -128,7 +128,7 @@ assumption), both real form fields, truncated to the field's own `maxLength`.
 
 ## SEO, metadata and icons
 
-- `site` is now `https://propagafrica.navac.co.ke` — the mapped host agreed for launch.
+- `site` is now `https://propag.navac.co.ke` — the mapped host agreed for launch.
   It drives canonical URLs, Open Graph URLs and the sitemap. One place to change.
 - `@astrojs/sitemap` generates `sitemap-index.xml` at build, filtering `/admin`.
   `public/robots.txt` disallows `/admin` and points at the sitemap.
@@ -196,3 +196,21 @@ Kept instead of merged. Three things were taken from it:
    gone; the notice is now `© PropagAfrica Technologies`.
 
 If that branch is ever wanted, take the copy from it and not the data layer.
+
+## Cloud project and domain — provisioned
+
+- Firebase / GCP project: **`propagafrica`**. Gemini in Firebase and Google Analytics were both
+  declined at creation: neither is needed, and the Gemini disclaimer says prompts may be used to
+  train the model. Either can be enabled later from the console.
+- Firestore: `(default)`, **Standard edition, Native mode, `eur3` (Belgium and Netherlands)**,
+  started in production mode so client reads and writes are denied until `firestore.rules` is
+  deployed. **The location is permanent — Firestore cannot be moved between regions.**
+- Hosting site `propagafrica` → `propagafrica.web.app` / `propagafrica.firebaseapp.com`.
+- Custom domain **`propag.navac.co.ke`** added in Hosting. DNS at HOSTAFRICA (DirectAdmin,
+  `da10.host-ww.net:2222`) now carries `CNAME propag → propagafrica.web.app.` TTL 3600 — the same
+  pattern as the existing `crm`, `bms` and `insureflow` subdomains on this zone. Public resolvers
+  answer `199.36.158.100`, the same Firebase edge IP those use.
+- **The project is on the Spark (no-cost) plan.** Hosting and Firestore work on Spark; Cloud
+  Functions 2nd gen does not. `firebase deploy` will fail on the `functions` target until the
+  project is upgraded to Blaze, so the quotation form's backend cannot go live before that.
+  Deploy hosting alone with `firebase deploy --only hosting` in the meantime.

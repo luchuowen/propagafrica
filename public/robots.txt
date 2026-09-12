@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: https://propagafrica.navac.co.ke/sitemap-index.xml
+Sitemap: https://propag.navac.co.ke/sitemap-index.xml

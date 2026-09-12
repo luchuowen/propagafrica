@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 // from. Session 8 set it to the mapped host agreed for launch; change it here
 // and nowhere else if the domain changes.
 export default defineConfig({
-  site: 'https://propagafrica.navac.co.ke',
+  site: 'https://propag.navac.co.ke',
   compressHTML: true,
   integrations: [
     sitemap({
