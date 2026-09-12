@@ -6,7 +6,16 @@ import globals from 'globals';
 
 export default tseslint.config(
   {
-    ignores: ['dist/**', '.astro/**', 'node_modules/**', 'playwright-report/**', 'test-results/**'],
+    // functions/ is a standalone deployable package with its own tsconfig and node_modules
+    // (firebase-admin, firebase-functions) — session 6, see .factory/decisions/session-6.md.
+    ignores: [
+      'dist/**',
+      '.astro/**',
+      'node_modules/**',
+      'playwright-report/**',
+      'test-results/**',
+      'functions/**',
+    ],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,

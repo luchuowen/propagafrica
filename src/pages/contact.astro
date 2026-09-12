@@ -1,36 +1,115 @@
 ---
+// Copy (eyebrow, H1, standfirst, title block, submit/success/error states, privacy note) is per
+// docs/content/copy-reference.md, section "/contact · SHEET 14 OF 14" — final, do not rephrase.
+//
+// The title block here uses this page's own DRAWING/SUBJECT/RESPONSE/SHEET rows rather than the
+// shared TitleBlock.astro component, whose five rows (DWG NO./SUBJECT/PRINCIPAL SKU/KEY DIM./
+// SCALE) don't fit this page's copy and are outside this session's owned paths to change — see
+// .factory/decisions/session-6.md.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import TitleBlock from '../components/TitleBlock.astro';
+import QuoteForm from '../components/quote/QuoteForm.astro';
+
+const titleBlockRows: [string, string][] = [
+  ['DRAWING', 'PA-014'],
+  ['SUBJECT', 'QUOTATION REQUEST'],
+  ['RESPONSE', 'ONE WORKING DAY'],
+  ['SHEET', '14 OF 14'],
+];
 ---
 
-<BaseLayout title="Contact — request a quotation" description="Ask for a quotation.">
-  <section class="stub">
-    <div class="stub-inner">
-      <p class="eyebrow">PROPAGAFRICA TECHNOLOGIES</p>
-      <h1>Contact — request a quotation</h1>
-      <TitleBlock drawingNo="PA-700" subject="Contact — request a quotation" />
-      <p class="stub-note">Content for this page is built in a later session.</p>
+<BaseLayout
+  title="Contact — request a quotation"
+  description="Tell PropagAfrica Technologies the crop, stage, annual volume and delivery point for a first quotation. We reply within one working day."
+>
+  <section class="contact">
+    <div class="contact-inner">
+      <div class="contact-copy">
+        <p class="eyebrow">QUOTATION</p>
+        <h1>Tell us the programme.</h1>
+        <p class="standfirst">
+          Crop, stage, annual volume and delivery point is enough for a first quotation. We reply
+          within one working day.
+        </p>
+      </div>
+      <dl class="quotation-title-block">
+        {titleBlockRows.map(([label, value]) => (
+          <div class="row">
+            <dt>{label}</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+    <div class="contact-inner">
+      <QuoteForm />
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .stub {
+  .contact {
     padding: var(--space-6) 0;
   }
-  .stub-inner {
+  .contact-inner {
     max-width: var(--content-max);
     margin: 0 auto;
     padding: 0 var(--side-gutter);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+    align-items: start;
   }
-  .stub-inner .eyebrow {
+  @media (min-width: 900px) {
+    .contact-inner:first-of-type {
+      grid-template-columns: 1fr auto;
+    }
+  }
+  .contact-copy {
+    max-width: 46em;
+  }
+  .contact-copy .eyebrow {
     margin-bottom: var(--space-2);
   }
-  .stub-note {
-    margin-top: var(--space-4);
+  .standfirst {
+    margin-top: var(--space-3);
+    font-size: 18px;
+    line-height: 1.7;
     color: var(--ink-soft);
+    max-width: 42em;
   }
-  .stub-inner :global(dl) {
-    margin-top: var(--space-4);
+  .contact-inner + .contact-inner {
+    margin-top: var(--space-5);
+  }
+
+  .quotation-title-block {
+    border: 1px solid var(--rule);
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    width: max-content;
+    max-width: 100%;
+    margin: 0;
+  }
+  .quotation-title-block .row {
+    display: grid;
+    grid-template-columns: 9.5em 1fr;
+    border-top: 1px solid var(--rule);
+  }
+  .quotation-title-block .row:first-child {
+    border-top: none;
+  }
+  .quotation-title-block dt,
+  .quotation-title-block dd {
+    margin: 0;
+    padding: 5px 10px;
+    font-variant-numeric: tabular-nums;
+  }
+  .quotation-title-block dt {
+    color: var(--ink-soft);
+    border-right: 1px solid var(--rule);
+    white-space: nowrap;
+  }
+  .quotation-title-block dd {
+    color: var(--ink);
+    word-break: break-word;
   }
 </style>
