@@ -32,7 +32,7 @@
     <line x1="188" y1="85" x2="188" y2="95" />
     <line x1="252" y1="85" x2="252" y2="95" />
   </g>
-  <text x="196" y="80" font-family="var(--f-mono)" font-size="13" fill="var(--signal)">4.5 mm bore</text>
+  <text x="196" y="80" font-family="var(--f-mono)" font-size="13" fill="var(--signal-ink)">4.5 mm bore</text>
 
   <!-- Sleeve length dimension -->
   <g stroke="var(--signal)" stroke-width="1" fill="none">
@@ -40,10 +40,10 @@
     <line x1="265" y1="118" x2="275" y2="118" />
     <line x1="265" y1="200" x2="275" y2="200" />
   </g>
-  <text x="278" y="163" font-family="var(--f-mono)" font-size="13" fill="var(--signal)">20 mm</text>
+  <text x="278" y="163" font-family="var(--f-mono)" font-size="13" fill="var(--signal-ink)">20 mm</text>
 
   <!-- Cut angle annotation -->
-  <text x="90" y="164" font-family="var(--f-mono)" font-size="13" fill="var(--signal)">30°</text>
+  <text x="90" y="164" font-family="var(--f-mono)" font-size="13" fill="var(--signal-ink)">30°</text>
   <path d="M 110 150 A 26 26 0 0 1 110 178" fill="none" stroke="var(--signal)" stroke-width="1" />
 
   <!-- Leaders and labels -->

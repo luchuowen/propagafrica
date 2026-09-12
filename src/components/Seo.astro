@@ -1,0 +1,33 @@
+---
+// Per-page head metadata: canonical URL, Open Graph, Twitter card and an
+// optional JSON-LD block. Nothing here states a founding date or a headcount.
+interface Props {
+  title: string;
+  description: string;
+  /** Absolute or site-relative path to the share image. */
+  image?: string;
+  /** Serialised JSON-LD to emit as-is. */
+  jsonLd?: string;
+  /** 'website' for pages, 'article' for a Field Note. */
+  ogType?: 'website' | 'article';
+}
+
+const { title, description, image = '/og-default.png', jsonLd, ogType = 'website' } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const imageUrl = new URL(image, Astro.site).href;
+---
+
+<link rel="canonical" href={canonical} />
+<meta property="og:type" content={ogType} />
+<meta property="og:site_name" content="PropagAfrica Technologies" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:locale" content="en_KE" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageUrl} />
+{jsonLd && <script type="application/ld+json" is:inline set:html={jsonLd}></script>}

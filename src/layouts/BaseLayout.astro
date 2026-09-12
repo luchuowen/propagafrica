@@ -3,13 +3,18 @@ import '../styles/global.css';
 import SheetFrame from '../components/SheetFrame.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Seo from '../components/Seo.astro';
 
 interface Props {
   title: string;
   description: string;
+  /** Passed through to Seo.astro. */
+  image?: string;
+  jsonLd?: string;
+  ogType?: 'website' | 'article';
 }
 
-const { title, description } = Astro.props;
+const { title, description, image, jsonLd, ogType } = Astro.props;
 const pageTitle = `${title} · PropagAfrica Technologies`;
 ---
 
@@ -20,6 +25,17 @@ const pageTitle = `${title} · PropagAfrica Technologies`;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <Seo
+      title={pageTitle}
+      description={description}
+      image={image}
+      jsonLd={jsonLd}
+      ogType={ogType}
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link
       rel="preload"
       href="/fonts/inter-var-latin.woff2"

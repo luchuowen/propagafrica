@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="PropagAfrica Technologies">
+  <rect width="64" height="64" fill="#ffffff"/>
+  <g transform="translate(10 6)" fill="none" stroke="#0e1211">
+    <g stroke-width="3.2" stroke-linecap="butt">
+      <path d="M22 30 V5"/>
+      <path d="M13 47 L22 30"/>
+      <path d="M31 47 L22 30"/>
+    </g>
+    <rect x="6.5" y="18" width="31" height="17" rx="3.5" stroke-width="2.4"/>
+  </g>
+</svg>

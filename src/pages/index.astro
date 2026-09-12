@@ -1,17 +1,21 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TitleBlock from '../components/TitleBlock.astro';
+import { organizationJsonLd } from '../lib/seo';
 import SupplyStages from '../components/home/SupplyStages.astro';
 import FourWeeks from '../components/home/FourWeeks.astro';
 import SpecPromise from '../components/home/SpecPromise.astro';
 import OrderingSummary from '../components/home/OrderingSummary.astro';
 import FieldNotesTeaser from '../components/home/FieldNotesTeaser.astro';
 import QuoteBlock from '../components/home/QuoteBlock.astro';
+
+const jsonLd = organizationJsonLd(Astro.site!);
 ---
 
 <BaseLayout
   title="Propagation supplies for nurseries and flower farms"
   description="Grafting sleeves and clips, growing media, nursery hygiene products, trays and labels for commercial nurseries and flower farms in Kenya and Ethiopia. Specifications published. Stocked in Nairobi."
+  jsonLd={jsonLd}
 >
   <section class="hero">
     <div class="hero-inner">

@@ -27,7 +27,7 @@
     <line x1="165" y1="40" x2="175" y2="40" />
     <line x1="165" y1="58" x2="175" y2="58" />
   </g>
-  <text x="178" y="52" font-family="var(--f-mono)" font-size="12" fill="var(--signal)">6 mm</text>
+  <text x="178" y="52" font-family="var(--f-mono)" font-size="12" fill="var(--signal-ink)">6 mm</text>
 
   <!-- Fill depth dimension, cell 2 -->
   <g stroke="var(--signal)" stroke-width="1" fill="none">
@@ -35,10 +35,10 @@
     <line x1="315" y1="58" x2="325" y2="58" />
     <line x1="315" y1="190" x2="325" y2="190" />
   </g>
-  <text x="328" y="128" font-family="var(--f-mono)" font-size="12" fill="var(--signal)">98 mm</text>
+  <text x="328" y="128" font-family="var(--f-mono)" font-size="12" fill="var(--signal-ink)">98 mm</text>
 
   <!-- Annotation -->
-  <text x="60" y="245" font-family="var(--f-mono)" font-size="13" fill="var(--signal)">
+  <text x="60" y="245" font-family="var(--f-mono)" font-size="13" fill="var(--signal-ink)">
     ≈ 20 ml / cell
   </text>
 </svg>

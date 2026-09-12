@@ -4,7 +4,7 @@
   role="img"
   aria-label="Dilution schematic for a tool dip. A concentrate drum plus a measuring cylinder showing 83 millilitres, plus a 10 litre water vessel, gives a 1000 parts per million working solution. The arithmetic is printed above the drawing in orange: 12 per cent available chlorine is 120 grams per litre, 83 millilitres carries 10 grams, and 10 grams in 10 litres is 1 gram per litre, which is 1000 parts per million."
 >
-  <text x="20" y="26" font-family="var(--f-mono)" font-size="13" fill="var(--signal)">
+  <text x="20" y="26" font-family="var(--f-mono)" font-size="13" fill="var(--signal-ink)">
     12% = 120 g/L · 83 ml → 10 g · 10 g in 10 L = 1000 ppm
   </text>
 
@@ -21,7 +21,7 @@
       <rect x="140" y="80" width="34" height="90" fill="none" />
       <line x1="140" y1="130" x2="174" y2="130" stroke="var(--signal)" />
       <rect x="140" y="130" width="34" height="40" fill="var(--signal)" fill-opacity="0.15" stroke="none" />
-      <text x="128" y="192" fill="var(--signal)">83 ml</text>
+      <text x="128" y="192" fill="var(--signal-ink)">83 ml</text>
     </g>
 
     <!-- Plus -->
@@ -41,8 +41,8 @@
     <!-- Result -->
     <g>
       <rect x="392" y="80" width="70" height="90" fill="none" stroke="var(--signal)" />
-      <text x="396" y="130" fill="var(--signal)" font-size="13">1 000</text>
-      <text x="396" y="148" fill="var(--signal)" font-size="13">ppm</text>
+      <text x="396" y="130" fill="var(--signal-ink)" font-size="13">1 000</text>
+      <text x="396" y="148" fill="var(--signal-ink)" font-size="13">ppm</text>
     </g>
   </g>
 </svg>

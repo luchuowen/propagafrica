@@ -47,7 +47,7 @@
     stroke="var(--signal)"
     stroke-width="1"
   />
-  <text x="30" y="137" font-family="var(--f-mono)" font-size="12" fill="var(--signal)">
+  <text x="30" y="137" font-family="var(--f-mono)" font-size="12" fill="var(--signal-ink)">
     LOT 24-0917-A — RUNS THROUGH ALL FIVE
   </text>
 

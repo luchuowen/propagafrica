@@ -3,9 +3,16 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import TitleBlock from '../../components/TitleBlock.astro';
 import Figure from '../../components/Figure.astro';
 import { ARTICLE_ORDER } from '../../data/field-notes/order';
+import { articleJsonLd } from '../../lib/seo';
 
 import graftUnionStagesSvg from '../../assets/figures/words/graft-union-stages.svg?raw';
 import boreFitSvg from '../../assets/figures/words/bore-fit.svg?raw';
+// Session 8 integration: the three figures below are drawn by session 3 and
+// live in its folder. The parallel-run rule that kept this page out of that
+// folder applied only while the sessions ran side by side.
+import traceabilityChainSvg from '../../assets/figures/supplies/traceability-chain.svg?raw';
+import dilutionSvg from '../../assets/figures/supplies/dilution.svg?raw';
+import cellSectionSvg from '../../assets/figures/supplies/cell-section.svg?raw';
 
 interface FieldNoteFrontmatter {
   slug: string;
@@ -44,9 +51,12 @@ if (!entry) {
 
 const { frontmatter, Content } = entry;
 
-const OWN_FIGURES: Record<string, string> = {
+const FIGURES: Record<string, string> = {
   'graft-union-stages': graftUnionStagesSvg,
   'bore-fit': boreFitSvg,
+  'traceability-chain': traceabilityChainSvg,
+  dilution: dilutionSvg,
+  'cell-section': cellSectionSvg,
 };
 
 const FIGURE_CAPTIONS: Record<string, string> = {
@@ -54,11 +64,20 @@ const FIGURE_CAPTIONS: Record<string, string> = {
     'The union forms in three stages: the cut faces are pressed together at day 0, a callus bridges the gap across days 2 to 7, and a vascular connection is established across days 7 to 14.',
   'bore-fit':
     'Three sleeves in section over the same measured stem: one size over leaves a persistent gap, the correct size seats snugly to tolerance, and one size under compresses the cambium.',
+  'traceability-chain':
+    'The record chain from supplier batch code through to the plant that leaves the house. If the supplier\u2019s batch code is missing, the chain breaks at the first link \u2014 and the finding lands on the grower, not on the supplier.',
+  dilution:
+    'Concentrate to working strength, drawn out. The arithmetic is printed because the failure mode is a supervisor guessing a capful: a dip made at a tenth of the intended strength is not biosecurity, it is the appearance of it.',
+  'cell-section':
+    'A tray cell in section. Under-filling costs root volume; over-filling closes the drainage path and waterlogs the base of the cell. Six millimetres of headspace is the working target.',
 };
 
 const FIGURE_NUMBERS: Record<string, number> = {
   'graft-union-stages': 1,
   'bore-fit': 2,
+  'traceability-chain': 3,
+  dilution: 4,
+  'cell-section': 5,
 };
 
 const position = ARTICLE_ORDER.indexOf(frontmatter.slug);
@@ -70,13 +89,25 @@ const next = nextSlug ? bySlug.get(nextSlug)?.frontmatter : undefined;
 
 const drawingNo = `FN-${String(position + 1).padStart(2, '0')}`;
 
+const jsonLd = articleJsonLd({
+  site: Astro.site!,
+  path: `/field-notes/${frontmatter.slug}`,
+  headline: frontmatter.title,
+  description: frontmatter.standfirst,
+});
+
 const figureKey = frontmatter.figure;
-const ownFigureSvg = figureKey ? OWN_FIGURES[figureKey] : undefined;
+const figureSvg = figureKey ? FIGURES[figureKey] : undefined;
 const figureCaption = figureKey ? FIGURE_CAPTIONS[figureKey] : undefined;
 const figureNumber = figureKey ? FIGURE_NUMBERS[figureKey] : undefined;
 ---
 
-<BaseLayout title={frontmatter.title} description={frontmatter.standfirst}>
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.standfirst}
+  jsonLd={jsonLd}
+  ogType="article"
+>
   <article class="note">
     <div class="note-inner">
       <header class="note-header">
@@ -90,10 +121,7 @@ const figureNumber = figureKey ? FIGURE_NUMBERS[figureKey] : undefined;
         />
       </header>
 
-      {/* TODO(session-8): traceability-chain, dilution and cell-section are drawn by
-           session 3 — wire those figures up here when ready. Do not import from
-           session 3's asset folder from this page. */}
-      {ownFigureSvg && figureCaption && figureNumber !== undefined ? (
+      {figureSvg && figureCaption && figureNumber !== undefined ? (
         <Figure
           number={figureNumber}
           subject={frontmatter.title}
@@ -101,7 +129,7 @@ const figureNumber = figureKey ? FIGURE_NUMBERS[figureKey] : undefined;
           sheet={12}
           sheetsTotal={14}
         >
-          <Fragment set:html={ownFigureSvg} />
+          <Fragment set:html={figureSvg} />
         </Figure>
       ) : null}
 

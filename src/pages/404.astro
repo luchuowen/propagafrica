@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import StageHeader from '../components/supplies/StageHeader.astro';
+---
+
+<BaseLayout title="Sheet not found" description="This page does not exist on propagafrica.">
+  <StageHeader
+    eyebrow="404"
+    title="This page does not exist."
+    standfirst="The address you followed is not a page on this site. It may have been mistyped, or a link somewhere may be out of date."
+    titleBlockRows={[
+      { label: 'DRAWING', value: 'PA-404' },
+      { label: 'SUBJECT', value: 'SHEET NOT FOUND' },
+    ]}
+  />
+
+  <div class="not-found">
+    <ul class="links">
+      <li>
+        <a href="/supplies">Everything we supply</a>
+      </li>
+      <li>
+        <a href="/specifications">Every published specification</a>
+      </li>
+      <li>
+        <a href="/contact">Ask for a quotation</a>
+      </li>
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .not-found {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: var(--space-4) var(--side-gutter) var(--space-7);
+  }
+
+  .links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--ink-soft);
+    max-width: 34em;
+  }
+
+  .links li {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .links a {
+    display: block;
+    padding: 14px 0;
+    font-size: 16px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .links a:hover {
+    color: var(--green);
+    text-decoration: underline;
+  }
+</style>

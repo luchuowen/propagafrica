@@ -44,7 +44,7 @@
     <line x1="120" y1="35" x2="120" y2="45" />
     <line x1="240" y1="35" x2="240" y2="45" />
   </g>
-  <text x="150" y="30" font-family="var(--f-mono)" font-size="13" fill="var(--signal)">1.1 m pitch</text>
+  <text x="150" y="30" font-family="var(--f-mono)" font-size="13" fill="var(--signal-ink)">1.1 m pitch</text>
 
   <!-- Sensor at canopy height -->
   <circle cx="240" cy="160" r="6" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5" />

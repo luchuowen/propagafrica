@@ -27,7 +27,7 @@ Size: standard (home page content build, no critical path touched)
   `QuoteBlock` — the page's one large `--green` area.
 - Files touched: `src/pages/index.astro` (assembles the six sections; hero left untouched);
   `src/components/home/{SupplyStages,FourWeeks,SpecPromise,OrderingSummary,FieldNotesTeaser,
-  QuoteBlock}.astro`; `src/assets/figures/home/GraftJoin.astro`; this file and
+QuoteBlock}.astro`; `src/assets/figures/home/GraftJoin.astro`; this file and
   `.factory/decisions/session-2.md`.
 - Edge cases: `src/data/field-notes/` absent → hard-coded fallback with a `TODO(session-8)`.
   `Figure.astro`'s own breakpoint (800px) is below the 900px this section needs → closed with a
@@ -48,6 +48,7 @@ Size: standard (home page content build, no critical path touched)
    `prettier --write` on the files I own.
 5. Full check pass → verify: `factory-check.sh full`, hex-literal grep, built-HTML script grep,
    manual Playwright viewport/H1 check, screenshots at desktop and mobile width.
+
 - Blast radius: `/` only; no shared component, token, or route outside `/` was touched.
 
 ## Build

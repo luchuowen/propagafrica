@@ -1,28 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { ARTICLE_ORDER } from '../../data/field-notes/order';
-
-interface FieldNoteFrontmatter {
-  slug: string;
-  title: string;
-  standfirst: string;
-  category: string;
-  readingMinutes: number;
-  figure?: string;
-}
-
-const modules = import.meta.glob<{ frontmatter: FieldNoteFrontmatter }>(
-  '../../data/field-notes/*.md',
-  { eager: true },
-);
-
-const bySlug = new Map(Object.values(modules).map((m) => [m.frontmatter.slug, m.frontmatter]));
-
-const articles = ARTICLE_ORDER.map((slug) => {
-  const frontmatter = bySlug.get(slug);
-  if (!frontmatter) throw new Error(`Field note not found for slug: ${slug}`);
-  return frontmatter;
-});
+import { FIELD_NOTES as articles } from '../../data/field-notes/articles';
 ---
 
 <BaseLayout

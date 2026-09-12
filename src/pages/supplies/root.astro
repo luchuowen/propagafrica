@@ -7,7 +7,12 @@ import NotesBlock from '../../components/supplies/NotesBlock.astro';
 import StageNav from '../../components/supplies/StageNav.astro';
 import QuotationBlock from '../../components/supplies/QuotationBlock.astro';
 import MistBenchFigure from '../../assets/figures/supplies/mist-bench.svg';
-import { PROPAGATION_MONITORING, SPECIFIED_AND_SOURCED_CATEGORIES } from '../../data/products/root';
+import { SPECIFIED_AND_SOURCED_CATEGORIES } from '../../data/products/root';
+import { specTable } from '../../data/products/tables';
+
+const tables = {
+  monitoring: specTable('monitoring'),
+};
 ---
 
 <BaseLayout
@@ -53,13 +58,9 @@ import { PROPAGATION_MONITORING, SPECIFIED_AND_SOURCED_CATEGORIES } from '../../
 
   <div class="stage-section">
     <SpecTable
-      caption="Propagation monitoring"
-      columns={[
-        { key: 'measurement', label: 'Measurement' },
-        { key: 'why', label: 'Why it is measured' },
-        { key: 'loggingInterval', label: 'Logging interval' },
-      ]}
-      rows={PROPAGATION_MONITORING}
+      caption={tables.monitoring.caption}
+      columns={tables.monitoring.columns}
+      rows={tables.monitoring.rows}
     />
   </div>
 

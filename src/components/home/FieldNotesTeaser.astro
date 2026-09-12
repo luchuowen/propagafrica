@@ -1,40 +1,10 @@
 ---
-interface NoteRow {
-  category: string;
-  title: string;
-  standfirst: string;
-  readingMinutes: number;
-}
+import { firstFieldNotes } from '../../data/field-notes/articles';
 
-// TODO(session-8): src/data/field-notes/ has not landed yet (checked at
-// build time this session — the directory does not exist). Once it does,
-// read the three most recent articles from there instead of this
-// hard-coded fallback. The three below are the first three entries in
-// docs/content/field-notes.md, in file order — the deck's only ordering
-// signal, since articles carry no publication date.
-const notes: NoteRow[] = [
-  {
-    category: 'Technique',
-    title: 'How a graft actually knits together',
-    standfirst:
-      'What is happening inside the sleeve for four weeks, why nothing is visible from the bench, and where the losses really occur.',
-    readingMinutes: 8,
-  },
-  {
-    category: 'Compliance',
-    title: 'What the European rose rules mean inside your propagation house',
-    standfirst:
-      'The systems approach, in plain terms — what is actually being audited, what has to be recorded, and which of it lands on propagation rather than on the pack house.',
-    readingMinutes: 11,
-  },
-  {
-    category: 'Specification',
-    title: 'Choosing a sleeve bore against a measured stem',
-    standfirst:
-      'Why one size over slips and one size under starves the join, how to sample a batch of rootstock properly, and what tolerance actually means on a silicone sleeve.',
-    readingMinutes: 6,
-  },
-];
+// The three most recent articles. Field Notes carry no publication date, so
+// the order fixed in src/data/field-notes/order.ts — which follows
+// docs/content/field-notes.md — is the only ordering signal the deck gives.
+const notes = firstFieldNotes(3);
 ---
 
 <section class="field-notes-teaser">
@@ -46,7 +16,9 @@ const notes: NoteRow[] = [
         <li class="note-row">
           <span class="note-category mono">{note.category}</span>
           <span class="note-body">
-            <h3 class="note-title">{note.title}</h3>
+            <h3 class="note-title">
+              <a href={`/field-notes/${note.slug}`}>{note.title}</a>
+            </h3>
             <p class="note-standfirst">{note.standfirst}</p>
           </span>
           <span class="note-time mono">{note.readingMinutes} MIN READ</span>
@@ -101,6 +73,15 @@ const notes: NoteRow[] = [
     font-size: 10.5px;
     letter-spacing: 0.08em;
     color: var(--ink-soft);
+  }
+
+  .note-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .note-title a:hover {
+    text-decoration: underline;
   }
 
   .note-title {

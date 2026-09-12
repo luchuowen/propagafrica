@@ -1,36 +1,142 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import TitleBlock from '../components/TitleBlock.astro';
+import StageHeader from '../components/supplies/StageHeader.astro';
+import NotesBlock from '../components/supplies/NotesBlock.astro';
+import QuotationBlock from '../components/supplies/QuotationBlock.astro';
+import RuledRows from '../components/reference/RuledRows.astro';
+
+// Nothing on this page states when the company was founded, how long it has
+// traded, or how many people it employs. scripts/factory-check.sh gates on it.
+const DIFFERENCES = [
+  {
+    key: 'Specialist range',
+    value:
+      'A general dealer carries propagation consumables as a footnote. It is the whole of what we do.',
+  },
+  {
+    key: 'Published specs',
+    value: 'Grade, dimension, strength and tolerance are published, not described on a phone call.',
+  },
+  {
+    key: 'Scheduled supply',
+    value:
+      'An annual framework and monthly call-offs, rather than a quotation every time you run out.',
+  },
+];
+
+const CUSTOMERS = [
+  {
+    key: 'Commercial flower growers',
+    value: 'Rose and summer flower propagation units.',
+  },
+  {
+    key: 'Vegetable and fruit growers',
+    value: 'Seedling and grafted-plant production.',
+  },
+  {
+    key: 'Nurseries and propagation labs',
+    value: 'Specialist propagators and tissue-culture operations.',
+  },
+  {
+    key: 'Agri-business distributors',
+    value: 'Resale into regional markets.',
+  },
+  {
+    key: 'Research and training',
+    value: 'Universities, colleges and demonstration units.',
+  },
+];
 ---
 
-<BaseLayout title="About" description="The company, the people, technical services.">
-  <section class="stub">
-    <div class="stub-inner">
-      <p class="eyebrow">PROPAGAFRICA TECHNOLOGIES</p>
-      <h1>About</h1>
-      <TitleBlock drawingNo="PA-600" subject="About" />
-      <p class="stub-note">Content for this page is built in a later session.</p>
-    </div>
-  </section>
+<BaseLayout
+  title="About"
+  description="PropagAfrica Technologies supplies one part of horticulture properly: the consumables and equipment a propagation house runs on, across Kenya and Ethiopia."
+>
+  <StageHeader
+    eyebrow="ABOUT"
+    title="A specialist supplier, not a general dealer."
+    standfirst="PropagAfrica Technologies supplies one part of horticulture properly: the consumables and equipment a propagation house runs on, across Kenya and Ethiopia."
+    titleBlockRows={[
+      { label: 'DRAWING', value: 'PA-013' },
+      { label: 'SUBJECT', value: 'THE COMPANY' },
+      { label: 'BASE', value: 'NAIROBI, KENYA' },
+      { label: 'TERRITORY', value: 'KENYA · ETHIOPIA' },
+      { label: 'SHEET', value: '13 OF 14' },
+    ]}
+  />
+
+  <div class="ref-section">
+    <h2>What we do.</h2>
+    <p class="body">
+      We source, specify and supply propagation consumables — grafting sleeves and clips, growing
+      media, nursery hygiene products, trays, labels and record books — and we specify and source
+      the equipment that sits around them. Everything we sell is bought against a written
+      specification, documented per batch, and delivered on a schedule that matches a grafting
+      calendar rather than a warehouse calendar.
+    </p>
+  </div>
+
+  <div class="ref-section">
+    <h2>How we are different from a general agri-dealer.</h2>
+    <RuledRows rows={DIFFERENCES} />
+  </div>
+
+  <div class="ref-section">
+    <h2>Who we supply.</h2>
+    <RuledRows rows={CUSTOMERS} />
+  </div>
+
+  <div class="ref-section">
+    <h2>Technical services.</h2>
+    <p class="body">
+      Training, on-site support at the bench, nursery design, written crop protocols,
+      troubleshooting when take drops, performance audits and split-batch product trials are part of
+      the supply rather than something sold against it. The full list is on
+      <a href="/ordering#services">the ordering page</a>.
+    </p>
+  </div>
+
+  <div class="ref-section">
+    <h2>Contact.</h2>
+    <NotesBlock>
+      <p>
+        PropagAfrica Technologies · Nairobi, Kenya ·
+        <a href="tel:+254722861682">+254&nbsp;722&nbsp;861&nbsp;682</a> ·
+        <a href="mailto:info@propagafrica.com">info@propagafrica.com</a> · Serving Kenya and
+        Ethiopia
+      </p>
+    </NotesBlock>
+  </div>
+
+  <div class="ref-section">
+    <QuotationBlock />
+  </div>
 </BaseLayout>
 
 <style>
-  .stub {
-    padding: var(--space-6) 0;
-  }
-  .stub-inner {
+  .ref-section {
     max-width: var(--content-max);
     margin: 0 auto;
-    padding: 0 var(--side-gutter);
+    padding: var(--space-4) var(--side-gutter) 0;
   }
-  .stub-inner .eyebrow {
-    margin-bottom: var(--space-2);
+
+  .ref-section:last-child {
+    padding-bottom: var(--space-6);
   }
-  .stub-note {
-    margin-top: var(--space-4);
-    color: var(--ink-soft);
+
+  h2 {
+    margin: 0 0 var(--space-3);
   }
-  .stub-inner :global(dl) {
-    margin-top: var(--space-4);
+
+  .body {
+    max-width: 42em;
+    font-size: 17px;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .body a,
+  .ref-section :global(.notes-block a) {
+    color: var(--green);
   }
 </style>

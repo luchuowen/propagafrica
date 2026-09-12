@@ -67,6 +67,7 @@ Size: standard (page + five-article content build; no critical path touched)
 8. Run `factory-check full`, fix format/typecheck issues in owned files only → verify: green,
    confirmed the four remaining format warnings pre-exist on `main` and aren't in owned paths.
 9. Lighthouse Accessibility check on one article page.
+
 - Blast radius: the six owned paths only; no shared component, token, or another session's file
   touched.
 

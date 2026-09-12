@@ -67,3 +67,107 @@ once per machine.
 
 pnpm 11 no longer reads the `pnpm` field in `package.json`. Build-script approvals
 for `esbuild` and `sharp` live in `pnpm-workspace.yaml` under `allowBuilds`.
+
+---
+
+# Session 8 — integration
+
+## Branch mapping
+
+Sessions 2–7 ran as cloud sessions on harness-assigned branch names. The mapping,
+established from `git diff --stat main...origin/<branch>`:
+
+| Session | Branch                          | Scope                                                                                       |
+| ------- | ------------------------------- | ------------------------------------------------------------------------------------------- |
+| 2       | `claude/vibrant-gauss-st1orq`   | Home page                                                                                   |
+| 3       | `claude/lucid-sagan-9f6d6y`     | Supplies stage pages                                                                        |
+| 4       | `claude/nice-hypatia-rgq275`    | Sleeve selector, consumables planner                                                        |
+| 5       | `claude/laughing-hopper-ne2aig` | How grafting works, Field Notes                                                             |
+| 6       | `claude/practical-tesla-m1pila` | Quotation form, Firestore, Cloud Functions                                                  |
+| 7       | —                               | **Never delivered.** `/specifications`, `/ordering` and `/about` were written in session 8. |
+
+Merged in the planned order (home, supplies, tools, words, reference, quotation).
+Zero conflicts — the disjoint-ownership rule held.
+
+## Specification tables now have one source of truth
+
+`src/data/products/tables.ts` is the registry: one descriptor per table carrying its
+id, stage, caption, columns and rows. `/specifications` and all five stage pages
+import from it, so a table cannot say one thing in one place and another elsewhere.
+`src/data/specs/` was never created, so there was nothing to delete.
+
+Proved two ways: `tests/unit/spec-tables.test.ts` asserts the registry holds the same
+array _instance_ the stage data exports (a copy would pass deep equality and still be
+able to drift), and `tests/e2e/site.spec.ts` reads the rendered sleeve and clip tables
+from both `/supplies/graft` and `/specifications` and asserts the cells are identical.
+
+The `/specifications` title block reads its table count from the registry, so it can
+never disagree with the page beneath it. The copy deck said 7; the built data is 9.
+
+## The planner → quotation query contract
+
+Session 4 emitted a `pt_*` parameter namespace. Nothing read it: session 6's prefill
+reader is generic over `QUOTATION_FIELDS` and looks for parameters named after the
+form's own fields. Session 4's side was the wrong one. `buildQuotationQuery` now emits
+`annualVolume` (the yearly total) and `notes` (the worked quantities and every stated
+assumption), both real form fields, truncated to the field's own `maxLength`.
+
+## Two real bugs the mount surfaced
+
+- **Horizontal scroll at 320 px on `/supplies/graft` and `/ordering`.** A `fieldset`
+  defaults to `min-width: min-content` and refused to shrink below the widest toggle
+  row. Session 4 tested the tools against a static fixture at desktop width, so this
+  only appeared once they were mounted on a real page. Fixed with `min-width: 0` on
+  the fieldsets and their flex ancestors.
+- **`--signal` orange fails WCAG AA as text**: 3.89:1 on white, flagged by axe on
+  `/how-grafting-works`. The brand orange stays as a _graphic_ colour (leaders, tick
+  marks, rules); a new `--signal-ink` (`#c1471b`, same hue, 5.02:1) carries any
+  `--signal` used as text, including dimension labels inside the drawings.
+  `tests/unit/contrast.test.ts` reads the tokens from `tokens.css` and checks every
+  pair the site actually uses.
+
+## SEO, metadata and icons
+
+- `site` is now `https://propagafrica.navac.co.ke` — the mapped host agreed for launch.
+  It drives canonical URLs, Open Graph URLs and the sitemap. One place to change.
+- `@astrojs/sitemap` generates `sitemap-index.xml` at build, filtering `/admin`.
+  `public/robots.txt` disallows `/admin` and points at the sitemap.
+- `src/components/Seo.astro` emits canonical, Open Graph, Twitter card and optional
+  JSON-LD, wired through `BaseLayout`.
+- `src/lib/seo.ts` builds `Organization` (home) and `Article` (each Field Note) JSON-LD.
+  No founding date, no headcount, no rating, no publication date — none is stated in the
+  client material. The `no-founding-date` gate now covers `.ts` too, so adding one fails
+  the build.
+- Favicon, apple-touch-icon and the 192/512 PWA icons are generated from the Mark,
+  single colour on white. `public/og-default.png` is a typographic share card in the
+  house style — the twelve photographs in `docs/images/nano-banana-prompts.md` are
+  still to be generated, and nothing in the layout depends on them.
+
+## Gates added
+
+`wordmark-case` (no `PROPAGAFRICA`, `Propagafrica` or `propagAfrica` anywhere),
+`no-placeholder-copy` (lorem, "coming soon", a leftover `TODO(session…)`, stub text),
+`no-prices`. `no-founding-date` widened to `established 20`, `since 20`,
+`years of experience`, `foundingDate`, `numberOfEmployees`; `no-banned-words` widened
+to `empower`, `transform`, `unlock`, `one-stop`, `state-of-the-art`, `game-chang`,
+`industry-leading` (`transform` is anchored so it does not match `text-transform`);
+`no-forbidden-ui` now also fails any `border-radius` above 4px.
+
+`factory-check full` additionally runs `scripts/lighthouse.mjs` — mobile audits of
+`/`, `/supplies/graft`, `/field-notes/how-a-graft-knits-together` and `/contact`
+against Performance ≥ 95, Accessibility 100, Best Practices ≥ 95, SEO ≥ 95.
+
+## What session 8 wired up
+
+- `SleeveSelector` mounted on `/supplies/graft` under **Find the right sleeve**; the
+  in-page link points at it.
+- `ConsumablesPlanner` mounted on `/ordering` under **Work out what a cycle consumes**.
+- The home page's Field Notes teaser reads from `src/data/field-notes/articles.ts`
+  (new shared module: the glob and the fixed order, once) instead of three hard-coded
+  rows, and links each title to its article.
+- The three figures session 5 left pending — `traceability-chain`, `dilution`,
+  `cell-section` — are wired into `[slug].astro` from session 3's folder. The
+  parallel-run rule that kept that page out of that folder applied only while the
+  sessions ran side by side.
+- `/404` in the house style: sheet frame, `PA-404 / SHEET NOT FOUND` title block, a
+  plain sentence, three links. No illustration, no joke.

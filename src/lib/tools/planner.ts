@@ -114,7 +114,7 @@ export function plannerRows(inputs: PlannerInputs, result: PlannerResult): Plann
       working: `${formatCount(result.total)} ÷ ${inputs.cells} cells (${trayLabel}), rounded up`,
     },
     {
-      label: 'Media',
+      label: 'Media, litres',
       value: result.mediaLitres,
       working: `(${formatCount(result.total)} × ${inputs.mlPerCell} ml ÷ 1000) × ${(1 + FILL_OVERRUN).toFixed(2)} (${FILL_OVERRUN * 100}% fill over-run)`,
     },
@@ -134,7 +134,7 @@ export function plannerRows(inputs: PlannerInputs, result: PlannerResult): Plann
       working: `${formatCount(result.total)} ÷ ${formatCount(UNITS_PER_LOGBOOK)}, rounded up`,
     },
     {
-      label: 'Sanitiser',
+      label: 'Sanitiser concentrate, litres',
       value: result.sanitiserL,
       working: `(${formatCount(result.total)} ÷ 1000) × ${SANITISER_L_PER_1000_UNITS} L (10 L of 1 000 ppm per 1 000 units, from PRO-SAN 12)`,
     },
@@ -160,33 +160,48 @@ export function assumptionLines(): string[] {
  * Param names are load-bearing for session 6 (prefill) and session 8 (mount) —
  * see .factory/decisions/session-4.md before changing any of them.
  */
+// Session 8 integration note — the agreed query-string contract.
+//
+// The planner originally emitted its own `pt_*` namespace. Nothing read it:
+// the quotation form's prefill reader (src/components/quote/QuoteForm.astro)
+// is generic over QUOTATION_FIELDS in src/lib/quotation/schema.ts and looks
+// for parameters named after the form's own fields. The planner side was the
+// wrong one, so it now emits field names the form actually reads — the annual
+// total into `annualVolume`, and the worked quantities into `notes` so the
+// arithmetic travels with the request instead of being retyped.
 export const QUOTATION_QUERY_PARAMS = {
-  graftsPerCycle: 'pt_grafts',
-  cyclesPerYear: 'pt_cycles',
-  cells: 'pt_tray',
-  total: 'pt_total',
-  sleeves: 'pt_sleeves',
-  trays: 'pt_trays',
-  mediaLitres: 'pt_media',
-  thermal: 'pt_thermal',
-  batchCards: 'pt_cards',
-  logbooks: 'pt_logbooks',
-  sanitiserL: 'pt_sanitiser',
+  annualVolume: 'annualVolume',
+  notes: 'notes',
 } as const;
+
+/** Keep in step with the `notes` maxLength in src/lib/quotation/schema.ts. */
+const NOTES_MAX_LENGTH = 2000;
+
+export function quotationNotes(inputs: PlannerInputs, result: PlannerResult): string {
+  const tray = TRAY_OPTIONS.find((option) => option.cells === inputs.cells);
+  const lines = [
+    `Planned from the consumables planner on /ordering.`,
+    `${formatCount(inputs.graftsPerCycle)} grafts per cycle x ${formatCount(inputs.cyclesPerYear)} cycles = ${formatCount(result.total)} a year.`,
+    `Tray: ${tray ? tray.label : `${inputs.cells} cell`}, ${formatCount(inputs.mlPerCell)} ml per cell.`,
+    '',
+    `Sleeves: ${formatCount(result.sleeves)}`,
+    `Trays: ${formatCount(result.trays)}`,
+    `Growing medium: ${formatLitres(result.mediaLitres)} L`,
+    `Thermal labels: ${formatCount(result.thermal)}`,
+    `Batch cards: ${formatCount(result.batchCards)}`,
+    `QC logbooks: ${formatCount(result.logbooks)}`,
+    `Sanitiser concentrate: ${formatLitres(result.sanitiserL)} L`,
+    '',
+    'Assumptions used:',
+    ...assumptionLines().map((line) => `- ${line}`),
+  ];
+  return lines.join('\n').slice(0, NOTES_MAX_LENGTH);
+}
 
 export function buildQuotationQuery(inputs: PlannerInputs, result: PlannerResult): string {
   const params = new URLSearchParams({
-    [QUOTATION_QUERY_PARAMS.graftsPerCycle]: String(Math.round(inputs.graftsPerCycle)),
-    [QUOTATION_QUERY_PARAMS.cyclesPerYear]: String(Math.round(inputs.cyclesPerYear)),
-    [QUOTATION_QUERY_PARAMS.cells]: String(inputs.cells),
-    [QUOTATION_QUERY_PARAMS.total]: String(Math.round(result.total)),
-    [QUOTATION_QUERY_PARAMS.sleeves]: String(Math.round(result.sleeves)),
-    [QUOTATION_QUERY_PARAMS.trays]: String(result.trays),
-    [QUOTATION_QUERY_PARAMS.mediaLitres]: result.mediaLitres.toFixed(1),
-    [QUOTATION_QUERY_PARAMS.thermal]: String(result.thermal),
-    [QUOTATION_QUERY_PARAMS.batchCards]: String(result.batchCards),
-    [QUOTATION_QUERY_PARAMS.logbooks]: String(result.logbooks),
-    [QUOTATION_QUERY_PARAMS.sanitiserL]: result.sanitiserL.toFixed(1),
+    [QUOTATION_QUERY_PARAMS.annualVolume]: String(Math.round(result.total)),
+    [QUOTATION_QUERY_PARAMS.notes]: quotationNotes(inputs, result),
   });
   return `/contact?${params.toString()}`;
 }

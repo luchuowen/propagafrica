@@ -1,39 +1,193 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import TitleBlock from '../components/TitleBlock.astro';
+import StageHeader from '../components/supplies/StageHeader.astro';
+import NotesBlock from '../components/supplies/NotesBlock.astro';
+import QuotationBlock from '../components/supplies/QuotationBlock.astro';
+import RuledRows from '../components/reference/RuledRows.astro';
+import ConsumablesPlanner from '../components/tools/ConsumablesPlanner.astro';
+
+const QUOTATION_BASIS = [
+  {
+    key: 'Annual volume',
+    value: 'High volume materially changes unit cost and freight per piece.',
+  },
+  {
+    key: 'Pack size',
+    value: 'Your consumption and storage decide the most economical pack.',
+  },
+  {
+    key: 'Specification',
+    value: 'Grade, diameter, formulation, strength and any printing.',
+  },
+  {
+    key: 'Delivery point',
+    value: 'Kenya stock, Ethiopia supply or consolidated import each change landed cost.',
+  },
+  {
+    key: 'Lead time',
+    value: 'Grafting demand is seasonal. Forecast visibility buys stock allocation.',
+  },
+];
+
+const SUPPLY_PROGRAMME = [
+  {
+    key: 'Framework agreement',
+    value:
+      'Specification, indicative annual volume and commercial terms, agreed once for the year.',
+  },
+  {
+    key: 'Monthly call-offs',
+    value:
+      'You release quantities against the framework as your schedule requires. No renegotiation per order.',
+  },
+  {
+    key: 'Buffer stock',
+    value:
+      'Held against an agreed volume commitment, so an upstream delay is our problem rather than yours.',
+  },
+  {
+    key: 'Quarterly price review',
+    value:
+      'For imported and currency-exposed lines, on a mechanism agreed in advance rather than ad-hoc.',
+  },
+  {
+    key: 'Documentation',
+    value:
+      'Data sheets, safety data sheets, certificates of analysis and batch records, issued with consignment.',
+  },
+  {
+    key: 'Farm-specific packs',
+    value: 'A consolidated monthly pack built to your house rather than to our catalogue.',
+  },
+  {
+    key: 'Consumption review',
+    value: 'Quarterly: usage, stock-outs, product performance, and cost per surviving plant.',
+  },
+];
+
+const TECHNICAL_SERVICES = [
+  {
+    key: 'Propagation training',
+    value: 'Bench technique, cut geometry, sleeve and clip selection, hygiene discipline.',
+  },
+  {
+    key: 'On-site support',
+    value: 'At the bench, during a cycle.',
+  },
+  {
+    key: 'Nursery setup and design',
+    value:
+      'Layout, benching, misting, climate, irrigation, and the flow of material through the house.',
+  },
+  {
+    key: 'Crop protocols',
+    value: 'Written to your varieties, rootstocks and house conditions.',
+  },
+  {
+    key: 'Troubleshooting',
+    value: 'When take drops and the cause is not obvious from the bench.',
+  },
+  {
+    key: 'Performance audits',
+    value: 'Take at four weeks, losses by stage, cost per surviving plant.',
+  },
+  {
+    key: 'Product trials',
+    value: 'Split batch, same operator, same house, assessed at four weeks.',
+  },
+  {
+    key: 'Custom specification',
+    value: 'Where the standard specification does not fit the operation.',
+  },
+];
 ---
 
 <BaseLayout
   title="Ordering"
-  description="Supply programme, framework agreements, call-offs and lead times."
+  description="How we quote and how supply is scheduled: an annual framework, monthly call-offs, buffer stock and documentation issued with consignment."
 >
-  <section class="stub">
-    <div class="stub-inner">
-      <p class="eyebrow">PROPAGAFRICA TECHNOLOGIES</p>
-      <h1>Ordering</h1>
-      <TitleBlock drawingNo="PA-400" subject="Ordering" />
-      <p class="stub-note">Content for this page is built in a later session.</p>
+  <StageHeader
+    eyebrow="ORDERING"
+    title="How we quote, and how supply is scheduled."
+    standfirst="There are no prices on this site. What an item costs depends on your volume, your pack size, your specification, where it goes and how much notice you can give — so we quote against a programme rather than publish a list."
+    titleBlockRows={[
+      { label: 'DRAWING', value: 'PA-010' },
+      { label: 'SUBJECT', value: 'SUPPLY PROGRAMME' },
+      { label: 'BASIS', value: 'ANNUAL FRAMEWORK' },
+      { label: 'RELEASE', value: 'MONTHLY CALL-OFF' },
+      { label: 'SHEET', value: '10 OF 14' },
+    ]}
+  />
+
+  <div class="ref-section">
+    <h2>What a quotation is priced against.</h2>
+    <RuledRows rows={QUOTATION_BASIS} />
+  </div>
+
+  <div class="ref-section">
+    <h2>The supply programme.</h2>
+    <p class="lede">
+      For anyone grafting at volume, spot orders are the wrong instrument. A stock-out is not a
+      delay in this business — it is a missed window that cannot be recovered until the next cycle.
+    </p>
+    <RuledRows rows={SUPPLY_PROGRAMME} />
+  </div>
+
+  <div class="ref-section" id="work-out-what-a-cycle-consumes">
+    <h2>Work out what a cycle consumes</h2>
+    <ConsumablesPlanner />
+  </div>
+
+  <div class="ref-section" id="services">
+    <h2>The consumable is half of it.</h2>
+    <p class="lede">
+      A sleeve is only as good as the cut it sits on and the bench it sits under. Technical support
+      is part of the supply rather than something sold against it.
+    </p>
+    <RuledRows rows={TECHNICAL_SERVICES} />
+    <div class="notes">
+      <NotesBlock>
+        <p>
+          Specifications, grades and tolerances for every item in the programme are published at
+          <a href="/specifications">/specifications</a>.
+        </p>
+      </NotesBlock>
     </div>
-  </section>
+  </div>
+
+  <div class="ref-section">
+    <QuotationBlock />
+  </div>
 </BaseLayout>
 
 <style>
-  .stub {
-    padding: var(--space-6) 0;
-  }
-  .stub-inner {
+  .ref-section {
     max-width: var(--content-max);
     margin: 0 auto;
-    padding: 0 var(--side-gutter);
+    padding: var(--space-4) var(--side-gutter) 0;
   }
-  .stub-inner .eyebrow {
-    margin-bottom: var(--space-2);
+
+  .ref-section:last-child {
+    padding-bottom: var(--space-6);
   }
-  .stub-note {
-    margin-top: var(--space-4);
-    color: var(--ink-soft);
+
+  h2 {
+    margin: 0 0 var(--space-3);
   }
-  .stub-inner :global(dl) {
-    margin-top: var(--space-4);
+
+  .lede {
+    max-width: 42em;
+    font-size: 17px;
+    line-height: 1.7;
+    margin: 0 0 var(--space-3);
+  }
+
+  .notes {
+    margin-top: var(--space-3);
+    max-width: 46em;
+  }
+
+  .notes :global(a) {
+    color: var(--green);
   }
 </style>

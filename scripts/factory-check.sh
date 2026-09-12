@@ -140,6 +140,13 @@ run_full() {
   else
     fail "playwright"
   fi
+
+  echo "--- lighthouse ---"
+  if node scripts/lighthouse.mjs; then
+    pass "lighthouse"
+  else
+    fail "lighthouse"
+  fi
 }
 
 case "$MODE" in

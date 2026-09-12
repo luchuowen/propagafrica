@@ -1,39 +1,163 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import TitleBlock from '../components/TitleBlock.astro';
+import StageHeader from '../components/supplies/StageHeader.astro';
+import SpecTable from '../components/supplies/SpecTable.astro';
+import NotesBlock from '../components/supplies/NotesBlock.astro';
+import QuotationBlock from '../components/supplies/QuotationBlock.astro';
+import RuledRows from '../components/reference/RuledRows.astro';
+import { SPEC_TABLES } from '../data/products/tables';
+
+// The table count is read from the registry rather than written by hand, so
+// the title block cannot disagree with the page beneath it.
+const tableCount = SPEC_TABLES.length;
+
+const STAGE_LABELS: Record<string, string> = {
+  prepare: 'Prepare',
+  graft: 'Graft',
+  root: 'Root',
+  protect: 'Protect',
+  record: 'Record',
+};
+
+const DOCUMENTS = [
+  {
+    key: 'Product data sheet',
+    value: 'Per SKU. Dimensions, material, grade, pack.',
+  },
+  {
+    key: 'Safety data sheet',
+    value: 'Every hygiene product, current revision.',
+  },
+  {
+    key: 'Certificate of analysis',
+    value: 'Per batch, where the product is manufactured to a specification.',
+  },
+  {
+    key: 'Batch record',
+    value: 'Lot code, date, quantity, destination.',
+  },
+];
+
+const HOW_TO_READ = [
+  {
+    key: 'Bore',
+    value:
+      'The inside diameter of a sleeve, measured across. Match it to the thicker of scion and rootstock.',
+  },
+  {
+    key: 'Wall',
+    value: 'Sleeve thickness. Heavier walls hold more firmly and release later.',
+  },
+  {
+    key: 'Fraction',
+    value:
+      'The particle size range of a growing medium. Finer holds more water; coarser drains faster.',
+  },
+  {
+    key: 'Conductivity',
+    value: 'How much dissolved salt a medium carries. It rises under repeated misting.',
+  },
+];
 ---
 
 <BaseLayout
   title="Specifications"
-  description="Every published specification table and document in one place."
+  description="Bore, wall, grade, particle size, density, pH, conductivity, available chlorine, pack — every published specification table in one place."
 >
-  <section class="stub">
-    <div class="stub-inner">
-      <p class="eyebrow">PROPAGAFRICA TECHNOLOGIES</p>
-      <h1>Specifications</h1>
-      <TitleBlock drawingNo="PA-300" subject="Specifications" />
-      <p class="stub-note">Content for this page is built in a later session.</p>
+  <StageHeader
+    eyebrow="SPECIFICATIONS"
+    title="Every published specification, in one place."
+    standfirst="Bore, wall, grade, particle size, density, pH, conductivity, available chlorine, pack. Read it before you speak to anyone."
+    titleBlockRows={[
+      { label: 'DRAWING', value: 'PA-009' },
+      { label: 'SUBJECT', value: 'SPECIFICATION INDEX' },
+      { label: 'TABLES', value: String(tableCount) },
+      { label: 'TOLERANCE', value: 'HELD TO BATCH' },
+      { label: 'SHEET', value: '09 OF 14' },
+    ]}
+  />
+
+  <div class="ref-section">
+    <p class="lede">
+      Every table on this page also appears on its own stage page. This is the index, for anyone who
+      would rather read the numbers than the words.
+    </p>
+  </div>
+
+  {SPEC_TABLES.map((table) => (
+    <div class="ref-section" id={table.id}>
+      <SpecTable caption={table.caption} columns={table.columns} rows={table.rows} />
+      <p class="stage-link">
+        <a href={`/supplies/${table.stage}`}>{STAGE_LABELS[table.stage]} &rarr;</a>
+      </p>
     </div>
-  </section>
+  ))}
+
+  <div class="ref-section">
+    <h2>What comes with a consignment.</h2>
+    <RuledRows rows={DOCUMENTS} />
+    <div class="notes">
+      <NotesBlock>
+        <p>
+          Specifications are held to batch and tolerances are stated rather than implied. Where a
+          figure depends on your crop, your tray or your irrigation, we say so instead of publishing
+          a number that will not hold.
+        </p>
+      </NotesBlock>
+    </div>
+  </div>
+
+  <div class="ref-section">
+    <h2>How to read a specification.</h2>
+    <RuledRows rows={HOW_TO_READ} />
+  </div>
+
+  <div class="ref-section">
+    <QuotationBlock />
+  </div>
 </BaseLayout>
 
 <style>
-  .stub {
-    padding: var(--space-6) 0;
-  }
-  .stub-inner {
+  .ref-section {
     max-width: var(--content-max);
     margin: 0 auto;
-    padding: 0 var(--side-gutter);
+    padding: var(--space-4) var(--side-gutter) 0;
   }
-  .stub-inner .eyebrow {
-    margin-bottom: var(--space-2);
+
+  .ref-section:last-child {
+    padding-bottom: var(--space-6);
   }
-  .stub-note {
-    margin-top: var(--space-4);
-    color: var(--ink-soft);
+
+  .lede {
+    max-width: 42em;
+    font-size: 17px;
+    line-height: 1.7;
   }
-  .stub-inner :global(dl) {
-    margin-top: var(--space-4);
+
+  h2 {
+    margin: 0 0 var(--space-3);
+  }
+
+  .stage-link {
+    margin-top: var(--space-2);
+    font-size: 14px;
+  }
+
+  .stage-link a {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--green);
+    text-decoration: none;
+  }
+
+  .stage-link a:hover {
+    text-decoration: underline;
+  }
+
+  .notes {
+    margin-top: var(--space-3);
+    max-width: 46em;
   }
 </style>

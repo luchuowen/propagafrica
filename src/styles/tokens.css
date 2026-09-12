@@ -11,6 +11,11 @@
   --ink-soft: #68716e; /* secondary text, annotation */
   --green: #0a5c3c; /* structure, wordmark rule, primary buttons */
   --signal: #e0521f; /* dimensions, callouts, anything carrying a measurement */
+  /* The same hue darkened to clear WCAG AA (5.02:1 on --paper). --signal is a
+     graphic colour — leader lines, tick marks, rules — and drops to 3.89:1 as
+     text, which axe flags at small sizes. Any --signal used as TEXT uses this
+     instead. Do not swap them: the graphic mark keeps the brand orange. */
+  --signal-ink: #c1471b;
   --rule: #dce2df; /* hairlines, sheet border */
 
   /* Type */

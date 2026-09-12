@@ -20,26 +20,49 @@
     },
     {
       "name": "no-founding-date",
-      "description": "No founding date, company age, or 'newly established' language anywhere in copy.",
-      "pattern": "(founded in|since \\d{4}|newly established|young company|new company)",
-      "paths": ["src/**/*.astro", "src/**/*.md"],
+      "description": "No founding date, company age, headcount or 'newly established' language anywhere in copy or structured data.",
+      "pattern": "(founded in|founded [0-9]|established (in )?20|since 20|newly established|young company|new company|years of experience|years in business|foundingDate|numberOfEmployees)",
+      "paths": ["src/**/*.astro", "src/**/*.md", "src/**/*.ts"],
       "exclude": [],
       "case_insensitive": true
     },
     {
       "name": "no-banned-words",
       "description": "Banned marketing words and constructions per the copy rules.",
-      "pattern": "(empowering|transforming|unlocking|seamless|cutting-edge|revolutionary|world-class|best-in-class|one-stop shop|Welcome to|Why choose us|at scale)",
+      "pattern": "(empowering|(^|[^-])transforming|unlocking|seamless|cutting-edge|revolutionary|world-class|best-in-class|one-stop|Welcome to|Why choose us|at scale|empower|(^|[^-])transform|unlock|state-of-the-art|game-chang|leverage our|passionate about|committed to excellence|industry-leading)",
       "paths": ["src/**/*.astro", "src/**/*.md"],
       "exclude": [],
       "case_insensitive": true
     },
     {
       "name": "no-forbidden-ui",
-      "description": "No border-radius above 4px (except the logo collar rx=3.5), no box-shadow, no gradient, no backdrop-filter.",
-      "pattern": "(box-shadow\\s*:|linear-gradient|radial-gradient|backdrop-filter\\s*:)",
+      "description": "No border-radius above 4px, no box-shadow, no gradient, no backdrop-filter anywhere in src/.",
+      "pattern": "(box-shadow\\s*:|linear-gradient|radial-gradient|conic-gradient|backdrop-filter\\s*:|border-radius\\s*:\\s*(?!0|1px|2px|3px|4px|50%\\s*;?\\s*/\\*)[0-9]+(\\.[0-9]+)?(px|rem|em))",
       "paths": ["src/**/*.astro", "src/**/*.css"],
       "exclude": []
+    },
+    {
+      "name": "wordmark-case",
+      "description": "The wordmark is never all-caps and never two-tone. Guards the exact failure the owner flagged.",
+      "pattern": "(PROPAGAFRICA|Propagafrica|propagAfrica)",
+      "paths": ["src/**/*.astro", "src/**/*.ts", "src/**/*.css"],
+      "exclude": []
+    },
+    {
+      "name": "no-placeholder-copy",
+      "description": "No lorem ipsum, no TODO left in shipped source, no 'coming soon', no stub text.",
+      "pattern": "(lorem ipsum|coming soon|placeholder text|TODO\\(session|built in a later session|TBD)",
+      "paths": ["src/**/*.astro", "src/**/*.ts", "src/**/*.md"],
+      "exclude": [],
+      "case_insensitive": true
+    },
+    {
+      "name": "no-prices",
+      "description": "No prices anywhere on the site. Every commercial path ends in a quotation request.",
+      "pattern": "(KES\\s*[0-9]|Ksh\\s*[0-9]|USD\\s*[0-9]|\\$[0-9]|\u20ac[0-9]|price list|per unit price)",
+      "paths": ["src/**/*.astro", "src/**/*.md"],
+      "exclude": [],
+      "case_insensitive": true
     }
   ],
   "protected": ["src/styles/tokens.css", "src/components/Mark.astro"],

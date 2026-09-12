@@ -12,6 +12,7 @@ import {
   assumptionLines,
   QUOTATION_QUERY_PARAMS,
 } from '../../src/lib/tools/planner';
+import { QUOTATION_FIELDS } from '../../src/lib/quotation/schema';
 
 describe('TRAY_OPTIONS', () => {
   it('lists the four tray options with the specified cell counts and ml/cell', () => {
@@ -111,11 +112,11 @@ describe('plannerRows', () => {
       'Total grafts',
       'Sleeves',
       'Trays',
-      'Media',
+      'Media, litres',
       'Thermal sleeves',
       'Batch cards',
       'Logbooks',
-      'Sanitiser',
+      'Sanitiser concentrate, litres',
     ]);
     for (const row of rows) {
       expect(typeof row.working).toBe('string');
@@ -159,18 +160,42 @@ describe('buildQuotationQuery', () => {
     expect(query.startsWith('/contact?')).toBe(true);
   });
 
-  it('encodes every documented query parameter with the computed values', () => {
+  it('uses parameter names the quotation form actually reads', () => {
     const params = new URLSearchParams(query.split('?')[1]);
-    expect(params.get(QUOTATION_QUERY_PARAMS.graftsPerCycle)).toBe('120000');
-    expect(params.get(QUOTATION_QUERY_PARAMS.cyclesPerYear)).toBe('4');
-    expect(params.get(QUOTATION_QUERY_PARAMS.cells)).toBe('128');
-    expect(params.get(QUOTATION_QUERY_PARAMS.total)).toBe('480000');
-    expect(params.get(QUOTATION_QUERY_PARAMS.sleeves)).toBe('494400');
-    expect(params.get(QUOTATION_QUERY_PARAMS.trays)).toBe('3750');
-    expect(params.get(QUOTATION_QUERY_PARAMS.mediaLitres)).toBe('11040.0');
-    expect(params.get(QUOTATION_QUERY_PARAMS.thermal)).toBe('3750');
-    expect(params.get(QUOTATION_QUERY_PARAMS.batchCards)).toBe('480');
-    expect(params.get(QUOTATION_QUERY_PARAMS.logbooks)).toBe('20');
-    expect(params.get(QUOTATION_QUERY_PARAMS.sanitiserL)).toBe('39.8');
+    const names = [...params.keys()].sort();
+    const formFields = QUOTATION_FIELDS.map((field) => field.name);
+    for (const name of names) {
+      expect(formFields).toContain(name);
+    }
+    expect(names).toEqual(['annualVolume', 'notes']);
+  });
+
+  it('carries the annual total as the volume', () => {
+    const params = new URLSearchParams(query.split('?')[1]);
+    expect(params.get(QUOTATION_QUERY_PARAMS.annualVolume)).toBe('480000');
+  });
+
+  it('carries every computed quantity and assumption in the notes', () => {
+    const params = new URLSearchParams(query.split('?')[1]);
+    const notes = params.get(QUOTATION_QUERY_PARAMS.notes) ?? '';
+    expect(notes).toContain('480');
+    expect(notes).toContain('Sleeves:');
+    expect(notes).toContain('Trays:');
+    expect(notes).toContain('Growing medium:');
+    expect(notes).toContain('Thermal labels:');
+    expect(notes).toContain('Batch cards:');
+    expect(notes).toContain('QC logbooks:');
+    expect(notes).toContain('Sanitiser concentrate:');
+    expect(notes).toContain('Assumptions used:');
+    for (const line of assumptionLines()) {
+      expect(notes).toContain(line);
+    }
+  });
+
+  it('keeps the notes inside the form field limit', () => {
+    const params = new URLSearchParams(query.split('?')[1]);
+    const notesField = QUOTATION_FIELDS.find((field) => field.name === 'notes');
+    expect(notesField).toBeDefined();
+    expect((params.get('notes') ?? '').length).toBeLessThanOrEqual(notesField!.maxLength);
   });
 });

@@ -7,7 +7,12 @@ import NotesBlock from '../../components/supplies/NotesBlock.astro';
 import StageNav from '../../components/supplies/StageNav.astro';
 import QuotationBlock from '../../components/supplies/QuotationBlock.astro';
 import DilutionFigure from '../../assets/figures/supplies/dilution.svg';
-import { PRO_SAN_DILUTIONS, HYGIENE_RANGE } from '../../data/products/protect';
+import { specTable } from '../../data/products/tables';
+
+const tables = {
+  dilutions: specTable('dilutions'),
+  hygiene: specTable('hygiene'),
+};
 ---
 
 <BaseLayout
@@ -40,14 +45,9 @@ import { PRO_SAN_DILUTIONS, HYGIENE_RANGE } from '../../data/products/protect';
 
   <div class="stage-section">
     <SpecTable
-      caption="PRO-SAN working dilutions from a 12 % concentrate"
-      columns={[
-        { key: 'application', label: 'Application' },
-        { key: 'target', label: 'Target' },
-        { key: 'concentratePer10L', label: 'Concentrate per 10 L' },
-        { key: 'contactTime', label: 'Contact time' },
-      ]}
-      rows={PRO_SAN_DILUTIONS}
+      caption={tables.dilutions.caption}
+      columns={tables.dilutions.columns}
+      rows={tables.dilutions.rows}
     />
   </div>
 
@@ -62,14 +62,9 @@ import { PRO_SAN_DILUTIONS, HYGIENE_RANGE } from '../../data/products/protect';
 
   <div class="stage-section">
     <SpecTable
-      caption="Hygiene range"
-      columns={[
-        { key: 'sku', label: 'SKU' },
-        { key: 'product', label: 'Product' },
-        { key: 'strength', label: 'Strength' },
-        { key: 'pack', label: 'Pack' },
-      ]}
-      rows={HYGIENE_RANGE}
+      caption={tables.hygiene.caption}
+      columns={tables.hygiene.columns}
+      rows={tables.hygiene.rows}
     />
   </div>
 

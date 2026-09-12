@@ -7,7 +7,13 @@ import NotesBlock from '../../components/supplies/NotesBlock.astro';
 import StageNav from '../../components/supplies/StageNav.astro';
 import QuotationBlock from '../../components/supplies/QuotationBlock.astro';
 import GraftElevationFigure from '../../assets/figures/supplies/graft-elevation.svg';
-import { GRAFTING_SLEEVES, GRAFTING_CLIPS } from '../../data/products/graft';
+import SleeveSelector from '../../components/tools/SleeveSelector.astro';
+import { specTable } from '../../data/products/tables';
+
+const tables = {
+  sleeves: specTable('sleeves'),
+  clips: specTable('clips'),
+};
 ---
 
 <BaseLayout
@@ -37,37 +43,28 @@ import { GRAFTING_SLEEVES, GRAFTING_CLIPS } from '../../data/products/graft';
       <GraftElevationFigure />
     </Figure>
     <p class="sleeve-link">
-      <a href="#sleeves">Find the right sleeve →</a>
+      <a href="#find-the-right-sleeve">Find the right sleeve →</a>
     </p>
+  </div>
+
+  <div class="stage-section" id="find-the-right-sleeve">
+    <h2>Find the right sleeve</h2>
+    <SleeveSelector />
   </div>
 
   <div class="stage-section" id="sleeves">
     <SpecTable
-      caption="Silicone grafting sleeves"
-      columns={[
-        { key: 'sku', label: 'SKU' },
-        { key: 'bore', label: 'Bore' },
-        { key: 'wall', label: 'Wall' },
-        { key: 'length', label: 'Length' },
-        { key: 'crop', label: 'Crop' },
-        { key: 'pack', label: 'Pack' },
-      ]}
-      rows={GRAFTING_SLEEVES}
+      caption={tables.sleeves.caption}
+      columns={tables.sleeves.columns}
+      rows={tables.sleeves.rows}
     />
   </div>
 
   <div class="stage-section">
     <SpecTable
-      caption="Grafting clips"
-      columns={[
-        { key: 'sku', label: 'SKU' },
-        { key: 'profile', label: 'Profile' },
-        { key: 'jaw', label: 'Jaw' },
-        { key: 'material', label: 'Material' },
-        { key: 'reusable', label: 'Reusable' },
-        { key: 'pack', label: 'Pack' },
-      ]}
-      rows={GRAFTING_CLIPS}
+      caption={tables.clips.caption}
+      columns={tables.clips.columns}
+      rows={tables.clips.rows}
     />
   </div>
 
@@ -118,5 +115,9 @@ import { GRAFTING_SLEEVES, GRAFTING_CLIPS } from '../../data/products/graft';
 
   .sleeve-link a:hover {
     text-decoration: underline;
+  }
+
+  h2 {
+    margin: 0 0 var(--space-3);
   }
 </style>

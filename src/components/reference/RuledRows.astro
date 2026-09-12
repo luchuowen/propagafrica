@@ -1,0 +1,79 @@
+---
+// A two-column ruled list: a mono key on the left, a sentence on the right.
+// The copy decks use this shape repeatedly (ordering criteria, supply
+// programme, technical services, customer types, document set). Hairline
+// rules only — no card, no shadow, no zebra striping.
+export interface RuledRow {
+  key: string;
+  value: string;
+}
+
+interface Props {
+  caption?: string;
+  rows: RuledRow[];
+}
+
+const { caption, rows } = Astro.props;
+---
+
+<dl class="ruled-rows">
+  {caption && <p class="ruled-caption">{caption}</p>}
+  {rows.map((row) => (
+    <div class="row">
+      <dt>{row.key}</dt>
+      <dd>{row.value}</dd>
+    </div>
+  ))}
+</dl>
+
+<style>
+  .ruled-rows {
+    margin: 0;
+    border-top: 1px solid var(--ink-soft);
+  }
+
+  .ruled-caption {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 var(--space-2);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  @media (min-width: 760px) {
+    .row {
+      grid-template-columns: 16em minmax(0, 1fr);
+      gap: var(--space-3);
+      align-items: baseline;
+    }
+  }
+
+  dt,
+  dd {
+    margin: 0;
+    min-width: 0;
+  }
+
+  dt {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  dd {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+</style>

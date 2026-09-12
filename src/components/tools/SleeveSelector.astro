@@ -117,12 +117,18 @@ const { stemRadiusPx, boreRadiusPx } = scaledRadii(
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
+    min-width: 0;
   }
 
   fieldset {
     border: none;
     margin: 0;
     padding: 0;
+    /* A fieldset defaults to min-width: min-content, which makes it refuse to
+       shrink below the widest toggle row and pushes the whole page sideways at
+       320px. The tools were built against a fixture harness at desktop width,
+       so this only appeared once they were mounted on a real page. */
+    min-width: 0;
   }
 
   legend {
@@ -133,6 +139,7 @@ const { stemRadiusPx, boreRadiusPx } = scaledRadii(
   .toggle-group {
     display: flex;
     flex-wrap: wrap;
+    min-width: 0;
     border: 1px solid var(--rule);
     width: max-content;
     max-width: 100%;

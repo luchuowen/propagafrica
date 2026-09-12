@@ -7,7 +7,11 @@ import NotesBlock from '../../components/supplies/NotesBlock.astro';
 import StageNav from '../../components/supplies/StageNav.astro';
 import QuotationBlock from '../../components/supplies/QuotationBlock.astro';
 import TraceabilityChainFigure from '../../assets/figures/supplies/traceability-chain.svg';
-import { TRACEABILITY_AND_QC } from '../../data/products/record';
+import { specTable } from '../../data/products/tables';
+
+const tables = {
+  traceability: specTable('traceability'),
+};
 ---
 
 <BaseLayout
@@ -40,15 +44,9 @@ import { TRACEABILITY_AND_QC } from '../../data/products/record';
 
   <div class="stage-section">
     <SpecTable
-      caption="Traceability and QC"
-      columns={[
-        { key: 'sku', label: 'SKU' },
-        { key: 'format', label: 'Format' },
-        { key: 'size', label: 'Size' },
-        { key: 'material', label: 'Material' },
-        { key: 'pack', label: 'Pack' },
-      ]}
-      rows={TRACEABILITY_AND_QC}
+      caption={tables.traceability.caption}
+      columns={tables.traceability.columns}
+      rows={tables.traceability.rows}
     />
   </div>
 

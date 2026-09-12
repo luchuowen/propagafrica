@@ -7,11 +7,13 @@ import NotesBlock from '../../components/supplies/NotesBlock.astro';
 import StageNav from '../../components/supplies/StageNav.astro';
 import QuotationBlock from '../../components/supplies/QuotationBlock.astro';
 import CellSectionFigure from '../../assets/figures/supplies/cell-section.svg';
-import {
-  VERMICULITE_GRADES,
-  PEAT_FORMULATIONS,
-  TRAYS_AND_CONTAINERS,
-} from '../../data/products/prepare';
+import { specTable } from '../../data/products/tables';
+
+const tables = {
+  vermiculite: specTable('vermiculite'),
+  peat: specTable('peat'),
+  trays: specTable('trays'),
+};
 ---
 
 <BaseLayout
@@ -44,47 +46,25 @@ import {
 
   <div class="stage-section">
     <SpecTable
-      caption="Propagation media — vermiculite grades"
-      columns={[
-        { key: 'sku', label: 'SKU' },
-        { key: 'grade', label: 'Grade' },
-        { key: 'particleFraction', label: 'Particle fraction' },
-        { key: 'ph', label: 'pH' },
-        { key: 'bulkDensity', label: 'Bulk density' },
-        { key: 'pack', label: 'Pack' },
-      ]}
-      rows={VERMICULITE_GRADES}
+      caption={tables.vermiculite.caption}
+      columns={tables.vermiculite.columns}
+      rows={tables.vermiculite.rows}
     />
   </div>
 
   <div class="stage-section">
     <SpecTable
-      caption="Propagation media — peat formulations"
-      columns={[
-        { key: 'sku', label: 'SKU' },
-        { key: 'formulation', label: 'Formulation' },
-        { key: 'particleFraction', label: 'Particle fraction' },
-        { key: 'ph', label: 'pH' },
-        { key: 'conductivity', label: 'Conductivity (1:5)' },
-        { key: 'airFilledPorosity', label: 'Air-filled porosity' },
-        { key: 'pack', label: 'Pack' },
-      ]}
-      rows={PEAT_FORMULATIONS}
+      caption={tables.peat.caption}
+      columns={tables.peat.columns}
+      rows={tables.peat.rows}
     />
   </div>
 
   <div class="stage-section">
     <SpecTable
-      caption="Trays and containers"
-      columns={[
-        { key: 'sku', label: 'SKU' },
-        { key: 'cells', label: 'Cells' },
-        { key: 'cellVolume', label: 'Cell volume' },
-        { key: 'sheetSize', label: 'Sheet size' },
-        { key: 'material', label: 'Material' },
-        { key: 'pack', label: 'Pack' },
-      ]}
-      rows={TRAYS_AND_CONTAINERS}
+      caption={tables.trays.caption}
+      columns={tables.trays.columns}
+      rows={tables.trays.rows}
     />
   </div>
 

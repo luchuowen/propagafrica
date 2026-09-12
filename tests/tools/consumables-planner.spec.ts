@@ -8,7 +8,7 @@ test.describe('ConsumablesPlanner — keyboard operation', () => {
     await page.goto('/consumables-planner.html');
     await expect(page.locator('#row-value-total')).toHaveText('480,000');
     await expect(page.locator('#row-value-trays')).toHaveText('3,750');
-    await expect(page.locator('#quotation-link')).toHaveAttribute('href', /pt_grafts=120000/);
+    await expect(page.locator('#quotation-link')).toHaveAttribute('href', /annualVolume=480000/);
   });
 
   test('Tab reaches grafts-per-cycle, typing a new value re-renders every row', async ({
@@ -21,7 +21,7 @@ test.describe('ConsumablesPlanner — keyboard operation', () => {
     await page.keyboard.press('ControlOrMeta+A');
     await page.keyboard.type('100000');
     await expect(page.locator('#row-value-total')).toHaveText('400,000');
-    await expect(page.locator('#quotation-link')).toHaveAttribute('href', /pt_total=400000/);
+    await expect(page.locator('#quotation-link')).toHaveAttribute('href', /annualVolume=400000/);
   });
 
   test('Tab reaches the checked tray option, arrow keys switch tray and re-render', async ({
