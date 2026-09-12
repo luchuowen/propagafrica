@@ -1,7 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import hygieneStationImg from '../../assets/images/hygiene-station.jpg';
 import Figure from '../../components/Figure.astro';
-import StageHeader from '../../components/supplies/StageHeader.astro';
+import PageHero from '../../components/PageHero.astro';
 import SpecTable from '../../components/supplies/SpecTable.astro';
 import NotesBlock from '../../components/supplies/NotesBlock.astro';
 import StageNav from '../../components/supplies/StageNav.astro';
@@ -19,17 +20,12 @@ const tables = {
   title="Protect"
   description="Hygiene in a propagation house is not a cleaning routine. It is a written protocol with a strength, a contact time and a record — and for anyone exporting"
 >
-  <StageHeader
+  <PageHero
     eyebrow="STAGE 04 · PROTECT"
     title="Nursery hygiene."
     standfirst="Hygiene in a propagation house is not a cleaning routine. It is a written protocol with a strength, a contact time and a record — and for anyone exporting roses to Europe, it is audited."
-    titleBlockRows={[
-      { label: 'DRAWING', value: 'PA-006' },
-      { label: 'SUBJECT', value: 'NURSERY HYGIENE' },
-      { label: 'STRENGTH', value: '10 % · 12 % AVAILABLE CHLORINE' },
-      { label: 'PACK', value: '20 L · 200 L' },
-      { label: 'SHEET', value: '06 OF 14' },
-    ]}
+    image={hygieneStationImg}
+    imageAlt="A footbath tray and tool dip station at the entrance to a propagation greenhouse"
   />
 
   <div class="stage-section">

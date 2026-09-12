@@ -1,17 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import StageHeader from '../components/supplies/StageHeader.astro';
+import PageHero from '../components/PageHero.astro';
 ---
 
 <BaseLayout title="Sheet not found" description="This page does not exist on propagafrica.">
-  <StageHeader
+  <PageHero
     eyebrow="404"
     title="This page does not exist."
     standfirst="The address you followed is not a page on this site. It may have been mistyped, or a link somewhere may be out of date."
-    titleBlockRows={[
-      { label: 'DRAWING', value: 'PA-404' },
-      { label: 'SUBJECT', value: 'SHEET NOT FOUND' },
-    ]}
   />
 
   <div class="not-found">

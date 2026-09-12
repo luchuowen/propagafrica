@@ -8,7 +8,6 @@
 // .factory/decisions/session-6.md. PUBLIC_FIREBASE_* are public client identifiers, not secrets
 // (documented in .env.example).
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import TitleBlock from '../../components/TitleBlock.astro';
 ---
 
 <BaseLayout title="Admin — quotation requests" description="Internal quotation request list.">
@@ -16,7 +15,6 @@ import TitleBlock from '../../components/TitleBlock.astro';
     <div class="admin-inner">
       <p class="eyebrow">PROPAGAFRICA TECHNOLOGIES · INTERNAL</p>
       <h1>Quotation requests</h1>
-      <TitleBlock drawingNo="PA-900" subject="Admin — quotation requests" />
 
       <p id="admin-status" class="status" role="status" aria-live="polite"></p>
 

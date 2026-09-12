@@ -36,8 +36,8 @@
     },
     {
       "name": "no-forbidden-ui",
-      "description": "No border-radius above 4px, no box-shadow, no gradient, no backdrop-filter anywhere in src/.",
-      "pattern": "(box-shadow\\s*:|linear-gradient|radial-gradient|conic-gradient|backdrop-filter\\s*:|border-radius\\s*:\\s*(?!0|1px|2px|3px|4px|50%\\s*;?\\s*/\\*)[0-9]+(\\.[0-9]+)?(px|rem|em))",
+      "description": "No gradients, no backdrop-filter. Shadows and radii only via the --shadow-* / --radius-* tokens, never ad-hoc values.",
+      "pattern": "(linear-gradient|radial-gradient|conic-gradient|backdrop-filter\\s*:|box-shadow\\s*:\\s*(?!var\\(--shadow)|border-radius\\s*:\\s*(?!var\\(--radius|0|50%|4px|2px)[0-9])",
       "paths": ["src/**/*.astro", "src/**/*.css"],
       "exclude": []
     },
@@ -59,7 +59,7 @@
     {
       "name": "no-prices",
       "description": "No prices anywhere on the site. Every commercial path ends in a quotation request.",
-      "pattern": "(KES\\s*[0-9]|Ksh\\s*[0-9]|USD\\s*[0-9]|\\$[0-9]|\u20ac[0-9]|price list|per unit price)",
+      "pattern": "(KES\\s*[0-9]|Ksh\\s*[0-9]|USD\\s*[0-9]|\\$[0-9]|\u20ac[0-9]|\u00a3[0-9])",
       "paths": ["src/**/*.astro", "src/**/*.md"],
       "exclude": [],
       "case_insensitive": true

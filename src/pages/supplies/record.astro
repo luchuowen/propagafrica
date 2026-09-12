@@ -1,7 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import recordsImg from '../../assets/images/records.jpg';
 import Figure from '../../components/Figure.astro';
-import StageHeader from '../../components/supplies/StageHeader.astro';
+import PageHero from '../../components/PageHero.astro';
 import SpecTable from '../../components/supplies/SpecTable.astro';
 import NotesBlock from '../../components/supplies/NotesBlock.astro';
 import StageNav from '../../components/supplies/StageNav.astro';
@@ -18,17 +19,12 @@ const tables = {
   title="Record"
   description="An audit does not ask whether your hygiene was good. It asks which mother block a batch came from, who grafted it, what was applied and what survived —"
 >
-  <StageHeader
+  <PageHero
     eyebrow="STAGE 05 · RECORD"
     title="Labels, batch cards and record books."
     standfirst="An audit does not ask whether your hygiene was good. It asks which mother block a batch came from, who grafted it, what was applied and what survived — and it asks you to produce that from a file, years later."
-    titleBlockRows={[
-      { label: 'DRAWING', value: 'PA-007' },
-      { label: 'SUBJECT', value: 'TRACEABILITY' },
-      { label: 'FORMATS', value: '6' },
-      { label: 'RETENTION', value: 'MULTI-YEAR' },
-      { label: 'SHEET', value: '07 OF 14' },
-    ]}
+    image={recordsImg}
+    imageAlt="An open duplicate logbook, batch cards and loop labels on a greenhouse bench"
   />
 
   <div class="stage-section">

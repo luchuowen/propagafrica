@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import TitleBlock from '../../components/TitleBlock.astro';
 import Figure from '../../components/Figure.astro';
 import { ARTICLE_ORDER } from '../../data/field-notes/order';
 import { articleJsonLd } from '../../lib/seo';
@@ -87,8 +86,6 @@ const nextSlug =
 const prev = prevSlug ? bySlug.get(prevSlug)?.frontmatter : undefined;
 const next = nextSlug ? bySlug.get(nextSlug)?.frontmatter : undefined;
 
-const drawingNo = `FN-${String(position + 1).padStart(2, '0')}`;
-
 const jsonLd = articleJsonLd({
   site: Astro.site!,
   path: `/field-notes/${frontmatter.slug}`,
@@ -114,11 +111,7 @@ const figureNumber = figureKey ? FIGURE_NUMBERS[figureKey] : undefined;
         <p class="eyebrow">{frontmatter.category.toUpperCase()}</p>
         <h1>{frontmatter.title}</h1>
         <p class="standfirst">{frontmatter.standfirst}</p>
-        <TitleBlock
-          drawingNo={drawingNo}
-          subject={frontmatter.category.toUpperCase()}
-          dimension={`${frontmatter.readingMinutes} MIN READ`}
-        />
+        <p class="note-meta">{frontmatter.readingMinutes} min read</p>
       </header>
 
       {figureSvg && figureCaption && figureNumber !== undefined ? (
@@ -168,6 +161,15 @@ const figureNumber = figureKey ? FIGURE_NUMBERS[figureKey] : undefined;
 
   .note-header .eyebrow {
     margin-bottom: var(--space-2);
+  }
+
+  .note-meta {
+    margin-top: var(--space-3);
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
   }
 
   .standfirst {

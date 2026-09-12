@@ -1,13 +1,15 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import TitleBlock from '../components/TitleBlock.astro';
-import { organizationJsonLd } from '../lib/seo';
 import SupplyStages from '../components/home/SupplyStages.astro';
-import FourWeeks from '../components/home/FourWeeks.astro';
-import SpecPromise from '../components/home/SpecPromise.astro';
-import OrderingSummary from '../components/home/OrderingSummary.astro';
 import FieldNotesTeaser from '../components/home/FieldNotesTeaser.astro';
-import QuoteBlock from '../components/home/QuoteBlock.astro';
+import { organizationJsonLd } from '../lib/seo';
+
+import heroImg from '../assets/images/sleeves-at-scale.jpg';
+import graftingImg from '../assets/images/grafting-hands.jpg';
+import sleevesImg from '../assets/images/sleeves.jpg';
+import rootedImg from '../assets/images/rooted-cutting.jpg';
+import deliveryImg from '../assets/images/delivery.jpg';
 
 const jsonLd = organizationJsonLd(Astro.site!);
 ---
@@ -18,70 +20,258 @@ const jsonLd = organizationJsonLd(Astro.site!);
   jsonLd={jsonLd}
 >
   <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-copy">
-        <p class="eyebrow">NAIROBI · SUPPLYING KENYA AND ETHIOPIA</p>
+    <div class="hero-media">
+      <Image
+        src={heroImg}
+        alt="Rows of grafted rose cuttings on a propagation bench, each join held by a small transparent sleeve, mist hanging in the air"
+        widths={[800, 1200, 1600]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+    <div class="hero-body">
+      <div class="hero-inner">
+        <p class="hero-eyebrow">Nairobi &middot; supplying Kenya and Ethiopia</p>
         <h1>Propagation supplies for nurseries and flower farms.</h1>
-        <p class="subhead">
+        <p class="hero-sub">
           Grafting sleeves and clips, growing media, nursery hygiene products, trays, labels and
-          record books — every item with its size, grade and strength written down. Stocked in
-          Nairobi, delivered to farms across Kenya and Ethiopia.
+          record books. Every item with its size, grade and strength written down.
         </p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="/contact">
             Ask for a quotation
           </a>
-          <a class="btn btn-outline" href="/supplies">
+          <a class="btn btn-ghost" href="/supplies">
             See what we supply
           </a>
         </div>
       </div>
-      <TitleBlock drawingNo="PA-000" subject="Site overview" sku="—" dimension="—" scale="NTS" />
     </div>
   </section>
+
+  <section class="strip">
+    <div class="strip-inner">
+      <p>
+        We supply one part of horticulture properly: the consumables a propagation house runs on.
+        Stocked in Nairobi, delivered to farms across Kenya and Ethiopia.
+      </p>
+    </div>
+  </section>
+
   <SupplyStages />
-  <FourWeeks />
-  <SpecPromise />
-  <OrderingSummary />
+
+  <section class="split">
+    <div class="split-inner">
+      <div class="split-media">
+        <Image
+          src={graftingImg}
+          alt="A nursery worker pressing a freshly grafted rose cutting into a tray, a transparent sleeve gripping the join"
+          widths={[600, 900, 1100]}
+          sizes="(min-width: 900px) 50vw, 100vw"
+          loading="lazy"
+        />
+      </div>
+      <div class="split-copy">
+        <p class="eyebrow-warm">The first four weeks</p>
+        <h2>Grafting joins the top of one plant to the roots of another.</h2>
+        <p>
+          The join has to be held still, under mist, for about four weeks — while the plant is also
+          growing the roots that will feed it. Nothing about whether it worked is visible from the
+          bench until the end.
+        </p>
+        <p>
+          Everything we sell exists to get a batch through those four weeks: the medium it sits in,
+          the sleeve that holds the join, the mist above it, the hygiene that keeps disease out, and
+          the record that proves which batch it was.
+        </p>
+        <a class="link-arrow" href="/how-grafting-works">
+          How grafting works &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="specs-band">
+    <div class="specs-inner">
+      <div class="specs-copy">
+        <p class="eyebrow-light">Specifications</p>
+        <h2>Every item has a specification, and we publish it.</h2>
+        <p>
+          Bore and wall thickness for every sleeve. Particle size, bulk density and pH for every
+          grade of vermiculite. Available chlorine, pack size and shelf life for every drum of
+          hypochlorite. You can read all of it before you speak to anyone.
+        </p>
+        <dl class="specs-rows">
+          <div>
+            <dt>Published</dt>
+            <dd>Bore, wall, grade, pH, conductivity, available chlorine</dd>
+          </div>
+          <div>
+            <dt>With consignment</dt>
+            <dd>Safety data sheet, certificate of analysis, batch record</dd>
+          </div>
+          <div>
+            <dt>On every batch</dt>
+            <dd>A lot code that reconciles with your nursery records</dd>
+          </div>
+        </dl>
+        <a class="link-arrow light" href="/specifications">
+          See the specifications &rarr;
+        </a>
+      </div>
+      <div class="specs-media">
+        <Image
+          src={sleevesImg}
+          alt="A small pile of transparent silicone grafting sleeves on a potting bench beside a rose stem with a sleeve holding the graft join"
+          widths={[600, 900]}
+          sizes="(min-width: 900px) 45vw, 100vw"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="split reverse">
+    <div class="split-inner">
+      <div class="split-media">
+        <Image
+          src={deliveryImg}
+          alt="Peat bales and drums on a pallet being unloaded at a Kenyan flower farm, greenhouses behind"
+          widths={[600, 900, 1100]}
+          sizes="(min-width: 900px) 50vw, 100vw"
+          loading="lazy"
+        />
+      </div>
+      <div class="split-copy">
+        <p class="eyebrow-warm">Ordering</p>
+        <h2>We quote against your programme, not against a price list.</h2>
+        <p>
+          There are no prices on this site, and that is deliberate. What an item costs depends on
+          annual volume, pack size, specification, delivery point and how much notice you can give.
+        </p>
+        <p>
+          For anyone grafting at volume, a stock-out is not a delay — it is a missed window that
+          cannot be recovered until the next cycle. So we work on an annual framework with monthly
+          call-offs and buffer stock held against it.
+        </p>
+        <a class="link-arrow" href="/ordering">
+          How ordering works &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
   <FieldNotesTeaser />
-  <QuoteBlock />
+
+  <section class="closer">
+    <div class="closer-media">
+      <Image
+        src={rootedImg}
+        alt="A rooted rose cutting lifted from its tray at four weeks, white roots and the healed graft join both visible"
+        widths={[800, 1200, 1600]}
+        sizes="100vw"
+        loading="lazy"
+      />
+    </div>
+    <div class="closer-body">
+      <div class="closer-inner">
+        <h2>Tell us the programme.</h2>
+        <p>
+          Crop, stage, annual volume and delivery point is enough for a first quotation. We reply
+          within one working day.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="/contact">
+            Ask for a quotation
+          </a>
+          <a class="btn btn-ghost" href="tel:+254722861682">
+            +254&nbsp;722&nbsp;861&nbsp;682
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
+  /* ---------- hero ---------- */
   .hero {
-    padding: var(--space-6) 0 var(--space-5);
+    position: relative;
+    isolation: isolate;
+    background: var(--green-deep);
   }
 
-  .hero-inner {
-    max-width: var(--content-max);
+  .hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .hero-media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .hero-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--ink-overlay-strong);
+  }
+
+  .hero-body {
+    max-width: var(--wide-max);
     margin: 0 auto;
-    padding: 0 var(--side-gutter);
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-5);
-    align-items: start;
+    padding: var(--space-7) var(--side-gutter) var(--space-7);
+    min-height: 66vh;
+    display: flex;
+    align-items: flex-end;
   }
 
-  @media (min-width: 900px) {
+  /* NB: `ch` on this container would resolve against its own 16px font, not
+     the headline's, which is how this first shipped five lines deep. */
+  .hero-inner {
+    max-width: 100%;
+    color: var(--paper);
+  }
+
+  @media (min-width: 700px) {
     .hero-inner {
-      grid-template-columns: 1fr auto;
+      max-width: 560px;
     }
   }
 
-  .hero-copy {
-    max-width: 46em;
+  @media (min-width: 1100px) {
+    .hero-inner {
+      max-width: 740px;
+    }
   }
 
-  .hero-copy .eyebrow {
-    margin-bottom: var(--space-2);
+  .hero-eyebrow {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--paper);
+    opacity: 0.78;
+    margin-bottom: var(--space-3);
   }
 
-  .subhead {
+  .hero h1 {
+    color: var(--paper);
+    font-size: clamp(34px, 6vw, 64px);
+  }
+
+  .hero-sub {
     margin-top: var(--space-3);
-    font-size: 18px;
-    line-height: 1.7;
-    color: var(--ink-soft);
-    max-width: 42em;
+    font-size: clamp(17px, 2vw, 20px);
+    line-height: 1.6;
+    color: var(--paper);
+    opacity: 0.9;
+    max-width: 52ch;
   }
 
   .hero-actions {
@@ -91,30 +281,256 @@ const jsonLd = organizationJsonLd(Astro.site!);
     gap: var(--space-2);
   }
 
+  /* ---------- buttons ---------- */
   .btn {
+    display: inline-block;
     text-decoration: none;
     font-weight: 600;
-    font-size: 15px;
-    padding: 12px 22px;
-    border: 1px solid var(--green);
+    font-size: 16px;
+    padding: 14px 24px;
+    border-radius: var(--radius-s);
+    border: 1px solid transparent;
   }
 
   .btn-primary {
     background: var(--green);
     color: var(--paper);
+    border-color: var(--green);
   }
 
   .btn-primary:hover {
-    opacity: 0.92;
+    background: var(--green-deep);
+    border-color: var(--green-deep);
   }
 
-  .btn-outline {
-    background: transparent;
-    color: var(--ink);
-    border-color: var(--rule);
+  .btn-ghost {
+    color: var(--paper);
+    border-color: rgba(255, 255, 255, 0.5);
   }
 
-  .btn-outline:hover {
-    border-color: var(--green);
+  .btn-ghost:hover {
+    border-color: var(--paper);
+  }
+
+  /* ---------- strip ---------- */
+  .strip {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .strip-inner {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: var(--space-5) var(--side-gutter);
+  }
+
+  .strip p {
+    font-size: clamp(19px, 2.4vw, 26px);
+    line-height: 1.45;
+    letter-spacing: -0.018em;
+    max-width: 30ch;
+    font-weight: 500;
+  }
+
+  /* ---------- split sections ---------- */
+  .split {
+    padding: var(--space-7) 0;
+  }
+
+  .split-inner {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 0 var(--side-gutter);
+    display: grid;
+    gap: var(--space-5);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .split-inner {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+    }
+
+    .split.reverse .split-media {
+      order: 2;
+    }
+  }
+
+  .split-media :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--radius-m);
+  }
+
+  .split-copy p {
+    margin-top: var(--space-3);
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    max-width: 46ch;
+  }
+
+  .eyebrow-warm {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--signal-ink);
+    margin-bottom: var(--space-2);
+  }
+
+  .link-arrow {
+    display: inline-block;
+    margin-top: var(--space-4);
+    font-weight: 600;
+    color: var(--green);
+    text-decoration: none;
+  }
+
+  .link-arrow:hover {
+    text-decoration: underline;
+  }
+
+  .link-arrow.light {
+    color: var(--paper);
+  }
+
+  /* ---------- specification section ---------- */
+  .specs-band {
+    background: var(--green-deep);
+    color: var(--paper);
+    padding: var(--space-7) 0;
+  }
+
+  .specs-inner {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 0 var(--side-gutter);
+    display: grid;
+    gap: var(--space-5);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .specs-inner {
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: var(--space-6);
+    }
+  }
+
+  .specs-band h2 {
+    color: var(--paper);
+  }
+
+  .specs-copy > p {
+    margin-top: var(--space-3);
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--paper);
+    opacity: 0.82;
+    max-width: 50ch;
+  }
+
+  .eyebrow-light {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--paper);
+    opacity: 0.7;
+    margin-bottom: var(--space-2);
+  }
+
+  .specs-rows {
+    margin: var(--space-4) 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
+  }
+
+  .specs-rows > div {
+    display: grid;
+    gap: 2px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  @media (min-width: 640px) {
+    .specs-rows > div {
+      grid-template-columns: 13em 1fr;
+      gap: var(--space-3);
+      align-items: baseline;
+    }
+  }
+
+  .specs-rows dt {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--paper);
+    opacity: 0.62;
+  }
+
+  .specs-rows dd {
+    margin: 0;
+    font-size: 15px;
+    color: var(--paper);
+  }
+
+  .specs-media :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--radius-m);
+  }
+
+  /* ---------- closer ---------- */
+  .closer {
+    position: relative;
+    isolation: isolate;
+    background: var(--green-deep);
+  }
+
+  .closer-media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .closer-media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .closer-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--ink-overlay-strong);
+  }
+
+  .closer-body {
+    max-width: var(--wide-max);
+    margin: 0 auto;
+    padding: var(--space-7) var(--side-gutter);
+  }
+
+  .closer-inner {
+    max-width: 640px;
+    color: var(--paper);
+  }
+
+  .closer h2 {
+    color: var(--paper);
+  }
+
+  .closer p {
+    margin-top: var(--space-3);
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--paper);
+    opacity: 0.88;
   }
 </style>

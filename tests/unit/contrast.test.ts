@@ -63,6 +63,16 @@ describe('colour token contrast', () => {
     expect(css).toMatch(/graphic colour/);
   });
 
+  it('text on the pale green ground clears AA', () => {
+    // The Field Notes band is the one tinted ground on the site. Both the
+    // secondary ink and the signal ink are used as small text on it.
+    const pale = token('green-pale');
+    expect(contrast(token('ink-soft'), pale)).toBeGreaterThanOrEqual(AA_NORMAL);
+    expect(contrast(token('signal-ink'), pale)).toBeGreaterThanOrEqual(AA_NORMAL);
+    expect(contrast(token('ink'), pale)).toBeGreaterThanOrEqual(AA_NORMAL);
+    expect(contrast(token('green'), pale)).toBeGreaterThanOrEqual(AA_NORMAL);
+  });
+
   it('--rule is a hairline, never text', () => {
     expect(contrast(token('rule'), paper())).toBeLessThan(AA_LARGE);
   });

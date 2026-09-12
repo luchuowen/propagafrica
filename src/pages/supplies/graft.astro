@@ -1,7 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import graftingHandsImg from '../../assets/images/grafting-hands.jpg';
 import Figure from '../../components/Figure.astro';
-import StageHeader from '../../components/supplies/StageHeader.astro';
+import PageHero from '../../components/PageHero.astro';
 import SpecTable from '../../components/supplies/SpecTable.astro';
 import NotesBlock from '../../components/supplies/NotesBlock.astro';
 import StageNav from '../../components/supplies/StageNav.astro';
@@ -20,17 +21,12 @@ const tables = {
   title="Graft"
   description="Two cut faces have to be brought into line and held there for weeks. The pressure has to be even and unchanging, and whatever holds them has to come away"
 >
-  <StageHeader
+  <PageHero
     eyebrow="STAGE 02 · GRAFT"
     title="Grafting sleeves and clips."
     standfirst="Two cut faces have to be brought into line and held there for weeks. The pressure has to be even and unchanging, and whatever holds them has to come away without tearing tissue that is only days old."
-    titleBlockRows={[
-      { label: 'DRAWING', value: 'PA-004' },
-      { label: 'SUBJECT', value: 'GRAFT SUPPORT' },
-      { label: 'SLEEVES', value: '9 SKU' },
-      { label: 'BORE', value: '1.5 – 12 mm' },
-      { label: 'SHEET', value: '04 OF 14' },
-    ]}
+    image={graftingHandsImg}
+    imageAlt="A nursery worker pressing a freshly grafted rose cutting into a tray, a sleeve gripping the join"
   />
 
   <div class="stage-section">

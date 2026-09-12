@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import StageHeader from '../components/supplies/StageHeader.astro';
+import houseWideImg from '../assets/images/house-wide.jpg';
+import PageHero from '../components/PageHero.astro';
 import NotesBlock from '../components/supplies/NotesBlock.astro';
 
 interface StageEntry {
@@ -74,17 +75,12 @@ const STAGES: StageEntry[] = [
   title="Supplies"
   description="Five stages, from filling a tray to filing the record. We stock the consumables each one uses, and we specify and source the equipment around them. One"
 >
-  <StageHeader
+  <PageHero
     eyebrow="WHAT WE SUPPLY"
     title="Everything a propagation house gets through in a month."
     standfirst="Five stages, from filling a tray to filing the record. We stock the consumables each one uses, and we specify and source the equipment around them. One framework agreement, one monthly call-off, one delivery."
-    titleBlockRows={[
-      { label: 'DRAWING', value: 'PA-002' },
-      { label: 'SUBJECT', value: 'SUPPLY RANGE' },
-      { label: 'FAMILIES', value: '5' },
-      { label: 'TERRITORY', value: 'KENYA · ETHIOPIA' },
-      { label: 'SHEET', value: '02 OF 14' },
-    ]}
+    image={houseWideImg}
+    imageAlt="A worker tending trays of young rose cuttings along a misted greenhouse bench"
   />
 
   <section class="stage-list">

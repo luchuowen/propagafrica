@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import StageHeader from '../components/supplies/StageHeader.astro';
+import farmAerialImg from '../assets/images/farm-aerial.jpg';
+import PageHero from '../components/PageHero.astro';
 import NotesBlock from '../components/supplies/NotesBlock.astro';
 import QuotationBlock from '../components/supplies/QuotationBlock.astro';
 import RuledRows from '../components/reference/RuledRows.astro';
@@ -52,17 +53,12 @@ const CUSTOMERS = [
   title="About"
   description="PropagAfrica Technologies supplies one part of horticulture properly: the consumables and equipment a propagation house runs on, across Kenya and Ethiopia."
 >
-  <StageHeader
+  <PageHero
     eyebrow="ABOUT"
     title="A specialist supplier, not a general dealer."
     standfirst="PropagAfrica Technologies supplies one part of horticulture properly: the consumables and equipment a propagation house runs on, across Kenya and Ethiopia."
-    titleBlockRows={[
-      { label: 'DRAWING', value: 'PA-013' },
-      { label: 'SUBJECT', value: 'THE COMPANY' },
-      { label: 'BASE', value: 'NAIROBI, KENYA' },
-      { label: 'TERRITORY', value: 'KENYA · ETHIOPIA' },
-      { label: 'SHEET', value: '13 OF 14' },
-    ]}
+    image={farmAerialImg}
+    imageAlt="Rows of polythene greenhouses across a Kenyan flower farm with an escarpment behind"
   />
 
   <div class="ref-section">

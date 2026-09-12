@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import StageHeader from '../components/supplies/StageHeader.astro';
+import sleevesImg from '../assets/images/sleeves.jpg';
+import PageHero from '../components/PageHero.astro';
 import SpecTable from '../components/supplies/SpecTable.astro';
 import NotesBlock from '../components/supplies/NotesBlock.astro';
 import RuledRows from '../components/reference/RuledRows.astro';
@@ -63,23 +64,18 @@ const HOW_TO_READ = [
   title="Specifications"
   description="Bore, wall, grade, particle size, density, pH, conductivity, available chlorine, pack — every published specification table in one place."
 >
-  <StageHeader
+  <PageHero
     eyebrow="SPECIFICATIONS"
     title="Every published specification, in one place."
     standfirst="Bore, wall, grade, particle size, density, pH, conductivity, available chlorine, pack. Read it before you speak to anyone."
-    titleBlockRows={[
-      { label: 'DRAWING', value: 'PA-009' },
-      { label: 'SUBJECT', value: 'SPECIFICATION INDEX' },
-      { label: 'TABLES', value: String(tableCount) },
-      { label: 'TOLERANCE', value: 'HELD TO BATCH' },
-      { label: 'SHEET', value: '09 OF 14' },
-    ]}
+    image={sleevesImg}
+    imageAlt="Transparent silicone grafting sleeves on a potting bench beside a rose stem"
   />
 
   <div class="ref-section">
     <p class="lede">
-      Every table on this page also appears on its own stage page. This is the index, for anyone who
-      would rather read the numbers than the words.
+      {tableCount} tables. Every one of them also appears on its own stage page — this is the index,
+      for anyone who would rather read the numbers than the words.
     </p>
   </div>
 

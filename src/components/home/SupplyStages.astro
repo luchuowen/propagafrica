@@ -1,179 +1,223 @@
 ---
-interface Stage {
-  number: string;
-  name: string;
-  href: string;
-  sentence: string;
-  skus: string[];
-}
+import { Image } from 'astro:assets';
 
-const stages: Stage[] = [
+import prepareImg from '../../assets/images/tray-filling.jpg';
+import graftImg from '../../assets/images/clips.jpg';
+import rootImg from '../../assets/images/mist-bench.jpg';
+import protectImg from '../../assets/images/hygiene-station.jpg';
+import recordImg from '../../assets/images/records.jpg';
+
+const STAGES = [
   {
-    number: '01',
-    name: 'Prepare',
-    href: '/supplies/prepare',
-    sentence: 'Filling trays and getting the growing medium right, before anything is cut.',
-    skus: [
-      'PRO-VERM F · M · C',
-      'PRO-PEAT SEED · PROP · GRAFT',
-      'Trays 104–288 cell',
-      'Pots, polybags, blades',
-    ],
+    n: '01',
+    slug: 'prepare',
+    title: 'Prepare',
+    line: 'The medium the cutting sits in, and the tray that holds it.',
+    items: 'Vermiculite · Peat formulations · Trays 104–288 cell',
+    img: prepareImg,
+    alt: 'A nursery worker filling black propagation trays with dark peat at a potting bench',
   },
   {
-    number: '02',
-    name: 'Graft',
-    href: '/supplies/graft',
-    sentence: 'Joining the two halves and holding them still while they knit together.',
-    skus: ['PRO-ROSE 35 → 85', 'PRO-VEG · PRO-CUC · PRO-TREE', 'Clips: U, Omega, Round, Tomato, V'],
+    n: '02',
+    slug: 'graft',
+    title: 'Graft',
+    line: 'Joining the two halves and holding them still while they knit together.',
+    items: 'Silicone sleeves 1.5–12 mm bore · Clips in five profiles',
+    img: graftImg,
+    alt: 'An assortment of grafting clips and transparent sleeves on a weathered potting bench',
   },
   {
-    number: '03',
-    name: 'Root',
-    href: '/supplies/root',
-    sentence: 'Keeping the leaf damp and the base drained for the weeks that follow.',
-    skus: [
-      'Misting and fogging',
-      'Benching and racking',
-      'Drip, ebb and flow',
-      'Shade, screening, LED',
-      'Sensors and dashboard',
-    ],
+    n: '03',
+    slug: 'root',
+    title: 'Root',
+    line: 'Keeping the leaf damp and the base drained for the weeks that follow.',
+    items: 'Misting and fogging · Benching · Irrigation · Sensors',
+    img: rootImg,
+    alt: 'Overhead misting nozzles spraying a bench of young rose cuttings, backlit droplets in the air',
   },
   {
-    number: '04',
-    name: 'Protect',
-    href: '/supplies/protect',
-    sentence: 'Keeping the house clean enough that nothing spreads through a whole batch.',
-    skus: [
-      'PRO-SAN 10 · PRO-SAN 12',
-      'Footbaths and tool stations',
-      'Algae and biofilm control',
-      'Sprayers, PPE',
-    ],
+    n: '04',
+    slug: 'protect',
+    title: 'Protect',
+    line: 'Keeping the house clean enough that nothing spreads through a whole batch.',
+    items: 'Hypochlorite 10 % and 12 % · Footbaths · Tool stations · PPE',
+    img: protectImg,
+    alt: 'A footbath tray and tool dip station at the entrance to a propagation greenhouse',
   },
   {
-    number: '05',
-    name: 'Record',
-    href: '/supplies/record',
-    sentence: 'Knowing which batch came from where, and being able to prove it later.',
-    skus: ['PRO-LABEL LOOP · T', 'PRO-TRACE · TRACE CARD', 'PRO-QC logbooks', 'PRO-MARK'],
+    n: '05',
+    slug: 'record',
+    title: 'Record',
+    line: 'Knowing which batch came from where, and being able to prove it later.',
+    items: 'Loop labels · Batch cards · QC logbooks · Markers',
+    img: recordImg,
+    alt: 'An open duplicate logbook, batch cards and a bundle of loop labels on a greenhouse bench',
   },
 ];
 ---
 
-<section class="supply-stages">
-  <div class="wrap">
-    <p class="eyebrow">WHAT WE SUPPLY</p>
+<section class="stages">
+  <div class="stages-head">
+    <p class="eyebrow-warm">What we supply</p>
     <h2>Five stages, one order.</h2>
-    <p class="intro">
+    <p class="lede">
       A nursery does not buy categories, it runs a sequence. We stock what each stage of that
-      sequence consumes, so one order covers a month of work instead of five suppliers covering it
-      between them.
+      sequence consumes, so one order covers a month of work instead of five suppliers covering bits
+      of it.
     </p>
-    <ol class="stage-list">
-      {stages.map((stage) => (
-        <li class="stage-row">
-          <a href={stage.href}>
-            <span class="stage-number mono">{stage.number}</span>
-            <span class="stage-body">
-              <h3 class="stage-name">{stage.name}</h3>
-              <p class="stage-sentence">{stage.sentence}</p>
-              <p class="stage-skus mono">
-                {stage.skus.map((sku, i) => (
-                  <>
-                    {i > 0 ? ' · ' : ''}
-                    <code>{sku}</code>
-                  </>
-                ))}
-              </p>
-            </span>
-          </a>
-        </li>
-      ))}
-    </ol>
-    <p class="closing mono">ONE FRAMEWORK AGREEMENT · MONTHLY CALL-OFFS · ONE DELIVERY</p>
   </div>
+
+  <ul class="grid">
+    {STAGES.map((s) => (
+      <li class="card">
+        <a href={`/supplies/${s.slug}`}>
+          <span class="card-media">
+            <Image
+              src={s.img}
+              alt={s.alt}
+              widths={[400, 700]}
+              sizes="(min-width: 1100px) 30vw, (min-width: 700px) 45vw, 100vw"
+              loading="lazy"
+            />
+          </span>
+          <span class="card-body">
+            <span class="card-n">{s.n}</span>
+            <span class="card-title">{s.title}</span>
+            <span class="card-line">{s.line}</span>
+            <span class="card-items">{s.items}</span>
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <p class="stages-foot">
+    One framework agreement &middot; monthly call-offs &middot; one delivery
+  </p>
 </section>
 
 <style>
-  .supply-stages {
-    padding: var(--space-6) 0;
-    border-top: 1px solid var(--rule);
-  }
-
-  .wrap {
+  .stages {
     max-width: var(--content-max);
     margin: 0 auto;
-    padding: 0 var(--side-gutter);
+    padding: var(--space-7) var(--side-gutter);
   }
 
-  .intro {
-    margin-top: var(--space-2);
-    max-width: 46em;
+  .stages-head {
+    max-width: 52ch;
+  }
+
+  .eyebrow-warm {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--signal-ink);
+    margin-bottom: var(--space-2);
+  }
+
+  .lede {
+    margin-top: var(--space-3);
+    font-size: 17px;
+    line-height: 1.7;
     color: var(--ink-soft);
   }
 
-  .stage-list {
+  .grid {
     list-style: none;
     margin: var(--space-5) 0 0;
     padding: 0;
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: 1fr;
   }
 
-  .stage-row a {
-    display: grid;
-    grid-template-columns: 2.5em 1fr;
-    gap: var(--space-3);
-    padding: var(--space-3) 0;
-    border-top: 1px solid var(--rule);
+  @media (min-width: 700px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .card a {
+    display: block;
+    height: 100%;
     text-decoration: none;
     color: inherit;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-m);
+    overflow: hidden;
+    background: var(--paper);
   }
 
-  .stage-row:first-child a {
-    border-top: none;
+  .card a:hover {
+    border-color: var(--green);
   }
 
-  .stage-row a:hover .stage-name {
-    color: var(--green);
+  .card-media {
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--green-pale);
   }
 
-  .stage-number {
-    font-size: 22px;
-    color: var(--ink-soft);
+  .card-media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
-  .stage-body {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  .card-body {
+    display: block;
+    padding: var(--space-3);
   }
 
-  .stage-name {
-    font-size: 18px;
-    letter-spacing: -0.02em;
-    margin: 0;
-  }
-
-  .stage-sentence {
-    margin: 0;
-    color: var(--ink-soft);
-  }
-
-  .stage-skus {
-    margin: 4px 0 0;
-    font-size: 11px;
-    color: var(--ink-soft);
-  }
-
-  .stage-skus code {
+  .card-n {
     font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--ink-soft);
   }
 
-  .closing {
-    margin-top: var(--space-4);
-    color: var(--green);
+  .card-title {
+    display: block;
+    margin-top: 4px;
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.022em;
+  }
+
+  .card-line {
+    display: block;
+    margin-top: 6px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  .card-items {
+    display: block;
+    margin-top: var(--space-2);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--rule);
+    font-family: var(--f-mono);
     font-size: 11px;
-    letter-spacing: 0.06em;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+
+  .stages-foot {
+    margin-top: var(--space-4);
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
   }
 </style>

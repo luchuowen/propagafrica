@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import StageHeader from '../components/supplies/StageHeader.astro';
+import deliveryImg from '../assets/images/delivery.jpg';
+import PageHero from '../components/PageHero.astro';
 import NotesBlock from '../components/supplies/NotesBlock.astro';
 import QuotationBlock from '../components/supplies/QuotationBlock.astro';
 import RuledRows from '../components/reference/RuledRows.astro';
@@ -106,17 +107,12 @@ const TECHNICAL_SERVICES = [
   title="Ordering"
   description="How we quote and how supply is scheduled: an annual framework, monthly call-offs, buffer stock and documentation issued with consignment."
 >
-  <StageHeader
+  <PageHero
     eyebrow="ORDERING"
     title="How we quote, and how supply is scheduled."
     standfirst="There are no prices on this site. What an item costs depends on your volume, your pack size, your specification, where it goes and how much notice you can give — so we quote against a programme rather than publish a list."
-    titleBlockRows={[
-      { label: 'DRAWING', value: 'PA-010' },
-      { label: 'SUBJECT', value: 'SUPPLY PROGRAMME' },
-      { label: 'BASIS', value: 'ANNUAL FRAMEWORK' },
-      { label: 'RELEASE', value: 'MONTHLY CALL-OFF' },
-      { label: 'SHEET', value: '10 OF 14' },
-    ]}
+    image={deliveryImg}
+    imageAlt="Peat bales and drums on a pallet being unloaded at a Kenyan flower farm"
   />
 
   <div class="ref-section">

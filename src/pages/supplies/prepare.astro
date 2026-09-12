@@ -1,7 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import trayFillingImg from '../../assets/images/tray-filling.jpg';
 import Figure from '../../components/Figure.astro';
-import StageHeader from '../../components/supplies/StageHeader.astro';
+import PageHero from '../../components/PageHero.astro';
 import SpecTable from '../../components/supplies/SpecTable.astro';
 import NotesBlock from '../../components/supplies/NotesBlock.astro';
 import StageNav from '../../components/supplies/StageNav.astro';
@@ -20,17 +21,12 @@ const tables = {
   title="Prepare"
   description="What a young plant sits in decides how evenly it roots. A medium that holds a little too much water, or a tray filled a few millimetres short, shows up"
 >
-  <StageHeader
+  <PageHero
     eyebrow="STAGE 01 · PREPARE"
     title="Growing media, trays and tools."
     standfirst="What a young plant sits in decides how evenly it roots. A medium that holds a little too much water, or a tray filled a few millimetres short, shows up three weeks later as a batch that finishes unevenly — long after anyone can do anything about it."
-    titleBlockRows={[
-      { label: 'DRAWING', value: 'PA-003' },
-      { label: 'SUBJECT', value: 'GROWING MEDIA' },
-      { label: 'GRADES', value: '6' },
-      { label: 'PACK', value: '20 kg · 50 L · 250 L' },
-      { label: 'SHEET', value: '03 OF 14' },
-    ]}
+    image={trayFillingImg}
+    imageAlt="A nursery worker filling black propagation trays with dark peat at a potting bench"
   />
 
   <div class="stage-section">

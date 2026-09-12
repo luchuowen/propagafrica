@@ -16,7 +16,26 @@
      text, which axe flags at small sizes. Any --signal used as TEXT uses this
      instead. Do not swap them: the graphic mark keeps the brand orange. */
   --signal-ink: #c1471b;
-  --rule: #dce2df; /* hairlines, sheet border */
+  --rule: #e4e7e4; /* hairlines */
+
+  /* Rebuild additions. The site is photography-led now; these carry the
+     contrast the old sheet border used to carry. */
+  --green-deep: #06301f; /* full-bleed dark sections, image overlays */
+  --green-mid: #0a5c3c; /* same as --green, named for section use */
+  /* The only tinted ground. Cool, not beige. Lightened from #eef3ef, which
+     put --ink-soft and --signal-ink at 4.47:1 on it — just under AA. At
+     #f5f8f6 both clear 4.69:1 and the tint is still visible. */
+  --green-pale: #f5f8f6;
+  --ink-overlay: rgba(6, 30, 20, 0.55); /* scrim over photographs */
+  --ink-overlay-strong: rgba(6, 30, 20, 0.72);
+
+  /* Radius and elevation. The old build banned both outright because the
+     blueprint idea had no use for them. A photographic site does. Kept
+     restrained: two radii, one shadow, no gradients ever. */
+  --radius-s: 4px;
+  --radius-m: 10px;
+  --radius-l: 18px;
+  --shadow-soft: 0 1px 2px rgba(6, 30, 20, 0.04), 0 8px 24px rgba(6, 30, 20, 0.06);
 
   /* Type */
   --f-sans:
@@ -33,12 +52,9 @@
   --space-7: 6rem;
   --space-8: 9rem;
 
-  /* Sheet frame */
-  --sheet-inset: 9px;
-  --sheet-inset-lg: 10px;
-
   /* Layout */
-  --content-max: 1180px;
+  --content-max: 1200px;
+  --wide-max: 1440px;
   --side-gutter: 20px;
 }
 

@@ -2,73 +2,8 @@
 
 Loaded via `CLAUDE.md`. Cap: 250 lines. Compact into `.factory/history/` when close to the cap.
 
-## Stack (fixed by spec, session 1)
-
-- Astro 5 (pinned `^5`, not the newer major that `pnpm add astro` resolves to by default),
-  TypeScript strict, hand-written CSS with design tokens, Vitest, Playwright, ESLint flat config +
-  Prettier, pnpm, Node 22. Firebase Hosting + Cloud Functions (2nd gen) + Firestore for the
-  quotation path — not wired yet (session 2+).
-- No Tailwind, no UI library, no CSS-in-JS. No framework for the two future islands beyond
-  vanilla TS in `client:visible` Astro islands.
-
-## Fonts — self-hosted via npm, not a CDN fetch
-
-- `fonts.google.com` is not reachable from this environment (proxy returns 403). Inter and
-  JetBrains Mono were obtained instead from the `@fontsource-variable/inter` and
-  `@fontsource/jetbrains-mono` npm packages, whose Latin-subset `.woff2` files were copied into
-  `public/fonts/` and the packages then removed from `package.json` (they were a one-time source
-  for static files, not a runtime dependency). `@font-face` is declared once in
-  `src/styles/global.css`, `font-display: swap`, preloaded in `BaseLayout.astro`.
-- Inter is shipped as the single variable file (weights 400–800 via `font-variation-settings` /
-  `format('woff2-variations')`); JetBrains Mono is shipped as three static weights (400/500/700)
-  since Fontsource does not publish a JetBrains Mono variable build.
-
-## Playwright — pinned to the pre-installed browser
-
-- The sandbox pre-installs Chromium at `/opt/pw-browsers/chromium-1194` and sets
-  `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1`. `@playwright/test@1.63.0`'s bundled build id (1243)
-  doesn't match, so `playwright.config.ts` sets
-  `use.launchOptions.executablePath: '/opt/pw-browsers/chromium'` on the `chromium` project instead
-  of running `playwright install`. Do not remove this — a fresh `playwright install` will not be
-  reachable in this environment either.
-
-## Astro version pin
-
-- `pnpm add astro` resolves to Astro 7 by default (newer major already shipped). The spec fixes
-  Astro 5, so the dependency is pinned `astro@^5` in `package.json`. Re-check this pin before any
-  future `pnpm update`.
-
-## Navigation is a typed module, not inline JSX
-
-- `src/lib/nav.ts` exports `NAV_ITEMS` and `isActive()`, imported by `Header.astro` and covered by
-  a Vitest unit test (`tests/unit/nav.test.ts`). This keeps the five-item order/wording from §4 of
-  the spec testable without a browser, and gives `factory-check quick` something fast to run.
-
-## No favicon / OG image yet
-
-- Not specified for session 1. `BaseLayout.astro` ships a bare `<head>` (charset, viewport, title,
-  description, font preloads). Add favicon and social meta when the asset exists.
-
-## Session 1 scope boundary
-
-- Home page ships only the hero (eyebrow, H1, subhead, two buttons) inside the sheet frame, per
-  the brief. All 13 other routes are stubs that render the shell (header, title block, footer) so
-  navigation never 404s; no page content beyond that is in scope for this session.
-
-## 2026-09-12 — Playwright browser resolution
-
-Session 1 ran in a cloud sandbox and hardcoded `/opt/pw-browsers/chromium` as the
-Chromium executable, which fails on any other machine. The config now uses
-Playwright's own managed browser by default and honours `PLAYWRIGHT_CHROMIUM_PATH`
-when a preinstalled binary is available. Run `pnpm exec playwright install chromium`
-once per machine.
-
-## 2026-09-12 — pnpm 11 build approvals
-
-pnpm 11 no longer reads the `pnpm` field in `package.json`. Build-script approvals
-for `esbuild` and `sharp` live in `pnpm-workspace.yaml` under `allowBuilds`.
-
----
+Sessions 1–7 build decisions (stack, fonts, toolchain) are archived in
+`.factory/history/2026-09-12-sessions-1-7.md` and still apply.
 
 # Session 8 — integration
 
@@ -214,3 +149,52 @@ If that branch is ever wanted, take the copy from it and not the data layer.
   Functions 2nd gen does not. `firebase deploy` will fail on the `functions` target until the
   project is upgraded to Blaze, so the quotation form's backend cannot go live before that.
   Deploy hosting alone with `firebase deploy --only hosting` in the meantime.
+
+---
+
+# Visual rebuild — the blueprint treatment was wrong at site scale
+
+The owner's reaction to the deployed site: "it looks like a user manual for an
+electronic equipment." He was right, and the diagnosis matters more than the fix.
+
+**What went wrong.** He chose "Blueprint" from a single hero sample. That was a
+choice of _direction_, and it was turned into the _format_ of all twenty pages:
+sheet border with registration marks, a `DRAWING PA-013 / SHEET 09 OF 14` title
+block at the top of every page, mono type well beyond the spec tables, and
+hairline rules as the only compositional device. A precision motif used once is
+a signature; used on every element of every page it becomes documentation.
+
+**The compounding error.** The image brief written for that direction said "no
+people, no premises, no branded packaging" — and then the twelve photographs
+were never generated, and the site shipped anyway. Twenty pages selling physical
+goods, with not one picture of a product, a person or a place. That alone
+guaranteed the reaction. A missing image set is a launch blocker, not a to-do.
+
+**The fix.**
+
+- `SheetFrame`, `TitleBlock` and `StageHeader` are deleted. `PageHero.astro`
+  replaces them: eyebrow, H1, standfirst, and a full-bleed photograph with a
+  scrim behind it.
+- 14 photographs generated with Nano Banana Pro on the owner's Gemini account,
+  all Kenyan commercial horticulture, consistent documentary register. Chrome
+  blocked the bulk download after the first file, so they were captured from the
+  page at their native 1024px instead — sharp at the sizes the layout uses, not
+  retina at full bleed. Replacing them with real client photography is the
+  standing follow-up.
+- The home page is rebuilt around photography: full-bleed hero, five stage cards
+  each with an image, a deep-green specifications band, a photographic closer.
+- Mono type is now confined to spec values, SKUs, eyebrows and small labels.
+  A layout band classed `.spec` had silently inherited `--f-mono` from a global
+  rule and shipped its body copy in monospace.
+- Tokens added: `--green-deep`, `--green-pale`, `--ink-overlay*`, `--radius-*`,
+  `--shadow-soft`. `--green-pale` is `#f5f8f6`; at the first value (`#eef3ef`)
+  `--ink-soft` and `--signal-ink` both measured 4.47:1 on it, just under AA.
+- The `no-forbidden-ui` gate banned radii above 4px and every box-shadow because
+  the blueprint idea had no use for them. It now allows both, but only from the
+  tokens. Gradients stay banned outright.
+- `no-prices` matched the phrase "price list" and fired on the copy that exists
+  to say we publish neither. It now matches currency plus digits only.
+
+**The lesson worth keeping.** A design direction picked from one sample is not a
+design system. The next time a direction is chosen from a hero, build two or
+three full pages in it — including the dullest one — before committing the site.

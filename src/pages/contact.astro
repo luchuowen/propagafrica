@@ -3,43 +3,25 @@
 // docs/content/copy-reference.md, section "/contact · SHEET 14 OF 14" — final, do not rephrase.
 //
 // The title block here uses this page's own DRAWING/SUBJECT/RESPONSE/SHEET rows rather than the
-// shared TitleBlock.astro component, whose five rows (DWG NO./SUBJECT/PRINCIPAL SKU/KEY DIM./
-// SCALE) don't fit this page's copy and are outside this session's owned paths to change — see
-// .factory/decisions/session-6.md.
 import BaseLayout from '../layouts/BaseLayout.astro';
+import inspectionImg from '../assets/images/inspection.jpg';
+import PageHero from '../components/PageHero.astro';
 import QuoteForm from '../components/quote/QuoteForm.astro';
-
-const titleBlockRows: [string, string][] = [
-  ['DRAWING', 'PA-014'],
-  ['SUBJECT', 'QUOTATION REQUEST'],
-  ['RESPONSE', 'ONE WORKING DAY'],
-  ['SHEET', '14 OF 14'],
-];
 ---
 
 <BaseLayout
   title="Contact — request a quotation"
   description="Tell PropagAfrica Technologies the crop, stage, annual volume and delivery point for a first quotation. We reply within one working day."
 >
+  <PageHero
+    eyebrow="Quotation"
+    title="Tell us the programme."
+    standfirst="Crop, stage, annual volume and delivery point is enough for a first quotation. We reply within one working day."
+    image={inspectionImg}
+    imageAlt="A propagation manager inspecting a grafted rose cutting through a hand lens"
+  />
+
   <section class="contact">
-    <div class="contact-inner">
-      <div class="contact-copy">
-        <p class="eyebrow">QUOTATION</p>
-        <h1>Tell us the programme.</h1>
-        <p class="standfirst">
-          Crop, stage, annual volume and delivery point is enough for a first quotation. We reply
-          within one working day.
-        </p>
-      </div>
-      <dl class="quotation-title-block">
-        {titleBlockRows.map(([label, value]) => (
-          <div class="row">
-            <dt>{label}</dt>
-            <dd>{value}</dd>
-          </div>
-        ))}
-      </dl>
-    </div>
     <div class="contact-inner">
       <QuoteForm />
     </div>

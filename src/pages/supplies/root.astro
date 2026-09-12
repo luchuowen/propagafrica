@@ -1,7 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import mistBenchImg from '../../assets/images/mist-bench.jpg';
 import Figure from '../../components/Figure.astro';
-import StageHeader from '../../components/supplies/StageHeader.astro';
+import PageHero from '../../components/PageHero.astro';
 import SpecTable from '../../components/supplies/SpecTable.astro';
 import NotesBlock from '../../components/supplies/NotesBlock.astro';
 import StageNav from '../../components/supplies/StageNav.astro';
@@ -19,17 +20,12 @@ const tables = {
   title="Root"
   description="A freshly grafted plant cannot drink yet, so the air around its leaves has to stay wet without the base of the cell ever sitting in water. Holding both at"
 >
-  <StageHeader
+  <PageHero
     eyebrow="STAGE 03 · ROOT"
     title="Misting, benching, irrigation and monitoring."
     standfirst="A freshly grafted plant cannot drink yet, so the air around its leaves has to stay wet without the base of the cell ever sitting in water. Holding both at once, for three weeks, is the hardest thing a propagation house does."
-    titleBlockRows={[
-      { label: 'DRAWING', value: 'PA-005' },
-      { label: 'SUBJECT', value: 'PROPAGATION ENVIRONMENT' },
-      { label: 'BASIS', value: 'SPECIFIED AND SOURCED' },
-      { label: 'CONTROL', value: 'VAPOUR PRESSURE DEFICIT' },
-      { label: 'SHEET', value: '05 OF 14' },
-    ]}
+    image={mistBenchImg}
+    imageAlt="Overhead misting nozzles spraying a bench of young rose cuttings, backlit droplets in the air"
   />
 
   <div class="stage-section">

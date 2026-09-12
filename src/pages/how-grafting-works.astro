@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import TitleBlock from '../components/TitleBlock.astro';
+import rootedCuttingImg from '../assets/images/rooted-cutting.jpg';
+import PageHero from '../components/PageHero.astro';
 
 const stages: { label: string; description: string; href: string }[] = [
   { label: 'Prepare', description: 'the medium and the tray', href: '/supplies/prepare' },
@@ -42,19 +43,13 @@ const weeks: { day: string; body: string }[] = [
   title="How grafting works"
   description="Two plants, one join, four weeks — how a graft is made, why roses are done differently, and what the numbers look like in Kenya."
 >
-  <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-copy">
-        <p class="eyebrow">HOW GRAFTING WORKS</p>
-        <h1>Two plants, one join, four weeks.</h1>
-        <p class="standfirst">
-          If you have never stood in a propagation house, this page is the whole thing in five
-          minutes. If you have, skip to the specifications.
-        </p>
-      </div>
-      <TitleBlock drawingNo="PA-008" subject="THE PROCESS" dimension="≈ 28 DAYS" />
-    </div>
-  </section>
+  <PageHero
+    eyebrow="How grafting works"
+    title="Two plants, one join, four weeks."
+    standfirst="If you have never stood in a propagation house, this page is the whole thing in five minutes. If you have, skip to the specifications."
+    image={rootedCuttingImg}
+    imageAlt="A rooted rose cutting held up at four weeks, white roots and the healed graft join visible"
+  />
 
   <article class="body">
     <div class="body-inner">
