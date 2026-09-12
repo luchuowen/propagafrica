@@ -1,0 +1,36 @@
+---
+// The "ask for a quotation" block that closes every stage page. Deliberately
+// small — the only full-width --green ground on the site is the home page's
+// closing block (blueprint.md §3), so this stays a hairline-topped strip
+// with an outline button, not a colour field.
+---
+
+<div class="quote-block">
+  <a class="quote-btn" href="/contact">
+    Ask for a quotation
+  </a>
+</div>
+
+<style>
+  .quote-block {
+    margin-top: var(--space-5);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--rule);
+  }
+
+  .quote-btn {
+    display: inline-block;
+    text-decoration: none;
+    font-family: var(--f-sans);
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--paper);
+    background: var(--green);
+    border: 1px solid var(--green);
+    padding: 12px 22px;
+  }
+
+  .quote-btn:hover {
+    opacity: 0.92;
+  }
+</style>

@@ -1,36 +1,83 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import TitleBlock from '../../components/TitleBlock.astro';
+import Figure from '../../components/Figure.astro';
+import StageHeader from '../../components/supplies/StageHeader.astro';
+import SpecTable from '../../components/supplies/SpecTable.astro';
+import NotesBlock from '../../components/supplies/NotesBlock.astro';
+import StageNav from '../../components/supplies/StageNav.astro';
+import QuotationBlock from '../../components/supplies/QuotationBlock.astro';
+import TraceabilityChainFigure from '../../assets/figures/supplies/traceability-chain.svg';
+import { TRACEABILITY_AND_QC } from '../../data/products/record';
 ---
 
-<BaseLayout title="Record" description="Labels, batch cards and QC record books.">
-  <section class="stub">
-    <div class="stub-inner">
-      <p class="eyebrow">PROPAGAFRICA TECHNOLOGIES</p>
-      <h1>Record</h1>
-      <TitleBlock drawingNo="PA-105" subject="Record" />
-      <p class="stub-note">Content for this page is built in a later session.</p>
-    </div>
-  </section>
+<BaseLayout
+  title="Record"
+  description="An audit does not ask whether your hygiene was good. It asks which mother block a batch came from, who grafted it, what was applied and what survived —"
+>
+  <StageHeader
+    eyebrow="STAGE 05 · RECORD"
+    title="Labels, batch cards and record books."
+    standfirst="An audit does not ask whether your hygiene was good. It asks which mother block a batch came from, who grafted it, what was applied and what survived — and it asks you to produce that from a file, years later."
+    titleBlockRows={[
+      { label: 'DRAWING', value: 'PA-007' },
+      { label: 'SUBJECT', value: 'TRACEABILITY' },
+      { label: 'FORMATS', value: '6' },
+      { label: 'RETENTION', value: 'MULTI-YEAR' },
+      { label: 'SHEET', value: '07 OF 14' },
+    ]}
+  />
+
+  <div class="stage-section">
+    <Figure
+      number={7}
+      subject="THE CHAIN AN AUDITOR WALKS"
+      caption="If the supplier's batch code is missing, the chain breaks at the first link — and the finding lands on the grower, not on the supplier."
+      sheet={7}
+    >
+      <TraceabilityChainFigure />
+    </Figure>
+  </div>
+
+  <div class="stage-section">
+    <SpecTable
+      caption="Traceability and QC"
+      columns={[
+        { key: 'sku', label: 'SKU' },
+        { key: 'format', label: 'Format' },
+        { key: 'size', label: 'Size' },
+        { key: 'material', label: 'Material' },
+        { key: 'pack', label: 'Pack' },
+      ]}
+      rows={TRACEABILITY_AND_QC}
+    />
+  </div>
+
+  <div class="stage-section">
+    <NotesBlock>
+      <p>
+        Thermal stock is synthetic rather than paper because a paper label at 90 % relative humidity
+        fails inside a week. Batch cards carry fixed fields for variety, rootstock, scion source,
+        date, operator, treatment and QC observation. Logbooks are sequentially numbered and
+        duplicate, so the copy stays in the house and the original goes to the file. Variable data —
+        lot numbers, barcodes, QR codes — is subject to your printer and media.
+      </p>
+    </NotesBlock>
+  </div>
+
+  <div class="stage-section">
+    <StageNav current="record" />
+    <QuotationBlock />
+  </div>
 </BaseLayout>
 
 <style>
-  .stub {
-    padding: var(--space-6) 0;
-  }
-  .stub-inner {
+  .stage-section {
     max-width: var(--content-max);
     margin: 0 auto;
-    padding: 0 var(--side-gutter);
+    padding: var(--space-4) var(--side-gutter) 0;
   }
-  .stub-inner .eyebrow {
-    margin-bottom: var(--space-2);
-  }
-  .stub-note {
-    margin-top: var(--space-4);
-    color: var(--ink-soft);
-  }
-  .stub-inner :global(dl) {
-    margin-top: var(--space-4);
+
+  .stage-section:last-child {
+    padding-bottom: var(--space-6);
   }
 </style>

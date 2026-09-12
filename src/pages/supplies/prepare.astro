@@ -1,36 +1,119 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import TitleBlock from '../../components/TitleBlock.astro';
+import Figure from '../../components/Figure.astro';
+import StageHeader from '../../components/supplies/StageHeader.astro';
+import SpecTable from '../../components/supplies/SpecTable.astro';
+import NotesBlock from '../../components/supplies/NotesBlock.astro';
+import StageNav from '../../components/supplies/StageNav.astro';
+import QuotationBlock from '../../components/supplies/QuotationBlock.astro';
+import CellSectionFigure from '../../assets/figures/supplies/cell-section.svg';
+import {
+  VERMICULITE_GRADES,
+  PEAT_FORMULATIONS,
+  TRAYS_AND_CONTAINERS,
+} from '../../data/products/prepare';
 ---
 
-<BaseLayout title="Prepare" description="Growing media, trays and tools for propagation.">
-  <section class="stub">
-    <div class="stub-inner">
-      <p class="eyebrow">PROPAGAFRICA TECHNOLOGIES</p>
-      <h1>Prepare</h1>
-      <TitleBlock drawingNo="PA-101" subject="Prepare" />
-      <p class="stub-note">Content for this page is built in a later session.</p>
-    </div>
-  </section>
+<BaseLayout
+  title="Prepare"
+  description="What a young plant sits in decides how evenly it roots. A medium that holds a little too much water, or a tray filled a few millimetres short, shows up"
+>
+  <StageHeader
+    eyebrow="STAGE 01 · PREPARE"
+    title="Growing media, trays and tools."
+    standfirst="What a young plant sits in decides how evenly it roots. A medium that holds a little too much water, or a tray filled a few millimetres short, shows up three weeks later as a batch that finishes unevenly — long after anyone can do anything about it."
+    titleBlockRows={[
+      { label: 'DRAWING', value: 'PA-003' },
+      { label: 'SUBJECT', value: 'GROWING MEDIA' },
+      { label: 'GRADES', value: '6' },
+      { label: 'PACK', value: '20 kg · 50 L · 250 L' },
+      { label: 'SHEET', value: '03 OF 14' },
+    ]}
+  />
+
+  <div class="stage-section">
+    <Figure
+      number={3}
+      subject="CELL SECTION, 128-CELL TRAY · SCALE 1:1.6"
+      caption="Under-filling costs root volume. Over-filling closes the drainage path and waterlogs the base of the cell. Six millimetres of headspace is the working target."
+      sheet={3}
+    >
+      <CellSectionFigure />
+    </Figure>
+  </div>
+
+  <div class="stage-section">
+    <SpecTable
+      caption="Propagation media — vermiculite grades"
+      columns={[
+        { key: 'sku', label: 'SKU' },
+        { key: 'grade', label: 'Grade' },
+        { key: 'particleFraction', label: 'Particle fraction' },
+        { key: 'ph', label: 'pH' },
+        { key: 'bulkDensity', label: 'Bulk density' },
+        { key: 'pack', label: 'Pack' },
+      ]}
+      rows={VERMICULITE_GRADES}
+    />
+  </div>
+
+  <div class="stage-section">
+    <SpecTable
+      caption="Propagation media — peat formulations"
+      columns={[
+        { key: 'sku', label: 'SKU' },
+        { key: 'formulation', label: 'Formulation' },
+        { key: 'particleFraction', label: 'Particle fraction' },
+        { key: 'ph', label: 'pH' },
+        { key: 'conductivity', label: 'Conductivity (1:5)' },
+        { key: 'airFilledPorosity', label: 'Air-filled porosity' },
+        { key: 'pack', label: 'Pack' },
+      ]}
+      rows={PEAT_FORMULATIONS}
+    />
+  </div>
+
+  <div class="stage-section">
+    <SpecTable
+      caption="Trays and containers"
+      columns={[
+        { key: 'sku', label: 'SKU' },
+        { key: 'cells', label: 'Cells' },
+        { key: 'cellVolume', label: 'Cell volume' },
+        { key: 'sheetSize', label: 'Sheet size' },
+        { key: 'material', label: 'Material' },
+        { key: 'pack', label: 'Pack' },
+      ]}
+      rows={TRAYS_AND_CONTAINERS}
+    />
+  </div>
+
+  <div class="stage-section">
+    <NotesBlock>
+      <p>
+        Vermiculite is exfoliated, supplied at 8 % moisture or below, cation exchange capacity
+        80–150 meq/100 g. Peat is a sphagnum-based professional substrate; wetting agent and starter
+        nutrition to the stated formulation. Conductivity measured on a 1:5 volume extract. A
+        certificate of analysis is issued per batch. Grade selection depends on crop, tray and
+        irrigation regime — tell us those and we will recommend rather than guess.
+      </p>
+    </NotesBlock>
+  </div>
+
+  <div class="stage-section">
+    <StageNav current="prepare" />
+    <QuotationBlock />
+  </div>
 </BaseLayout>
 
 <style>
-  .stub {
-    padding: var(--space-6) 0;
-  }
-  .stub-inner {
+  .stage-section {
     max-width: var(--content-max);
     margin: 0 auto;
-    padding: 0 var(--side-gutter);
+    padding: var(--space-4) var(--side-gutter) 0;
   }
-  .stub-inner .eyebrow {
-    margin-bottom: var(--space-2);
-  }
-  .stub-note {
-    margin-top: var(--space-4);
-    color: var(--ink-soft);
-  }
-  .stub-inner :global(dl) {
-    margin-top: var(--space-4);
+
+  .stage-section:last-child {
+    padding-bottom: var(--space-6);
   }
 </style>

@@ -1,0 +1,48 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 480 240"
+  role="img"
+  aria-label="Dilution schematic for a tool dip. A concentrate drum plus a measuring cylinder showing 83 millilitres, plus a 10 litre water vessel, gives a 1000 parts per million working solution. The arithmetic is printed above the drawing in orange: 12 per cent available chlorine is 120 grams per litre, 83 millilitres carries 10 grams, and 10 grams in 10 litres is 1 gram per litre, which is 1000 parts per million."
+>
+  <text x="20" y="26" font-family="var(--f-mono)" font-size="13" fill="var(--signal)">
+    12% = 120 g/L · 83 ml → 10 g · 10 g in 10 L = 1000 ppm
+  </text>
+
+  <g font-family="var(--f-mono)" font-size="12" fill="var(--ink)" stroke="var(--ink)" stroke-width="1.5">
+    <!-- Concentrate drum -->
+    <rect x="20" y="60" width="70" height="110" rx="2" fill="var(--green)" fill-opacity="0.08" />
+    <text x="27" y="185" fill="var(--ink-soft)">PRO-SAN 12</text>
+
+    <!-- Plus -->
+    <text x="108" y="125" font-size="20" stroke="none">+</text>
+
+    <!-- Measuring cylinder -->
+    <g>
+      <rect x="140" y="80" width="34" height="90" fill="none" />
+      <line x1="140" y1="130" x2="174" y2="130" stroke="var(--signal)" />
+      <rect x="140" y="130" width="34" height="40" fill="var(--signal)" fill-opacity="0.15" stroke="none" />
+      <text x="128" y="192" fill="var(--signal)">83 ml</text>
+    </g>
+
+    <!-- Plus -->
+    <text x="196" y="125" font-size="20" stroke="none">+</text>
+
+    <!-- Water vessel -->
+    <g>
+      <rect x="222" y="70" width="90" height="100" fill="none" />
+      <rect x="222" y="95" width="90" height="75" fill="var(--green)" fill-opacity="0.06" stroke="none" />
+      <text x="232" y="188" fill="var(--ink-soft)">10 L water</text>
+    </g>
+
+    <!-- Arrow -->
+    <path d="M 330 120 H 380" fill="none" stroke="var(--ink)" stroke-width="1.5" />
+    <path d="M 372 112 L 380 120 L 372 128" fill="none" stroke="var(--ink)" stroke-width="1.5" />
+
+    <!-- Result -->
+    <g>
+      <rect x="392" y="80" width="70" height="90" fill="none" stroke="var(--signal)" />
+      <text x="396" y="130" fill="var(--signal)" font-size="13">1 000</text>
+      <text x="396" y="148" fill="var(--signal)" font-size="13">ppm</text>
+    </g>
+  </g>
+</svg>
