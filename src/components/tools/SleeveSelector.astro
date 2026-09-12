@@ -1,0 +1,278 @@
+---
+// Sleeve selector: choose a grafting sleeve against a measured stem, with
+// the bore drawn to scale beside the stem. Vanilla-TS island — the SSR
+// markup below is a complete, correct default state on its own; the script
+// at the bottom only re-renders it in place once the tool scrolls into view.
+import {
+  CROPS,
+  STEM_MIN,
+  STEM_MAX,
+  STEM_STEP,
+  selectSleeve,
+  scaledRadii,
+} from '../../lib/tools/sleeve';
+
+const DEFAULT_CROP = 'rose' as const;
+const DEFAULT_STEM = 4.5;
+const MAX_RADIUS_PX = 64;
+
+const result = selectSleeve(DEFAULT_CROP, DEFAULT_STEM);
+const { stemRadiusPx, boreRadiusPx } = scaledRadii(
+  DEFAULT_STEM,
+  result.bore,
+  STEM_MAX,
+  MAX_RADIUS_PX,
+);
+---
+
+<div class="sleeve-selector" id="sleeve-selector" data-tool="sleeve-selector">
+  <form data-role="crop-form">
+    <fieldset>
+      <legend class="eyebrow">Crop</legend>
+      <div class="toggle-group">
+        {CROPS.map((crop) => (
+          <span class="toggle-button">
+            <input
+              type="radio"
+              name="crop"
+              id={`crop-${crop.key}`}
+              value={crop.key}
+              checked={crop.key === DEFAULT_CROP}
+            />
+            <label for={`crop-${crop.key}`}>{crop.label}</label>
+          </span>
+        ))}
+      </div>
+    </fieldset>
+  </form>
+
+  <div class="stem-control">
+    <label for="stem-diameter">Stem diameter at the cut</label>
+    <div class="stem-input-row">
+      <input
+        type="range"
+        id="stem-diameter"
+        min={STEM_MIN}
+        max={STEM_MAX}
+        step={STEM_STEP}
+        value={DEFAULT_STEM}
+      />
+      <output for="stem-diameter" id="stem-diameter-value" class="mono">
+        {DEFAULT_STEM.toFixed(1)} mm
+      </output>
+    </div>
+  </div>
+
+  <div class="sleeve-result" id="sleeve-result">
+    <p class="sku mono" id="sleeve-sku">
+      {result.sku}
+    </p>
+    <dl class="spec mono">
+      <div class="row">
+        <dt>Bore</dt>
+        <dd id="sleeve-bore">{result.boreLabel} mm</dd>
+      </div>
+      <div class="row">
+        <dt>Wall</dt>
+        <dd id="sleeve-wall">{result.wall.toFixed(2)} mm</dd>
+      </div>
+      <div class="row">
+        <dt>Length</dt>
+        <dd id="sleeve-length">{result.length} mm</dd>
+      </div>
+      <div class="row">
+        <dt>Pack</dt>
+        <dd id="sleeve-pack">{result.pack.toLocaleString('en-GB')}</dd>
+      </div>
+    </dl>
+
+    <svg
+      id="sleeve-svg"
+      viewBox="-70 -70 140 140"
+      role="img"
+      aria-label="The measured stem and the sleeve bore, drawn to the same scale"
+    >
+      <circle id="bore-circle" cx="0" cy="0" r={boreRadiusPx.toFixed(2)} class="bore-circle" />
+      <circle id="stem-circle" cx="0" cy="0" r={stemRadiusPx.toFixed(2)} class="stem-circle" />
+    </svg>
+
+    <p class="fit-note" id="sleeve-fit-note">
+      {result.fitNote}
+    </p>
+  </div>
+
+  <p class="mono permanent-note">MEASURE THE THICKER OF SCION AND ROOTSTOCK, AT THE CUT.</p>
+</div>
+
+<script>
+  import { mountSleeveSelector } from '../../lib/tools/sleeve-ui';
+  import { onVisible } from '../../lib/tools/visible';
+
+  const root = document.getElementById('sleeve-selector');
+  if (root) onVisible(root, () => mountSleeveSelector(root));
+</script>
+
+<style>
+  .sleeve-selector {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  legend {
+    padding: 0;
+    margin-bottom: var(--space-1);
+  }
+
+  .toggle-group {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid var(--rule);
+    width: max-content;
+    max-width: 100%;
+  }
+
+  .toggle-button {
+    position: relative;
+  }
+
+  .toggle-button input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .toggle-button label {
+    display: block;
+    padding: 8px 14px;
+    font-size: 13px;
+    line-height: 1.3;
+    color: var(--ink-soft);
+    border-right: 1px solid var(--rule);
+    cursor: pointer;
+  }
+
+  .toggle-button:last-child label {
+    border-right: none;
+  }
+
+  .toggle-button input:checked + label {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .toggle-button input:focus-visible + label {
+    outline: 2px solid var(--green);
+    outline-offset: -2px;
+  }
+
+  .stem-control {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .stem-control > label {
+    font-size: 14px;
+  }
+
+  .stem-input-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  input[type='range'] {
+    flex: 1;
+    max-width: 320px;
+  }
+
+  #stem-diameter-value {
+    font-size: 14px;
+    min-width: 5.5em;
+  }
+
+  .sleeve-result {
+    display: grid;
+    gap: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--rule);
+  }
+
+  @media (min-width: 640px) {
+    .sleeve-result {
+      grid-template-columns: 1fr auto;
+      align-items: start;
+    }
+  }
+
+  .sku {
+    grid-column: 1 / -1;
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .spec {
+    margin: 0;
+  }
+
+  .spec .row {
+    display: grid;
+    grid-template-columns: 6em 1fr;
+    border-top: 1px solid var(--rule);
+  }
+
+  .spec .row:first-child {
+    border-top: none;
+  }
+
+  .spec dt,
+  .spec dd {
+    margin: 0;
+    padding: 5px 0;
+  }
+
+  .spec dt {
+    color: var(--ink-soft);
+  }
+
+  #sleeve-svg {
+    width: 140px;
+    height: 140px;
+    justify-self: center;
+  }
+
+  .bore-circle {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.5;
+  }
+
+  .stem-circle {
+    fill: var(--ink-soft);
+  }
+
+  .fit-note {
+    grid-column: 1 / -1;
+    font-size: 14px;
+    color: var(--ink-soft);
+    max-width: 60ch;
+  }
+
+  .permanent-note {
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--rule);
+  }
+</style>

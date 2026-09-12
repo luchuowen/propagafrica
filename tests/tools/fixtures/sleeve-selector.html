@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>SleeveSelector fixture</title>
+    <style>
+      /* Minimal port of SleeveSelector.astro's scoped styles — enough to
+         exercise real layout/focus behaviour, not a byzantine match. */
+      body {
+        font-family: sans-serif;
+        margin: 2rem;
+      }
+      fieldset {
+        border: none;
+        margin: 0;
+        padding: 0;
+      }
+      .toggle-group {
+        display: flex;
+        flex-wrap: wrap;
+        border: 1px solid lightgray;
+        width: max-content;
+      }
+      .toggle-button {
+        position: relative;
+      }
+      .toggle-button input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        margin: 0;
+        cursor: pointer;
+      }
+      .toggle-button label {
+        display: block;
+        padding: 8px 14px;
+        cursor: pointer;
+        border-right: 1px solid lightgray;
+      }
+      .toggle-button:last-child label {
+        border-right: none;
+      }
+      .toggle-button input:checked + label {
+        background: black;
+        color: white;
+      }
+      .toggle-button input:focus-visible + label {
+        outline: 2px solid seagreen;
+        outline-offset: -2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sleeve-selector" id="sleeve-selector" data-tool="sleeve-selector">
+      <form data-role="crop-form">
+        <fieldset>
+          <legend>Crop</legend>
+          <div class="toggle-group">
+            <span class="toggle-button">
+              <input type="radio" name="crop" id="crop-rose" value="rose" checked />
+              <label for="crop-rose">Rose</label>
+            </span>
+            <span class="toggle-button">
+              <input type="radio" name="crop" id="crop-vegetable" value="vegetable" />
+              <label for="crop-vegetable">Tomato, pepper, aubergine</label>
+            </span>
+            <span class="toggle-button">
+              <input type="radio" name="crop" id="crop-cucurbit" value="cucurbit" />
+              <label for="crop-cucurbit">Cucumber, melon, watermelon</label>
+            </span>
+            <span class="toggle-button">
+              <input type="radio" name="crop" id="crop-tree" value="tree" />
+              <label for="crop-tree">Fruit tree</label>
+            </span>
+          </div>
+        </fieldset>
+      </form>
+
+      <div class="stem-control">
+        <label for="stem-diameter">Stem diameter at the cut</label>
+        <div class="stem-input-row">
+          <input type="range" id="stem-diameter" min="1.4" max="12" step="0.1" value="4.5" />
+          <output for="stem-diameter" id="stem-diameter-value">4.5 mm</output>
+        </div>
+      </div>
+
+      <div class="sleeve-result" id="sleeve-result">
+        <p class="sku" id="sleeve-sku">PRO-ROSE 45</p>
+        <dl class="spec">
+          <div class="row">
+            <dt>Bore</dt>
+            <dd id="sleeve-bore">4.5 mm</dd>
+          </div>
+          <div class="row">
+            <dt>Wall</dt>
+            <dd id="sleeve-wall">0.50 mm</dd>
+          </div>
+          <div class="row">
+            <dt>Length</dt>
+            <dd id="sleeve-length">20 mm</dd>
+          </div>
+          <div class="row">
+            <dt>Pack</dt>
+            <dd id="sleeve-pack">50,000</dd>
+          </div>
+        </dl>
+        <svg
+          id="sleeve-svg"
+          viewBox="-70 -70 140 140"
+          role="img"
+          aria-label="Stem and bore, drawn to scale"
+        >
+          <circle
+            id="bore-circle"
+            cx="0"
+            cy="0"
+            r="24"
+            fill="none"
+            stroke="black"
+            stroke-width="1.5"
+          />
+          <circle id="stem-circle" cx="0" cy="0" r="24" fill="dimgray" />
+        </svg>
+        <p class="fit-note" id="sleeve-fit-note">placeholder</p>
+      </div>
+
+      <p class="permanent-note">MEASURE THE THICKER OF SCION AND ROOTSTOCK, AT THE CUT.</p>
+    </div>
+
+    <script type="module">
+      import { mountSleeveSelector } from './lib/sleeve-ui.js';
+      import { onVisible } from './lib/visible.js';
+
+      const root = document.getElementById('sleeve-selector');
+      if (root) onVisible(root, () => mountSleeveSelector(root));
+    </script>
+  </body>
+</html>
