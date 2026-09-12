@@ -1,0 +1,61 @@
+---
+// Minimal key/value ruled list for the reference pages (/specifications,
+// /ordering, /about). Not session 3's SpecTable.astro — this is its own
+// component, kept deliberately small: mono key, hairline rule, no card.
+interface Props {
+  rows: readonly (readonly [string, string])[];
+}
+
+const { rows } = Astro.props;
+---
+
+<dl class="ruled-list">
+  {rows.map(([key, value]) => (
+    <div class="ruled-row">
+      <dt>{key}</dt>
+      <dd>{value}</dd>
+    </div>
+  ))}
+</dl>
+
+<style>
+  .ruled-list {
+    margin: 0;
+  }
+
+  .ruled-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: var(--space-2) 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .ruled-row:first-child {
+    border-top: none;
+  }
+
+  @media (min-width: 560px) {
+    .ruled-row {
+      grid-template-columns: minmax(160px, 260px) 1fr;
+      gap: var(--space-3);
+      align-items: baseline;
+    }
+  }
+
+  dt {
+    margin: 0;
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  dd {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+</style>

@@ -56,6 +56,7 @@ Loaded via `CLAUDE.md`. Cap: 250 lines. Compact into `.factory/history/` when cl
   navigation never 404s; no page content beyond that is in scope for this session.
 
 ## 2026-09-12 — Playwright browser resolution
+
 Session 1 ran in a cloud sandbox and hardcoded `/opt/pw-browsers/chromium` as the
 Chromium executable, which fails on any other machine. The config now uses
 Playwright's own managed browser by default and honours `PLAYWRIGHT_CHROMIUM_PATH`
@@ -63,5 +64,23 @@ when a preinstalled binary is available. Run `pnpm exec playwright install chrom
 once per machine.
 
 ## 2026-09-12 — pnpm 11 build approvals
+
 pnpm 11 no longer reads the `pnpm` field in `package.json`. Build-script approvals
 for `esbuild` and `sharp` live in `pnpm-workspace.yaml` under `allowBuilds`.
+
+## 2026-09-12 — Reference pages (/specifications, /ordering, /about)
+
+Built from `docs/content/copy-reference.md` (final copy). Specification tables live in
+`src/data/specs/index.ts` as typed modules, not imported from any product data module —
+none exists yet in this codebase. If a canonical product data module is introduced later
+(e.g. for the sleeve selector or consumables planner in blueprint.md §9), reconcile with
+it. Table and ruled-list rendering are two small components under `src/data/specs/`
+(`SpecsTable.astro`, `RuledList.astro`) — mono, hairline rules, each table in its own
+`overflow-x: auto` container, no card, no zebra striping. `/about`'s no-founding-date/
+age/headcount rule is enforced by `tests/unit/about-copy.test.ts`, which runs a real
+`astro build` to a temp dir and greps the built `/about` HTML — the manifest gate only
+regex-checks source copy, and a rephrase can dodge that.
+
+Known follow-up, not fixed here (out of scope — the files are frozen for this change):
+`docs/content/copy-reference.md`, `copy-supplies.md` and `field-notes.md`, brought in by
+merging `origin/main`, fail `prettier --check` as committed upstream.

@@ -1,0 +1,77 @@
+---
+// Minimal specification table for the reference pages. Deliberately not
+// session 3's SpecTable.astro: mono, tabular figures, hairline rules, its
+// own horizontal-scroll container, no card, no zebra striping.
+import type { SpecTable } from './index';
+
+type Props = SpecTable;
+
+const { caption, columns, rows } = Astro.props;
+---
+
+<div class="specs-table-scroll">
+  <table class="specs-table">
+    <caption>{caption}</caption>
+    <thead>
+      <tr>
+        {columns.map((col) => (
+          <th scope="col">{col}</th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((row) => (
+        <tr>{row.map((cell, i) => (i === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>))}</tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .specs-table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: var(--space-3);
+  }
+
+  .specs-table {
+    width: 100%;
+    min-width: 620px;
+    border-collapse: collapse;
+    font-family: var(--f-mono);
+    font-size: 11px;
+  }
+
+  .specs-table caption {
+    caption-side: top;
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding-bottom: var(--space-1);
+  }
+
+  .specs-table th,
+  .specs-table td {
+    padding: 8px 16px 8px 0;
+    text-align: left;
+    border-top: 1px solid var(--rule);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .specs-table thead th {
+    border-top: none;
+    border-bottom: 1px solid var(--ink);
+    color: var(--ink-soft);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .specs-table tbody th {
+    font-weight: 500;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+</style>

@@ -1,39 +1,180 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TitleBlock from '../components/TitleBlock.astro';
+import RuledList from '../data/specs/RuledList.astro';
 ---
 
 <BaseLayout
   title="Ordering"
-  description="Supply programme, framework agreements, call-offs and lead times."
+  description="There are no prices on this site. We quote against a programme rather than publish a list."
 >
-  <section class="stub">
-    <div class="stub-inner">
-      <p class="eyebrow">PROPAGAFRICA TECHNOLOGIES</p>
-      <h1>Ordering</h1>
-      <TitleBlock drawingNo="PA-400" subject="Ordering" />
-      <p class="stub-note">Content for this page is built in a later session.</p>
+  <section class="page-hero">
+    <div class="page-inner">
+      <p class="eyebrow">ORDERING</p>
+      <h1>How we quote, and how supply is scheduled.</h1>
+      <p class="standfirst">
+        There are no prices on this site. What an item costs depends on your volume, your pack size,
+        your specification, where it goes and how much notice you can give — so we quote against a
+        programme rather than publish a list.
+      </p>
+      <TitleBlock
+        drawingNo="PA-010"
+        subject="Supply programme"
+        sku="Annual framework"
+        dimension="Monthly call-off"
+      />
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="page-inner">
+      <h2>What a quotation is priced against</h2>
+      <RuledList
+        rows={[
+          ['Annual volume', 'High volume materially changes unit cost and freight per piece.'],
+          ['Pack size', 'Your consumption and storage decide the most economical pack.'],
+          ['Specification', 'Grade, diameter, formulation, strength and any printing.'],
+          [
+            'Delivery point',
+            'Kenya stock, Ethiopia supply or consolidated import each change landed cost.',
+          ],
+          ['Lead time', 'Grafting demand is seasonal. Forecast visibility buys stock allocation.'],
+        ]}
+      />
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="page-inner">
+      <h2>The supply programme</h2>
+      <p class="body-text">
+        For anyone grafting at volume, spot orders are the wrong instrument. A stock-out is not a
+        delay in this business — it is a missed window that cannot be recovered until the next
+        cycle.
+      </p>
+      <RuledList
+        rows={[
+          [
+            'Framework agreement',
+            'Specification, indicative annual volume and commercial terms, agreed once for the year.',
+          ],
+          [
+            'Monthly call-offs',
+            'You release quantities against the framework as your schedule requires. No renegotiation per order.',
+          ],
+          [
+            'Buffer stock',
+            'Held against an agreed volume commitment, so an upstream delay is our problem rather than yours.',
+          ],
+          [
+            'Quarterly price review',
+            'For imported and currency-exposed lines, on a mechanism agreed in advance rather than ad-hoc.',
+          ],
+          [
+            'Documentation',
+            'Data sheets, safety data sheets, certificates of analysis and batch records, issued with consignment.',
+          ],
+          [
+            'Farm-specific packs',
+            'A consolidated monthly pack built to your house rather than to our catalogue.',
+          ],
+          [
+            'Consumption review',
+            'Quarterly: usage, stock-outs, product performance, and cost per surviving plant.',
+          ],
+        ]}
+      />
+    </div>
+  </section>
+
+  <section class="page-section" id="services">
+    <div class="page-inner">
+      <h2>The consumable is half of it.</h2>
+      <p class="body-text">
+        A sleeve is only as good as the cut it sits on and the bench it sits under. Technical
+        support is part of the supply rather than something sold against it.
+      </p>
+      <RuledList
+        rows={[
+          [
+            'Propagation training',
+            'Bench technique, cut geometry, sleeve and clip selection, hygiene discipline.',
+          ],
+          ['On-site support', 'At the bench, during a cycle.'],
+          [
+            'Nursery setup and design',
+            'Layout, benching, misting, climate, irrigation, and the flow of material through the house.',
+          ],
+          ['Crop protocols', 'Written to your varieties, rootstocks and house conditions.'],
+          ['Troubleshooting', 'When take drops and the cause is not obvious from the bench.'],
+          ['Performance audits', 'Take at four weeks, losses by stage, cost per surviving plant.'],
+          ['Product trials', 'Split batch, same operator, same house, assessed at four weeks.'],
+          ['Custom specification', 'Where the standard specification does not fit the operation.'],
+        ]}
+      />
+      <a class="cta" href="/contact">
+        Ask for a quotation →
+      </a>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .stub {
-    padding: var(--space-6) 0;
+  .page-hero {
+    padding: var(--space-6) 0 var(--space-5);
   }
-  .stub-inner {
+
+  .page-section {
+    padding: var(--space-5) 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .page-inner {
     max-width: var(--content-max);
     margin: 0 auto;
     padding: 0 var(--side-gutter);
   }
-  .stub-inner .eyebrow {
+
+  .page-inner .eyebrow {
     margin-bottom: var(--space-2);
   }
-  .stub-note {
-    margin-top: var(--space-4);
+
+  .standfirst {
+    margin-top: var(--space-3);
+    font-size: 18px;
+    line-height: 1.7;
     color: var(--ink-soft);
+    max-width: 42em;
   }
-  .stub-inner :global(dl) {
+
+  .page-inner :global(dl.title-block) {
     margin-top: var(--space-4);
+  }
+
+  .page-section h2 {
+    margin-bottom: var(--space-3);
+  }
+
+  .body-text {
+    margin: 0 0 var(--space-3);
+    max-width: 42em;
+    line-height: 1.7;
+  }
+
+  .cta {
+    display: inline-block;
+    margin-top: var(--space-4);
+    font-family: var(--f-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--green);
+    text-decoration: none;
+    border-bottom: 1px solid var(--green);
+    padding-bottom: 2px;
+  }
+
+  .cta:hover {
+    opacity: 0.85;
   }
 </style>

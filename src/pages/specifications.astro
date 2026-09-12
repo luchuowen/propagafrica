@@ -1,39 +1,211 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TitleBlock from '../components/TitleBlock.astro';
+import RuledList from '../data/specs/RuledList.astro';
+import SpecsTable from '../data/specs/SpecsTable.astro';
+import { SPEC_SECTIONS } from '../data/specs';
 ---
 
 <BaseLayout
   title="Specifications"
-  description="Every published specification table and document in one place."
+  description="Bore, wall, grade, particle size, density, pH, conductivity, available chlorine, pack. Read it before you speak to anyone."
 >
-  <section class="stub">
-    <div class="stub-inner">
-      <p class="eyebrow">PROPAGAFRICA TECHNOLOGIES</p>
-      <h1>Specifications</h1>
-      <TitleBlock drawingNo="PA-300" subject="Specifications" />
-      <p class="stub-note">Content for this page is built in a later session.</p>
+  <section class="page-hero">
+    <div class="page-inner">
+      <p class="eyebrow">SPECIFICATIONS</p>
+      <h1>Every published specification, in one place.</h1>
+      <p class="standfirst">
+        Bore, wall, grade, particle size, density, pH, conductivity, available chlorine, pack. Read
+        it before you speak to anyone.
+      </p>
+      <TitleBlock
+        drawingNo="PA-009"
+        subject="Specification index"
+        sku="7 tables"
+        dimension="Held to batch"
+      />
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="page-inner">
+      <p class="intro">
+        Every table on this page also appears on its own stage page. This is the index, for anyone
+        who would rather read the numbers than the words.
+      </p>
+
+      {SPEC_SECTIONS.map((sect) => (
+        <div class="spec-block" id={sect.id}>
+          <div class="spec-block-head">
+            <h2>{sect.heading}</h2>
+            <a class="stage-link" href={sect.stageHref}>
+              {sect.stageLabel} →
+            </a>
+          </div>
+          {sect.tables.map((table) => (
+            <SpecsTable {...table} />
+          ))}
+          {sect.note && <p class="spec-note mono">{sect.note}</p>}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="page-inner">
+      <h2>What comes with a consignment.</h2>
+      <RuledList
+        rows={[
+          ['Product data sheet', 'Per SKU. Dimensions, material, grade, pack.'],
+          ['Safety data sheet', 'Every hygiene product, current revision.'],
+          [
+            'Certificate of analysis',
+            'Per batch, where the product is manufactured to a specification.',
+          ],
+          ['Batch record', 'Lot code, date, quantity, destination.'],
+        ]}
+      />
+      <p class="body-text">
+        Specifications are held to batch and tolerances are stated rather than implied. Where a
+        figure depends on your crop, your tray or your irrigation, we say so instead of publishing a
+        number that will not hold.
+      </p>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="page-inner">
+      <h2>How to read a specification</h2>
+      <RuledList
+        rows={[
+          [
+            'Bore',
+            'The inside diameter of a sleeve, measured across. Match it to the thicker of scion and rootstock.',
+          ],
+          ['Wall', 'Sleeve thickness. Heavier walls hold more firmly and release later.'],
+          [
+            'Fraction',
+            'The particle size range of a growing medium. Finer holds more water; coarser drains faster.',
+          ],
+          [
+            'Conductivity',
+            'How much dissolved salt a medium carries. It rises under repeated misting.',
+          ],
+        ]}
+      />
+      <a class="cta" href="/contact">
+        Ask for a specification sheet →
+      </a>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .stub {
-    padding: var(--space-6) 0;
+  .page-hero {
+    padding: var(--space-6) 0 var(--space-5);
   }
-  .stub-inner {
+
+  .page-section {
+    padding: var(--space-5) 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .page-inner {
     max-width: var(--content-max);
     margin: 0 auto;
     padding: 0 var(--side-gutter);
   }
-  .stub-inner .eyebrow {
+
+  .page-inner .eyebrow {
     margin-bottom: var(--space-2);
   }
-  .stub-note {
+
+  .standfirst {
+    margin-top: var(--space-3);
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    max-width: 42em;
+  }
+
+  .page-inner :global(dl.title-block) {
     margin-top: var(--space-4);
+  }
+
+  .intro {
+    margin: 0 0 var(--space-5);
+    max-width: 42em;
     color: var(--ink-soft);
   }
-  .stub-inner :global(dl) {
+
+  .spec-block {
+    padding: var(--space-4) 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .spec-block:first-of-type {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .spec-block-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+
+  .spec-block-head h2 {
+    margin: 0;
+  }
+
+  .stage-link {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--green);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .stage-link:hover {
+    text-decoration: underline;
+  }
+
+  .spec-note {
+    margin-top: var(--space-3);
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    max-width: 60em;
+  }
+
+  .page-section h2 {
+    margin-bottom: var(--space-3);
+  }
+
+  .body-text {
+    margin-top: var(--space-3);
+    max-width: 42em;
+    line-height: 1.7;
+  }
+
+  .cta {
+    display: inline-block;
     margin-top: var(--space-4);
+    font-family: var(--f-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--green);
+    text-decoration: none;
+    border-bottom: 1px solid var(--green);
+    padding-bottom: 2px;
+  }
+
+  .cta:hover {
+    opacity: 0.85;
   }
 </style>

@@ -1,36 +1,171 @@
 ---
+// Hard rule, overrides anything else on this page: nothing here may state
+// when the company was founded, how long it has traded, or how many people
+// it employs. See CLAUDE.md § Invariants (no-founding-date) and
+// tests/unit/about-copy.test.ts, which greps the built HTML for it.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TitleBlock from '../components/TitleBlock.astro';
+import RuledList from '../data/specs/RuledList.astro';
 ---
 
-<BaseLayout title="About" description="The company, the people, technical services.">
-  <section class="stub">
-    <div class="stub-inner">
-      <p class="eyebrow">PROPAGAFRICA TECHNOLOGIES</p>
-      <h1>About</h1>
-      <TitleBlock drawingNo="PA-600" subject="About" />
-      <p class="stub-note">Content for this page is built in a later session.</p>
+<BaseLayout
+  title="About"
+  description="PropagAfrica Technologies supplies one part of horticulture properly: the consumables and equipment a propagation house runs on, across Kenya and Ethiopia."
+>
+  <section class="page-hero">
+    <div class="page-inner">
+      <p class="eyebrow">ABOUT</p>
+      <h1>A specialist supplier, not a general dealer.</h1>
+      <p class="standfirst">
+        PropagAfrica Technologies supplies one part of horticulture properly: the consumables and
+        equipment a propagation house runs on, across Kenya and Ethiopia.
+      </p>
+      <TitleBlock
+        drawingNo="PA-013"
+        subject="The company"
+        sku="Nairobi, Kenya"
+        dimension="Kenya · Ethiopia"
+      />
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="page-inner">
+      <h2>What we do</h2>
+      <p class="body-text">
+        We source, specify and supply propagation consumables — grafting sleeves and clips, growing
+        media, nursery hygiene products, trays, labels and record books — and we specify and source
+        the equipment that sits around them. Everything we sell is bought against a written
+        specification, documented per batch, and delivered on a schedule that matches a grafting
+        calendar rather than a warehouse calendar.
+      </p>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="page-inner">
+      <h2>How we are different from a general agri-dealer</h2>
+      <RuledList
+        rows={[
+          [
+            'Specialist range',
+            'A general dealer carries propagation consumables as a footnote. It is the whole of what we do.',
+          ],
+          [
+            'Published specs',
+            'Grade, dimension, strength and tolerance are published, not described on a phone call.',
+          ],
+          [
+            'Scheduled supply',
+            'An annual framework and monthly call-offs, rather than a quotation every time you run out.',
+          ],
+        ]}
+      />
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="page-inner">
+      <h2>Who we supply</h2>
+      <RuledList
+        rows={[
+          ['Commercial flower growers', 'Rose and summer flower propagation units.'],
+          ['Vegetable and fruit growers', 'Seedling and grafted-plant production.'],
+          [
+            'Nurseries and propagation labs',
+            'Specialist propagators and tissue-culture operations.',
+          ],
+          ['Agri-business distributors', 'Resale into regional markets.'],
+          ['Research and training', 'Universities, colleges and demonstration units.'],
+        ]}
+      />
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="page-inner">
+      <h2>Technical services</h2>
+      <p class="body-text">
+        Training, on-site support, nursery design, crop protocols, troubleshooting, performance
+        audits, product trials and custom specification are set out on the ordering page:
+        <a class="inline-link" href="/ordering#services">
+          technical services →
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="page-inner">
+      <h2>Contact</h2>
+      <p class="mono contact-line">
+        PropagAfrica Technologies · Nairobi, Kenya{' · '}
+        <a href="tel:+254722861682">+254 722 861 682</a>
+        {' · '}
+        <a href="mailto:info@propagafrica.com">info@propagafrica.com</a>
+        {' · '}
+        Serving Kenya and Ethiopia
+      </p>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .stub {
-    padding: var(--space-6) 0;
+  .page-hero {
+    padding: var(--space-6) 0 var(--space-5);
   }
-  .stub-inner {
+
+  .page-section {
+    padding: var(--space-5) 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .page-inner {
     max-width: var(--content-max);
     margin: 0 auto;
     padding: 0 var(--side-gutter);
   }
-  .stub-inner .eyebrow {
+
+  .page-inner .eyebrow {
     margin-bottom: var(--space-2);
   }
-  .stub-note {
-    margin-top: var(--space-4);
+
+  .standfirst {
+    margin-top: var(--space-3);
+    font-size: 18px;
+    line-height: 1.7;
     color: var(--ink-soft);
+    max-width: 42em;
   }
-  .stub-inner :global(dl) {
+
+  .page-inner :global(dl.title-block) {
     margin-top: var(--space-4);
+  }
+
+  .page-section h2 {
+    margin-bottom: var(--space-3);
+  }
+
+  .body-text {
+    margin: 0;
+    max-width: 42em;
+    line-height: 1.7;
+  }
+
+  .inline-link {
+    color: var(--green);
+  }
+
+  .contact-line {
+    line-height: 1.9;
+  }
+
+  .contact-line a {
+    color: var(--green);
+    text-decoration: none;
+  }
+
+  .contact-line a:hover {
+    text-decoration: underline;
   }
 </style>
