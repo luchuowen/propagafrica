@@ -21,9 +21,12 @@ export default defineConfig({
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        // Pre-installed browser in this environment; avoids a version-pinned
-        // download mismatch with @playwright/test's bundled build id.
-        launchOptions: { executablePath: '/opt/pw-browsers/chromium' },
+        // Use Playwright's own managed browser by default so the suite runs on
+        // any machine. Set PLAYWRIGHT_CHROMIUM_PATH to point at a preinstalled
+        // binary in sandboxes or CI images that ship one.
+        ...(process.env.PLAYWRIGHT_CHROMIUM_PATH
+          ? { launchOptions: { executablePath: process.env.PLAYWRIGHT_CHROMIUM_PATH } }
+          : {}),
       },
     },
   ],
