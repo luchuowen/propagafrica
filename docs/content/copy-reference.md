@@ -14,6 +14,7 @@ Standfirst
 If you have never stood in a propagation house, this page is the whole thing in five minutes. If you have, skip to the specifications.
 
 Title block
+
 ```
 DRAWING    PA-008
 SUBJECT    THE PROCESS
@@ -30,7 +31,7 @@ Cut both at a matching angle, press the faces together, hold them still, and the
 
 ## Why roses are done slightly differently
 
-In most grafting, the rootstock is already a rooted plant. In commercial rose propagation it usually is not. A cutting is taken and grafted in the same operation, so the join forms *while* the rootstock is still growing its own roots. The technique has a name — **stenting** — and it matters here because it means the join has to be held mechanically the entire time, under mist, with nothing underneath it yet.
+In most grafting, the rootstock is already a rooted plant. In commercial rose propagation it usually is not. A cutting is taken and grafted in the same operation, so the join forms _while_ the rootstock is still growing its own roots. The technique has a name — **stenting** — and it matters here because it means the join has to be held mechanically the entire time, under mist, with nothing underneath it yet.
 
 That is what a silicone sleeve is for.
 
@@ -52,7 +53,7 @@ That is what a silicone sleeve is for.
 
 **Take** is the share of grafts that produce both a shoot and roots, counted at four weeks. It is the number a propagation manager manages to, and it is sensitive to things that sound small.
 
-Published Kenyan work illustrates the range. In a study of the rose variety 'Inca' by Otiende, Nyabundi and Ngamau (*Journal of Applied Horticulture*, 18(1), 2016), grafting take on Natal Briar rootstock reached **85.2 %** from cuttings taken low on the mother shoot, while the rootstock 'Rosa Progress' averaged **60.0 %** across the trial. Cuttings from the base of the shoot outperformed cuttings from the top on both rootstocks, and auxin treatment beat none.
+Published Kenyan work illustrates the range. In a study of the rose variety 'Inca' by Otiende, Nyabundi and Ngamau (_Journal of Applied Horticulture_, 18(1), 2016), grafting take on Natal Briar rootstock reached **85.2 %** from cuttings taken low on the mother shoot, while the rootstock 'Rosa Progress' averaged **60.0 %** across the trial. Cuttings from the base of the shoot outperformed cuttings from the top on both rootstocks, and auxin treatment beat none.
 
 Those are figures from one Kenyan trial on one variety, not a promise about your house. The point is the size of the gap: the difference between a good decision and a careless one at this stage is tens of points of take.
 
@@ -77,6 +78,7 @@ Standfirst
 Bore, wall, grade, particle size, density, pH, conductivity, available chlorine, pack. Read it before you speak to anyone.
 
 Title block
+
 ```
 DRAWING    PA-009
 SUBJECT    SPECIFICATION INDEX
@@ -95,6 +97,7 @@ Then all seven tables from the supplies deck, in order, each with its own hairli
 H2 **What comes with a consignment.**
 
 Ruled list, mono keys:
+
 ```
 PRODUCT DATA SHEET        Per SKU. Dimensions, material, grade, pack.
 SAFETY DATA SHEET         Every hygiene product, current revision.
@@ -108,6 +111,7 @@ Specifications are held to batch and tolerances are stated rather than implied. 
 ## How to read a specification
 
 Short block, four ruled rows:
+
 ```
 BORE          The inside diameter of a sleeve, measured across. Match it to the thicker of scion and rootstock.
 WALL          Sleeve thickness. Heavier walls hold more firmly and release later.
@@ -129,6 +133,7 @@ Standfirst
 There are no prices on this site. What an item costs depends on your volume, your pack size, your specification, where it goes and how much notice you can give — so we quote against a programme rather than publish a list.
 
 Title block
+
 ```
 DRAWING    PA-010
 SUBJECT    SUPPLY PROGRAMME
@@ -140,6 +145,7 @@ SHEET      10 OF 14
 ## What a quotation is priced against
 
 Five ruled rows:
+
 ```
 ANNUAL VOLUME     High volume materially changes unit cost and freight per piece.
 PACK SIZE         Your consumption and storage decide the most economical pack.
@@ -153,6 +159,7 @@ LEAD TIME         Grafting demand is seasonal. Forecast visibility buys stock al
 For anyone grafting at volume, spot orders are the wrong instrument. A stock-out is not a delay in this business — it is a missed window that cannot be recovered until the next cycle.
 
 Seven ruled rows:
+
 ```
 FRAMEWORK AGREEMENT   Specification, indicative annual volume and commercial terms, agreed once for the year.
 MONTHLY CALL-OFFS     You release quantities against the framework as your schedule requires. No renegotiation per order.
@@ -171,6 +178,7 @@ Body
 A sleeve is only as good as the cut it sits on and the bench it sits under. Technical support is part of the supply rather than something sold against it.
 
 Eight ruled rows:
+
 ```
 PROPAGATION TRAINING     Bench technique, cut geometry, sleeve and clip selection, hygiene discipline.
 ON-SITE SUPPORT          At the bench, during a cycle.
@@ -196,6 +204,7 @@ Standfirst
 PropagAfrica Technologies supplies one part of horticulture properly: the consumables and equipment a propagation house runs on, across Kenya and Ethiopia.
 
 Title block
+
 ```
 DRAWING    PA-013
 SUBJECT    THE COMPANY
@@ -211,6 +220,7 @@ We source, specify and supply propagation consumables — grafting sleeves and c
 ## How we are different from a general agri-dealer
 
 Three ruled rows:
+
 ```
 SPECIALIST RANGE   A general dealer carries propagation consumables as a footnote. It is the whole of what we do.
 PUBLISHED SPECS    Grade, dimension, strength and tolerance are published, not described on a phone call.
@@ -220,6 +230,7 @@ SCHEDULED SUPPLY   An annual framework and monthly call-offs, rather than a quot
 ## Who we supply
 
 Five ruled rows:
+
 ```
 COMMERCIAL FLOWER GROWERS     Rose and summer flower propagation units.
 VEGETABLE AND FRUIT GROWERS   Seedling and grafted-plant production.
@@ -250,6 +261,7 @@ Standfirst
 Crop, stage, annual volume and delivery point is enough for a first quotation. We reply within one working day.
 
 Title block
+
 ```
 DRAWING    PA-014
 SUBJECT    QUOTATION REQUEST
@@ -259,18 +271,18 @@ SHEET      14 OF 14
 
 Form fields, in this order:
 
-| Field | Type | Required | Notes |
-|---|---|---|---|
-| Name | text | yes | |
-| Farm or company | text | yes | |
-| Email | email | yes | |
-| Phone | tel | no | |
-| Country | select | yes | Kenya · Ethiopia · Other |
-| Crop | select | yes | Rose · Other cut flower · Tomato, pepper, aubergine · Cucurbits · Fruit tree · Mixed nursery |
-| Stage | multi-select | yes | Prepare · Graft · Root · Protect · Record · Whole programme |
-| Annual volume, units | text, numeric hint | no | placeholder `480 000` |
-| Delivery point | text | no | placeholder `Naivasha` |
-| Specification, pack preference, call-off schedule | textarea | no | placeholder `Rootstock and scion diameters, tray type, current substrate, when the next cycle starts.` |
+| Field                                             | Type               | Required | Notes                                                                                                  |
+| ------------------------------------------------- | ------------------ | -------- | ------------------------------------------------------------------------------------------------------ |
+| Name                                              | text               | yes      |                                                                                                        |
+| Farm or company                                   | text               | yes      |                                                                                                        |
+| Email                                             | email              | yes      |                                                                                                        |
+| Phone                                             | tel                | no       |                                                                                                        |
+| Country                                           | select             | yes      | Kenya · Ethiopia · Other                                                                               |
+| Crop                                              | select             | yes      | Rose · Other cut flower · Tomato, pepper, aubergine · Cucurbits · Fruit tree · Mixed nursery           |
+| Stage                                             | multi-select       | yes      | Prepare · Graft · Root · Protect · Record · Whole programme                                            |
+| Annual volume, units                              | text, numeric hint | no       | placeholder `480 000`                                                                                  |
+| Delivery point                                    | text               | no       | placeholder `Naivasha`                                                                                 |
+| Specification, pack preference, call-off schedule | textarea           | no       | placeholder `Rootstock and scion diameters, tray type, current substrate, when the next cycle starts.` |
 
 Submit button `Send the request`
 Beside it, mono: `Or call +254 722 861 682 · info@propagafrica.com`

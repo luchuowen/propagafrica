@@ -21,6 +21,7 @@ Standfirst
 Five stages, from filling a tray to filing the record. We stock the consumables each one uses, and we specify and source the equipment around them. One framework agreement, one monthly call-off, one delivery.
 
 Title block
+
 ```
 DRAWING    PA-002
 SUBJECT    SUPPLY RANGE
@@ -44,6 +45,7 @@ Standfirst
 What a young plant sits in decides how evenly it roots. A medium that holds a little too much water, or a tray filled a few millimetres short, shows up three weeks later as a batch that finishes unevenly — long after anyone can do anything about it.
 
 Title block
+
 ```
 DRAWING    PA-003
 SUBJECT    GROWING MEDIA
@@ -60,26 +62,26 @@ Under-filling costs root volume. Over-filling closes the drainage path and water
 
 ### Table — Propagation media
 
-| SKU | Grade | Particle fraction | pH | Bulk density | Pack |
-|---|---|---|---|---|---|
-| PRO-VERM F | Fine vermiculite | 0.5–1.0 mm | 7.0–8.0 | 100–130 kg/m³ | 20 kg · 50 L |
-| PRO-VERM M | Medium vermiculite | 1.0–2.0 mm | 7.0–8.0 | 90–120 kg/m³ | 20 kg |
-| PRO-VERM C | Coarse vermiculite | 2.0–4.0 mm | 7.0–8.5 | 70–100 kg/m³ | 20 kg |
+| SKU        | Grade              | Particle fraction | pH      | Bulk density  | Pack         |
+| ---------- | ------------------ | ----------------- | ------- | ------------- | ------------ |
+| PRO-VERM F | Fine vermiculite   | 0.5–1.0 mm        | 7.0–8.0 | 100–130 kg/m³ | 20 kg · 50 L |
+| PRO-VERM M | Medium vermiculite | 1.0–2.0 mm        | 7.0–8.0 | 90–120 kg/m³  | 20 kg        |
+| PRO-VERM C | Coarse vermiculite | 2.0–4.0 mm        | 7.0–8.5 | 70–100 kg/m³  | 20 kg        |
 
-| SKU | Formulation | Particle fraction | pH | Conductivity (1:5) | Air-filled porosity | Pack |
-|---|---|---|---|---|---|---|
-| PRO-PEAT SEED | Seed and plug | 0–7 mm | 5.5–6.0 | 0.6–0.8 mS/cm | 8–12 % | 250 L |
-| PRO-PEAT PROP | Cuttings and young plants | 0–10 mm | 5.3–5.8 | 0.4–0.6 mS/cm | 15–20 % | 250 L |
-| PRO-PEAT GRAFT | Grafting and rootstock | 0–20 mm | 5.5–6.2 | 0.5–0.7 mS/cm | 20–25 % | 250 L |
+| SKU            | Formulation               | Particle fraction | pH      | Conductivity (1:5) | Air-filled porosity | Pack  |
+| -------------- | ------------------------- | ----------------- | ------- | ------------------ | ------------------- | ----- |
+| PRO-PEAT SEED  | Seed and plug             | 0–7 mm            | 5.5–6.0 | 0.6–0.8 mS/cm      | 8–12 %              | 250 L |
+| PRO-PEAT PROP  | Cuttings and young plants | 0–10 mm           | 5.3–5.8 | 0.4–0.6 mS/cm      | 15–20 %             | 250 L |
+| PRO-PEAT GRAFT | Grafting and rootstock    | 0–20 mm           | 5.5–6.2 | 0.5–0.7 mS/cm      | 20–25 %             | 250 L |
 
 ### Table — Trays and containers
 
-| SKU | Cells | Cell volume | Sheet size | Material | Pack |
-|---|---|---|---|---|---|
-| PRO-TRAY 104 | 104 | 26 ml | 540 × 280 mm | UV-stabilised polystyrene | 100 |
-| PRO-TRAY 128 | 128 | 20 ml | 540 × 280 mm | UV-stabilised polystyrene | 100 |
-| PRO-TRAY 200 | 200 | 12 ml | 540 × 280 mm | UV-stabilised polystyrene | 100 |
-| PRO-TRAY 288 | 288 | 8 ml | 540 × 280 mm | UV-stabilised polystyrene | 100 |
+| SKU          | Cells | Cell volume | Sheet size   | Material                  | Pack |
+| ------------ | ----- | ----------- | ------------ | ------------------------- | ---- |
+| PRO-TRAY 104 | 104   | 26 ml       | 540 × 280 mm | UV-stabilised polystyrene | 100  |
+| PRO-TRAY 128 | 128   | 20 ml       | 540 × 280 mm | UV-stabilised polystyrene | 100  |
+| PRO-TRAY 200 | 200   | 12 ml       | 540 × 280 mm | UV-stabilised polystyrene | 100  |
+| PRO-TRAY 288 | 288   | 8 ml        | 540 × 280 mm | UV-stabilised polystyrene | 100  |
 
 Notes block
 Vermiculite is exfoliated, supplied at 8 % moisture or below, cation exchange capacity 80–150 meq/100 g. Peat is a sphagnum-based professional substrate; wetting agent and starter nutrition to the stated formulation. Conductivity measured on a 1:5 volume extract. A certificate of analysis is issued per batch. Grade selection depends on crop, tray and irrigation regime — tell us those and we will recommend rather than guess.
@@ -94,6 +96,7 @@ Standfirst
 Two cut faces have to be brought into line and held there for weeks. The pressure has to be even and unchanging, and whatever holds them has to come away without tearing tissue that is only days old.
 
 Title block
+
 ```
 DRAWING    PA-004
 SUBJECT    GRAFT SUPPORT
@@ -112,27 +115,27 @@ Link to the sleeve selector: `Find the right sleeve →`
 
 ### Table — Silicone grafting sleeves
 
-| SKU | Bore | Wall | Length | Crop | Pack |
-|---|---|---|---|---|---|
-| PRO-ROSE 35 | 3.5 mm | 0.50 mm | 20 mm | Rose and ornamental | 50 000 |
-| PRO-ROSE 45 | 4.5 mm | 0.50 mm | 20 mm | Rose and ornamental | 50 000 |
-| PRO-ROSE 55 | 5.5 mm | 0.60 mm | 22 mm | Rose and ornamental | 50 000 |
-| PRO-ROSE 65 | 6.5 mm | 0.60 mm | 22 mm | Rose and ornamental | 50 000 |
-| PRO-ROSE 75 | 7.5 mm | 0.70 mm | 25 mm | Rose and ornamental | 50 000 |
-| PRO-ROSE 85 | 8.5 mm | 0.70 mm | 25 mm | Rose and ornamental | 50 000 |
-| PRO-VEG | 1.5–2.5 mm | 0.40 mm | 15 mm | Tomato, pepper, aubergine | 100 000 |
-| PRO-CUC | 2.5–4.0 mm | 0.45 mm | 18 mm | Cucumber, melon, watermelon | 100 000 |
-| PRO-TREE | 4.0–12 mm | 0.70 mm | 30 mm | Fruit tree | 50 000 |
+| SKU         | Bore       | Wall    | Length | Crop                        | Pack    |
+| ----------- | ---------- | ------- | ------ | --------------------------- | ------- |
+| PRO-ROSE 35 | 3.5 mm     | 0.50 mm | 20 mm  | Rose and ornamental         | 50 000  |
+| PRO-ROSE 45 | 4.5 mm     | 0.50 mm | 20 mm  | Rose and ornamental         | 50 000  |
+| PRO-ROSE 55 | 5.5 mm     | 0.60 mm | 22 mm  | Rose and ornamental         | 50 000  |
+| PRO-ROSE 65 | 6.5 mm     | 0.60 mm | 22 mm  | Rose and ornamental         | 50 000  |
+| PRO-ROSE 75 | 7.5 mm     | 0.70 mm | 25 mm  | Rose and ornamental         | 50 000  |
+| PRO-ROSE 85 | 8.5 mm     | 0.70 mm | 25 mm  | Rose and ornamental         | 50 000  |
+| PRO-VEG     | 1.5–2.5 mm | 0.40 mm | 15 mm  | Tomato, pepper, aubergine   | 100 000 |
+| PRO-CUC     | 2.5–4.0 mm | 0.45 mm | 18 mm  | Cucumber, melon, watermelon | 100 000 |
+| PRO-TREE    | 4.0–12 mm  | 0.70 mm | 30 mm  | Fruit tree                  | 50 000  |
 
 ### Table — Grafting clips
 
-| SKU | Profile | Jaw | Material | Reusable | Pack |
-|---|---|---|---|---|---|
-| PRO-CLIP U | U | 1.5 · 2.0 · 2.5 · 3.0 mm | Silicone | No | 1 000 · 5 000 |
-| PRO-CLIP O | Omega | 1.5 · 2.0 · 2.5 · 3.0 mm | Elastomer | No | 1 000 · 5 000 |
-| PRO-CLIP R | Round | 2.0 · 2.5 · 3.0 mm | Thermoplastic | Yes | 1 000 · 5 000 |
-| PRO-CLIP T | Tomato | 1.5 · 2.0 · 2.5 mm | Silicone | No | 1 000 · 5 000 |
-| PRO-CLIP V | V | 2.0 · 2.5 · 3.0 mm | Thermoplastic | Yes | 1 000 · 5 000 |
+| SKU        | Profile | Jaw                      | Material      | Reusable | Pack          |
+| ---------- | ------- | ------------------------ | ------------- | -------- | ------------- |
+| PRO-CLIP U | U       | 1.5 · 2.0 · 2.5 · 3.0 mm | Silicone      | No       | 1 000 · 5 000 |
+| PRO-CLIP O | Omega   | 1.5 · 2.0 · 2.5 · 3.0 mm | Elastomer     | No       | 1 000 · 5 000 |
+| PRO-CLIP R | Round   | 2.0 · 2.5 · 3.0 mm       | Thermoplastic | Yes      | 1 000 · 5 000 |
+| PRO-CLIP T | Tomato  | 1.5 · 2.0 · 2.5 mm       | Silicone      | No       | 1 000 · 5 000 |
+| PRO-CLIP V | V       | 2.0 · 2.5 · 3.0 mm       | Thermoplastic | Yes      | 1 000 · 5 000 |
 
 Notes block
 Sleeves are platinum-cured silicone, transparent, Shore A 40 ± 5, light transmission 88 % or better so a join can be inspected without removing the sleeve. Service range −40 °C to +200 °C, UV stable. Dimensional tolerance ± 0.15 mm on bore, held to batch. Single use.
@@ -150,6 +153,7 @@ Standfirst
 A freshly grafted plant cannot drink yet, so the air around its leaves has to stay wet without the base of the cell ever sitting in water. Holding both at once, for three weeks, is the hardest thing a propagation house does.
 
 Title block
+
 ```
 DRAWING    PA-005
 SUBJECT    PROPAGATION ENVIRONMENT
@@ -178,13 +182,13 @@ Equipment at this stage is designed around your house and sourced to that design
 
 ### Table — Propagation monitoring
 
-| Measurement | Why it is measured | Logging interval |
-|---|---|---|
-| Air temperature and humidity | The two inputs to vapour pressure deficit | 1 min |
-| Vapour pressure deficit | The variable the misting decision is actually made on | 1 min |
-| Substrate moisture | Waterlogging at the base of the cell | 5 min |
-| Substrate conductivity | Salt build-up under repeated misting | 5 min |
-| Light, PAR | The load driving water loss from the leaf | 1 min |
+| Measurement                  | Why it is measured                                    | Logging interval |
+| ---------------------------- | ----------------------------------------------------- | ---------------- |
+| Air temperature and humidity | The two inputs to vapour pressure deficit             | 1 min            |
+| Vapour pressure deficit      | The variable the misting decision is actually made on | 1 min            |
+| Substrate moisture           | Waterlogging at the base of the cell                  | 5 min            |
+| Substrate conductivity       | Salt build-up under repeated misting                  | 5 min            |
+| Light, PAR                   | The load driving water loss from the leaf             | 1 min            |
 
 Notes block
 Moisture sensors are calibrated to the substrate actually in use — coco peat, a vermiculite blend and a peat formulation each read differently, and a sensor calibrated for one is wrong in another. Supplied as hardware, dashboard and support together, with threshold alerts and export of the full history.
@@ -202,6 +206,7 @@ Standfirst
 Hygiene in a propagation house is not a cleaning routine. It is a written protocol with a strength, a contact time and a record — and for anyone exporting roses to Europe, it is audited.
 
 Title block
+
 ```
 DRAWING    PA-006
 SUBJECT    NURSERY HYGIENE
@@ -218,27 +223,27 @@ The arithmetic is printed because the failure mode is a supervisor guessing a ca
 
 ### Table — PRO-SAN working dilutions from a 12 % concentrate
 
-| Application | Target | Concentrate per 10 L | Contact time |
-|---|---|---|---|
-| Tool dip, between plants | 1 000 ppm | 83 ml | 30 s or more |
-| Footbath, refreshed daily | 1 000 ppm | 83 ml | on entry |
-| Bench and surface wash | 500 ppm | 42 ml | 5 min or more |
-| Irrigation line shock | 200 ppm | 17 ml | 60 min or more |
-| Empty-house terminal clean | 2 000 ppm | 167 ml | 10 min or more |
+| Application                | Target    | Concentrate per 10 L | Contact time   |
+| -------------------------- | --------- | -------------------- | -------------- |
+| Tool dip, between plants   | 1 000 ppm | 83 ml                | 30 s or more   |
+| Footbath, refreshed daily  | 1 000 ppm | 83 ml                | on entry       |
+| Bench and surface wash     | 500 ppm   | 42 ml                | 5 min or more  |
+| Irrigation line shock      | 200 ppm   | 17 ml                | 60 min or more |
+| Empty-house terminal clean | 2 000 ppm | 167 ml               | 10 min or more |
 
 Working: 12 % available chlorine is 120 g per litre. 83 ml carries 10 g. Ten grams in 10 litres is 1 g/L, which is 1 000 ppm.
 
 ### Table — Hygiene range
 
-| SKU | Product | Strength | Pack |
-|---|---|---|---|
-| PRO-SAN 10 | Sodium hypochlorite | 10 % available chlorine, nominal | 20 L |
-| PRO-SAN 12 | Sodium hypochlorite | 12 % available chlorine, nominal | 20 L · 200 L |
-| PRO-FOOT | Footbath tray and grid | 600 × 400 mm | each |
-| PRO-DIP | Tool dip station | 5 L | each |
-| PRO-SPRAY 5 | Knapsack sprayer | 5 L | each |
-| PRO-SPRAY 16 | Knapsack sprayer | 16 L | each |
-| PRO-PPE | Gloves, aprons, overshoes, eye protection | — | by pack |
+| SKU          | Product                                   | Strength                         | Pack         |
+| ------------ | ----------------------------------------- | -------------------------------- | ------------ |
+| PRO-SAN 10   | Sodium hypochlorite                       | 10 % available chlorine, nominal | 20 L         |
+| PRO-SAN 12   | Sodium hypochlorite                       | 12 % available chlorine, nominal | 20 L · 200 L |
+| PRO-FOOT     | Footbath tray and grid                    | 600 × 400 mm                     | each         |
+| PRO-DIP      | Tool dip station                          | 5 L                              | each         |
+| PRO-SPRAY 5  | Knapsack sprayer                          | 5 L                              | each         |
+| PRO-SPRAY 16 | Knapsack sprayer                          | 16 L                             | each         |
+| PRO-PPE      | Gloves, aprons, overshoes, eye protection | —                                | by pack      |
 
 Notes block
 Sodium hypochlorite, CAS 7681-52-9. HDPE packaging, compliant for road transport. Shelf life 90 days from manufacture at 25 °C or below, stored out of direct light — hypochlorite loses strength with heat and time, so every drum is dated and stock is rotated rather than held. Safety data sheet and certificate of analysis supplied with every consignment.
@@ -256,6 +261,7 @@ Standfirst
 An audit does not ask whether your hygiene was good. It asks which mother block a batch came from, who grafted it, what was applied and what survived — and it asks you to produce that from a file, years later.
 
 Title block
+
 ```
 DRAWING    PA-007
 SUBJECT    TRACEABILITY
@@ -272,14 +278,14 @@ If the supplier's batch code is missing, the chain breaks at the first link — 
 
 ### Table — Traceability and QC
 
-| SKU | Format | Size | Material | Pack |
-|---|---|---|---|---|
-| PRO-LABEL LOOP | Loop label | 200 × 8 mm | LDPE, UV stable | 1 000 |
-| PRO-LABEL T | Write-on tag | 120 × 20 mm | Rigid polypropylene | 1 000 |
-| PRO-TRACE | Thermal label roll | 50 × 25 mm | Top-coated synthetic | 1 000 · 5 000 |
-| PRO-TRACE CARD | Batch card | A6 | 200 gsm, moisture resistant | 500 · 1 000 |
-| PRO-QC | QC logbook | A5, 100 pages, duplicate | Carbonless, numbered | 50 · 100 books |
-| PRO-MARK | Permanent marker | 1.0 mm bullet | Pigment ink, UV resistant | 12 |
+| SKU            | Format             | Size                     | Material                    | Pack           |
+| -------------- | ------------------ | ------------------------ | --------------------------- | -------------- |
+| PRO-LABEL LOOP | Loop label         | 200 × 8 mm               | LDPE, UV stable             | 1 000          |
+| PRO-LABEL T    | Write-on tag       | 120 × 20 mm              | Rigid polypropylene         | 1 000          |
+| PRO-TRACE      | Thermal label roll | 50 × 25 mm               | Top-coated synthetic        | 1 000 · 5 000  |
+| PRO-TRACE CARD | Batch card         | A6                       | 200 gsm, moisture resistant | 500 · 1 000    |
+| PRO-QC         | QC logbook         | A5, 100 pages, duplicate | Carbonless, numbered        | 50 · 100 books |
+| PRO-MARK       | Permanent marker   | 1.0 mm bullet            | Pigment ink, UV resistant   | 12             |
 
 Notes block
 Thermal stock is synthetic rather than paper because a paper label at 90 % relative humidity fails inside a week. Batch cards carry fixed fields for variety, rootstock, scion source, date, operator, treatment and QC observation. Logbooks are sequentially numbered and duplicate, so the copy stays in the house and the original goes to the file. Variable data — lot numbers, barcodes, QR codes — is subject to your printer and media.

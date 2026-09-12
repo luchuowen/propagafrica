@@ -53,7 +53,7 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         baseURL: 'http://localhost:4322',
-        launchOptions: { executablePath: '/opt/pw-browsers/chromium' },
+        ...(chromiumPath ? { launchOptions: { executablePath: chromiumPath } } : {}),
       },
     },
   ],
