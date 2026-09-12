@@ -52,10 +52,27 @@ const jsonLd = organizationJsonLd(Astro.site!);
 
   <section class="strip">
     <div class="strip-inner">
-      <p>
+      <p class="strip-lead">
         We supply one part of horticulture properly: the consumables a propagation house runs on.
-        Stocked in Nairobi, delivered to farms across Kenya and Ethiopia.
       </p>
+      <dl class="strip-facts">
+        <div>
+          <dt>Territory</dt>
+          <dd>Kenya and Ethiopia, stocked in Nairobi</dd>
+        </div>
+        <div>
+          <dt>Range</dt>
+          <dd>Media, trays, sleeves, clips, hygiene, labels</dd>
+        </div>
+        <div>
+          <dt>Supply</dt>
+          <dd>Annual framework, monthly call-offs, buffer stock</dd>
+        </div>
+        <div>
+          <dt>Documents</dt>
+          <dd>Data sheet, safety data sheet, CoA, batch record</dd>
+        </div>
+      </dl>
     </div>
   </section>
 
@@ -75,16 +92,18 @@ const jsonLd = organizationJsonLd(Astro.site!);
       <div class="split-copy">
         <p class="eyebrow-warm">The first four weeks</p>
         <h2>Grafting joins the top of one plant to the roots of another.</h2>
-        <p>
-          The join has to be held still, under mist, for about four weeks — while the plant is also
-          growing the roots that will feed it. Nothing about whether it worked is visible from the
-          bench until the end.
-        </p>
-        <p>
-          Everything we sell exists to get a batch through those four weeks: the medium it sits in,
-          the sleeve that holds the join, the mist above it, the hygiene that keeps disease out, and
-          the record that proves which batch it was.
-        </p>
+        <div class="cols">
+          <p>
+            The join has to be held still, under mist, for about four weeks — while the plant is
+            also growing the roots that will feed it. Nothing about whether it worked is visible
+            from the bench until the end.
+          </p>
+          <p>
+            Everything we sell exists to get a batch through those four weeks: the medium it sits
+            in, the sleeve that holds the join, the mist above it, the hygiene that keeps disease
+            out, and the record that proves which batch it was.
+          </p>
+        </div>
         <a class="link-arrow" href="/how-grafting-works">
           How grafting works &rarr;
         </a>
@@ -146,15 +165,18 @@ const jsonLd = organizationJsonLd(Astro.site!);
       <div class="split-copy">
         <p class="eyebrow-warm">Ordering</p>
         <h2>We quote against your programme, not against a price list.</h2>
-        <p>
-          There are no prices on this site, and that is deliberate. What an item costs depends on
-          annual volume, pack size, specification, delivery point and how much notice you can give.
-        </p>
-        <p>
-          For anyone grafting at volume, a stock-out is not a delay — it is a missed window that
-          cannot be recovered until the next cycle. So we work on an annual framework with monthly
-          call-offs and buffer stock held against it.
-        </p>
+        <div class="cols">
+          <p>
+            There are no prices on this site, and that is deliberate. What an item costs depends on
+            annual volume, pack size, specification, delivery point and how much notice you can
+            give.
+          </p>
+          <p>
+            For anyone grafting at volume, a stock-out is not a delay — it is a missed window that
+            cannot be recovered until the next cycle. So we work on an annual framework with monthly
+            call-offs and buffer stock held against it.
+          </p>
+        </div>
         <a class="link-arrow" href="/ordering">
           How ordering works &rarr;
         </a>
@@ -225,10 +247,8 @@ const jsonLd = organizationJsonLd(Astro.site!);
   .hero-body {
     max-width: var(--wide-max);
     margin: 0 auto;
-    padding: var(--space-7) var(--side-gutter) var(--space-7);
-    min-height: 66vh;
-    display: flex;
-    align-items: flex-end;
+    padding: var(--space-6) var(--side-gutter);
+    min-height: 0;
   }
 
   /* NB: `ch` on this container would resolve against its own 16px font, not
@@ -238,15 +258,9 @@ const jsonLd = organizationJsonLd(Astro.site!);
     color: var(--paper);
   }
 
-  @media (min-width: 700px) {
+  @media (min-width: 820px) {
     .hero-inner {
-      max-width: 560px;
-    }
-  }
-
-  @media (min-width: 1100px) {
-    .hero-inner {
-      max-width: 740px;
+      max-width: 640px;
     }
   }
 
@@ -262,12 +276,11 @@ const jsonLd = organizationJsonLd(Astro.site!);
 
   .hero h1 {
     color: var(--paper);
-    font-size: clamp(34px, 6vw, 64px);
   }
 
   .hero-sub {
     margin-top: var(--space-3);
-    font-size: clamp(17px, 2vw, 20px);
+    font-size: 16px;
     line-height: 1.6;
     color: var(--paper);
     opacity: 0.9;
@@ -286,8 +299,8 @@ const jsonLd = organizationJsonLd(Astro.site!);
     display: inline-block;
     text-decoration: none;
     font-weight: 600;
-    font-size: 16px;
-    padding: 14px 24px;
+    font-size: 15px;
+    padding: 11px 20px;
     border-radius: var(--radius-s);
     border: 1px solid transparent;
   }
@@ -321,19 +334,60 @@ const jsonLd = organizationJsonLd(Astro.site!);
     max-width: var(--content-max);
     margin: 0 auto;
     padding: var(--space-5) var(--side-gutter);
+    display: grid;
+    gap: var(--space-3) var(--space-5);
+    align-items: start;
   }
 
-  .strip p {
-    font-size: clamp(19px, 2.4vw, 26px);
-    line-height: 1.45;
-    letter-spacing: -0.018em;
-    max-width: 30ch;
+  @media (min-width: 820px) {
+    .strip-inner {
+      grid-template-columns: minmax(0, 26ch) minmax(0, 1fr);
+    }
+  }
+
+  .strip-lead {
+    font-family: var(--f-display);
+    font-size: 22px;
+    line-height: 1.3;
     font-weight: 500;
+  }
+
+  .strip-facts {
+    margin: 0;
+    display: grid;
+    gap: 0;
+  }
+
+  @media (min-width: 560px) {
+    .strip-facts {
+      grid-template-columns: 1fr 1fr;
+      column-gap: var(--space-5);
+    }
+  }
+
+  .strip-facts > div {
+    padding: 7px 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .strip-facts dt {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .strip-facts dd {
+    margin: 2px 0 0;
+    font-size: 14.5px;
+    line-height: 1.45;
   }
 
   /* ---------- split sections ---------- */
   .split {
-    padding: var(--space-7) 0;
+    padding: var(--space-6) 0;
+    border-top: 1px solid var(--rule);
   }
 
   .split-inner {
@@ -347,8 +401,8 @@ const jsonLd = organizationJsonLd(Astro.site!);
 
   @media (min-width: 900px) {
     .split-inner {
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-6);
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: var(--space-5);
     }
 
     .split.reverse .split-media {
@@ -364,11 +418,25 @@ const jsonLd = organizationJsonLd(Astro.site!);
   }
 
   .split-copy p {
-    margin-top: var(--space-3);
-    font-size: 17px;
-    line-height: 1.7;
+    margin-top: var(--space-2);
+    font-size: 15px;
+    line-height: 1.65;
     color: var(--ink-soft);
-    max-width: 46ch;
+  }
+
+  @media (min-width: 1000px) {
+    .split-copy .cols {
+      column-count: 2;
+      column-gap: var(--space-4);
+    }
+
+    .split-copy .cols p {
+      margin-top: 0;
+    }
+
+    .split-copy .cols p + p {
+      margin-top: var(--space-2);
+    }
   }
 
   .eyebrow-warm {
@@ -400,7 +468,7 @@ const jsonLd = organizationJsonLd(Astro.site!);
   .specs-band {
     background: var(--green-deep);
     color: var(--paper);
-    padding: var(--space-7) 0;
+    padding: var(--space-6) 0;
   }
 
   .specs-inner {
@@ -424,8 +492,8 @@ const jsonLd = organizationJsonLd(Astro.site!);
   }
 
   .specs-copy > p {
-    margin-top: var(--space-3);
-    font-size: 17px;
+    margin-top: var(--space-2);
+    font-size: 15px;
     line-height: 1.7;
     color: var(--paper);
     opacity: 0.82;
@@ -512,9 +580,9 @@ const jsonLd = organizationJsonLd(Astro.site!);
   }
 
   .closer-body {
-    max-width: var(--wide-max);
+    max-width: var(--content-max);
     margin: 0 auto;
-    padding: var(--space-7) var(--side-gutter);
+    padding: var(--space-6) var(--side-gutter);
   }
 
   .closer-inner {
@@ -527,9 +595,9 @@ const jsonLd = organizationJsonLd(Astro.site!);
   }
 
   .closer p {
-    margin-top: var(--space-3);
-    font-size: 17px;
-    line-height: 1.7;
+    margin-top: var(--space-2);
+    font-size: 15px;
+    line-height: 1.65;
     color: var(--paper);
     opacity: 0.88;
   }

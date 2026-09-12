@@ -7,13 +7,19 @@ import rootImg from '../../assets/images/mist-bench.jpg';
 import protectImg from '../../assets/images/hygiene-station.jpg';
 import recordImg from '../../assets/images/records.jpg';
 
+// Five rows, not three cards. A row gives the range room to be listed properly
+// — a buyer scanning for a 4.5 mm bore should see it here, not two pages in.
 const STAGES = [
   {
     n: '01',
     slug: 'prepare',
     title: 'Prepare',
     line: 'The medium the cutting sits in, and the tray that holds it.',
-    items: 'Vermiculite · Peat formulations · Trays 104–288 cell',
+    range: [
+      ['Vermiculite', 'Fine, medium, coarse · 0.5–4.0 mm · 20 kg'],
+      ['Peat', 'Seed, cuttings, grafting · pH 5.3–6.2 · 250 L'],
+      ['Trays', '104 / 128 / 200 / 288 cell · 540 × 280 mm'],
+    ],
     img: prepareImg,
     alt: 'A nursery worker filling black propagation trays with dark peat at a potting bench',
   },
@@ -22,7 +28,11 @@ const STAGES = [
     slug: 'graft',
     title: 'Graft',
     line: 'Joining the two halves and holding them still while they knit together.',
-    items: 'Silicone sleeves 1.5–12 mm bore · Clips in five profiles',
+    range: [
+      ['Rose sleeves', '3.5–8.5 mm bore · wall 0.50–0.70 mm · 50 000'],
+      ['Vegetable sleeves', '1.5–4.0 mm bore · 15–18 mm · 100 000'],
+      ['Clips', 'U, omega, round, tomato, V · 1.5–3.0 mm jaw'],
+    ],
     img: graftImg,
     alt: 'An assortment of grafting clips and transparent sleeves on a weathered potting bench',
   },
@@ -31,7 +41,11 @@ const STAGES = [
     slug: 'root',
     title: 'Root',
     line: 'Keeping the leaf damp and the base drained for the weeks that follow.',
-    items: 'Misting and fogging · Benching · Irrigation · Sensors',
+    range: [
+      ['Misting and fogging', 'Nozzles, line layout, pump, filtration'],
+      ['Benching', 'Fixed, rolling and heated'],
+      ['Monitoring', 'VPD, substrate moisture and conductivity, PAR'],
+    ],
     img: rootImg,
     alt: 'Overhead misting nozzles spraying a bench of young rose cuttings, backlit droplets in the air',
   },
@@ -40,7 +54,11 @@ const STAGES = [
     slug: 'protect',
     title: 'Protect',
     line: 'Keeping the house clean enough that nothing spreads through a whole batch.',
-    items: 'Hypochlorite 10 % and 12 % · Footbaths · Tool stations · PPE',
+    range: [
+      ['Hypochlorite', '10 % and 12 % available chlorine · 20 L, 200 L'],
+      ['Stations', 'Footbath trays, tool dips, knapsack sprayers'],
+      ['PPE', 'Gloves, aprons, overshoes, eye protection'],
+    ],
     img: protectImg,
     alt: 'A footbath tray and tool dip station at the entrance to a propagation greenhouse',
   },
@@ -49,7 +67,11 @@ const STAGES = [
     slug: 'record',
     title: 'Record',
     line: 'Knowing which batch came from where, and being able to prove it later.',
-    items: 'Loop labels · Batch cards · QC logbooks · Markers',
+    range: [
+      ['Labels', 'Loop 200 × 8 mm, write-on tags, thermal rolls'],
+      ['Batch cards', 'A6, 200 gsm, moisture resistant'],
+      ['QC logbooks', 'A5, 100 pages, carbonless duplicate, numbered'],
+    ],
     img: recordImg,
     alt: 'An open duplicate logbook, batch cards and a bundle of loop labels on a greenhouse bench',
   },
@@ -57,167 +79,203 @@ const STAGES = [
 ---
 
 <section class="stages">
-  <div class="stages-head">
-    <p class="eyebrow-warm">What we supply</p>
-    <h2>Five stages, one order.</h2>
-    <p class="lede">
-      A nursery does not buy categories, it runs a sequence. We stock what each stage of that
-      sequence consumes, so one order covers a month of work instead of five suppliers covering bits
-      of it.
-    </p>
-  </div>
+  <div class="stages-inner">
+    <div class="stages-head">
+      <h2>Five stages, one order</h2>
+      <p>
+        A nursery does not buy categories, it runs a sequence. We stock what each stage of that
+        sequence consumes, so one order covers a month of work instead of five suppliers covering
+        bits of it.
+      </p>
+      <p class="head-note">
+        One framework agreement &middot; monthly call-offs &middot; one delivery
+      </p>
+    </div>
 
-  <ul class="grid">
-    {STAGES.map((s) => (
-      <li class="card">
-        <a href={`/supplies/${s.slug}`}>
-          <span class="card-media">
+    <ol class="rows">
+      {STAGES.map((s) => (
+        <li class="row">
+          <span class="row-media">
             <Image
               src={s.img}
-              alt={s.alt}
-              widths={[400, 700]}
-              sizes="(min-width: 1100px) 30vw, (min-width: 700px) 45vw, 100vw"
+              alt=""
+              widths={[280, 480]}
+              sizes="(min-width: 900px) 220px, 40vw"
               loading="lazy"
             />
           </span>
-          <span class="card-body">
-            <span class="card-n">{s.n}</span>
-            <span class="card-title">{s.title}</span>
-            <span class="card-line">{s.line}</span>
-            <span class="card-items">{s.items}</span>
-          </span>
-        </a>
-      </li>
-    ))}
-  </ul>
-
-  <p class="stages-foot">
-    One framework agreement &middot; monthly call-offs &middot; one delivery
-  </p>
+          <div class="row-head">
+            <span class="row-n">{s.n}</span>
+            <h3>
+              <a href={`/supplies/${s.slug}`}>{s.title}</a>
+            </h3>
+            <p class="row-line">{s.line}</p>
+          </div>
+          <dl class="row-range">
+            {s.range.map(([k, v]) => (
+              <div>
+                <dt>{k}</dt>
+                <dd>{v}</dd>
+              </div>
+            ))}
+          </dl>
+        </li>
+      ))}
+    </ol>
+  </div>
 </section>
 
 <style>
   .stages {
+    border-top: 1px solid var(--rule);
+    padding: var(--space-6) 0;
+  }
+
+  .stages-inner {
     max-width: var(--content-max);
     margin: 0 auto;
-    padding: var(--space-7) var(--side-gutter);
+    padding: 0 var(--side-gutter);
   }
 
+  /* The head sits in two columns so it fills the measure instead of leaving
+     half the row empty, which was the previous build's defining habit. */
   .stages-head {
-    max-width: 52ch;
-  }
-
-  .eyebrow-warm {
-    font-family: var(--f-mono);
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--signal-ink);
-    margin-bottom: var(--space-2);
-  }
-
-  .lede {
-    margin-top: var(--space-3);
-    font-size: 17px;
-    line-height: 1.7;
-    color: var(--ink-soft);
-  }
-
-  .grid {
-    list-style: none;
-    margin: var(--space-5) 0 0;
-    padding: 0;
     display: grid;
-    gap: var(--space-3);
-    grid-template-columns: 1fr;
+    gap: var(--space-2) var(--space-5);
+    align-items: end;
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--ink);
   }
 
-  @media (min-width: 700px) {
-    .grid {
-      grid-template-columns: repeat(2, 1fr);
+  @media (min-width: 820px) {
+    .stages-head {
+      grid-template-columns: minmax(0, 20ch) minmax(0, 1fr) minmax(0, auto);
     }
+  }
+
+  .stages-head p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 62ch;
+  }
+
+  .head-note {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    min-width: 0;
   }
 
   @media (min-width: 1100px) {
-    .grid {
-      grid-template-columns: repeat(3, 1fr);
+    .head-note {
+      white-space: nowrap;
     }
   }
 
-  .card a {
-    display: block;
-    height: 100%;
-    text-decoration: none;
-    color: inherit;
-    border: 1px solid var(--rule);
-    border-radius: var(--radius-m);
-    overflow: hidden;
-    background: var(--paper);
+  .rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
 
-  .card a:hover {
-    border-color: var(--green);
+  .row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2) var(--space-4);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: start;
   }
 
-  .card-media {
+  @media (min-width: 900px) {
+    .row {
+      grid-template-columns: 220px minmax(0, 20rem) minmax(0, 1fr);
+      gap: var(--space-4);
+      align-items: center;
+    }
+  }
+
+  .row-media {
     display: block;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 4 / 3;
     overflow: hidden;
     background: var(--green-pale);
+    max-width: 220px;
   }
 
-  .card-media :global(img) {
+  .row-media :global(img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
   }
 
-  .card-body {
-    display: block;
-    padding: var(--space-3);
-  }
-
-  .card-n {
+  .row-n {
     font-family: var(--f-mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    color: var(--ink-soft);
-  }
-
-  .card-title {
-    display: block;
-    margin-top: 4px;
-    font-size: 21px;
-    font-weight: 700;
-    letter-spacing: -0.022em;
-  }
-
-  .card-line {
-    display: block;
-    margin-top: 6px;
-    font-size: 15px;
-    line-height: 1.6;
-    color: var(--ink-soft);
-  }
-
-  .card-items {
-    display: block;
-    margin-top: var(--space-2);
-    padding-top: var(--space-2);
-    border-top: 1px solid var(--rule);
-    font-family: var(--f-mono);
-    font-size: 11px;
-    line-height: 1.7;
-    color: var(--ink-soft);
-  }
-
-  .stages-foot {
-    margin-top: var(--space-4);
-    font-family: var(--f-mono);
-    font-size: 11px;
+    font-size: 10.5px;
     letter-spacing: 0.12em;
-    text-transform: uppercase;
     color: var(--ink-soft);
+  }
+
+  .row-head h3 {
+    margin-top: 2px;
+    font-family: var(--f-display);
+    font-size: 23px;
+    font-weight: 600;
+  }
+
+  .row-head h3 a {
+    text-decoration: none;
+  }
+
+  .row-head h3 a:hover {
+    text-decoration: underline;
+  }
+
+  .row-line {
+    margin-top: 4px;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+
+  .row-range {
+    margin: 0;
+    display: grid;
+    gap: 0;
+  }
+
+  .row-range > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2);
+    padding: 5px 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  @media (min-width: 560px) {
+    .row-range > div {
+      grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+    }
+  }
+
+  .row-range > div:first-child {
+    border-top: none;
+  }
+
+  .row-range dt {
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+
+  .row-range dd {
+    margin: 0;
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    overflow-wrap: anywhere;
   }
 </style>

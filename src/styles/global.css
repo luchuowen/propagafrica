@@ -2,9 +2,17 @@
 
 /* Self-hosted fonts. Latin subset. font-display: swap per the brand spec. */
 @font-face {
-  font-family: 'Inter Variable';
-  src: url('/fonts/inter-var-latin.woff2') format('woff2-variations');
-  font-weight: 400 800;
+  font-family: 'Newsreader Variable';
+  src: url('/fonts/newsreader-var-latin.woff2') format('woff2-variations');
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Archivo Variable';
+  src: url('/fonts/archivo-var-latin.woff2') format('woff2-variations');
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
@@ -49,7 +57,7 @@ body {
   color: var(--ink);
   font-family: var(--f-sans);
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.55;
   font-weight: 400;
 }
 
@@ -74,32 +82,34 @@ a {
   color: inherit;
 }
 
-/* Type scale */
+/* Type scale. Sizes are working sizes, not landing-page sizes: the previous
+   build ran the H1 to 64px at weight 800 with -0.037em tracking, which is the
+   look this rebuild exists to get rid of. Tracking is normal or near it. */
 .h1,
 h1 {
-  font-family: var(--f-sans);
-  font-weight: 800;
-  font-size: clamp(30px, 5vw, 56px);
-  letter-spacing: -0.037em;
-  line-height: 1.08;
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: clamp(28px, 3.4vw, 42px);
+  letter-spacing: -0.012em;
+  line-height: 1.12;
 }
 
 .h2,
 h2 {
-  font-family: var(--f-sans);
-  font-weight: 800;
-  font-size: clamp(22px, 3vw, 34px);
-  letter-spacing: -0.03em;
-  line-height: 1.15;
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: clamp(21px, 2.1vw, 27px);
+  letter-spacing: -0.008em;
+  line-height: 1.22;
 }
 
 .h3,
 h3 {
   font-family: var(--f-sans);
-  font-weight: 700;
-  font-size: clamp(18px, 2.2vw, 23px);
-  letter-spacing: -0.024em;
-  line-height: 1.25;
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: 0;
+  line-height: 1.35;
 }
 
 .eyebrow {

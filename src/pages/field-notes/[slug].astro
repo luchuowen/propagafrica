@@ -221,10 +221,20 @@ const figureNumber = figureKey ? FIGURE_NUMBERS[figureKey] : undefined;
     margin-top: 6px;
   }
 
-  .article-body :global(table) {
-    display: block;
+  /* The scroll container is the wrapper, not the table — see the
+     rehypeScrollableTables plugin in astro.config.mjs. */
+  .article-body :global(.table-scroll) {
     overflow-x: auto;
     margin-top: var(--space-4);
+    max-width: 100%;
+  }
+
+  .article-body :global(.table-scroll:focus-visible) {
+    outline: 2px solid var(--green);
+    outline-offset: 2px;
+  }
+
+  .article-body :global(table) {
     width: 100%;
     border-collapse: collapse;
     font-family: var(--f-mono);
