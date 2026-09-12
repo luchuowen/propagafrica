@@ -171,3 +171,28 @@ against Performance ≥ 95, Accessibility 100, Best Practices ≥ 95, SEO ≥ 95
   sessions ran side by side.
 - `/404` in the house style: sheet frame, `PA-404 / SHEET NOT FOUND` title block, a
   plain sentence, three links. No illustration, no joke.
+
+## Session 7 delivered late, on `claude/jolly-lamport-fmnpd9` — not merged
+
+Session 7 pushed its reference pages 28 minutes after session 8 had already
+written them. Its branch was cut from `main` before the integration, so it never
+saw `src/data/products/`, and it re-typed all nine specification tables into a
+new `src/data/specs/index.ts` with its own local table and list components —
+exactly the duplication the integration brief said to remove. Merging it would
+have reintroduced that duplication and conflicted on all three pages.
+
+Kept instead of merged. Three things were taken from it:
+
+1. **Its best idea, generalised.** It tested `/about` by running a full
+   `astro build` inside a unit test and grepping the built HTML, on the correct
+   reasoning that a manifest gate is a regex over _source_ and a rephrase can
+   dodge it. `tests/e2e/site.spec.ts` now greps the **rendered text** of every
+   route against the banned-phrase list, plus a stricter set of patterns on
+   `/about` — without a three-minute build inside a unit test.
+2. **A missing CTA.** `/specifications` closes with the copy deck's
+   `Ask for a specification sheet →`, not the generic quotation block.
+3. **A real find the new check surfaced**: the footer read `© 2026`, which
+   quietly dates the company — the exact thing the owner ruled out. The year is
+   gone; the notice is now `© PropagAfrica Technologies`.
+
+If that branch is ever wanted, take the copy from it and not the data layer.

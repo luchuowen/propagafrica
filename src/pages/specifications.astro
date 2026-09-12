@@ -3,7 +3,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import StageHeader from '../components/supplies/StageHeader.astro';
 import SpecTable from '../components/supplies/SpecTable.astro';
 import NotesBlock from '../components/supplies/NotesBlock.astro';
-import QuotationBlock from '../components/supplies/QuotationBlock.astro';
 import RuledRows from '../components/reference/RuledRows.astro';
 import { SPEC_TABLES } from '../data/products/tables';
 
@@ -113,7 +112,11 @@ const HOW_TO_READ = [
   </div>
 
   <div class="ref-section">
-    <QuotationBlock />
+    <div class="sheet-cta">
+      <a class="cta" href="/contact?stage=Whole%20programme">
+        Ask for a specification sheet &rarr;
+      </a>
+    </div>
   </div>
 </BaseLayout>
 
@@ -159,5 +162,27 @@ const HOW_TO_READ = [
   .notes {
     margin-top: var(--space-3);
     max-width: 46em;
+  }
+
+  .sheet-cta {
+    margin-top: var(--space-5);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--rule);
+  }
+
+  .cta {
+    display: inline-block;
+    text-decoration: none;
+    font-family: var(--f-sans);
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--paper);
+    background: var(--green);
+    border: 1px solid var(--green);
+    padding: 12px 22px;
+  }
+
+  .cta:hover {
+    opacity: 0.92;
   }
 </style>

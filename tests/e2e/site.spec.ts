@@ -203,3 +203,50 @@ test.describe('the specification index', () => {
     expect(onIndex).toEqual(onStage);
   });
 });
+
+// Session 7 (branch claude/jolly-lamport-fmnpd9) delivered its own version of
+// the reference pages after session 8 had already written them, and shipped one
+// idea worth keeping: grep the BUILT HTML, not the source. The manifest gates
+// are regexes over source copy, and a rephrase or a value assembled at build
+// time can slip past them. Session 7 ran a full `astro build` inside a unit
+// test for /about alone; this runs against the pages the suite already has, and
+// covers every route.
+test.describe('the rendered page, not the source', () => {
+  const BANNED = [
+    'founded',
+    'established 20',
+    'since 20',
+    'years of experience',
+    'years in business',
+    'welcome to',
+    'why choose us',
+    'one-stop',
+    'world-class',
+    'cutting-edge',
+    'state-of-the-art',
+    'industry-leading',
+    'lorem ipsum',
+    'coming soon',
+    'placeholder',
+  ];
+
+  for (const route of ROUTES) {
+    test(`${route} contains none of the banned phrases as rendered text`, async ({ page }) => {
+      await page.goto(route);
+      const text = (await page.locator('body').innerText()).toLowerCase();
+      for (const phrase of BANNED) {
+        expect(text, `"${phrase}" on ${route}`).not.toContain(phrase);
+      }
+    });
+  }
+
+  test('/about states no founding date, company age or headcount', async ({ page }) => {
+    await page.goto('/about');
+    const text = (await page.locator('body').innerText()).toLowerCase();
+    // A year anywhere in a sentence about the company is the failure mode the
+    // owner flagged, so this is stricter than the phrase list above.
+    expect(text).not.toMatch(/\b(founded|established|incorporated|trading since)\b/);
+    expect(text).not.toMatch(/\b(19|20)\d{2}\b(?![^.]*copyright)/);
+    expect(text).not.toMatch(/\b\d+\s+(employees|staff|people)\b/);
+  });
+});
