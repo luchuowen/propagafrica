@@ -1,46 +1,257 @@
 ---
-// Article template for Field Notes. No articles exist yet — they are
-// written in a later session. getStaticPaths returns none for now, which
-// is correct: no navigation on this site links to a slug that doesn't
-// exist yet, so nothing 404s.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TitleBlock from '../../components/TitleBlock.astro';
+import Figure from '../../components/Figure.astro';
+import { ARTICLE_ORDER } from '../../data/field-notes/order';
 
-export async function getStaticPaths() {
-  return [];
+import graftUnionStagesSvg from '../../assets/figures/words/graft-union-stages.svg?raw';
+import boreFitSvg from '../../assets/figures/words/bore-fit.svg?raw';
+
+interface FieldNoteFrontmatter {
+  slug: string;
+  title: string;
+  standfirst: string;
+  category: string;
+  readingMinutes: number;
+  figure?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type FieldNoteModule = { frontmatter: FieldNoteFrontmatter; Content: any };
+
+function loadFieldNotes() {
+  const modules = import.meta.glob<FieldNoteModule>('../../data/field-notes/*.md', {
+    eager: true,
+  });
+  return new Map(Object.values(modules).map((m) => [m.frontmatter.slug, m]));
+}
+
+export async function getStaticPaths() {
+  const modules = import.meta.glob<{ frontmatter: { slug: string } }>(
+    '../../data/field-notes/*.md',
+    { eager: true },
+  );
+  return Object.values(modules).map((m) => ({ params: { slug: m.frontmatter.slug } }));
+}
+
+const bySlug = loadFieldNotes();
 const { slug } = Astro.params;
+const entry = slug ? bySlug.get(slug) : undefined;
+
+if (!entry) {
+  throw new Error(`No field note for slug: ${slug}`);
+}
+
+const { frontmatter, Content } = entry;
+
+const OWN_FIGURES: Record<string, string> = {
+  'graft-union-stages': graftUnionStagesSvg,
+  'bore-fit': boreFitSvg,
+};
+
+const FIGURE_CAPTIONS: Record<string, string> = {
+  'graft-union-stages':
+    'The union forms in three stages: the cut faces are pressed together at day 0, a callus bridges the gap across days 2 to 7, and a vascular connection is established across days 7 to 14.',
+  'bore-fit':
+    'Three sleeves in section over the same measured stem: one size over leaves a persistent gap, the correct size seats snugly to tolerance, and one size under compresses the cambium.',
+};
+
+const FIGURE_NUMBERS: Record<string, number> = {
+  'graft-union-stages': 1,
+  'bore-fit': 2,
+};
+
+const position = ARTICLE_ORDER.indexOf(frontmatter.slug);
+const prevSlug = position > 0 ? ARTICLE_ORDER[position - 1] : undefined;
+const nextSlug =
+  position >= 0 && position < ARTICLE_ORDER.length - 1 ? ARTICLE_ORDER[position + 1] : undefined;
+const prev = prevSlug ? bySlug.get(prevSlug)?.frontmatter : undefined;
+const next = nextSlug ? bySlug.get(nextSlug)?.frontmatter : undefined;
+
+const drawingNo = `FN-${String(position + 1).padStart(2, '0')}`;
+
+const figureKey = frontmatter.figure;
+const ownFigureSvg = figureKey ? OWN_FIGURES[figureKey] : undefined;
+const figureCaption = figureKey ? FIGURE_CAPTIONS[figureKey] : undefined;
+const figureNumber = figureKey ? FIGURE_NUMBERS[figureKey] : undefined;
 ---
 
-<BaseLayout title="Field Note" description="A PropagAfrica field note.">
-  <section class="stub">
-    <div class="stub-inner">
-      <p class="eyebrow">FIELD NOTES</p>
-      <h1>Field note</h1>
-      <TitleBlock drawingNo="PA-501" subject={slug ?? 'article'} />
-      <p class="stub-note">Content for this article is written in a later session.</p>
+<BaseLayout title={frontmatter.title} description={frontmatter.standfirst}>
+  <article class="note">
+    <div class="note-inner">
+      <header class="note-header">
+        <p class="eyebrow">{frontmatter.category.toUpperCase()}</p>
+        <h1>{frontmatter.title}</h1>
+        <p class="standfirst">{frontmatter.standfirst}</p>
+        <TitleBlock
+          drawingNo={drawingNo}
+          subject={frontmatter.category.toUpperCase()}
+          dimension={`${frontmatter.readingMinutes} MIN READ`}
+        />
+      </header>
+
+      {/* TODO(session-8): traceability-chain, dilution and cell-section are drawn by
+           session 3 — wire those figures up here when ready. Do not import from
+           session 3's asset folder from this page. */}
+      {ownFigureSvg && figureCaption && figureNumber !== undefined ? (
+        <Figure
+          number={figureNumber}
+          subject={frontmatter.title}
+          caption={figureCaption}
+          sheet={12}
+          sheetsTotal={14}
+        >
+          <Fragment set:html={ownFigureSvg} />
+        </Figure>
+      ) : null}
+
+      <div class="article-body">
+        <Content />
+      </div>
+
+      <nav class="prev-next" aria-label="Field Notes navigation">
+        <a class="prev" href={prev ? `/field-notes/${prev.slug}` : '/field-notes'}>
+          <span class="direction">← Previous</span>
+          <span class="link-title">{prev ? prev.title : 'Field Notes'}</span>
+        </a>
+        <a class="next" href={next ? `/field-notes/${next.slug}` : '/field-notes'}>
+          <span class="direction">Next →</span>
+          <span class="link-title">{next ? next.title : 'Field Notes'}</span>
+        </a>
+      </nav>
     </div>
-  </section>
+  </article>
 </BaseLayout>
 
 <style>
-  .stub {
-    padding: var(--space-6) 0;
+  .note {
+    padding: var(--space-6) 0 var(--space-7);
   }
-  .stub-inner {
+
+  .note-inner {
     max-width: var(--content-max);
     margin: 0 auto;
     padding: 0 var(--side-gutter);
   }
-  .stub-inner .eyebrow {
+
+  .note-header {
+    max-width: 68ch;
+  }
+
+  .note-header .eyebrow {
     margin-bottom: var(--space-2);
   }
-  .stub-note {
-    margin-top: var(--space-4);
+
+  .standfirst {
+    margin-top: var(--space-3);
+    font-size: 18px;
     color: var(--ink-soft);
   }
-  .stub-inner :global(dl) {
+
+  .note-header :global(.title-block) {
     margin-top: var(--space-4);
+  }
+
+  .note-inner :global(figure) {
+    margin-top: var(--space-6);
+  }
+
+  .article-body {
+    max-width: 68ch;
+    margin-top: var(--space-6);
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  .article-body :global(p) {
+    margin-top: var(--space-3);
+  }
+
+  .article-body :global(p:first-child) {
+    margin-top: 0;
+  }
+
+  .article-body :global(h2) {
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--rule);
+  }
+
+  .article-body :global(h2 + p) {
+    margin-top: var(--space-3);
+  }
+
+  .article-body :global(ul),
+  .article-body :global(ol) {
+    margin-top: var(--space-3);
+    padding-left: 1.3em;
+  }
+
+  .article-body :global(li + li) {
+    margin-top: 6px;
+  }
+
+  .article-body :global(table) {
+    display: block;
+    overflow-x: auto;
+    margin-top: var(--space-4);
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--f-mono);
+    font-size: 12px;
+  }
+
+  .article-body :global(th),
+  .article-body :global(td) {
+    border: 1px solid var(--rule);
+    padding: 6px 12px;
+    text-align: left;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .article-body :global(th) {
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .prev-next {
+    max-width: 68ch;
+    margin-top: var(--space-7);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .prev-next a {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-decoration: none;
+    color: var(--ink);
+    max-width: 48%;
+  }
+
+  .prev-next .next {
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  .prev-next a:hover .link-title {
+    color: var(--green);
+  }
+
+  .direction {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .link-title {
+    font-weight: 700;
   }
 </style>

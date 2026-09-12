@@ -1,36 +1,142 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import TitleBlock from '../../components/TitleBlock.astro';
+import { ARTICLE_ORDER } from '../../data/field-notes/order';
+
+interface FieldNoteFrontmatter {
+  slug: string;
+  title: string;
+  standfirst: string;
+  category: string;
+  readingMinutes: number;
+  figure?: string;
+}
+
+const modules = import.meta.glob<{ frontmatter: FieldNoteFrontmatter }>(
+  '../../data/field-notes/*.md',
+  { eager: true },
+);
+
+const bySlug = new Map(Object.values(modules).map((m) => [m.frontmatter.slug, m.frontmatter]));
+
+const articles = ARTICLE_ORDER.map((slug) => {
+  const frontmatter = bySlug.get(slug);
+  if (!frontmatter) throw new Error(`Field note not found for slug: ${slug}`);
+  return frontmatter;
+});
 ---
 
-<BaseLayout title="Field Notes" description="Field Notes index.">
-  <section class="stub">
-    <div class="stub-inner">
-      <p class="eyebrow">PROPAGAFRICA TECHNOLOGIES</p>
+<BaseLayout
+  title="Field Notes"
+  description="Technique, compliance, specification, hygiene and media notes for propagation houses supplying roses and grafted vegetables in Kenya and Ethiopia."
+>
+  <section class="index">
+    <div class="index-inner">
+      <p class="eyebrow">FIELD NOTES</p>
       <h1>Field Notes</h1>
-      <TitleBlock drawingNo="PA-500" subject="Field Notes" />
-      <p class="stub-note">Content for this page is built in a later session.</p>
+      <ul class="rows">
+        {articles.map((a) => (
+          <li class="row">
+            <a href={`/field-notes/${a.slug}`}>
+              <span class="category">{a.category}</span>
+              <span class="text">
+                <span class="title">{a.title}</span>
+                <span class="standfirst">{a.standfirst}</span>
+              </span>
+              <span class="minutes">{a.readingMinutes} MIN</span>
+            </a>
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .stub {
-    padding: var(--space-6) 0;
+  .index {
+    padding: var(--space-6) 0 var(--space-7);
   }
-  .stub-inner {
+
+  .index-inner {
     max-width: var(--content-max);
     margin: 0 auto;
     padding: 0 var(--side-gutter);
   }
-  .stub-inner .eyebrow {
+
+  .index-inner .eyebrow {
     margin-bottom: var(--space-2);
   }
-  .stub-note {
-    margin-top: var(--space-4);
+
+  .rows {
+    list-style: none;
+    margin: var(--space-5) 0 0;
+    padding: 0;
+  }
+
+  .row {
+    border-top: 1px solid var(--rule);
+  }
+
+  .row:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .row a {
+    display: grid;
+    grid-template-columns: 8em 1fr auto;
+    gap: var(--space-3);
+    align-items: baseline;
+    padding: var(--space-3) 0;
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  .row a:hover .title {
+    color: var(--green);
+  }
+
+  .category {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     color: var(--ink-soft);
   }
-  .stub-inner :global(dl) {
-    margin-top: var(--space-4);
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .title {
+    font-family: var(--f-sans);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.016em;
+  }
+
+  .standfirst {
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  .minutes {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .row a {
+      grid-template-columns: 1fr;
+      gap: var(--space-1);
+    }
+
+    .minutes {
+      order: -1;
+    }
   }
 </style>
