@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>ConsumablesPlanner fixture</title>
+    <style>
+      /* Minimal port of ConsumablesPlanner.astro's scoped styles — enough to
+         exercise real layout/focus behaviour, not a byzantine match. */
+      body {
+        font-family: sans-serif;
+        margin: 2rem;
+      }
+      fieldset {
+        border: none;
+        margin: 0;
+        padding: 0;
+      }
+      .inputs {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+      .toggle-group {
+        display: flex;
+        flex-wrap: wrap;
+        border: 1px solid lightgray;
+        width: max-content;
+      }
+      .toggle-button {
+        position: relative;
+      }
+      .toggle-button input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        margin: 0;
+        cursor: pointer;
+      }
+      .toggle-button label {
+        display: block;
+        padding: 8px 14px;
+        cursor: pointer;
+        border-right: 1px solid lightgray;
+        white-space: nowrap;
+      }
+      .toggle-button:last-child label {
+        border-right: none;
+      }
+      .toggle-button input:checked + label {
+        background: black;
+        color: white;
+      }
+      .toggle-button input:focus-visible + label {
+        outline: 2px solid seagreen;
+        outline-offset: -2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="consumables-planner" id="consumables-planner" data-tool="consumables-planner">
+      <div class="inputs">
+        <div class="field">
+          <label for="grafts-per-cycle">Grafts per cycle</label>
+          <input type="number" id="grafts-per-cycle" min="0" step="1" value="120000" />
+        </div>
+        <div class="field">
+          <label for="cycles-per-year">Cycles per year</label>
+          <input type="number" id="cycles-per-year" min="0" step="1" value="4" />
+        </div>
+        <form data-role="tray-form" class="field">
+          <fieldset>
+            <legend>Tray</legend>
+            <div class="toggle-group">
+              <span class="toggle-button">
+                <input type="radio" name="tray" id="tray-104" value="104" />
+                <label for="tray-104">104 cell / 26 ml</label>
+              </span>
+              <span class="toggle-button">
+                <input type="radio" name="tray" id="tray-128" value="128" checked />
+                <label for="tray-128">128 cell / 20 ml</label>
+              </span>
+              <span class="toggle-button">
+                <input type="radio" name="tray" id="tray-200" value="200" />
+                <label for="tray-200">200 cell / 12 ml</label>
+              </span>
+              <span class="toggle-button">
+                <input type="radio" name="tray" id="tray-288" value="288" />
+                <label for="tray-288">288 cell / 8 ml</label>
+              </span>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+
+      <dl class="rows" id="planner-rows">
+        <div class="row">
+          <dt>Total grafts</dt>
+          <dd><span id="row-value-total">placeholder</span><span id="row-working-total"></span></dd>
+        </div>
+        <div class="row">
+          <dt>Sleeves</dt>
+          <dd>
+            <span id="row-value-sleeves">placeholder</span><span id="row-working-sleeves"></span>
+          </dd>
+        </div>
+        <div class="row">
+          <dt>Trays</dt>
+          <dd><span id="row-value-trays">placeholder</span><span id="row-working-trays"></span></dd>
+        </div>
+        <div class="row">
+          <dt>Media</dt>
+          <dd><span id="row-value-media">placeholder</span><span id="row-working-media"></span></dd>
+        </div>
+        <div class="row">
+          <dt>Thermal sleeves</dt>
+          <dd>
+            <span id="row-value-thermal">placeholder</span><span id="row-working-thermal"></span>
+          </dd>
+        </div>
+        <div class="row">
+          <dt>Batch cards</dt>
+          <dd><span id="row-value-cards">placeholder</span><span id="row-working-cards"></span></dd>
+        </div>
+        <div class="row">
+          <dt>Logbooks</dt>
+          <dd>
+            <span id="row-value-logbooks">placeholder</span><span id="row-working-logbooks"></span>
+          </dd>
+        </div>
+        <div class="row">
+          <dt>Sanitiser</dt>
+          <dd>
+            <span id="row-value-sanitiser">placeholder</span
+            ><span id="row-working-sanitiser"></span>
+          </dd>
+        </div>
+      </dl>
+
+      <p><a id="quotation-link" href="/contact">Send this to a quotation</a></p>
+    </div>
+
+    <script type="module">
+      import { mountConsumablesPlanner } from './lib/planner-ui.js';
+      import { onVisible } from './lib/visible.js';
+
+      const root = document.getElementById('consumables-planner');
+      if (root) onVisible(root, () => mountConsumablesPlanner(root));
+    </script>
+  </body>
+</html>

@@ -56,6 +56,7 @@ Loaded via `CLAUDE.md`. Cap: 250 lines. Compact into `.factory/history/` when cl
   navigation never 404s; no page content beyond that is in scope for this session.
 
 ## 2026-09-12 — Playwright browser resolution
+
 Session 1 ran in a cloud sandbox and hardcoded `/opt/pw-browsers/chromium` as the
 Chromium executable, which fails on any other machine. The config now uses
 Playwright's own managed browser by default and honours `PLAYWRIGHT_CHROMIUM_PATH`
@@ -63,5 +64,6 @@ when a preinstalled binary is available. Run `pnpm exec playwright install chrom
 once per machine.
 
 ## 2026-09-12 — pnpm 11 build approvals
+
 pnpm 11 no longer reads the `pnpm` field in `package.json`. Build-script approvals
 for `esbuild` and `sharp` live in `pnpm-workspace.yaml` under `allowBuilds`.

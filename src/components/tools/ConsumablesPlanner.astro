@@ -1,0 +1,280 @@
+---
+// Consumables planner: turn a grafting programme into quantities, with
+// every assumption printed. Vanilla-TS island — the SSR markup below is a
+// complete, correct default state on its own; the script at the bottom
+// only re-renders it in place once the tool scrolls into view.
+import {
+  TRAY_OPTIONS,
+  DEFAULT_GRAFTS_PER_CYCLE,
+  DEFAULT_CYCLES_PER_YEAR,
+  DEFAULT_TRAY_CELLS,
+  DEFAULT_TRAY,
+  ROW_SLUGS,
+  LITRES_ROW_SLUGS,
+  planConsumables,
+  plannerRows,
+  formatCount,
+  formatLitres,
+  buildQuotationQuery,
+  assumptionLines,
+} from '../../lib/tools/planner';
+
+const defaultTray = TRAY_OPTIONS.find((t) => t.cells === DEFAULT_TRAY_CELLS) ?? DEFAULT_TRAY;
+const inputs = {
+  graftsPerCycle: DEFAULT_GRAFTS_PER_CYCLE,
+  cyclesPerYear: DEFAULT_CYCLES_PER_YEAR,
+  cells: defaultTray.cells,
+  mlPerCell: defaultTray.mlPerCell,
+};
+const result = planConsumables(inputs);
+const rows = plannerRows(inputs, result);
+const quotationHref = buildQuotationQuery(inputs, result);
+const assumptions = assumptionLines();
+---
+
+<div class="consumables-planner" id="consumables-planner" data-tool="consumables-planner">
+  <div class="inputs">
+    <div class="field">
+      <label for="grafts-per-cycle">Grafts per cycle</label>
+      <input
+        type="number"
+        id="grafts-per-cycle"
+        min="0"
+        step="1"
+        value={DEFAULT_GRAFTS_PER_CYCLE}
+        class="mono"
+      />
+    </div>
+    <div class="field">
+      <label for="cycles-per-year">Cycles per year</label>
+      <input
+        type="number"
+        id="cycles-per-year"
+        min="0"
+        step="1"
+        value={DEFAULT_CYCLES_PER_YEAR}
+        class="mono"
+      />
+    </div>
+    <form data-role="tray-form" class="field">
+      <fieldset>
+        <legend class="eyebrow">Tray</legend>
+        <div class="toggle-group">
+          {TRAY_OPTIONS.map((tray) => (
+            <span class="toggle-button">
+              <input
+                type="radio"
+                name="tray"
+                id={`tray-${tray.cells}`}
+                value={tray.cells}
+                checked={tray.cells === DEFAULT_TRAY_CELLS}
+              />
+              <label for={`tray-${tray.cells}`}>
+                {tray.cells} cell / {tray.mlPerCell} ml
+              </label>
+            </span>
+          ))}
+        </div>
+      </fieldset>
+    </form>
+  </div>
+
+  <dl class="rows" id="planner-rows">
+    {rows.map((row, i) => {
+      const slug = ROW_SLUGS[i]!;
+      return (
+        <div class="row">
+          <dt>{row.label}</dt>
+          <dd>
+            <span class="value mono" id={`row-value-${slug}`}>
+              {LITRES_ROW_SLUGS.has(slug) ? formatLitres(row.value) : formatCount(row.value)}
+            </span>
+            <span class="working mono" id={`row-working-${slug}`}>
+              {row.working}
+            </span>
+          </dd>
+        </div>
+      );
+    })}
+  </dl>
+
+  <p class="quotation-link">
+    <a id="quotation-link" href={quotationHref}>
+      Send this to a quotation
+    </a>
+  </p>
+
+  <div class="assumptions">
+    <p class="eyebrow">Assumptions</p>
+    <ul class="mono">
+      {assumptions.map((line) => (
+        <li>{line}</li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<script>
+  import { mountConsumablesPlanner } from '../../lib/tools/planner-ui';
+  import { onVisible } from '../../lib/tools/visible';
+
+  const root = document.getElementById('consumables-planner');
+  if (root) onVisible(root, () => mountConsumablesPlanner(root));
+</script>
+
+<style>
+  .consumables-planner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .inputs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    align-items: flex-end;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .field label,
+  legend {
+    font-size: 14px;
+  }
+
+  fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  legend {
+    padding: 0;
+    margin-bottom: var(--space-1);
+  }
+
+  input[type='number'] {
+    font-family: var(--f-mono);
+    font-size: 14px;
+    padding: 6px 8px;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    color: var(--ink);
+    width: 10em;
+  }
+
+  .toggle-group {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid var(--rule);
+    width: max-content;
+    max-width: 100%;
+  }
+
+  .toggle-button {
+    position: relative;
+  }
+
+  .toggle-button input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .toggle-button label {
+    display: block;
+    padding: 8px 14px;
+    font-size: 13px;
+    line-height: 1.3;
+    color: var(--ink-soft);
+    border-right: 1px solid var(--rule);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .toggle-button:last-child label {
+    border-right: none;
+  }
+
+  .toggle-button input:checked + label {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .toggle-button input:focus-visible + label {
+    outline: 2px solid var(--green);
+    outline-offset: -2px;
+  }
+
+  .rows {
+    margin: 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .rows .row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2px;
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  @media (min-width: 640px) {
+    .rows .row {
+      grid-template-columns: 10em 1fr;
+    }
+  }
+
+  .rows dt {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .rows dd {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .rows .value {
+    font-size: 16px;
+  }
+
+  .rows .working {
+    font-size: 10.5px;
+    color: var(--ink-soft);
+  }
+
+  .quotation-link a {
+    font-size: 14px;
+    color: var(--green);
+    text-decoration: underline;
+  }
+
+  .assumptions {
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--rule);
+  }
+
+  .assumptions ul {
+    margin: var(--space-1) 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .assumptions li {
+    font-size: 10.5px;
+    color: var(--ink-soft);
+  }
+</style>

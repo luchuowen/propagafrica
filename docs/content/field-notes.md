@@ -12,6 +12,7 @@ slug, title, standfirst, category, readingMinutes, figure (optional)
 ---
 
 ---
+
 slug: how-a-graft-knits-together
 title: How a graft actually knits together
 standfirst: What is happening inside the sleeve for four weeks, why nothing is visible from the bench, and where the losses really occur.
@@ -35,7 +36,7 @@ only tissue in the stem that makes new cells. Everything a graft becomes, it bec
 When you cut a scion and a rootstock, you expose a ring of cambium on each. Press the two together and
 the cells nearest the wound start dividing into a disorganised mass called **callus** — undifferentiated
 tissue, the plant equivalent of a scab that keeps growing. Within that callus, new cambium forms, and
-it forms *across* the gap. Once the new cambium is continuous from the rootstock into the scion, the
+it forms _across_ the gap. Once the new cambium is continuous from the rootstock into the scion, the
 two are one plant: water can move up, sugars can move down.
 
 Two things follow from this that matter on a bench.
@@ -52,7 +53,7 @@ firmly.
 ## Rose is done differently, and that changes everything
 
 In most grafting, the rootstock is a plant that already has roots. In commercial rose propagation it
-usually is not. A cutting is taken and grafted in the same operation, so the join knits *while* the
+usually is not. A cutting is taken and grafted in the same operation, so the join knits _while_ the
 rootstock is still forming its own roots underneath. The technique has a name — **stenting** — and it
 was developed for exactly this: getting a saleable young plant in one pass instead of two.
 
@@ -101,7 +102,7 @@ perfectly healthy.
 ## What the numbers look like in Kenya
 
 Published Kenyan work gives a sense of how much the controllable variables matter. In a study of the
-rose variety 'Inca' by Otiende, Nyabundi and Ngamau (*Journal of Applied Horticulture*, 18(1), 2016),
+rose variety 'Inca' by Otiende, Nyabundi and Ngamau (_Journal of Applied Horticulture_, 18(1), 2016),
 grafting take on Natal Briar rootstock reached **85.2 %** using cuttings taken from low on the mother
 shoot, while 'Rosa Progress' averaged **60.0 %** across the trial. Cuttings from the base of the shoot
 beat cuttings from the top on both rootstocks, and auxin-treated cuttings beat untreated.
@@ -119,6 +120,7 @@ measured. And assume nothing is visible until day 28, because it is not.
 ---
 
 ---
+
 slug: european-rose-rules-inside-the-house
 title: What the European rose rules mean inside your propagation house
 standfirst: The systems approach, in plain terms — what is actually being audited, what has to be recorded, and which of it lands on propagation rather than on the pack house.
@@ -137,7 +139,7 @@ This is what the rules mean where the grafting is done.
 
 ## What changed, and when
 
-The European Union treats **false codling moth** (*Thaumatotibia leucotreta*) as a quarantine pest.
+The European Union treats **false codling moth** (_Thaumatotibia leucotreta_) as a quarantine pest.
 Inspection rates on Kenyan rose consignments were raised from 5 % to **25 % from 1 May 2024**, which
 made interception a commercial certainty rather than a risk.
 
@@ -242,6 +244,7 @@ paperwork without being asked.
 ---
 
 ---
+
 slug: choosing-a-sleeve-bore
 title: Choosing a sleeve bore against a measured stem
 standfirst: Why one size over slips and one size under starves the join, how to sample a batch of rootstock properly, and what tolerance actually means on a silicone sleeve.
@@ -333,6 +336,7 @@ supplier helped.
 ---
 
 ---
+
 slug: hypochlorite-is-a-protocol
 title: Hypochlorite is a protocol, not a product
 standfirst: Available chlorine against parts per million, why a drum in a hot store is weaker than the label says, the contact times that matter, and the records an auditor will ask for.
@@ -365,13 +369,13 @@ estimates a capful.
 
 ## The dilutions that actually get used
 
-| Application | Target | From a 12 % concentrate, per 10 L | Contact time |
-|---|---|---|---|
-| Tool dip, between plants | 1 000 ppm | 83 ml | 30 seconds or more |
-| Footbath, refreshed daily | 1 000 ppm | 83 ml | on entry |
-| Bench and surface wash | 500 ppm | 42 ml | 5 minutes or more |
-| Irrigation line shock | 200 ppm | 17 ml | 60 minutes or more |
-| Empty-house terminal clean | 2 000 ppm | 167 ml | 10 minutes or more |
+| Application                | Target    | From a 12 % concentrate, per 10 L | Contact time       |
+| -------------------------- | --------- | --------------------------------- | ------------------ |
+| Tool dip, between plants   | 1 000 ppm | 83 ml                             | 30 seconds or more |
+| Footbath, refreshed daily  | 1 000 ppm | 83 ml                             | on entry           |
+| Bench and surface wash     | 500 ppm   | 42 ml                             | 5 minutes or more  |
+| Irrigation line shock      | 200 ppm   | 17 ml                             | 60 minutes or more |
+| Empty-house terminal clean | 2 000 ppm | 167 ml                            | 10 minutes or more |
 
 From a 10 % concentrate, multiply each volume by 1.2.
 
@@ -435,6 +439,7 @@ reconstructed later.
 ---
 
 ---
+
 slug: reading-a-substrate-specification
 title: Reading a substrate specification
 standfirst: Particle fraction, bulk density, pH and conductivity — what each one changes at the base of the cell, and which numbers to insist on before a delivery is accepted.
