@@ -1,0 +1,358 @@
+---
+// Grafting Sleeve and Clip Calculator — blueprint.md Section 10 and the Build
+// Workbook's Calculator Logic section. Client-side only: there is no server
+// to compute against (this site builds to static HTML), so the interactive
+// form stays `hidden` until the enhancement script proves JavaScript is
+// running, and a <noscript> fallback points to /contact/ instead.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ToolIntro from '../../components/tools/ToolIntro.astro';
+import { TOOLS_DISCLAIMER } from '../../data/tools';
+import { CROP_GROUPS, CLIP_TYPES, ROSE_SIZES } from '../../lib/tools/grafting-calculator';
+
+const PACKAGING_NOTE =
+  'Tubes are packed 50,000-100,000 pcs per box or as per request; clips 1,000-10,000 pcs per box or as per request — confirm exact packaging with our team.';
+---
+
+<BaseLayout
+  title="Grafting Sleeve and Clip Calculator"
+  description="Work out grafting tube and clip quantities for your next graft run, by crop group and stem size, with a wastage allowance you can adjust."
+>
+  <section class="tool-page">
+    <div class="tool-inner">
+      <ToolIntro
+        eyebrow="Planning tools"
+        title="Grafting Sleeve and Clip Calculator"
+        sub="Work out tube and clip quantities for your next graft run, by crop group and stem size."
+        image="/images/products/grafting-tubes/01.jpg"
+        imageAlt="PRO-ROSE silicone grafting tubes sized by diameter for a propagation run"
+      />
+
+      <noscript>
+        <p class="js-required">
+          This calculator needs JavaScript to run. <a href="/contact/">Request a Quotation</a> and
+          our team will help you work out quantities.
+        </p>
+      </noscript>
+
+      <div class="calculator" data-calculator hidden>
+        <form id="grafting-form" novalidate>
+          <div class="field">
+            <label for="crop-group">Crop group</label>
+            <select id="crop-group" name="cropGroup">
+              {CROP_GROUPS.map((group) => (
+                <option value={group}>{group}</option>
+              ))}
+            </select>
+          </div>
+
+          <div class="field" id="rose-size-field">
+            <label for="rose-size">Rose stem diameter</label>
+            <select id="rose-size" name="roseSize">
+              {ROSE_SIZES.map((size) => (
+                <option value={size.diameter}>{size.label}</option>
+              ))}
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="grafts">Number of grafts planned</label>
+            <input
+              id="grafts"
+              name="grafts"
+              type="number"
+              min="1"
+              step="1"
+              inputmode="numeric"
+              placeholder="e.g. 5000"
+            />
+          </div>
+
+          <div class="field">
+            <label for="clip-type">Clip type</label>
+            <select id="clip-type" name="clipType">
+              {CLIP_TYPES.map((clip) => (
+                <option value={clip}>{clip}</option>
+              ))}
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="buffer">Wastage buffer (%)</label>
+            <input id="buffer" name="buffer" type="number" min="0" max="25" step="1" value="10" />
+          </div>
+        </form>
+
+        <div class="results">
+          <p class="hint" data-hint>
+            Enter the number of grafts planned to see quantities.
+          </p>
+          <dl class="result-list" data-result-list hidden>
+            <div class="row">
+              <dt>Recommended product</dt>
+              <dd class="mono" data-product-code></dd>
+            </div>
+            <div class="row">
+              <dt>Recommended clip</dt>
+              <dd data-clip-type></dd>
+            </div>
+            <div class="row">
+              <dt>Tubes needed</dt>
+              <dd class="mono" data-tubes></dd>
+            </div>
+            <div class="row">
+              <dt>Clips needed</dt>
+              <dd class="mono" data-clips></dd>
+            </div>
+          </dl>
+
+          <p class="packaging-note" data-result-list hidden>
+            {PACKAGING_NOTE}
+          </p>
+          <p class="disclaimer">{TOOLS_DISCLAIMER}</p>
+
+          <a class="btn-primary" id="quote-link" href="/contact/" data-result-list hidden>
+            Request a Quotation
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import {
+    CROP_GROUPS,
+    DEFAULT_CLIP_BY_CROP,
+    computeGraftingPlan,
+    type CropGroup,
+    type ClipType,
+  } from '../../lib/tools/grafting-calculator';
+  import { buildQuotationHref } from '../../lib/tools/handoff';
+
+  const calculator = document.querySelector<HTMLElement>('[data-calculator]');
+  const form = document.getElementById('grafting-form') as HTMLFormElement | null;
+  if (calculator && form) {
+    calculator.hidden = false;
+
+    const cropGroupEl = document.getElementById('crop-group') as HTMLSelectElement;
+    const roseSizeField = document.getElementById('rose-size-field') as HTMLElement;
+    const roseSizeEl = document.getElementById('rose-size') as HTMLSelectElement;
+    const graftsEl = document.getElementById('grafts') as HTMLInputElement;
+    const clipTypeEl = document.getElementById('clip-type') as HTMLSelectElement;
+    const bufferEl = document.getElementById('buffer') as HTMLInputElement;
+
+    const hint = document.querySelector('[data-hint]') as HTMLElement;
+    const resultEls = document.querySelectorAll<HTMLElement>('[data-result-list]');
+    const productCodeOut = document.querySelector('[data-product-code]') as HTMLElement;
+    const clipTypeOut = document.querySelector('[data-clip-type]') as HTMLElement;
+    const tubesOut = document.querySelector('[data-tubes]') as HTMLElement;
+    const clipsOut = document.querySelector('[data-clips]') as HTMLElement;
+    const quoteLink = document.getElementById('quote-link') as HTMLAnchorElement;
+
+    function isRoses(cropGroup: string): boolean {
+      return cropGroup === CROP_GROUPS[0];
+    }
+
+    function syncCropGroup() {
+      const cropGroup = cropGroupEl.value as CropGroup;
+      roseSizeField.hidden = !isRoses(cropGroup);
+      clipTypeEl.value = DEFAULT_CLIP_BY_CROP[cropGroup];
+    }
+
+    function readBuffer(): number {
+      const raw = Number(bufferEl.value);
+      const value = Number.isFinite(raw) ? raw : 10;
+      return Math.min(25, Math.max(0, value));
+    }
+
+    function render() {
+      const grafts = Math.floor(Number(graftsEl.value));
+      if (!Number.isFinite(grafts) || grafts <= 0) {
+        hint.hidden = false;
+        resultEls.forEach((el) => (el.hidden = true));
+        return;
+      }
+
+      const plan = computeGraftingPlan(
+        cropGroupEl.value as CropGroup,
+        roseSizeEl.value,
+        grafts,
+        clipTypeEl.value as ClipType,
+        readBuffer(),
+      );
+
+      productCodeOut.textContent = plan.productCode;
+      clipTypeOut.textContent = plan.clipType;
+      tubesOut.textContent = plan.tubesNeeded.toLocaleString('en-GB');
+      clipsOut.textContent = plan.clipsNeeded.toLocaleString('en-GB');
+
+      quoteLink.href = buildQuotationHref({
+        source: 'grafting-calculator',
+        cropGroup: cropGroupEl.value,
+        productCode: plan.productCode,
+        clipType: plan.clipType,
+        tubesNeeded: plan.tubesNeeded,
+        clipsNeeded: plan.clipsNeeded,
+      });
+
+      hint.hidden = true;
+      resultEls.forEach((el) => (el.hidden = false));
+    }
+
+    cropGroupEl.addEventListener('change', () => {
+      syncCropGroup();
+      render();
+    });
+    form.addEventListener('input', render);
+    form.addEventListener('change', render);
+
+    syncCropGroup();
+    render();
+  }
+</script>
+
+<style>
+  .tool-page {
+    padding: var(--space-6) 0 var(--space-7);
+  }
+
+  .tool-inner {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 0 var(--side-gutter);
+  }
+
+  .js-required {
+    margin-top: var(--space-4);
+    padding: var(--space-3);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-m);
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 60ch;
+  }
+
+  .js-required a {
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  .calculator {
+    margin-top: var(--space-5);
+    display: grid;
+    gap: var(--space-5);
+    max-width: 640px;
+  }
+
+  /* A class that sets `display` unconditionally beats the browser's own
+     `[hidden] { display: none }` rule — both are author-origin author rules
+     of equal specificity here, but this one is declared later, and even
+     where specificity ties toggling `hidden` must still win. Every element
+     this page hides via the `hidden` property needs its own override. */
+  .calculator[hidden] {
+    display: none;
+  }
+
+  form {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .field[hidden] {
+    display: none;
+  }
+
+  label {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  input,
+  select {
+    width: 100%;
+    font-family: var(--f-sans);
+    font-size: 16px;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-s);
+    padding: 10px 12px;
+  }
+
+  .results {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--rule);
+    display: grid;
+    gap: var(--space-3);
+    align-items: start;
+  }
+
+  .hint {
+    color: var(--soft);
+    font-size: 15px;
+  }
+
+  .result-list {
+    margin: 0;
+  }
+
+  .result-list .row {
+    display: grid;
+    grid-template-columns: 10em 1fr;
+    gap: var(--space-3);
+    padding: 10px 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .result-list .row:first-child {
+    border-top: none;
+  }
+
+  dt {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--soft);
+  }
+
+  dd {
+    margin: 0;
+    font-size: 15px;
+  }
+
+  .packaging-note,
+  .disclaimer {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--soft);
+  }
+
+  .btn-primary {
+    justify-self: start;
+    display: inline-block;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 11px 22px;
+    border-radius: var(--radius-s);
+    background: var(--green);
+    color: var(--paper);
+    border: 1px solid var(--green);
+  }
+
+  .btn-primary[hidden] {
+    display: none;
+  }
+
+  .btn-primary:hover {
+    background: var(--green-dark);
+    border-color: var(--green-dark);
+  }
+</style>
