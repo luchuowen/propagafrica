@@ -1,54 +1,27 @@
 ---
-// Site footer: four columns, then a mono baseline row. No founding year,
-// no company registration line (none supplied).
+// Site footer. Nav column reuses the canonical NAV_ITEMS so it can never
+// disagree with the header, plus the company contact block. The baseline
+// row (copyright, designer credit, strap line) is locked copy from
+// blueprint.md's Global section — do not reword it.
 import Wordmark from './Wordmark.astro';
+import { NAV_ITEMS } from '../lib/nav';
 
-const columns = [
-  {
-    heading: 'Supplies',
-    links: [
-      { label: 'Prepare', href: '/supplies/prepare' },
-      { label: 'Graft', href: '/supplies/graft' },
-      { label: 'Root', href: '/supplies/root' },
-      { label: 'Protect', href: '/supplies/protect' },
-      { label: 'Record', href: '/supplies/record' },
-    ],
-  },
-  {
-    heading: 'Tools',
-    links: [
-      { label: 'Sleeve selector', href: '/supplies/graft' },
-      { label: 'Consumables planner', href: '/ordering' },
-      { label: 'Ordering', href: '/ordering' },
-    ],
-  },
-  {
-    heading: 'Documents',
-    links: [
-      { label: 'Product data sheets', href: '/specifications' },
-      { label: 'Safety data sheets', href: '/specifications' },
-      { label: 'Certificates of analysis', href: '/specifications' },
-      { label: 'Field Notes', href: '/field-notes' },
-    ],
-  },
-];
+const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-grid">
-      {columns.map((col) => (
-        <div class="footer-col">
-          <p class="eyebrow">{col.heading}</p>
-          <ul>
-            {col.links.map((link) => (
-              <li>
-                <a href={link.href}>{link.label}</a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+      <div class="footer-col">
+        <p class="eyebrow">Explore</p>
+        <ul>
+          {NAV_ITEMS.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
       <div class="footer-col footer-company">
         <Wordmark markSize={26} />
         <address>
@@ -58,15 +31,18 @@ const columns = [
           <br />
           <a href="mailto:info@propagafrica.com">info@propagafrica.com</a>
           <br />
-          Kenya and Ethiopia
+          Stock held in Kenya and Ethiopia
         </address>
       </div>
     </div>
     <div class="footer-baseline">
-      <p class="mono">
-        Specifications held to batch · Safety data sheets and certificates of analysis issued with
-        consignment · © PropagAfrica Technologies
+      <p class="baseline-row">
+        <span>&copy; {year} PropagAfrica Technologies</span>
+        <a class="credit" href="https://navac.co.ke">
+          Designed by NAVAC GLOBAL
+        </a>
       </p>
+      <p class="strapline">Together we grow Africa&rsquo;s horticulture.</p>
     </div>
   </div>
 </footer>
@@ -92,6 +68,10 @@ const columns = [
   @media (min-width: 720px) {
     .footer-grid {
       grid-template-columns: repeat(4, 1fr);
+    }
+
+    .footer-company {
+      grid-column: 4;
     }
   }
 
@@ -127,9 +107,30 @@ const columns = [
     border-top: 1px solid var(--rule);
   }
 
-  .footer-baseline p {
-    font-size: 10.5px;
-    color: var(--ink-soft);
-    letter-spacing: 0.02em;
+  .baseline-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-2);
+    font-size: 12px;
+    color: var(--soft);
+  }
+
+  .credit {
+    /* --gold-ink, not --gold: bare --gold on --paper is 2.09:1, axe-flagged. */
+    color: var(--gold-ink);
+    text-decoration: none;
+  }
+
+  .credit:hover,
+  .credit:focus {
+    text-decoration: none;
+  }
+
+  .strapline {
+    margin-top: var(--space-2);
+    text-align: center;
+    font-size: 12px;
+    color: var(--soft);
   }
 </style>

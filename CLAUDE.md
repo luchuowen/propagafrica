@@ -1,5 +1,12 @@
 # PropagAfrica — agent rules (factory v2.1)
 
+## Build Workbook
+
+This repo is being rebuilt via an 8-session Claude Code prompt sequence (Prompt 0
+foundations through Prompt 7 QA). `blueprint.md` is the sole content source — no
+session invents product facts or copy. Image paths follow `docs/image-manifest.md`
+exactly; a placeholder there is replaced in place, same filename and extension.
+
 ## Commands
 
 - verify quick: `bash scripts/factory-check.sh quick` · full: `bash scripts/factory-check.sh full`

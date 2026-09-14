@@ -7,7 +7,9 @@ import { existsSync } from 'node:fs';
 import lighthouse from 'lighthouse';
 import * as chromeLauncher from 'chrome-launcher';
 
-const ROUTES = ['/', '/supplies/graft', '/field-notes/how-a-graft-knits-together', '/contact'];
+// /supplies/graft was deleted in the Prompt 0 restart (see .factory/DECISIONS.md);
+// /about stands in for a second content page until the products/tools pages exist.
+const ROUTES = ['/', '/about', '/field-notes/how-a-graft-knits-together', '/contact'];
 
 const THRESHOLDS = {
   performance: 95,

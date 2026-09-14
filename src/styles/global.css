@@ -1,18 +1,13 @@
 @import './tokens.css';
 
-/* Self-hosted fonts. Latin subset. font-display: swap per the brand spec. */
+/* Self-hosted fonts. Latin subset. font-display: swap per the brand spec.
+   Inter Variable carries every weight from 400 to 800; JetBrains Mono is
+   reserved for spec values, SKUs, dimensions and pack sizes — never body
+   copy, never an eyebrow, never a nav label. */
 @font-face {
-  font-family: 'Newsreader Variable';
-  src: url('/fonts/newsreader-var-latin.woff2') format('woff2-variations');
-  font-weight: 200 800;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Archivo Variable';
-  src: url('/fonts/archivo-var-latin.woff2') format('woff2-variations');
-  font-weight: 100 900;
+  font-family: 'Inter Variable';
+  src: url('/fonts/inter-var-latin.woff2') format('woff2-variations');
+  font-weight: 400 800;
   font-style: normal;
   font-display: swap;
 }
@@ -82,43 +77,53 @@ a {
   color: inherit;
 }
 
-/* Type scale. Sizes are working sizes, not landing-page sizes: the previous
-   build ran the H1 to 64px at weight 800 with -0.037em tracking, which is the
-   look this rebuild exists to get rid of. Tracking is normal or near it. */
+/* Type scale, Direction C. Hero H1 is the one heading that gets the full
+   800-weight tight-tracking treatment; section and product titles are 700 at
+   a lighter tracking; nav and buttons have their own weights below. */
 .h1,
 h1 {
-  font-family: var(--f-display);
-  font-weight: 600;
+  font-family: var(--f-sans);
+  font-weight: 800;
   font-size: clamp(28px, 3.4vw, 42px);
-  letter-spacing: -0.012em;
+  letter-spacing: -0.03em;
   line-height: 1.12;
 }
 
 .h2,
 h2 {
-  font-family: var(--f-display);
-  font-weight: 600;
+  font-family: var(--f-sans);
+  font-weight: 700;
   font-size: clamp(21px, 2.1vw, 27px);
-  letter-spacing: -0.008em;
+  letter-spacing: -0.02em;
   line-height: 1.22;
 }
 
 .h3,
 h3 {
   font-family: var(--f-sans);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 17px;
-  letter-spacing: 0;
+  letter-spacing: -0.02em;
   line-height: 1.35;
 }
 
 .eyebrow {
-  font-family: var(--f-mono);
-  font-weight: 400;
-  font-size: 10px;
-  letter-spacing: 0.13em;
+  font-family: var(--f-sans);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ink-soft);
+  color: var(--soft);
+}
+
+.nav-link {
+  font-family: var(--f-sans);
+  font-weight: 600;
+}
+
+.btn {
+  font-family: var(--f-sans);
+  font-weight: 700;
 }
 
 .mono,
