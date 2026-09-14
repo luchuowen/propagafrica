@@ -7,8 +7,8 @@ import { WHY_PARTNER, TARGET_MARKETS } from '../data/trust';
 ---
 
 <section class="trust">
-  <div class="trust-inner">
-    <div class="trust-col">
+  <div class="trust-inner" data-reveal-group>
+    <div class="trust-col" data-reveal>
       <h2>Why partner with PropagAfrica</h2>
       <ul class="check-list">
         {WHY_PARTNER.map((item) => (
@@ -16,7 +16,7 @@ import { WHY_PARTNER, TARGET_MARKETS } from '../data/trust';
         ))}
       </ul>
     </div>
-    <div class="trust-col">
+    <div class="trust-col" data-reveal>
       <h2>Who we supply</h2>
       <ul class="check-list">
         {TARGET_MARKETS.map((item) => (
@@ -45,19 +45,20 @@ import { WHY_PARTNER, TARGET_MARKETS } from '../data/trust';
     .trust-inner {
       grid-template-columns: repeat(2, 1fr);
       gap: var(--space-6);
+      align-items: center;
     }
   }
 
   .check-list {
     list-style: none;
-    margin: var(--space-3) 0 0;
+    margin: var(--space-2) 0 0;
     padding: 0;
     display: grid;
     gap: 0;
   }
 
   .check-list li {
-    padding: 10px 0;
+    padding: 6px 0;
     border-top: 1px solid var(--rule);
     font-size: 15px;
     line-height: 1.5;

@@ -47,9 +47,9 @@ const photos = [
 
   <section class="about-photos">
     <div class="about-photos-inner">
-      <ul class="photo-grid">
+      <ul class="photo-grid" data-reveal-group>
         {photos.map((photo) => (
-          <li>
+          <li data-reveal>
             <img src={photo.src} alt={photo.alt} loading="lazy" />
           </li>
         ))}
@@ -58,7 +58,7 @@ const photos = [
   </section>
 
   <section class="about-contact">
-    <div class="about-contact-inner">
+    <div class="about-contact-inner" data-reveal>
       <h2>Contact</h2>
       <address>
         <a href="tel:+254722861682">+254 722 861 682</a>

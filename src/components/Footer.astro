@@ -12,16 +12,6 @@ const year = new Date().getFullYear();
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-grid">
-      <div class="footer-col">
-        <p class="eyebrow">Explore</p>
-        <ul>
-          {NAV_ITEMS.map((item) => (
-            <li>
-              <a href={item.href}>{item.label}</a>
-            </li>
-          ))}
-        </ul>
-      </div>
       <div class="footer-col footer-company">
         <Wordmark markSize={26} />
         <address>
@@ -34,15 +24,25 @@ const year = new Date().getFullYear();
           Stock held in Kenya and Ethiopia
         </address>
       </div>
+      <div class="footer-col footer-explore">
+        <p class="eyebrow">Explore</p>
+        <ul>
+          {NAV_ITEMS.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
     <div class="footer-baseline">
       <p class="baseline-row">
         <span>&copy; {year} PropagAfrica Technologies</span>
+        <span class="strapline">Together we grow Africa&rsquo;s horticulture.</span>
         <a class="credit" href="https://navac.co.ke">
-          Designed by NAVAC GLOBAL
+          <span class="credit-label">Designed by</span> <span class="credit-brand">NAVAC GLOBAL</span>
         </a>
       </p>
-      <p class="strapline">Together we grow Africa&rsquo;s horticulture.</p>
     </div>
   </div>
 </footer>
@@ -71,6 +71,10 @@ const year = new Date().getFullYear();
     }
 
     .footer-company {
+      grid-column: 1 / 3;
+    }
+
+    .footer-explore {
       grid-column: 4;
     }
   }
@@ -117,20 +121,25 @@ const year = new Date().getFullYear();
   }
 
   .credit {
-    /* --gold-ink, not --gold: bare --gold on --paper is 2.09:1, axe-flagged. */
-    color: var(--gold-ink);
     text-decoration: none;
   }
 
-  .credit:hover,
-  .credit:focus {
-    text-decoration: none;
+  .credit-label {
+    color: var(--soft);
+  }
+
+  .credit-brand {
+    /* --gold-ink, not --gold: bare --gold on --paper is 2.09:1, axe-flagged. */
+    color: var(--gold-ink);
+    font-weight: 600;
+  }
+
+  .credit:hover .credit-brand,
+  .credit:focus .credit-brand {
+    text-decoration: underline;
   }
 
   .strapline {
-    margin-top: var(--space-2);
-    text-align: center;
-    font-size: 12px;
     color: var(--soft);
   }
 </style>

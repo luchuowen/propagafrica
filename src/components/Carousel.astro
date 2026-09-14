@@ -117,6 +117,17 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
     border-radius: 0;
   }
 
+  /* Below ~640px the hero copy (heading, standfirst, buttons) needs more
+     room than a 16:9 crop of the photo gives it — the overlay text was
+     overflowing the hero band and colliding with the section below. Drop
+     the fixed aspect ratio there and guarantee enough height instead. */
+  @media (max-width: 640px) {
+    [data-variant='hero'] .lane {
+      aspect-ratio: auto;
+      min-height: 560px;
+    }
+  }
+
   [data-variant='grid'] .lane:nth-child(n + 2) {
     display: none;
   }
@@ -199,6 +210,15 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
     z-index: 2;
     display: flex;
     justify-content: center;
+    gap: 2px;
+  }
+
+  /* Grid-variant slides always carry a caption bar along the bottom edge;
+     an overlaid dot row collides with it (see the homepage bug report).
+     Flow the dots below the photo instead, clear of any caption. */
+  [data-variant='grid'] .dots {
+    position: static;
+    margin-top: var(--space-2);
   }
 
   /* The button is a 24x24 hit target (WCAG 2.5.8); the visible dot is a

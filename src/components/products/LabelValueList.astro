@@ -15,7 +15,7 @@ interface Props {
 const { heading, items } = Astro.props;
 ---
 
-<section class="label-value-list">
+<section class="label-value-list" data-reveal>
   <h2>{heading}</h2>
   <dl>
     {items.map((item) => (

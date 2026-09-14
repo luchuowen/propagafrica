@@ -8,9 +8,9 @@ interface Props {
 const { images } = Astro.props;
 ---
 
-<ul class="detail-strip">
+<ul class="detail-strip" data-reveal-group>
   {images.map((img) => (
-    <li>
+    <li data-reveal>
       <img src={img.src} alt={img.alt} loading="lazy" />
     </li>
   ))}

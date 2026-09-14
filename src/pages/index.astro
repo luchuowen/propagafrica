@@ -139,7 +139,10 @@ const outcomes = [
 // Product families — blueprint.md Sections 3-9, imported from the shared
 // registry (src/data/products/families.ts) so the homepage teaser and the
 // /products/ hub can never disagree on a name, tagline or tag.
-const families = PRODUCT_FAMILIES;
+// The homepage teaser shows only the six physical-goods families so the
+// grid divides evenly with no dead space; Technical Services (a service,
+// not a stocked product) still appears in full on /products/.
+const families = PRODUCT_FAMILIES.filter((f) => f.slug !== 'technical-services');
 
 // Services 3-up — blueprint.md Section 9, first three "Our Services" bullets.
 const services = [
@@ -159,7 +162,6 @@ const services = [
     <Carousel slides={heroSlides} label="Featured product ranges" variant="hero" />
     <div class="hero-copy">
       <div class="hero-copy-inner">
-        <p class="eyebrow light">Propagation inputs and systems, East Africa</p>
         <h1>Propagation supplies for nurseries and flower farms across Kenya and Ethiopia</h1>
         <p class="hero-sub">
           PropagAfrica Technologies supplies the grafting tubes, clips, nursery consumables,
@@ -180,9 +182,9 @@ const services = [
 
   <!-- Outcome panels -->
   <section class="outcomes">
-    <div class="outcomes-inner">
+    <div class="outcomes-inner" data-reveal-group>
       {outcomes.map((o) => (
-        <div class="outcome">
+        <div class="outcome" data-reveal>
           <span class="outcome-n">{o.n}</span>
           <h2>{o.heading}</h2>
           <p>{o.body}</p>
@@ -194,7 +196,7 @@ const services = [
   <!-- Propagation Journey -->
   <section class="journey">
     <div class="journey-inner">
-      <div class="section-head">
+      <div class="section-head" data-reveal>
         <p class="eyebrow">The propagation journey</p>
         <h2>From selected stock to finished plant</h2>
       </div>
@@ -205,7 +207,7 @@ const services = [
   <!-- Product grid teaser -->
   <section class="products">
     <div class="products-inner">
-      <div class="section-head">
+      <div class="section-head" data-reveal>
         <p class="eyebrow">Full range</p>
         <h2>Everything a propagation nursery runs on</h2>
       </div>
@@ -221,9 +223,9 @@ const services = [
         ))}
       </div>
 
-      <ul class="product-grid" data-product-grid>
+      <ul class="product-grid" data-product-grid data-reveal-group>
         {families.map((f) => (
-          <li class="product-card" data-product-card data-tags={f.tags.join('|')}>
+          <li class="product-card" data-product-card data-tags={f.tags.join('|')} data-reveal>
             <div class="product-media">
               <img src={f.img} alt="" loading="lazy" />
             </div>
@@ -248,7 +250,7 @@ const services = [
   <!-- Facilities-in-use -->
   <section class="facilities">
     <div class="facilities-inner">
-      <div class="section-head">
+      <div class="section-head" data-reveal>
         <p class="eyebrow">In the field</p>
         <h2>Facilities in use across Kenya and Ethiopia</h2>
       </div>
@@ -259,7 +261,7 @@ const services = [
   <!-- Monitoring spotlight -->
   <section class="monitoring">
     <div class="monitoring-inner">
-      <div class="monitoring-copy">
+      <div class="monitoring-copy" data-reveal>
         <p class="eyebrow light">PropagAfrica Monitoring</p>
         <h2>See what&rsquo;s happening in your nursery, not just what happened last week.</h2>
         <p class="monitoring-body">
@@ -281,7 +283,7 @@ const services = [
           See Propagation Monitoring &rarr;
         </a>
       </div>
-      <div class="monitoring-media">
+      <div class="monitoring-media" data-reveal style="--reveal-delay: 120ms">
         <img
           src="/images/products/monitoring/dashboard.png"
           alt="PropagAfrica Monitoring dashboard showing temperature, humidity and VPD readings"
@@ -294,13 +296,13 @@ const services = [
   <!-- Services 3-up -->
   <section class="services">
     <div class="services-inner">
-      <div class="section-head">
+      <div class="section-head" data-reveal>
         <p class="eyebrow">Technical Services</p>
         <h2>Expert support. Lasting success.</h2>
       </div>
-      <ul class="services-grid">
+      <ul class="services-grid" data-reveal-group>
         {services.map((s, i) => (
-          <li class="service">
+          <li class="service" data-reveal>
             <span class="service-n">{String(i + 1).padStart(2, '0')}</span>
             <a href="/products/technical-services/">{s}</a>
           </li>
@@ -317,8 +319,8 @@ const services = [
 
   <!-- CTA band -->
   <section class="cta-band">
-    <div class="cta-band-inner">
-      <h2>Tell us what you&rsquo;re growing and how much of it.</h2>
+    <div class="cta-band-inner" data-reveal>
+      <h2>What are you growing, and in what quantity?</h2>
       <p>
         Send your crop, volume and site details and we&rsquo;ll come back with the right products
         and packaging.
@@ -357,6 +359,8 @@ const services = [
     z-index: 2;
     display: flex;
     align-items: center;
+    justify-content: center;
+    text-align: center;
     pointer-events: none;
   }
 
@@ -364,17 +368,18 @@ const services = [
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      100deg,
-      rgba(6, 30, 20, 0.82) 0%,
-      rgba(6, 30, 20, 0.62) 32%,
-      rgba(6, 30, 20, 0.22) 58%,
-      rgba(6, 30, 20, 0) 78%
+    background: radial-gradient(
+      ellipse at center,
+      rgba(6, 30, 20, 0.78) 0%,
+      rgba(6, 30, 20, 0.55) 42%,
+      rgba(6, 30, 20, 0.18) 72%,
+      rgba(6, 30, 20, 0) 100%
     );
     z-index: -1;
   }
 
   .hero-copy-inner {
+    width: 100%;
     max-width: var(--wide-max);
     margin: 0 auto;
     padding: var(--space-6) var(--side-gutter);
@@ -382,13 +387,16 @@ const services = [
   }
 
   .hero-copy h1 {
-    margin-top: var(--space-2);
     color: var(--paper);
     max-width: 20ch;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .hero-sub {
     margin-top: var(--space-3);
+    margin-left: auto;
+    margin-right: auto;
     font-size: 16px;
     line-height: 1.6;
     color: var(--paper);
@@ -406,6 +414,7 @@ const services = [
     margin-top: var(--space-4);
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: var(--space-2);
   }
 
@@ -453,12 +462,12 @@ const services = [
   }
 
   .outcome {
-    padding: var(--space-5) var(--side-gutter);
+    padding: var(--space-4) var(--side-gutter);
   }
 
   @media (min-width: 820px) {
     .outcome {
-      padding: var(--space-6) var(--space-4);
+      padding: var(--space-4) var(--space-4);
     }
   }
 

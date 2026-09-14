@@ -29,9 +29,9 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
         ))}
       </div>
 
-      <ul class="product-grid" data-product-grid>
+      <ul class="product-grid" data-product-grid data-reveal-group>
         {PRODUCT_FAMILIES.map((f) => (
-          <li class="product-card" data-product-card data-tags={f.tags.join('|')}>
+          <li class="product-card" data-product-card data-tags={f.tags.join('|')} data-reveal>
             <div class="product-media">
               <img src={f.img} alt="" loading="lazy" />
             </div>

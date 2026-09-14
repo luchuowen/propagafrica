@@ -11,7 +11,7 @@ interface Props {
 const { toolText, toolHref, quoteHref = '/contact/' } = Astro.props;
 ---
 
-<div class="family-cta">
+<div class="family-cta" data-reveal>
   {toolText && toolHref && (
     <a class="tool-link" href={toolHref}>
       {toolText} &rarr;
