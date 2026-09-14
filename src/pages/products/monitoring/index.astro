@@ -1,0 +1,142 @@
+---
+// Propagation Monitoring — blueprint.md Section 8.
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import FamilyHero from '../../../components/products/FamilyHero.astro';
+import BulletList from '../../../components/products/BulletList.astro';
+import DetailStrip from '../../../components/products/DetailStrip.astro';
+import FamilyCta from '../../../components/products/FamilyCta.astro';
+
+const tagline = 'Data-Driven Decisions. Better Outcomes.';
+const intro = 'Digital tools to track, manage and improve your propagation results.';
+
+const keyFeatures = [
+  'Temperature, humidity and VPD sensors',
+  'Soil moisture and EC monitoring',
+  'Light intensity (PAR) sensors',
+  'Data loggers and wireless systems',
+  'Mobile and web dashboards',
+  'Alerts and historical reporting',
+  'Easy to install and use',
+];
+
+const detailImages = [
+  {
+    src: '/images/products/monitoring/01.jpg',
+    alt: 'A sensor mounted above a propagation bench',
+  },
+  { src: '/images/products/monitoring/02.jpg', alt: 'A data logger installed in a nursery block' },
+  {
+    src: '/images/products/monitoring/03.jpg',
+    alt: 'A grower checking the monitoring dashboard on a phone',
+  },
+];
+---
+
+<BaseLayout title="Propagation Monitoring" description={intro}>
+  <FamilyHero
+    eyebrow="Products"
+    title="Propagation Monitoring"
+    tagline={tagline}
+    intro={intro}
+    image="/images/products/monitoring/hero.jpg"
+    imageAlt="Monitoring sensors installed above a propagation bench"
+  />
+
+  <div class="family-body">
+    <BulletList heading="Key features" items={keyFeatures} />
+
+    <p class="includes-line">Hardware + software + support.</p>
+
+    <section class="dashboard">
+      <h2>Dashboard</h2>
+      <div class="dashboard-grid">
+        <img
+          src="/images/products/monitoring/dashboard.png"
+          alt="PropagAfrica Monitoring dashboard showing temperature, humidity and VPD readings"
+          loading="lazy"
+        />
+        <dl class="readings">
+          <div>
+            <dt>Example reading</dt>
+            <dd>Graft Success 98.4%</dd>
+          </div>
+          <div>
+            <dt>Example reading</dt>
+            <dd>Average zone temperature 24.6&deg;C</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <DetailStrip images={detailImages} />
+
+    <FamilyCta />
+  </div>
+</BaseLayout>
+
+<style>
+  .family-body {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: var(--space-6) var(--side-gutter) var(--space-7);
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .includes-line {
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--green);
+  }
+
+  .dashboard {
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--rule);
+  }
+
+  .dashboard h2 {
+    margin-bottom: var(--space-3);
+  }
+
+  .dashboard-grid {
+    display: grid;
+    gap: var(--space-4);
+    align-items: center;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 720px) {
+    .dashboard-grid {
+      grid-template-columns: 3fr 2fr;
+    }
+  }
+
+  .dashboard-grid img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--radius-m);
+    border: 1px solid var(--rule);
+  }
+
+  .readings {
+    margin: 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .readings dt {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--soft);
+  }
+
+  .readings dd {
+    margin: 4px 0 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+</style>

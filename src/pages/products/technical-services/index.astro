@@ -1,0 +1,77 @@
+---
+// Technical Services — blueprint.md Section 9.
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import FamilyHero from '../../../components/products/FamilyHero.astro';
+import BulletList from '../../../components/products/BulletList.astro';
+import DetailStrip from '../../../components/products/DetailStrip.astro';
+import FamilyCta from '../../../components/products/FamilyCta.astro';
+
+const tagline = 'Expert Support. Lasting Success.';
+const intro = 'From training to troubleshooting, we support your propagation journey.';
+
+const ourServices = [
+  'Propagation training and workshops',
+  'On-site technical support',
+  'Nursery setup and design',
+  'Crop specific propagation protocols',
+  'Troubleshooting and diagnostics',
+  'Performance audits',
+  'Custom solutions for your business',
+];
+
+const detailImages = [
+  {
+    src: '/images/products/technical-services/01.jpg',
+    alt: 'A technical team member training nursery staff',
+  },
+  {
+    src: '/images/products/technical-services/02.jpg',
+    alt: 'An on-site visit to a propagation block',
+  },
+  {
+    src: '/images/products/technical-services/03.jpg',
+    alt: 'A performance audit under way in a nursery',
+  },
+  {
+    src: '/images/products/technical-services/04.jpg',
+    alt: 'A troubleshooting visit to a propagation system',
+  },
+];
+---
+
+<BaseLayout title="Technical Services" description={intro}>
+  <FamilyHero
+    eyebrow="Products"
+    title="Technical Services"
+    tagline={tagline}
+    intro={intro}
+    image="/images/products/technical-services/hero.jpg"
+    imageAlt="A technical services visit to a propagation nursery"
+  />
+
+  <div class="family-body">
+    <BulletList heading="Our Services" items={ourServices} />
+
+    <p class="includes-line">On-site, virtual and farm-based support.</p>
+
+    <DetailStrip images={detailImages} />
+
+    <FamilyCta />
+  </div>
+</BaseLayout>
+
+<style>
+  .family-body {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: var(--space-6) var(--side-gutter) var(--space-7);
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .includes-line {
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--green);
+  }
+</style>

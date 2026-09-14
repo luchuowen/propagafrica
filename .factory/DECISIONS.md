@@ -120,6 +120,7 @@ tree was clean, so this was a pure fast-forward, not a reset) brought it current
 any of the above was possible.
 
 # Session 2026-09-14 — Prompt 2: products hub, grafting tubes, grafting clips,
+
 # nursery consumables
 
 `src/data/products/families.ts` is now the single source of truth for the seven
@@ -159,3 +160,33 @@ whitespace issue in `.factory/history/2026-09-13-session8-and-visual-rebuild.md`
 (from the Prompt 0 merge) unrelated to this session's diff. Reformatted it
 (whitespace only, no text changed) since a red gate blocks `factory-check full`
 regardless of which session's diff it belongs to.
+
+# Session 2026-09-14 — Prompt 3: propagation systems, sanitation, monitoring,
+
+# technical services pages
+
+Built the remaining four family pages against `blueprint.md` Sections 6-9, same
+bespoke-per-page pattern as Prompt 2 (no monolithic family layout): each page
+imports the same five shared components (`FamilyHero`, `BulletList`,
+`LabelValueList`, `DetailStrip`, `FamilyCta`) but assembles its own middle
+section. `/products/` hub and `families.ts` already pointed at these paths from
+Prompt 2, so no data-layer change was needed — the hub's "not yet built" header
+comment was just stale and is corrected.
+
+- **Sanitation packaging** (5L/20L/200L/1,000L IBC) is the one verbatim list the
+  brief asked to render as mono spec data rather than prose — a page-local
+  `.pack-sizes` chip row using the existing `.mono` utility class, not a new
+  shared component (four numbers don't warrant one, and `LabelValueList`'s
+  label/value shape doesn't fit a flat list of sizes).
+- **Monitoring's two "Example reading" stats + dashboard.png** reuse the exact
+  markup and copy (including the `&deg;C` entity) from the homepage's Monitoring
+  spotlight (Prompt 1) instead of the blueprint's literal "24.6C", so the figure
+  doesn't render two different ways on two pages.
+- **Propagation Systems** has no planning-tool CTA (unlike tubes/clips/
+  consumables) — blueprint.md Section 6 names none, so `FamilyCta` is used
+  without `toolText`/`toolHref`, quotation button only. Same for Monitoring and
+  Technical Services.
+- Added the four new routes to `tests/e2e/site.spec.ts`'s `ROUTES` (axe,
+  overflow, metadata and banned-phrase coverage) — no new route-specific tests
+  needed since these pages follow the established family-page shape already
+  covered by that suite.
