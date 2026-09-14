@@ -52,3 +52,20 @@ export function renderErrorPage(message: string): string {
     `<p>${message}</p><p class="soft"><a href="/contact">Back to contact</a></p>`,
   );
 }
+
+export function renderNewsletterSuccessPage(): string {
+  return page(
+    'Subscribed',
+    'You’re subscribed.',
+    '<p>We’ll email you when there’s something worth reading.</p>' +
+      '<p class="soft"><a href="/">Back to the homepage</a></p>',
+  );
+}
+
+export function renderNewsletterErrorPage(message: string): string {
+  return page(
+    'That did not send',
+    'That did not send.',
+    `<p>${message}</p><p class="soft"><a href="/">Back to the homepage</a></p>`,
+  );
+}

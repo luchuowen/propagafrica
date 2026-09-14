@@ -1,30 +1,58 @@
 ---
-// Site footer. Nav column reuses the canonical NAV_ITEMS so it can never
-// disagree with the header, plus the company contact block. The baseline
-// row (copyright, designer credit, strap line) is locked copy from
-// blueprint.md's Global section — do not reword it.
+// Site footer. Four columns per the shadcn-inspired brief Owen supplied — reimplemented in this
+// project's own Astro + plain-CSS system rather than pulling in React/Tailwind/shadcn, which the
+// rest of the codebase doesn't use. Nav column reuses the canonical NAV_ITEMS so it can never
+// disagree with the header. Social links are honest placeholders (no destination exists yet —
+// see .factory/decisions — so they render as non-interactive, muted icons, not dead "#" links)
+// until Owen has real accounts to point them at. The newsletter form posts to a real Cloud
+// Function (subscribeNewsletter, see functions/src/index.ts) via the same progressive-enhancement
+// pattern as QuoteForm.astro. The baseline row (copyright, designer credit, strap line) is locked
+// copy from blueprint.md's Global section — do not reword it.
 import Wordmark from './Wordmark.astro';
 import { NAV_ITEMS } from '../lib/nav';
+import { HONEYPOT_FIELD, TIMESTAMP_FIELD } from '../lib/quotation/schema';
 
 const year = new Date().getFullYear();
+
+const SOCIALS = [
+  {
+    name: 'Instagram',
+    path: 'M4 4h12v12H4z M8.2 8.2a1.8 1.8 0 1 0 3.6 0 1.8 1.8 0 0 0-3.6 0Z M12.6 5.6h.01',
+  },
+  {
+    name: 'Facebook',
+    path: 'M13 5h-1.8C9.6 5 8.6 6 8.6 7.6V9H7v2.4h1.6V16h2.4v-4.6h1.8L13 9h-1.4V7.8c0-.5.3-.8.8-.8H13Z',
+  },
+  {
+    name: 'LinkedIn',
+    path: 'M5 8h2v8H5zM6 4.2A1.2 1.2 0 1 1 6 6.6a1.2 1.2 0 0 1 0-2.4ZM10 8h2v1.2c.5-.8 1.3-1.4 2.5-1.4 1.9 0 3 1.3 3 3.8V16h-2v-4c0-1.1-.4-1.9-1.5-1.9-.8 0-1.4.6-1.6 1.1-.1.2-.1.5-.1.8V16h-2Z',
+  },
+  {
+    name: 'X (Twitter)',
+    path: 'M5 5l10 10M15 5 5 15',
+  },
+] as const;
 ---
 
 <footer class="site-footer">
   <div class="footer-inner">
-    <div class="footer-grid">
-      <div class="footer-col footer-company">
+    <div class="footer-grid" data-reveal-group>
+      <div class="footer-col footer-company" data-reveal>
         <Wordmark markSize={26} />
+        <p class="blurb">
+          Grafting tubes, clips, nursery consumables and propagation systems for commercial
+          growers, with technical support and stock held in Kenya and Ethiopia.
+        </p>
         <address>
           Nairobi, Kenya
           <br />
           <a href="tel:+254722861682">+254 722 861 682</a>
           <br />
           <a href="mailto:info@propagafrica.com">info@propagafrica.com</a>
-          <br />
-          Stock held in Kenya and Ethiopia
         </address>
       </div>
-      <div class="footer-col footer-explore">
+
+      <div class="footer-col footer-explore" data-reveal>
         <p class="eyebrow">Explore</p>
         <ul>
           {NAV_ITEMS.map((item) => (
@@ -34,7 +62,61 @@ const year = new Date().getFullYear();
           ))}
         </ul>
       </div>
+
+      <div class="footer-col footer-social" data-reveal>
+        <p class="eyebrow">Follow Us</p>
+        <ul class="social-list">
+          {SOCIALS.map((social) => (
+            <li>
+              <span class="social-icon" aria-disabled="true" title={`${social.name} — coming soon`}>
+                <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                  <path d={social.path} />
+                </svg>
+                <span class="sr-only">{social.name} (coming soon)</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p class="social-note">Accounts launching soon.</p>
+      </div>
+
+      <div class="footer-col footer-newsletter" data-reveal>
+        <p class="eyebrow">Newsletter</p>
+        <p class="blurb">Occasional notes on stock, seasons and new product lines.</p>
+
+        <form id="newsletter-form" class="newsletter-form" method="post" action="/api/subscribe-newsletter">
+          <label for="newsletter-email" class="sr-only">Email address</label>
+          <div class="newsletter-row">
+            <input
+              id="newsletter-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              placeholder="you@company.com"
+              maxlength="254"
+              required
+              aria-describedby="newsletter-status"
+            />
+            <button type="submit" class="newsletter-submit">Subscribe</button>
+          </div>
+
+          <div class="honeypot" aria-hidden="true">
+            <label for={HONEYPOT_FIELD}>Leave this field blank</label>
+            <input
+              id={HONEYPOT_FIELD}
+              name={HONEYPOT_FIELD}
+              type="text"
+              tabindex="-1"
+              autocomplete="off"
+            />
+          </div>
+          <input type="hidden" id={TIMESTAMP_FIELD} name={TIMESTAMP_FIELD} value="" />
+
+          <p id="newsletter-status" class="newsletter-status" role="alert" aria-live="assertive"></p>
+        </form>
+      </div>
     </div>
+
     <div class="footer-baseline">
       <p class="baseline-row">
         <span>&copy; {year} PropagAfrica Technologies</span>
@@ -46,6 +128,73 @@ const year = new Date().getFullYear();
     </div>
   </div>
 </footer>
+
+<script>
+  import { HONEYPOT_FIELD, TIMESTAMP_FIELD } from '../lib/quotation/schema';
+
+  const GENERIC_ERROR = 'That did not send. Check your connection and try again.';
+
+  const form = document.getElementById('newsletter-form') as HTMLFormElement | null;
+  const statusEl = document.getElementById('newsletter-status');
+  if (form && statusEl) {
+    const tsInput = form.elements.namedItem(TIMESTAMP_FIELD) as HTMLInputElement | null;
+    if (tsInput) tsInput.value = String(Date.now());
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      statusEl.textContent = '';
+      statusEl.classList.remove('is-error');
+
+      const honeypot = form.elements.namedItem(HONEYPOT_FIELD) as HTMLInputElement | null;
+      if (honeypot && honeypot.value.trim() !== '') {
+        // Bot filled the trap. Pretend success and stop — never tip it off.
+        form.reset();
+        statusEl.textContent = 'Subscribed.';
+        return;
+      }
+
+      const emailInput = form.elements.namedItem('email') as HTMLInputElement | null;
+      if (emailInput && !emailInput.checkValidity()) {
+        statusEl.textContent = 'Enter a valid email address.';
+        statusEl.classList.add('is-error');
+        emailInput.focus();
+        return;
+      }
+
+      const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+      if (submitButton) submitButton.disabled = true;
+
+      try {
+        const formData = new FormData(form);
+        const payload = {
+          email: formData.get('email') ?? '',
+          [HONEYPOT_FIELD]: formData.get(HONEYPOT_FIELD) ?? '',
+          [TIMESTAMP_FIELD]: formData.get(TIMESTAMP_FIELD) ?? '',
+        };
+
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json().catch(() => null);
+
+        if (response.ok && result?.ok) {
+          form.reset();
+          statusEl.textContent = 'You’re subscribed.';
+        } else {
+          statusEl.textContent = result?.message ?? GENERIC_ERROR;
+          statusEl.classList.add('is-error');
+        }
+      } catch {
+        statusEl.textContent = GENERIC_ERROR;
+        statusEl.classList.add('is-error');
+      } finally {
+        if (submitButton) submitButton.disabled = false;
+      }
+    });
+  }
+</script>
 
 <style>
   .site-footer {
@@ -62,30 +211,36 @@ const year = new Date().getFullYear();
   .footer-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-4);
+    /* Center rather than the grid default (stretch): the four columns hold very different
+       amounts of copy (a paragraph + address vs. four icons), so stretching them to equal
+       height left the shorter columns with a trail of dead space at the bottom. Centering
+       each column's content in its row keeps the row looking composed regardless of how
+       much copy is in it. */
+    align-items: center;
+    gap: var(--space-5);
   }
 
   @media (min-width: 720px) {
     .footer-grid {
       grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-4);
     }
+  }
 
-    .footer-company {
-      grid-column: 1 / 3;
-    }
-
-    .footer-explore {
-      grid-column: 4;
-    }
+  .footer-col {
+    /* Without this, a grid item defaults to min-width: auto (its content's natural width),
+       so the newsletter row's input+button can force the whole grid wider than the viewport
+       on narrow screens instead of shrinking to fit the column. */
+    min-width: 0;
   }
 
   .footer-col ul {
     list-style: none;
-    margin: var(--space-1) 0 0;
+    margin: var(--space-2) 0 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
   }
 
   .footer-col a {
@@ -98,11 +253,152 @@ const year = new Date().getFullYear();
     color: var(--green);
   }
 
+  .eyebrow {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--soft);
+    margin: 0;
+  }
+
+  .blurb {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--soft);
+    margin: var(--space-2) 0 0;
+    max-width: 34ch;
+  }
+
   address {
     font-style: normal;
     font-size: 14px;
     line-height: 1.8;
     margin-top: var(--space-2);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  /* Social icons: deliberately non-interactive spans, not <a href="#">. The accounts don't
+     exist yet, so a real link would either 404 or go nowhere — a muted, labelled placeholder
+     is the honest version until Owen has pages to point these at. */
+  /* Specificity note: needs to beat ".footer-col ul" above (which sets flex-direction: column),
+     so this is qualified with .footer-col rather than left as a bare .social-list rule. */
+  .footer-col .social-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    color: var(--soft);
+    cursor: default;
+  }
+
+  .social-icon svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .social-note {
+    font-size: 12px;
+    color: var(--soft);
+    margin: var(--space-2) 0 0;
+  }
+
+  .newsletter-form {
+    margin-top: var(--space-2);
+  }
+
+  .newsletter-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  @media (min-width: 720px) {
+    .newsletter-row {
+      flex-direction: row;
+    }
+  }
+
+  .newsletter-row input {
+    width: 100%;
+    min-width: 0;
+    font-family: var(--f-sans);
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 0;
+    padding: 9px 10px;
+  }
+
+  @media (min-width: 720px) {
+    .newsletter-row input {
+      flex: 1;
+    }
+  }
+
+  .newsletter-submit {
+    flex-shrink: 0;
+    text-decoration: none;
+    background: var(--green);
+    color: var(--paper);
+    font-weight: 600;
+    font-size: 13px;
+    padding: 9px 16px;
+    border: 1px solid var(--green);
+    cursor: pointer;
+  }
+
+  .newsletter-submit:hover {
+    opacity: 0.92;
+  }
+
+  .newsletter-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .honeypot {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .newsletter-status {
+    margin: var(--space-1) 0 0;
+    font-family: var(--f-mono);
+    font-size: 12px;
+    color: var(--green);
+    min-height: 1em;
+  }
+
+  .newsletter-status.is-error {
+    color: var(--signal-ink);
   }
 
   .footer-baseline {

@@ -40,7 +40,6 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
               loading={lane === 0 && i === 0 ? 'eager' : 'lazy'}
               fetchpriority={variant === 'hero' && lane === 0 && i === 0 ? 'high' : undefined}
             />
-            {slide.caption && <figcaption>{slide.caption}</figcaption>}
           </figure>
         ))}
       </div>
@@ -79,8 +78,9 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
             type="button"
             class="dot"
             data-index={i}
+            data-tooltip={slide.caption}
             aria-current={i === 0 ? 'true' : undefined}
-            aria-label={`Go to slide ${i + 1}: ${slide.alt}`}
+            aria-label={`Go to slide ${i + 1}: ${slide.caption ?? slide.alt}`}
           ></button>
         ))}
       </div>
@@ -106,6 +106,10 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
     aspect-ratio: 16 / 9;
     overflow: hidden;
     border-radius: var(--radius-m);
+    /* Fallback fill while a slide's photo is still loading (large hero JPEGs on a slow
+       connection), so a not-yet-painted image shows a dark, on-brand panel instead of the
+       browser's default white/grey — reported as a "gray band" flash at the top of the hero. */
+    background: var(--green-dark);
   }
 
   [data-variant='hero'] .viewport {
@@ -162,17 +166,6 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
     display: block;
   }
 
-  .slide figcaption {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: var(--space-3);
-    color: var(--white);
-    background-color: var(--ink-overlay);
-    font-size: 14px;
-  }
-
   .control {
     position: absolute;
     top: 50%;
@@ -224,6 +217,7 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
   /* The button is a 24x24 hit target (WCAG 2.5.8); the visible dot is a
      smaller centred pseudo-element so the dot row still reads as small marks. */
   .dot {
+    position: relative;
     width: 24px;
     height: 24px;
     padding: 0;
@@ -247,6 +241,66 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
   .dot[aria-current='true']::after {
     opacity: 1;
     background: var(--gold);
+  }
+
+  /* The caption that used to sit as a permanent bar across the photo (see the homepage bug
+     report — it collided with the dots) now lives here instead: a small tooltip that only
+     appears while a dot is hovered or focused, naming the slide it jumps to. */
+  .dot[data-tooltip]::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 10px);
+    transform: translateX(-50%) translateY(4px);
+    width: max-content;
+    max-width: 200px;
+    padding: 7px 10px;
+    border-radius: var(--radius-s);
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--f-sans);
+    font-size: 12px;
+    line-height: 1.4;
+    text-align: center;
+    white-space: normal;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 200ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 3;
+  }
+
+  /* Keep the tooltip from spilling past the edge of the dot row for the first/last dots,
+     where a centred bubble would otherwise overhang the carousel. */
+  .dot[data-tooltip]:first-child::before {
+    left: 0;
+    transform: translateX(0) translateY(4px);
+  }
+
+  .dot[data-tooltip]:last-child::before {
+    left: auto;
+    right: 0;
+    transform: translateX(0) translateY(4px);
+  }
+
+  .dot[data-tooltip]:hover::before,
+  .dot[data-tooltip]:focus-visible::before {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .dot[data-tooltip]:first-child:hover::before,
+  .dot[data-tooltip]:first-child:focus-visible::before,
+  .dot[data-tooltip]:last-child:hover::before,
+  .dot[data-tooltip]:last-child:focus-visible::before {
+    transform: translateX(0) translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dot[data-tooltip]::before {
+      transition: opacity 120ms linear;
+    }
   }
 
   .pa-carousel:focus-visible,
