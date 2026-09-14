@@ -190,3 +190,25 @@ comment was just stale and is corrected.
   overflow, metadata and banned-phrase coverage) — no new route-specific tests
   needed since these pages follow the established family-page shape already
   covered by that suite.
+
+# Session 2026-09-14 — Prompt 5: Field Notes hub and 5 articles
+
+Full replacement, not an addition: the five pre-restart articles under
+`src/data/field-notes/` (`how-a-graft-knits-together` and its four siblings —
+different topics, different voice, written before Direction C) are deleted,
+along with the now-dead `FieldNotesTeaser.astro` (unmounted since Prompt 1,
+its `category`/`readingMinutes` fields no longer exist on the new frontmatter
+shape). `order.ts` and `articles.ts` now carry only the five
+`blueprint.md` Section 11 slugs; `articles.ts`'s frontmatter shape dropped to
+`slug`/`title`/`dek`/`cover` — the old copy deck's `category`, `readingMinutes`
+and `figure` aren't given anywhere in the Direction C blueprint, so they
+weren't invented for the new articles. `Figure.astro` and its per-article SVGs
+are now unreferenced (left in place, same as `StageNav.astro` after Prompt 0 —
+not asked for). The hub (`/field-notes/`) is now a card grid (cover, title,
+dek, read link) rather than the old text-row list, matching the
+`/products/` hub's card pattern; each article page adds a cover image, a
+"Request a Quotation" CTA and 1-2 related-article links (next two slugs in
+`order.ts`, wrapping — always one of the other four new articles).
+`docs/content/field-notes.md` (the old prose source) is left as-is, same as
+`docs/content/copy-supplies.md` was left after its pages were deleted in
+Prompt 0 — these are archival, not part of the built site.

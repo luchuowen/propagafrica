@@ -19,11 +19,11 @@ export const ROUTES = [
   '/products/monitoring',
   '/products/technical-services',
   '/field-notes',
-  '/field-notes/how-a-graft-knits-together',
-  '/field-notes/european-rose-rules-inside-the-house',
-  '/field-notes/choosing-a-sleeve-bore',
-  '/field-notes/hypochlorite-is-a-protocol',
-  '/field-notes/reading-a-substrate-specification',
+  '/field-notes/choosing-the-right-graft-tube-size',
+  '/field-notes/humidity-and-vpd-during-rooting',
+  '/field-notes/sanitation-between-propagation-batches',
+  '/field-notes/reading-your-monitoring-dashboard',
+  '/field-notes/setting-up-a-new-propagation-block',
   '/404',
 ];
 
@@ -85,7 +85,7 @@ test.describe('metadata', () => {
   });
 
   test('each Field Note carries Article JSON-LD with no invented date', async ({ page }) => {
-    await page.goto('/field-notes/how-a-graft-knits-together');
+    await page.goto('/field-notes/choosing-the-right-graft-tube-size');
     const raw = await page.locator('script[type="application/ld+json"]').first().textContent();
     const data = JSON.parse(raw ?? '{}');
     expect(data['@type']).toBe('Article');

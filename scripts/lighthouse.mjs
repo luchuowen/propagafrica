@@ -9,7 +9,7 @@ import * as chromeLauncher from 'chrome-launcher';
 
 // /supplies/graft was deleted in the Prompt 0 restart (see .factory/DECISIONS.md);
 // /about stands in for a second content page until the products/tools pages exist.
-const ROUTES = ['/', '/about', '/field-notes/how-a-graft-knits-together', '/contact'];
+const ROUTES = ['/', '/about', '/field-notes/choosing-the-right-graft-tube-size', '/contact'];
 
 const THRESHOLDS = {
   performance: 95,
