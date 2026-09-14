@@ -364,7 +364,13 @@ const services = [
     content: '';
     position: absolute;
     inset: 0;
-    background: var(--ink-overlay-strong);
+    background: linear-gradient(
+      100deg,
+      rgba(6, 30, 20, 0.82) 0%,
+      rgba(6, 30, 20, 0.62) 32%,
+      rgba(6, 30, 20, 0.22) 58%,
+      rgba(6, 30, 20, 0) 78%
+    );
     z-index: -1;
   }
 
@@ -435,16 +441,9 @@ const services = [
   }
 
   /* ---------- outcome panels ---------- */
-  .outcomes {
-    border-bottom: 1px solid var(--rule);
-  }
-
   .outcomes-inner {
-    max-width: var(--content-max);
-    margin: 0 auto;
-    padding: var(--space-6) var(--side-gutter);
     display: grid;
-    gap: var(--space-5);
+    gap: 0;
   }
 
   @media (min-width: 820px) {
@@ -454,26 +453,50 @@ const services = [
   }
 
   .outcome {
-    border-top: 1px solid var(--ink);
-    padding-top: var(--space-2);
+    padding: var(--space-5) var(--side-gutter);
+  }
+
+  @media (min-width: 820px) {
+    .outcome {
+      padding: var(--space-6) var(--space-4);
+    }
+  }
+
+  .outcome:nth-child(1) {
+    background: var(--green);
+    color: var(--paper);
+  }
+
+  .outcome:nth-child(2) {
+    background: var(--terra);
+    color: var(--paper);
+  }
+
+  .outcome:nth-child(3) {
+    background: var(--gold);
+    color: var(--ink);
   }
 
   .outcome-n {
     font-family: var(--f-mono);
     font-size: 11px;
     letter-spacing: 0.12em;
-    color: var(--soft);
+    text-transform: uppercase;
+    opacity: 0.85;
   }
 
   .outcome h2 {
     margin-top: var(--space-2);
+    color: inherit;
   }
 
   .outcome p {
     margin-top: var(--space-2);
     font-size: 15px;
     line-height: 1.65;
-    color: var(--soft);
+    color: inherit;
+    opacity: 0.92;
+    max-width: 34ch;
   }
 
   /* ---------- propagation journey ---------- */
