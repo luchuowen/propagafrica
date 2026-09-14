@@ -1,0 +1,142 @@
+---
+// Tools hub — blueprint.md Section 10.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { TOOLS } from '../../data/tools';
+---
+
+<BaseLayout
+  title="Tools"
+  description="Two planning calculators, built on standard nursery ratios, for working out grafting sleeve, clip and consumable quantities before you request a quotation."
+>
+  <section class="hub">
+    <div class="hub-inner">
+      <p class="eyebrow">Planning tools</p>
+      <h1>Work out what you need before you order</h1>
+      <p class="hub-sub">
+        Two calculators built on standard nursery ratios, with a wastage allowance you can adjust
+        &mdash; use them to plan quantities before you request a quotation.
+      </p>
+
+      <ul class="tool-grid">
+        {TOOLS.map((tool) => (
+          <li class="tool-card">
+            <div class="tool-media">
+              <img src={tool.img} alt={tool.imgAlt} loading="lazy" />
+            </div>
+            <div class="tool-body">
+              <h2>
+                <a href={tool.href}>{tool.name}</a>
+              </h2>
+              <p class="descriptor">{tool.description}</p>
+              <a class="link-arrow" href={tool.href}>
+                Open calculator &rarr;
+              </a>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hub {
+    padding: var(--space-6) 0 var(--space-7);
+  }
+
+  .hub-inner {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 0 var(--side-gutter);
+  }
+
+  h1 {
+    margin-top: var(--space-2);
+    max-width: 26ch;
+  }
+
+  .hub-sub {
+    margin-top: var(--space-3);
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--soft);
+    max-width: 60ch;
+  }
+
+  .tool-grid {
+    list-style: none;
+    margin: var(--space-5) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 640px) {
+    .tool-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .tool-card {
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-m);
+    overflow: hidden;
+    background: var(--paper);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tool-media {
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--mint);
+  }
+
+  .tool-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .tool-body {
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .tool-body h2 {
+    font-size: 19px;
+  }
+
+  .tool-body h2 a {
+    text-decoration: none;
+  }
+
+  .tool-body h2 a:hover {
+    text-decoration: underline;
+  }
+
+  .descriptor {
+    margin-top: var(--space-2);
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--soft);
+  }
+
+  .link-arrow {
+    display: inline-block;
+    margin-top: var(--space-3);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--green);
+    text-decoration: none;
+  }
+
+  .link-arrow:hover {
+    text-decoration: underline;
+  }
+</style>

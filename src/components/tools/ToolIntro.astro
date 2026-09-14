@@ -1,0 +1,58 @@
+---
+// The header shared by both calculator pages: eyebrow, H1, one-line sub and a
+// contained photograph (not full-bleed — these are working tool pages, not
+// product marketing pages, so the photo illustrates rather than dominates).
+interface Props {
+  eyebrow: string;
+  title: string;
+  sub: string;
+  image: string;
+  imageAlt: string;
+}
+
+const { eyebrow, title, sub, image, imageAlt } = Astro.props;
+---
+
+<header class="tool-intro">
+  <p class="eyebrow">{eyebrow}</p>
+  <h1>{title}</h1>
+  <p class="tool-sub">{sub}</p>
+  <figure class="tool-photo">
+    <img src={image} alt={imageAlt} loading="eager" />
+  </figure>
+</header>
+
+<style>
+  .tool-intro {
+    padding-top: var(--space-2);
+  }
+
+  h1 {
+    margin-top: var(--space-2);
+    max-width: 26ch;
+  }
+
+  .tool-sub {
+    margin-top: var(--space-3);
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--soft);
+    max-width: 60ch;
+  }
+
+  .tool-photo {
+    margin: var(--space-4) 0 0;
+    aspect-ratio: 16 / 9;
+    max-width: 640px;
+    overflow: hidden;
+    border-radius: var(--radius-m);
+    background: var(--mint);
+  }
+
+  .tool-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+</style>

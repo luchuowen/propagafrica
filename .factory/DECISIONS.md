@@ -190,3 +190,44 @@ comment was just stale and is corrected.
   overflow, metadata and banned-phrase coverage) — no new route-specific tests
   needed since these pages follow the established family-page shape already
   covered by that suite.
+
+# Session 2026-09-14 — Prompt 4: tools hub, grafting calculator, consumables
+
+# planner
+
+Built `/tools/`, `/tools/grafting-calculator/` and `/tools/consumables-planner/`
+against blueprint.md Section 10 and the Build Workbook's Calculator Logic
+(crop groups, PRO-ROSE/VEG/CUC/TREE + clip mapping, tray/pot/label/dome/tie
+ratios). Pure math lives in `src/lib/tools/grafting-calculator.ts` and
+`consumables-planner.ts` (unit tested in `tests/unit/tools-calculators.test.ts`);
+`src/data/tools.ts` holds the two tools' name/description/image once, shared by
+the hub cards and each calculator page's own heading. `ToolIntro.astro` is the
+shared (non-full-bleed) header+photo shape for the two calculator pages.
+
+**Found, not touched: orphaned pre-restart tools code.** `src/lib/tools/sleeve.ts`,
+`planner.ts` (+ `-ui.ts`/`visible.ts` helpers), `src/components/tools/
+SleeveSelector.astro` and `ConsumablesPlanner.astro`, plus their tests
+(`tests/tools/*.test.ts`, `*.spec.ts` against a fixture harness on port 4322 —
+see `playwright.config.ts`) already existed from a session-4/8 "Blueprint"
+build and were never mounted at any route. They implement a different model
+(continuous stem-diameter slider with fit-note/gap maths, no clip calculator,
+old crop names, old tray options, the old quotation query-param contract) and
+are superseded by blueprint.md Section 10 — the spec this session builds to.
+Left in place per the "don't delete what wasn't asked for" precedent (see
+Prompt 0's `StageNav.astro` note above); their tests still pass since they
+exercise the orphaned components directly, not the new `/tools/` pages. A
+follow-up session should delete this dead code and its fixture harness/second
+Playwright project once nothing depends on it.
+
+**Calculator → quotation handoff.** blueprint.md Section 13 (not yet built)
+wants a hidden-field JSON prefill; this session can only produce the link, so
+`src/lib/tools/handoff.ts` documents the contract: a single `?prefill=`
+query param, JSON-encoded, `source: 'grafting-calculator' | 'consumables-planner'`
+plus that tool's fields. The Prompt 6 session reads it from there.
+
+**No-JS fallback uses `<noscript>`, not a hidden div toggled by class.** Since
+this site has no server to compute against, a no-JS visitor must never see the
+form at all (the maths simply cannot run) — `.calculator` carries a plain
+`hidden` attribute in the markup and the enhancement script clears it; the
+`<noscript>` block is the only thing a no-JS browser renders. Simpler than
+tracking a "JS is running" flag both ways.
