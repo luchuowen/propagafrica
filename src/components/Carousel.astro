@@ -38,6 +38,7 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
               src={slide.src}
               alt={slide.alt}
               loading={lane === 0 && i === 0 ? 'eager' : 'lazy'}
+              fetchpriority={variant === 'hero' && lane === 0 && i === 0 ? 'high' : undefined}
             />
             {slide.caption && <figcaption>{slide.caption}</figcaption>}
           </figure>
@@ -198,21 +199,32 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
     z-index: 2;
     display: flex;
     justify-content: center;
-    gap: 8px;
   }
 
+  /* The button is a 24x24 hit target (WCAG 2.5.8); the visible dot is a
+     smaller centred pseudo-element so the dot row still reads as small marks. */
   .dot {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dot::after {
+    content: '';
     width: 8px;
     height: 8px;
-    padding: 0;
     border-radius: 50%;
-    border: none;
     background: var(--white);
     opacity: 0.55;
-    cursor: pointer;
   }
 
-  .dot[aria-current='true'] {
+  .dot[aria-current='true']::after {
     opacity: 1;
     background: var(--gold);
   }

@@ -50,198 +50,71 @@ accent. Fix these invariants in the QA session once the new pages have replaced 
 Loaded via `CLAUDE.md`. Cap: 250 lines. Compact into `.factory/history/` when close to the cap.
 
 Sessions 1–7 build decisions (stack, fonts, toolchain) are archived in
-`.factory/history/2026-09-12-sessions-1-7.md` and still apply.
+`.factory/history/2026-09-12-sessions-1-7.md` and still apply. Session 8 integration and
+the pre-restart "Blueprint" visual-rebuild lessons are archived in
+`.factory/history/2026-09-13-session8-and-visual-rebuild.md` — superseded by Direction C
+above, but the provisioned Firebase project/domain facts there still apply.
 
-# Session 8 — integration
+# Session 2026-09-14 — Prompt 1: homepage
 
-## Branch mapping
+Rebuilt `src/pages/index.astro` from scratch against `blueprint.md` Section 1 (Direction
+C) and `docs/image-manifest.md`: sticky header, hero carousel (5 slides), 3 outcome
+panels, Propagation Journey carousel (6 slides), a 7-family product grid with a
+client-side shop-by-crop filter, Facilities-in-use carousel (8 slides), a dark Monitoring
+spotlight, a Technical Services 3-up, trust/target-markets panels, and a CTA band.
+`SupplyStages.astro` and `FieldNotesTeaser.astro` are no longer mounted on the home page
+(pre-restart, tied to the deleted `/supplies` routes and old copy) — left in place,
+unreferenced, not deleted.
 
-Sessions 2–7 ran as cloud sessions on harness-assigned branch names. The mapping,
-established from `git diff --stat main...origin/<branch>`:
+## Carousel.astro got two small, generic fixes, not homepage-specific
 
-| Session | Branch                          | Scope                                                                                       |
-| ------- | ------------------------------- | ------------------------------------------------------------------------------------------- |
-| 2       | `claude/vibrant-gauss-st1orq`   | Home page                                                                                   |
-| 3       | `claude/lucid-sagan-9f6d6y`     | Supplies stage pages                                                                        |
-| 4       | `claude/nice-hypatia-rgq275`    | Sleeve selector, consumables planner                                                        |
-| 5       | `claude/laughing-hopper-ne2aig` | How grafting works, Field Notes                                                             |
-| 6       | `claude/practical-tesla-m1pila` | Quotation form, Firestore, Cloud Functions                                                  |
-| 7       | —                               | **Never delivered.** `/specifications`, `/ordering` and `/about` were written in session 8. |
+- Added `fetchpriority="high"` to the hero variant's first slide only (`loading="eager"`
+  was already conditional; `fetchpriority` was missing). Home page LCP scores 99 on
+  Lighthouse mobile with this in place.
+- The dot controls were an 8×8px hit target — axe/Lighthouse `target-size` failure (needs
+  24×24px, WCAG 2.5.8). Fixed by making the `<button>` itself 24×24 with a smaller
+  8×8px `::after` as the visible dot, so the dot row still reads as small marks. This
+  applies to every carousel, not just the homepage's three.
 
-Merged in the planned order (home, supplies, tools, words, reference, quotation).
-Zero conflicts — the disjoint-ownership rule held.
+## The homepage carries one H1/sub-head/CTA overlay, not one per slide
 
-## Specification tables now have one source of truth
+`blueprint.md` says the H1/sub-head is "overlaid on slide 1 only" but the copy is
+singular — there's one hero headline, not five. `Carousel.astro` has no slot for
+per-slide extra content (by design: "do not put homepage-specific content... in this
+file"), so the hero copy is a separate absolutely-positioned layer on top of the whole
+carousel section, visible from first paint (when slide 1 is showing) rather than
+disappearing on slide 2+. Reuses the existing `--ink-overlay-strong` token for the scrim
+rather than adding a new one to the protected `tokens.css`.
 
-`src/data/products/tables.ts` is the registry: one descriptor per table carrying its
-id, stage, caption, columns and rows. `/specifications` and all five stage pages
-import from it, so a table cannot say one thing in one place and another elsewhere.
-`src/data/specs/` was never created, so there was nothing to delete.
+## Product card image links were dropped, not made `aria-hidden`
 
-Proved two ways: `tests/unit/spec-tables.test.ts` asserts the registry holds the same
-array _instance_ the stage data exports (a copy would pass deep equality and still be
-able to drift), and `tests/e2e/site.spec.ts` reads the rendered sleeve and clip tables
-from both `/supplies/graft` and `/specifications` and asserts the cells are identical.
+Each family card originally wrapped its image in its own link to the product page,
+duplicating the title link right below it. `aria-hidden="true" tabindex="-1"` satisfies
+axe (no unnamed link in the accessibility tree) but breaks
+`tests/e2e/site.spec.ts`'s keyboard-traversal count, which selects `a[href]` without
+checking `tabindex` — so it still counts the element as "expected reachable" while Tab
+correctly skips it. Simplest fix that satisfies both: the image is a plain `<div>`, not a
+link; the card's `<h3>` title and "View range" link already cover the same href.
 
-The `/specifications` title block reads its table count from the registry, so it can
-never disagree with the page beneath it. The copy deck said 7; the built data is 9.
+## `tests/e2e/home.spec.ts` still asserted the pre-restart H1
 
-## The planner → quotation query contract
+`H1 matches the specified hero copy exactly` checked the deleted "Propagation supplies
+for nurseries and flower farms." string. Updated to the Direction C H1 from
+`blueprint.md` Section 1.
 
-Session 4 emitted a `pt_*` parameter namespace. Nothing read it: session 6's prefill
-reader is generic over `QUOTATION_FIELDS` and looks for parameters named after the
-form's own fields. Session 4's side was the wrong one. `buildQuotationQuery` now emits
-`annualVolume` (the yearly total) and `notes` (the worked quantities and every stated
-assumption), both real form fields, truncated to the field's own `maxLength`.
+## Shop-by-crop tagging for the product grid
 
-## Two real bugs the mount surfaced
+`blueprint.md` Section 1 and Section 2 give slightly different summaries of which
+families carry which crop tags; Section 2's is the explicit one ("systems, sanitation,
+monitoring and services tagged 'Nursery and facility supplies'"). Grafting Tubes and
+Grafting Clips carry the three crop-specific tags (Roses and ornamentals / Vegetables and
+cucurbits / Fruit trees); the other five families carry "Nursery and facility supplies"
+only. An "All" pill was added for usability — not in the copy deck, a UI affordance only.
 
-- **Horizontal scroll at 320 px on `/supplies/graft` and `/ordering`.** A `fieldset`
-  defaults to `min-width: min-content` and refused to shrink below the widest toggle
-  row. Session 4 tested the tools against a static fixture at desktop width, so this
-  only appeared once they were mounted on a real page. Fixed with `min-width: 0` on
-  the fieldsets and their flex ancestors.
-- **`--signal` orange fails WCAG AA as text**: 3.89:1 on white, flagged by axe on
-  `/how-grafting-works`. The brand orange stays as a _graphic_ colour (leaders, tick
-  marks, rules); a new `--signal-ink` (`#c1471b`, same hue, 5.02:1) carries any
-  `--signal` used as text, including dimension labels inside the drawings.
-  `tests/unit/contrast.test.ts` reads the tokens from `tokens.css` and checks every
-  pair the site actually uses.
+## Session checked out a stale branch at start
 
-## SEO, metadata and icons
-
-- `site` is now `https://propag.navac.co.ke` — the mapped host agreed for launch.
-  It drives canonical URLs, Open Graph URLs and the sitemap. One place to change.
-- `@astrojs/sitemap` generates `sitemap-index.xml` at build, filtering `/admin`.
-  `public/robots.txt` disallows `/admin` and points at the sitemap.
-- `src/components/Seo.astro` emits canonical, Open Graph, Twitter card and optional
-  JSON-LD, wired through `BaseLayout`.
-- `src/lib/seo.ts` builds `Organization` (home) and `Article` (each Field Note) JSON-LD.
-  No founding date, no headcount, no rating, no publication date — none is stated in the
-  client material. The `no-founding-date` gate now covers `.ts` too, so adding one fails
-  the build.
-- Favicon, apple-touch-icon and the 192/512 PWA icons are generated from the Mark,
-  single colour on white. `public/og-default.png` is a typographic share card in the
-  house style — the twelve photographs in `docs/images/nano-banana-prompts.md` are
-  still to be generated, and nothing in the layout depends on them.
-
-## Gates added
-
-`wordmark-case` (no `PROPAGAFRICA`, `Propagafrica` or `propagAfrica` anywhere),
-`no-placeholder-copy` (lorem, "coming soon", a leftover `TODO(session…)`, stub text),
-`no-prices`. `no-founding-date` widened to `established 20`, `since 20`,
-`years of experience`, `foundingDate`, `numberOfEmployees`; `no-banned-words` widened
-to `empower`, `transform`, `unlock`, `one-stop`, `state-of-the-art`, `game-chang`,
-`industry-leading` (`transform` is anchored so it does not match `text-transform`);
-`no-forbidden-ui` now also fails any `border-radius` above 4px.
-
-`factory-check full` additionally runs `scripts/lighthouse.mjs` — mobile audits of
-`/`, `/supplies/graft`, `/field-notes/how-a-graft-knits-together` and `/contact`
-against Performance ≥ 95, Accessibility 100, Best Practices ≥ 95, SEO ≥ 95.
-
-## What session 8 wired up
-
-- `SleeveSelector` mounted on `/supplies/graft` under **Find the right sleeve**; the
-  in-page link points at it.
-- `ConsumablesPlanner` mounted on `/ordering` under **Work out what a cycle consumes**.
-- The home page's Field Notes teaser reads from `src/data/field-notes/articles.ts`
-  (new shared module: the glob and the fixed order, once) instead of three hard-coded
-  rows, and links each title to its article.
-- The three figures session 5 left pending — `traceability-chain`, `dilution`,
-  `cell-section` — are wired into `[slug].astro` from session 3's folder. The
-  parallel-run rule that kept that page out of that folder applied only while the
-  sessions ran side by side.
-- `/404` in the house style: sheet frame, `PA-404 / SHEET NOT FOUND` title block, a
-  plain sentence, three links. No illustration, no joke.
-
-## Session 7 delivered late, on `claude/jolly-lamport-fmnpd9` — not merged
-
-Session 7 pushed its reference pages 28 minutes after session 8 had already
-written them. Its branch was cut from `main` before the integration, so it never
-saw `src/data/products/`, and it re-typed all nine specification tables into a
-new `src/data/specs/index.ts` with its own local table and list components —
-exactly the duplication the integration brief said to remove. Merging it would
-have reintroduced that duplication and conflicted on all three pages.
-
-Kept instead of merged. Three things were taken from it:
-
-1. **Its best idea, generalised.** It tested `/about` by running a full
-   `astro build` inside a unit test and grepping the built HTML, on the correct
-   reasoning that a manifest gate is a regex over _source_ and a rephrase can
-   dodge it. `tests/e2e/site.spec.ts` now greps the **rendered text** of every
-   route against the banned-phrase list, plus a stricter set of patterns on
-   `/about` — without a three-minute build inside a unit test.
-2. **A missing CTA.** `/specifications` closes with the copy deck's
-   `Ask for a specification sheet →`, not the generic quotation block.
-3. **A real find the new check surfaced**: the footer read `© 2026`, which
-   quietly dates the company — the exact thing the owner ruled out. The year is
-   gone; the notice is now `© PropagAfrica Technologies`.
-
-If that branch is ever wanted, take the copy from it and not the data layer.
-
-## Cloud project and domain — provisioned
-
-- Firebase / GCP project: **`propagafrica`**. Gemini in Firebase and Google Analytics were both
-  declined at creation: neither is needed, and the Gemini disclaimer says prompts may be used to
-  train the model. Either can be enabled later from the console.
-- Firestore: `(default)`, **Standard edition, Native mode, `eur3` (Belgium and Netherlands)**,
-  started in production mode so client reads and writes are denied until `firestore.rules` is
-  deployed. **The location is permanent — Firestore cannot be moved between regions.**
-- Hosting site `propagafrica` → `propagafrica.web.app` / `propagafrica.firebaseapp.com`.
-- Custom domain **`propag.navac.co.ke`** added in Hosting. DNS at HOSTAFRICA (DirectAdmin,
-  `da10.host-ww.net:2222`) now carries `CNAME propag → propagafrica.web.app.` TTL 3600 — the same
-  pattern as the existing `crm`, `bms` and `insureflow` subdomains on this zone. Public resolvers
-  answer `199.36.158.100`, the same Firebase edge IP those use.
-- **The project is on the Spark (no-cost) plan.** Hosting and Firestore work on Spark; Cloud
-  Functions 2nd gen does not. `firebase deploy` will fail on the `functions` target until the
-  project is upgraded to Blaze, so the quotation form's backend cannot go live before that.
-  Deploy hosting alone with `firebase deploy --only hosting` in the meantime.
-
----
-
-# Visual rebuild — the blueprint treatment was wrong at site scale
-
-The owner's reaction to the deployed site: "it looks like a user manual for an
-electronic equipment." He was right, and the diagnosis matters more than the fix.
-
-**What went wrong.** He chose "Blueprint" from a single hero sample. That was a
-choice of _direction_, and it was turned into the _format_ of all twenty pages:
-sheet border with registration marks, a `DRAWING PA-013 / SHEET 09 OF 14` title
-block at the top of every page, mono type well beyond the spec tables, and
-hairline rules as the only compositional device. A precision motif used once is
-a signature; used on every element of every page it becomes documentation.
-
-**The compounding error.** The image brief written for that direction said "no
-people, no premises, no branded packaging" — and then the twelve photographs
-were never generated, and the site shipped anyway. Twenty pages selling physical
-goods, with not one picture of a product, a person or a place. That alone
-guaranteed the reaction. A missing image set is a launch blocker, not a to-do.
-
-**The fix.**
-
-- `SheetFrame`, `TitleBlock` and `StageHeader` are deleted. `PageHero.astro`
-  replaces them: eyebrow, H1, standfirst, and a full-bleed photograph with a
-  scrim behind it.
-- 14 photographs generated with Nano Banana Pro on the owner's Gemini account,
-  all Kenyan commercial horticulture, consistent documentary register. Chrome
-  blocked the bulk download after the first file, so they were captured from the
-  page at their native 1024px instead — sharp at the sizes the layout uses, not
-  retina at full bleed. Replacing them with real client photography is the
-  standing follow-up.
-- The home page is rebuilt around photography: full-bleed hero, five stage cards
-  each with an image, a deep-green specifications band, a photographic closer.
-- Mono type is now confined to spec values, SKUs, eyebrows and small labels.
-  A layout band classed `.spec` had silently inherited `--f-mono` from a global
-  rule and shipped its body copy in monospace.
-- Tokens added: `--green-deep`, `--green-pale`, `--ink-overlay*`, `--radius-*`,
-  `--shadow-soft`. `--green-pale` is `#f5f8f6`; at the first value (`#eef3ef`)
-  `--ink-soft` and `--signal-ink` both measured 4.47:1 on it, just under AA.
-- The `no-forbidden-ui` gate banned radii above 4px and every box-shadow because
-  the blueprint idea had no use for them. It now allows both, but only from the
-  tokens. Gradients stay banned outright.
-- `no-prices` matched the phrase "price list" and fired on the copy that exists
-  to say we publish neither. It now matches currency plus digits only.
-
-**The lesson worth keeping.** A design direction picked from one sample is not a
-design system. The next time a direction is chosen from a hero, build two or
-three full pages in it — including the dullest one — before committing the site.
+The session's working tree started 8 commits behind `origin/main` — pre-Prompt-0, with
+no `Carousel.astro`, no `docs/image-manifest.md`, and `blueprint.md` still describing the
+deleted pre-restart "supplies" IA. `git fetch && git merge --ff-only origin/main` (the
+tree was clean, so this was a pure fast-forward, not a reset) brought it current before
+any of the above was possible.
