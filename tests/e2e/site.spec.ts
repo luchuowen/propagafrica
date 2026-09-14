@@ -199,14 +199,16 @@ test.describe('the rendered page, not the source', () => {
     // A year anywhere in a sentence about the company is the failure mode the
     // owner flagged, so this is stricter than the phrase list above. A footer
     // copyright year is excused either way it's marked: the word "copyright"
-    // or the "©" symbol. "established" is scoped to founding language (a year,
-    // or "newly/trading since") rather than banned outright: blueprint.md
-    // Section 12's verbatim body copy says PropagAfrica sources from
-    // "established manufacturers" — established third parties, not a claim
-    // about when PropagAfrica itself started. Same scope as the manifest's
-    // own no-founding-date gate.
-    expect(text).not.toMatch(/\b(founded|incorporated)\b/);
-    expect(text).not.toMatch(/established\s+(in\s+)?(19|20)\d{2}|newly established|trading since/);
+    // or the "©" symbol. The bare word "established" stays banned — only the
+    // one known, verbatim exception is stripped first: blueprint.md Section
+    // 12's own body copy says PropagAfrica sources from "established
+    // manufacturers" (established third parties, not a claim about when
+    // PropagAfrica itself started). Any other "established" — including a
+    // rephrase of the company's own age — still fails this check.
+    const textWithKnownExceptions = text.replace(/established manufacturers/g, '');
+    expect(textWithKnownExceptions).not.toMatch(
+      /\b(founded|established|incorporated|trading since)\b/,
+    );
     expect(text).not.toMatch(/(?<!©\s*)\b(19|20)\d{2}\b(?![^.]*copyright)/);
     expect(text).not.toMatch(/\b\d+\s+(employees|staff|people)\b/);
   });

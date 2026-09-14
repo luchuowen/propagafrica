@@ -48,21 +48,41 @@ test.describe('quotation form markup and progressive enhancement', () => {
     await expect(page.locator('#enquiringAbout-2')).not.toBeChecked(); // Nursery Consumables
   });
 
-  test('prefills the Enquiring-about field and Message from a calculator handoff', async ({
+  test('prefills the Enquiring-about field and Message from a consumables-planner handoff', async ({
     page,
   }) => {
-    const prefill = encodeURIComponent(
-      JSON.stringify({
-        enquiringAbout: ['Nursery Consumables'],
-        summary: 'Planned from the consumables planner: 480,000 sleeves a year.',
-      }),
-    );
+    const payload = {
+      source: 'consumables-planner',
+      items: { trays: 100, pots: 0, labels: 100, domes: 20, ties: 0 },
+    };
+    const prefill = encodeURIComponent(JSON.stringify(payload));
     await page.goto(`/contact?prefill=${prefill}`);
     await expect(page.locator('#enquiringAbout-2')).toBeChecked(); // Nursery Consumables
     await expect(page.locator('#message')).toHaveValue(
-      'Planned from the consumables planner: 480,000 sleeves a year.',
+      'Planned from the consumables planner: 100 trays, 100 labels, 20 humidity domes.',
     );
     await expect(page.locator('#calculatorContext')).toHaveValue(decodeURIComponent(prefill));
+  });
+
+  test('prefills the Enquiring-about field and Message from a grafting-calculator handoff', async ({
+    page,
+  }) => {
+    const payload = {
+      source: 'grafting-calculator',
+      cropGroup: 'Roses and ornamentals',
+      productCode: 'PRO-ROSE 55',
+      clipType: 'Omega Clip',
+      tubesNeeded: 5000,
+      clipsNeeded: 5000,
+    };
+    const prefill = encodeURIComponent(JSON.stringify(payload));
+    await page.goto(`/contact?prefill=${prefill}`);
+    await expect(page.locator('#enquiringAbout-0')).toBeChecked(); // Grafting Tubes
+    await expect(page.locator('#enquiringAbout-1')).toBeChecked(); // Grafting Clips
+    await expect(page.locator('#message')).toHaveValue(
+      'Planned from the grafting calculator: Roses and ornamentals — ' +
+        '5,000 x PRO-ROSE 55 tubes, 5,000 x Omega Clip clips.',
+    );
   });
 
   test('shows inline errors and does not navigate when required fields are empty', async ({

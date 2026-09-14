@@ -192,60 +192,88 @@ import {
     }
     applyPrefill();
 
-    // A calculator tool's own handoff, layered on top of the generic per-field prefill above: a
-    // JSON blob in `?prefill=` (blueprint.md Section 13's "hidden field carries a JSON prefill"
-    // — crop group, product codes, quantities). The plain per-field query params a tool like the
-    // consumables planner sends (`enquiringAbout`, `message`) are already covered by
-    // applyPrefill() above, since they're named after this form's own fields; this only adds a
-    // structured JSON handoff on top, for a future tool that needs to pass more than the two
-    // visible fields can hold. Never overwrites a field the visitor or the generic prefill
+    // The calculator handoff — blueprint.md Section 13's "hidden field carries a JSON prefill
+    // when arriving from a calculator (crop group, product codes, quantities)". The two
+    // /tools/ calculators (src/lib/tools/handoff.ts) each build a "Request a Quotation" link as
+    // `?prefill=<JSON>`; this is the read side that module's own comment says is "built in a
+    // later prompt against the rebuilt contact form". Never overwrites a field the visitor
     // already filled in.
+    interface GraftingHandoff {
+      source: 'grafting-calculator';
+      cropGroup: string;
+      productCode: string;
+      clipType: string;
+      tubesNeeded: number;
+      clipsNeeded: number;
+    }
+    interface ConsumablesHandoff {
+      source: 'consumables-planner';
+      items: {
+        trays: number;
+        pots: number;
+        labels: number;
+        domes: number;
+        ties: number;
+      };
+    }
+
+    function summariseHandoff(payload: GraftingHandoff | ConsumablesHandoff): {
+      families: string[];
+      summary: string;
+    } {
+      if (payload.source === 'grafting-calculator') {
+        return {
+          families: ['Grafting Tubes', 'Grafting Clips'],
+          summary:
+            `Planned from the grafting calculator: ${payload.cropGroup} — ` +
+            `${payload.tubesNeeded.toLocaleString('en-GB')} x ${payload.productCode} tubes, ` +
+            `${payload.clipsNeeded.toLocaleString('en-GB')} x ${payload.clipType} clips.`,
+        };
+      }
+      const { trays, pots, labels, domes, ties } = payload.items;
+      const lines = [
+        trays > 0 && `${trays.toLocaleString('en-GB')} trays`,
+        pots > 0 && `${pots.toLocaleString('en-GB')} pots`,
+        labels > 0 && `${labels.toLocaleString('en-GB')} labels`,
+        domes > 0 && `${domes.toLocaleString('en-GB')} humidity domes`,
+        ties > 0 && `${ties.toLocaleString('en-GB')} ties`,
+      ].filter((line): line is string => Boolean(line));
+      return {
+        families: ['Nursery Consumables'],
+        summary: `Planned from the consumables planner: ${lines.join(', ')}.`,
+      };
+    }
+
     function applyCalculatorPrefill() {
-      const params = new URLSearchParams(window.location.search);
-      const families = new Set<string>();
-      const summaryParts: string[] = [];
-      let rawContext = '';
+      const prefillParam = new URLSearchParams(window.location.search).get('prefill');
+      if (!prefillParam) return;
 
-      const prefillParam = params.get('prefill');
-      if (prefillParam) {
-        try {
-          const parsed = JSON.parse(prefillParam) as {
-            enquiringAbout?: unknown;
-            summary?: unknown;
-          };
-          if (Array.isArray(parsed.enquiringAbout)) {
-            for (const value of parsed.enquiringAbout) {
-              if (typeof value === 'string') families.add(value);
-            }
-          }
-          if (typeof parsed.summary === 'string' && parsed.summary.trim()) {
-            summaryParts.push(parsed.summary.trim());
-          }
-          rawContext = prefillParam;
-        } catch {
-          // Not valid JSON — ignore rather than fail the page.
+      let payload: GraftingHandoff | ConsumablesHandoff;
+      try {
+        const parsed = JSON.parse(prefillParam) as { source?: unknown };
+        if (parsed.source !== 'grafting-calculator' && parsed.source !== 'consumables-planner') {
+          return;
         }
+        payload = parsed as GraftingHandoff | ConsumablesHandoff;
+      } catch {
+        return; // Not valid JSON — ignore rather than fail the page.
       }
 
-      if (families.size > 0) {
-        form?.querySelectorAll<HTMLInputElement>('input[name="enquiringAbout"]').forEach((el) => {
-          if (families.has(el.value)) el.checked = true;
-        });
+      const { families, summary } = summariseHandoff(payload);
+
+      form?.querySelectorAll<HTMLInputElement>('input[name="enquiringAbout"]').forEach((el) => {
+        if (families.includes(el.value)) el.checked = true;
+      });
+
+      const messageEl = form?.elements.namedItem('message') as HTMLTextAreaElement | null;
+      if (messageEl && messageEl.value.trim().length === 0) {
+        messageEl.value = summary.slice(0, 2000);
       }
 
-      if (summaryParts.length > 0) {
-        const messageEl = form?.elements.namedItem('message') as HTMLTextAreaElement | null;
-        if (messageEl && messageEl.value.trim().length === 0) {
-          messageEl.value = summaryParts.join('\n\n').slice(0, 2000);
-        }
-      }
-
-      if (rawContext) {
-        const contextEl = form?.elements.namedItem(
-          CALCULATOR_CONTEXT_FIELD,
-        ) as HTMLInputElement | null;
-        if (contextEl) contextEl.value = rawContext.slice(0, CALCULATOR_CONTEXT_MAX_LENGTH);
-      }
+      const contextEl = form?.elements.namedItem(
+        CALCULATOR_CONTEXT_FIELD,
+      ) as HTMLInputElement | null;
+      if (contextEl) contextEl.value = prefillParam.slice(0, CALCULATOR_CONTEXT_MAX_LENGTH);
     }
     applyCalculatorPrefill();
 
