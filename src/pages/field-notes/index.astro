@@ -1,27 +1,38 @@
 ---
+// Field Notes hub -- blueprint.md Section 11. Five article cards, in the
+// order order.ts fixes.
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { FIELD_NOTES as articles } from '../../data/field-notes/articles';
+import { FIELD_NOTES } from '../../data/field-notes/articles';
 ---
 
 <BaseLayout
   title="Field Notes"
-  description="Technique, compliance, specification, hygiene and media notes for propagation houses supplying roses and grafted vegetables in Kenya and Ethiopia."
+  description="Short, practical articles on grafting, propagation environment and nursery operations, written for growers in Kenya and Ethiopia."
 >
-  <section class="index">
-    <div class="index-inner">
-      <p class="eyebrow">FIELD NOTES</p>
-      <h1>Field Notes</h1>
-      <ul class="rows">
-        {articles.map((a) => (
-          <li class="row">
-            <a href={`/field-notes/${a.slug}`}>
-              <span class="category">{a.category}</span>
-              <span class="text">
-                <span class="title">{a.title}</span>
-                <span class="standfirst">{a.standfirst}</span>
-              </span>
-              <span class="minutes">{a.readingMinutes} MIN</span>
-            </a>
+  <section class="hub">
+    <div class="hub-inner">
+      <p class="eyebrow">Field Notes</p>
+      <h1>Practical guidance for propagation nurseries</h1>
+      <p class="hub-sub">
+        Short, practical articles on grafting, propagation environment and nursery operations,
+        written for growers in Kenya and Ethiopia.
+      </p>
+
+      <ul class="note-grid">
+        {FIELD_NOTES.map((note) => (
+          <li class="note-card">
+            <div class="note-media">
+              <img src={note.cover} alt="" loading="lazy" />
+            </div>
+            <div class="note-body">
+              <h2>
+                <a href={`/field-notes/${note.slug}`}>{note.title}</a>
+              </h2>
+              <p class="dek">{note.dek}</p>
+              <a class="link-arrow" href={`/field-notes/${note.slug}`}>
+                Read &rarr;
+              </a>
+            </div>
           </li>
         ))}
       </ul>
@@ -30,91 +41,110 @@ import { FIELD_NOTES as articles } from '../../data/field-notes/articles';
 </BaseLayout>
 
 <style>
-  .index {
+  .hub {
     padding: var(--space-6) 0 var(--space-7);
   }
 
-  .index-inner {
+  .hub-inner {
     max-width: var(--content-max);
     margin: 0 auto;
     padding: 0 var(--side-gutter);
   }
 
-  .index-inner .eyebrow {
-    margin-bottom: var(--space-2);
+  h1 {
+    margin-top: var(--space-2);
+    max-width: 26ch;
   }
 
-  .rows {
+  .hub-sub {
+    margin-top: var(--space-3);
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--soft);
+    max-width: 60ch;
+  }
+
+  .note-grid {
     list-style: none;
     margin: var(--space-5) 0 0;
     padding: 0;
-  }
-
-  .row {
-    border-top: 1px solid var(--rule);
-  }
-
-  .row:last-child {
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .row a {
     display: grid;
-    grid-template-columns: 8em 1fr auto;
-    gap: var(--space-3);
-    align-items: baseline;
-    padding: var(--space-3) 0;
-    text-decoration: none;
-    color: var(--ink);
+    gap: var(--space-4);
+    grid-template-columns: 1fr;
   }
 
-  .row a:hover .title {
-    color: var(--green);
+  @media (min-width: 640px) {
+    .note-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 
-  .category {
-    font-family: var(--f-mono);
-    font-size: 10.5px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
+  @media (min-width: 1024px) {
+    .note-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 
-  .text {
+  .note-card {
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-m);
+    overflow: hidden;
+    background: var(--paper);
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    min-width: 0;
   }
 
-  .title {
-    font-family: var(--f-sans);
-    font-weight: 700;
+  .note-media {
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--mint);
+  }
+
+  .note-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .note-body {
+    padding: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .note-body h2 {
     font-size: 18px;
-    letter-spacing: -0.016em;
   }
 
-  .standfirst {
+  .note-body h2 a {
+    text-decoration: none;
+  }
+
+  .note-body h2 a:hover {
+    text-decoration: underline;
+  }
+
+  .dek {
+    margin-top: var(--space-2);
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--soft);
+    flex: 1;
+  }
+
+  .link-arrow {
+    display: inline-block;
+    margin-top: var(--space-3);
+    font-weight: 600;
     font-size: 14px;
-    color: var(--ink-soft);
+    color: var(--green);
+    text-decoration: none;
   }
 
-  .minutes {
-    font-family: var(--f-mono);
-    font-size: 11px;
-    color: var(--ink-soft);
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-  }
-
-  @media (max-width: 640px) {
-    .row a {
-      grid-template-columns: 1fr;
-      gap: var(--space-1);
-    }
-
-    .minutes {
-      order: -1;
-    }
+  .link-arrow:hover {
+    text-decoration: underline;
   }
 </style>

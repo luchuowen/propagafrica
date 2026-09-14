@@ -1,25 +1,15 @@
 ---
+// Field Notes article -- blueprint.md Section 11. Cover image, body copy,
+// a closing quotation CTA and 1-2 related links into the other four articles.
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Figure from '../../components/Figure.astro';
 import { ARTICLE_ORDER } from '../../data/field-notes/order';
 import { articleJsonLd } from '../../lib/seo';
-
-import graftUnionStagesSvg from '../../assets/figures/words/graft-union-stages.svg?raw';
-import boreFitSvg from '../../assets/figures/words/bore-fit.svg?raw';
-// Session 8 integration: the three figures below are drawn by session 3 and
-// live in its folder. The parallel-run rule that kept this page out of that
-// folder applied only while the sessions ran side by side.
-import traceabilityChainSvg from '../../assets/figures/supplies/traceability-chain.svg?raw';
-import dilutionSvg from '../../assets/figures/supplies/dilution.svg?raw';
-import cellSectionSvg from '../../assets/figures/supplies/cell-section.svg?raw';
 
 interface FieldNoteFrontmatter {
   slug: string;
   title: string;
-  standfirst: string;
-  category: string;
-  readingMinutes: number;
-  figure?: string;
+  dek: string;
+  cover: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,96 +40,62 @@ if (!entry) {
 
 const { frontmatter, Content } = entry;
 
-const FIGURES: Record<string, string> = {
-  'graft-union-stages': graftUnionStagesSvg,
-  'bore-fit': boreFitSvg,
-  'traceability-chain': traceabilityChainSvg,
-  dilution: dilutionSvg,
-  'cell-section': cellSectionSvg,
-};
-
-const FIGURE_CAPTIONS: Record<string, string> = {
-  'graft-union-stages':
-    'The union forms in three stages: the cut faces are pressed together at day 0, a callus bridges the gap across days 2 to 7, and a vascular connection is established across days 7 to 14.',
-  'bore-fit':
-    'Three sleeves in section over the same measured stem: one size over leaves a persistent gap, the correct size seats snugly to tolerance, and one size under compresses the cambium.',
-  'traceability-chain':
-    'The record chain from supplier batch code through to the plant that leaves the house. If the supplier\u2019s batch code is missing, the chain breaks at the first link \u2014 and the finding lands on the grower, not on the supplier.',
-  dilution:
-    'Concentrate to working strength, drawn out. The arithmetic is printed because the failure mode is a supervisor guessing a capful: a dip made at a tenth of the intended strength is not biosecurity, it is the appearance of it.',
-  'cell-section':
-    'A tray cell in section. Under-filling costs root volume; over-filling closes the drainage path and waterlogs the base of the cell. Six millimetres of headspace is the working target.',
-};
-
-const FIGURE_NUMBERS: Record<string, number> = {
-  'graft-union-stages': 1,
-  'bore-fit': 2,
-  'traceability-chain': 3,
-  dilution: 4,
-  'cell-section': 5,
-};
-
+// Up to two related articles: the next two in ARTICLE_ORDER, wrapping around,
+// always drawn from the other four Field Notes -- never the article itself.
 const position = ARTICLE_ORDER.indexOf(frontmatter.slug);
-const prevSlug = position > 0 ? ARTICLE_ORDER[position - 1] : undefined;
-const nextSlug =
-  position >= 0 && position < ARTICLE_ORDER.length - 1 ? ARTICLE_ORDER[position + 1] : undefined;
-const prev = prevSlug ? bySlug.get(prevSlug)?.frontmatter : undefined;
-const next = nextSlug ? bySlug.get(nextSlug)?.frontmatter : undefined;
+const related = [1, 2]
+  .map((offset) => ARTICLE_ORDER[(position + offset) % ARTICLE_ORDER.length]!)
+  .map((s) => bySlug.get(s)?.frontmatter)
+  .filter((f): f is FieldNoteFrontmatter => Boolean(f));
 
 const jsonLd = articleJsonLd({
   site: Astro.site!,
   path: `/field-notes/${frontmatter.slug}`,
   headline: frontmatter.title,
-  description: frontmatter.standfirst,
+  description: frontmatter.dek,
 });
-
-const figureKey = frontmatter.figure;
-const figureSvg = figureKey ? FIGURES[figureKey] : undefined;
-const figureCaption = figureKey ? FIGURE_CAPTIONS[figureKey] : undefined;
-const figureNumber = figureKey ? FIGURE_NUMBERS[figureKey] : undefined;
 ---
 
 <BaseLayout
   title={frontmatter.title}
-  description={frontmatter.standfirst}
+  description={frontmatter.dek}
   jsonLd={jsonLd}
   ogType="article"
 >
   <article class="note">
     <div class="note-inner">
       <header class="note-header">
-        <p class="eyebrow">{frontmatter.category.toUpperCase()}</p>
+        <p class="eyebrow">Field Notes</p>
         <h1>{frontmatter.title}</h1>
-        <p class="standfirst">{frontmatter.standfirst}</p>
-        <p class="note-meta">{frontmatter.readingMinutes} min read</p>
+        <p class="dek">{frontmatter.dek}</p>
       </header>
 
-      {figureSvg && figureCaption && figureNumber !== undefined ? (
-        <Figure
-          number={figureNumber}
-          subject={frontmatter.title}
-          caption={figureCaption}
-          sheet={12}
-          sheetsTotal={14}
-        >
-          <Fragment set:html={figureSvg} />
-        </Figure>
-      ) : null}
+      <div class="note-media">
+        <img src={frontmatter.cover} alt="" loading="lazy" />
+      </div>
 
       <div class="article-body">
         <Content />
       </div>
 
-      <nav class="prev-next" aria-label="Field Notes navigation">
-        <a class="prev" href={prev ? `/field-notes/${prev.slug}` : '/field-notes'}>
-          <span class="direction">← Previous</span>
-          <span class="link-title">{prev ? prev.title : 'Field Notes'}</span>
+      <div class="note-cta">
+        <a class="btn btn-primary" href="/contact/">
+          Request a Quotation
         </a>
-        <a class="next" href={next ? `/field-notes/${next.slug}` : '/field-notes'}>
-          <span class="direction">Next →</span>
-          <span class="link-title">{next ? next.title : 'Field Notes'}</span>
-        </a>
-      </nav>
+      </div>
+
+      {related.length > 0 && (
+        <nav class="related" aria-label="Related Field Notes">
+          <p class="related-label">Related</p>
+          <ul>
+            {related.map((r) => (
+              <li>
+                <a href={`/field-notes/${r.slug}`}>{r.title}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
     </div>
   </article>
 </BaseLayout>
@@ -163,27 +119,26 @@ const figureNumber = figureKey ? FIGURE_NUMBERS[figureKey] : undefined;
     margin-bottom: var(--space-2);
   }
 
-  .note-meta {
-    margin-top: var(--space-3);
-    font-family: var(--f-mono);
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
-  }
-
-  .standfirst {
+  .dek {
     margin-top: var(--space-3);
     font-size: 18px;
-    color: var(--ink-soft);
+    color: var(--soft);
   }
 
-  .note-header :global(.title-block) {
-    margin-top: var(--space-4);
+  .note-media {
+    margin-top: var(--space-5);
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: var(--radius-m);
+    background: var(--mint);
+    max-width: 68ch;
   }
 
-  .note-inner :global(figure) {
-    margin-top: var(--space-6);
+  .note-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
   .article-body {
@@ -201,97 +156,62 @@ const figureNumber = figureKey ? FIGURE_NUMBERS[figureKey] : undefined;
     margin-top: 0;
   }
 
-  .article-body :global(h2) {
+  .note-cta {
+    max-width: 68ch;
     margin-top: var(--space-6);
     padding-top: var(--space-4);
     border-top: 1px solid var(--rule);
   }
 
-  .article-body :global(h2 + p) {
-    margin-top: var(--space-3);
-  }
-
-  .article-body :global(ul),
-  .article-body :global(ol) {
-    margin-top: var(--space-3);
-    padding-left: 1.3em;
-  }
-
-  .article-body :global(li + li) {
-    margin-top: 6px;
-  }
-
-  /* The scroll container is the wrapper, not the table — see the
-     rehypeScrollableTables plugin in astro.config.mjs. */
-  .article-body :global(.table-scroll) {
-    overflow-x: auto;
-    margin-top: var(--space-4);
-    max-width: 100%;
-  }
-
-  .article-body :global(.table-scroll:focus-visible) {
-    outline: 2px solid var(--green);
-    outline-offset: 2px;
-  }
-
-  .article-body :global(table) {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: var(--f-mono);
-    font-size: 12px;
-  }
-
-  .article-body :global(th),
-  .article-body :global(td) {
-    border: 1px solid var(--rule);
-    padding: 6px 12px;
-    text-align: left;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-  }
-
-  .article-body :global(th) {
-    color: var(--ink-soft);
-    font-weight: 500;
-  }
-
-  .prev-next {
-    max-width: 68ch;
-    margin-top: var(--space-7);
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--rule);
-    display: flex;
-    justify-content: space-between;
-    gap: var(--space-3);
-  }
-
-  .prev-next a {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  .btn-primary {
+    display: inline-block;
     text-decoration: none;
-    color: var(--ink);
-    max-width: 48%;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 11px 22px;
+    border-radius: var(--radius-s);
+    background: var(--green);
+    color: var(--paper);
+    border: 1px solid var(--green);
   }
 
-  .prev-next .next {
-    text-align: right;
-    align-items: flex-end;
+  .btn-primary:hover {
+    background: var(--green-dark);
+    border-color: var(--green-dark);
   }
 
-  .prev-next a:hover .link-title {
-    color: var(--green);
+  .related {
+    max-width: 68ch;
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--rule);
   }
 
-  .direction {
+  .related-label {
     font-family: var(--f-mono);
-    font-size: 10.5px;
+    font-size: 11px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--ink-soft);
+    color: var(--soft);
   }
 
-  .link-title {
-    font-weight: 700;
+  .related ul {
+    list-style: none;
+    margin: var(--space-2) 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .related a {
+    font-weight: 600;
+    font-size: 15.5px;
+    color: var(--green);
+    text-decoration: none;
+  }
+
+  .related a:hover {
+    text-decoration: underline;
   }
 </style>
