@@ -8,6 +8,7 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
 <BaseLayout
   title="Products"
   description="Seven product families, sourced and stocked for commercial growers in Kenya and Ethiopia. Filter by what you grow, or browse the full range below."
+  image="/images/og/og-products.jpg"
 >
   <section class="hub">
     <div class="hub-inner">
@@ -33,7 +34,7 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
         {PRODUCT_FAMILIES.map((f) => (
           <li class="product-card" data-product-card data-tags={f.tags.join('|')}>
             <div class="product-media">
-              <img src={f.img} alt="" loading="lazy" />
+              <img src={f.img} alt={f.imgAlt} loading="lazy" />
             </div>
             <div class="product-body">
               <h2>

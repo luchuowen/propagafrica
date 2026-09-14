@@ -10,6 +10,7 @@ interface FieldNoteFrontmatter {
   title: string;
   dek: string;
   cover: string;
+  coverAlt: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,7 +51,7 @@ const related = [1, 2]
 
 const jsonLd = articleJsonLd({
   site: Astro.site!,
-  path: `/field-notes/${frontmatter.slug}`,
+  path: `/field-notes/${frontmatter.slug}/`,
   headline: frontmatter.title,
   description: frontmatter.dek,
 });
@@ -59,6 +60,7 @@ const jsonLd = articleJsonLd({
 <BaseLayout
   title={frontmatter.title}
   description={frontmatter.dek}
+  image={`/images/og/og-${frontmatter.slug}.jpg`}
   jsonLd={jsonLd}
   ogType="article"
 >
@@ -71,7 +73,7 @@ const jsonLd = articleJsonLd({
       </header>
 
       <div class="note-media">
-        <img src={frontmatter.cover} alt="" loading="lazy" />
+        <img src={frontmatter.cover} alt={frontmatter.coverAlt} loading="lazy" />
       </div>
 
       <div class="article-body">
@@ -90,7 +92,7 @@ const jsonLd = articleJsonLd({
           <ul>
             {related.map((r) => (
               <li>
-                <a href={`/field-notes/${r.slug}`}>{r.title}</a>
+                <a href={`/field-notes/${r.slug}/`}>{r.title}</a>
               </li>
             ))}
           </ul>

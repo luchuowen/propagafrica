@@ -3,6 +3,7 @@ slug: reading-your-monitoring-dashboard
 title: Reading a propagation dashboard without drowning in data
 dek: More sensors are only useful if you know which three numbers to check first.
 cover: /images/field-notes/reading-your-monitoring-dashboard/cover.jpg
+coverAlt: A propagation monitoring dashboard showing live sensor readings
 ---
 
 It's easy to install a full sensor set -- temperature, humidity, VPD, soil moisture, EC, PAR -- and then not look at most of it. In practice, three checks catch most problems early: whether the zone is holding its temperature and humidity band overnight, not just during the working day when a fault is easiest to notice; whether soil moisture is trending down between irrigation cycles rather than staying flat; and whether an alert has fired since the last check.

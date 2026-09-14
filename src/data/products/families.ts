@@ -12,6 +12,8 @@ export interface ProductFamily {
   /** Shop-by-crop filter tags (blueprint.md Section 2). */
   tags: string[];
   img: string;
+  /** Matches the `imageAlt` passed to FamilyHero on the family's own page. */
+  imgAlt: string;
   /** First 4 bullets of the family's own product/feature list, verbatim. */
   keyBullets: string[];
   /** Path to the family's own page, once built. */
@@ -35,6 +37,7 @@ export const PRODUCT_FAMILIES: readonly ProductFamily[] = [
       'High-quality silicone tubes designed for rose and ornamental as well as vegetable and fruit tree grafting. Ensure optimal union, high graft success and healthy growth.',
     tags: ['Roses and ornamentals', 'Vegetables and cucurbits', 'Fruit trees'],
     img: '/images/products/grafting-tubes/hero.jpg',
+    imgAlt: 'Silicone grafting tubes fitted over a rose graft union',
     keyBullets: [
       'PRO-ROSE 35 (3.5mm)',
       'PRO-ROSE 45 (4.5mm)',
@@ -50,6 +53,7 @@ export const PRODUCT_FAMILIES: readonly ProductFamily[] = [
     descriptor: 'Precision clips for strong graft unions and better propagation outcomes.',
     tags: ['Roses and ornamentals', 'Vegetables and cucurbits', 'Fruit trees'],
     img: '/images/products/grafting-clips/hero.jpg',
+    imgAlt: 'Precision grafting clips fitted to a graft union',
     keyBullets: ['U-Clip', 'Omega Clip', 'Round Clip', 'Tomato Clip'],
     href: '/products/grafting-clips/',
   },
@@ -60,6 +64,7 @@ export const PRODUCT_FAMILIES: readonly ProductFamily[] = [
     descriptor: 'Essential supplies for clean, efficient and productive nurseries.',
     tags: ['Nursery and facility supplies'],
     img: '/images/products/nursery-consumables/hero.jpg',
+    imgAlt: 'Nursery consumables staged for a propagation batch',
     keyBullets: [
       'Propagation trays and inserts',
       'Pots, polybags and sleeves',
@@ -75,6 +80,7 @@ export const PRODUCT_FAMILIES: readonly ProductFamily[] = [
     descriptor: 'Integrated systems to improve efficiency, uniformity and yield.',
     tags: ['Nursery and facility supplies'],
     img: '/images/products/propagation-systems/hero.jpg',
+    imgAlt: 'A propagation system installed across a greenhouse bench',
     keyBullets: [
       'Misting and fogging systems',
       'Climate control solutions',
@@ -91,6 +97,7 @@ export const PRODUCT_FAMILIES: readonly ProductFamily[] = [
       'Disinfectants, sanitizers and hygiene solutions for a disease-free propagation environment.',
     tags: ['Nursery and facility supplies'],
     img: '/images/products/sanitation/hero.jpg',
+    imgAlt: 'Sanitation products staged beside a propagation bench',
     keyBullets: [
       'Disinfectants and sanitizers',
       'Algae and biofilm control',
@@ -106,6 +113,7 @@ export const PRODUCT_FAMILIES: readonly ProductFamily[] = [
     descriptor: 'Digital tools to track, manage and improve your propagation results.',
     tags: ['Nursery and facility supplies'],
     img: '/images/products/monitoring/hero.jpg',
+    imgAlt: 'Monitoring sensors installed above a propagation bench',
     keyBullets: [
       'Temperature, humidity and VPD sensors',
       'Soil moisture and EC monitoring',
@@ -121,6 +129,7 @@ export const PRODUCT_FAMILIES: readonly ProductFamily[] = [
     descriptor: 'From training to troubleshooting, we support your propagation journey.',
     tags: ['Nursery and facility supplies'],
     img: '/images/products/technical-services/hero.jpg',
+    imgAlt: 'A technical services visit to a propagation nursery',
     keyBullets: [
       'Propagation training and workshops',
       'On-site technical support',

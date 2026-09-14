@@ -3,6 +3,7 @@ slug: sanitation-between-propagation-batches
 title: What actually needs disinfecting between batches
 dek: Algae on a bench looks cosmetic. It usually isn't.
 cover: /images/field-notes/sanitation-between-propagation-batches/cover.jpg
+coverAlt: A propagation bench being disinfected between batches
 ---
 
 Disease pressure in a propagation house builds up on surfaces that don't get replaced between batches: benching, trays that are reused rather than discarded, irrigation lines, and tools that move from plant to plant. Algae and biofilm on benching and in irrigation lines are not just an appearance issue -- they hold moisture and organic matter that pathogens use as a foothold, and biofilm inside drip or misting lines can also block emitters over time, which shows up later as uneven watering rather than as an obvious sanitation problem.

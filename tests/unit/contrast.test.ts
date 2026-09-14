@@ -48,12 +48,27 @@ describe('colour token contrast', () => {
     ['ink-soft on paper', 'ink-soft', AA_NORMAL],
     ['green on paper', 'green', AA_NORMAL],
     ['signal-ink on paper', 'signal-ink', AA_NORMAL],
+    // --soft (not --ink-soft) is the secondary-text token the rebuilt
+    // Direction C pages actually use — dek/descriptor/sub copy, the footer
+    // baseline row and strapline.
+    ['soft on paper', 'soft', AA_NORMAL],
+    // --gold-ink is the darkened gold used only for the footer credit link,
+    // since bare --gold fails AA as text.
+    ['gold-ink on paper', 'gold-ink', AA_NORMAL],
   ])('%s clears AA', (_label, name, threshold) => {
     expect(contrast(token(name as string), paper())).toBeGreaterThanOrEqual(threshold as number);
   });
 
   it('paper on green clears AA — the only reversed ground on the site', () => {
     expect(contrast(token('paper'), token('green'))).toBeGreaterThanOrEqual(AA_NORMAL);
+  });
+
+  it('soft on mint clears AA — the one tinted ground the rebuilt pages use', () => {
+    expect(contrast(token('soft'), token('mint'))).toBeGreaterThanOrEqual(AA_NORMAL);
+  });
+
+  it('paper on green-dark clears AA — the homepage Monitoring spotlight', () => {
+    expect(contrast(token('paper'), token('green-dark'))).toBeGreaterThanOrEqual(AA_NORMAL);
   });
 
   it('the brand --signal is used as a graphic colour only, and is documented as such', () => {

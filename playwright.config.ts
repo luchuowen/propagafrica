@@ -16,23 +16,12 @@ export default defineConfig({
     baseURL: 'http://localhost:4321',
     trace: 'on-first-retry',
   },
-  webServer: [
-    {
-      command: 'pnpm exec astro preview --port 4321',
-      url: 'http://localhost:4321',
-      reuseExistingServer: !process.env.CI,
-      timeout: 60_000,
-    },
-    {
-      // The tools' components aren't mounted by any page yet (session 8
-      // does that) — this serves their fixture harness instead. See
-      // tests/tools/fixtures/serve.mjs and .factory/decisions/session-4.md.
-      command: 'node tests/tools/fixtures/serve.mjs',
-      url: 'http://localhost:4322/sleeve-selector.html',
-      reuseExistingServer: !process.env.CI,
-      timeout: 60_000,
-    },
-  ],
+  webServer: {
+    command: 'pnpm exec astro preview --port 4321',
+    url: 'http://localhost:4321',
+    reuseExistingServer: !process.env.CI,
+    timeout: 60_000,
+  },
   projects: [
     {
       name: 'chromium',
@@ -43,16 +32,6 @@ export default defineConfig({
         // then a sandbox-preinstalled binary if one exists, then Playwright's
         // own managed download. Keeps the suite runnable locally and in cloud
         // sessions without editing this file.
-        ...(chromiumPath ? { launchOptions: { executablePath: chromiumPath } } : {}),
-      },
-    },
-    {
-      name: 'tools',
-      testDir: './tests/tools',
-      testMatch: '**/*.spec.ts',
-      use: {
-        ...devices['Desktop Chrome'],
-        baseURL: 'http://localhost:4322',
         ...(chromiumPath ? { launchOptions: { executablePath: chromiumPath } } : {}),
       },
     },

@@ -152,6 +152,7 @@ const services = [
 <BaseLayout
   title="Propagation supplies for nurseries and flower farms across Kenya and Ethiopia"
   description="PropagAfrica Technologies supplies the grafting tubes, clips, nursery consumables, propagation systems, sanitation products and monitoring tools that commercial growers depend on, with technical support and stock held in both countries."
+  image="/images/og/og-home.jpg"
   jsonLd={jsonLd}
 >
   <!-- Hero -->
@@ -225,7 +226,7 @@ const services = [
         {families.map((f) => (
           <li class="product-card" data-product-card data-tags={f.tags.join('|')}>
             <div class="product-media">
-              <img src={f.img} alt="" loading="lazy" />
+              <img src={f.img} alt={f.imgAlt} loading="lazy" />
             </div>
             <div class="product-body">
               <h3>

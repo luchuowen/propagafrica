@@ -3,6 +3,7 @@ slug: humidity-and-vpd-during-rooting
 title: Why VPD matters more than humidity alone during rooting
 dek: Two nurseries running the same humidity percentage can get very different rooting results. VPD is usually why.
 cover: /images/field-notes/humidity-and-vpd-during-rooting/cover.jpg
+coverAlt: A humidity and VPD sensor inside a propagation rooting tent
 ---
 
 Relative humidity on its own doesn't tell you how hard a cutting is working to hold water while it roots -- vapour pressure deficit (VPD) does, because it accounts for temperature as well as humidity. A propagation tent reading 85% humidity at 22C behaves very differently to the same 85% at 30C; the warmer tent has a much higher VPD and cuttings lose water faster than they can replace it without roots.

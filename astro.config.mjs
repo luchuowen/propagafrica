@@ -44,8 +44,21 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      // The admin console is not public content.
-      filter: (page) => !page.includes('/admin'),
+      // The admin console isn't public content; the legacy-route redirects
+      // below aren't canonical pages either.
+      filter: (page) =>
+        !page.includes('/admin') &&
+        !['/supplies', '/how-grafting-works', '/ordering', '/specifications'].some((path) =>
+          page.endsWith(path),
+        ),
     }),
   ],
+  // Closest-equivalent redirects for routes deleted in the Prompt 0
+  // foundations restart, in case anything external still links to them.
+  redirects: {
+    '/supplies': '/products/',
+    '/how-grafting-works': '/field-notes/',
+    '/ordering': '/contact/',
+    '/specifications': '/contact/',
+  },
 });

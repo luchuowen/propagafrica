@@ -30,11 +30,11 @@ exactly; a placeholder there is replaced in place, same filename and extension.
 ## Invariants without a mechanical check
 
 - No founding date, company age, or "newly established" language anywhere on the site (gate: `no-founding-date`, but review copy meaning too — a rephrase can dodge the regex).
-- `--signal` orange appears only on a dimension, tolerance, callout leader or figure reference — never a button, background, or decoration. Target under 5% of ink coverage per page.
-- Wordmark casing is fixed: "PropagAfrica" title case always, never all-caps; "TECHNOLOGIES" strap line in JetBrains Mono capitals below it. One colour only, never two.
+- `--terra` (the live accent orange) appears only as a small graphic detail — a dot, a thin rule, a callout leader — never a button fill, background, or large decorative block. Target under 5% of ink coverage per page. (`--signal`/`--signal-ink`, the superseded "Blueprint" orange, are still read by a handful of surviving components — PageHero's eyebrow, RuledRows, QuoteForm, admin — and carry the same ceiling.)
+- Wordmark casing is fixed: "PropagAfrica" title case always, never all-caps; "TECHNOLOGIES" strap line in JetBrains Mono capitals below it. Two-tone: "Propag" and "Africa" each carry their own brand colour (`Wordmark.astro`) — never flatten it to one colour, never introduce a third.
 - Forbidden permanently: gradients, backdrop-filter, icon+title+two-line feature triplets, fade-up-on-scroll, animated counters, marquee logo strips, chat bubbles, a 100vh hero. Radii and shadows are allowed but only via `--radius-*` / `--shadow-*`, never ad-hoc.
 - Every page carries at least one photograph. A page of rules and tables with no image is the failure this rebuild corrected — the drawing-sheet border and per-page `DRAWING PA-000 / SHEET n OF 14` title blocks are gone and must not return.
-- Mono type is for specification values, SKUs, eyebrows and small labels only. Never body copy. (`global.css` applies `--f-mono` to any element classed `.spec` — do not reuse that class name for a layout band.)
+- Mono type is for specification values, SKUs, pack sizes and small labels only. Never body copy, never an eyebrow — the sitewide `.eyebrow` utility (`global.css`) is Inter 700 uppercase, not mono. (`global.css` also applies `--f-mono` to any element classed `.spec` — do not reuse that class name for a layout band.)
 - No prices anywhere on the site. Every commercial path ends in a quotation request.
 - British spelling throughout; no adjective without a figure and unit behind it; a research result always carries its country.
 - `blueprint.md` is the master reference for IA, copy rules and component inventory — read it before adding a page or component.

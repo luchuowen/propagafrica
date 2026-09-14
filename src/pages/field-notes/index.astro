@@ -8,6 +8,7 @@ import { FIELD_NOTES } from '../../data/field-notes/articles';
 <BaseLayout
   title="Field Notes"
   description="Short, practical articles on grafting, propagation environment and nursery operations, written for growers in Kenya and Ethiopia."
+  image="/images/og/og-field-notes.jpg"
 >
   <section class="hub">
     <div class="hub-inner">
@@ -22,14 +23,14 @@ import { FIELD_NOTES } from '../../data/field-notes/articles';
         {FIELD_NOTES.map((note) => (
           <li class="note-card">
             <div class="note-media">
-              <img src={note.cover} alt="" loading="lazy" />
+              <img src={note.cover} alt={note.coverAlt} loading="lazy" />
             </div>
             <div class="note-body">
               <h2>
-                <a href={`/field-notes/${note.slug}`}>{note.title}</a>
+                <a href={`/field-notes/${note.slug}/`}>{note.title}</a>
               </h2>
               <p class="dek">{note.dek}</p>
-              <a class="link-arrow" href={`/field-notes/${note.slug}`}>
+              <a class="link-arrow" href={`/field-notes/${note.slug}/`}>
                 Read &rarr;
               </a>
             </div>

@@ -7,6 +7,7 @@ export interface FieldNoteFrontmatter {
   title: string;
   dek: string;
   cover: string;
+  coverAlt: string;
 }
 
 const modules = import.meta.glob<{ frontmatter: FieldNoteFrontmatter }>('./*.md', {

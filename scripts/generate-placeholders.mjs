@@ -162,6 +162,37 @@ const ENTRIES = [
     width: 1200,
     caption: `Field Notes: ${slug}`,
   })),
+  // Per-page share images (og:image). 1200x630 is the standard Open Graph
+  // crop, distinct from any hero photo the page also carries. og-default.jpg
+  // is hand-built brand art (scripts/generate-og-default.mjs), not part of
+  // this list.
+  ...[
+    ['home', 'Home'],
+    ['products', 'Products'],
+    ['grafting-tubes', 'Grafting Tubes'],
+    ['grafting-clips', 'Grafting Clips'],
+    ['nursery-consumables', 'Nursery Consumables'],
+    ['propagation-systems', 'Propagation Systems'],
+    ['sanitation', 'Sanitation Products'],
+    ['monitoring', 'Propagation Monitoring'],
+    ['technical-services', 'Technical Services'],
+    ['tools', 'Tools'],
+    ['grafting-calculator', 'Grafting Calculator'],
+    ['consumables-planner', 'Consumables Planner'],
+    ['field-notes', 'Field Notes'],
+    ['choosing-the-right-graft-tube-size', 'Choosing the Right Graft Tube Size'],
+    ['humidity-and-vpd-during-rooting', 'Humidity and VPD During Rooting'],
+    ['sanitation-between-propagation-batches', 'Sanitation Between Propagation Batches'],
+    ['reading-your-monitoring-dashboard', 'Reading Your Monitoring Dashboard'],
+    ['setting-up-a-new-propagation-block', 'Setting Up a New Propagation Block'],
+    ['about', 'About'],
+    ['contact', 'Contact'],
+  ].map(([slug, page]) => ({
+    path: `public/images/og/og-${slug}.jpg`,
+    ratio: [40, 21],
+    width: 1200,
+    caption: `Share image — ${page}`,
+  })),
 ];
 
 async function main() {
