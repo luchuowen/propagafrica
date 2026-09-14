@@ -42,8 +42,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
               <th scope="col">Contact</th>
               <th scope="col">Email</th>
               <th scope="col">Country</th>
-              <th scope="col">Crop</th>
-              <th scope="col">Stage</th>
+              <th scope="col">Enquiring about</th>
             </tr>
           </thead>
           <tbody id="requests-body"></tbody>
@@ -60,8 +59,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     farmOrCompany: string;
     email: string;
     country: string;
-    crop: string;
-    stage: string[];
+    enquiringAbout: string[];
     status: string;
     createdAt: string | null;
   }
@@ -88,7 +86,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     if (requests.length === 0) {
       const row = document.createElement('tr');
       const cell = document.createElement('td');
-      cell.colSpan = 8;
+      cell.colSpan = 7;
       cell.textContent = 'No quotation requests visible to this account.';
       row.appendChild(cell);
       tbody.appendChild(row);
@@ -104,8 +102,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         r.name,
         r.email,
         r.country,
-        r.crop,
-        r.stage.join(', '),
+        r.enquiringAbout.join(', '),
       ];
       for (const value of values) {
         const cell = document.createElement('td');

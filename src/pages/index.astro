@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Carousel from '../components/Carousel.astro';
+import TrustPanel from '../components/TrustPanel.astro';
 import { organizationJsonLd } from '../lib/seo';
 import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../data/products/families';
 
@@ -145,25 +146,6 @@ const services = [
   'Propagation training and workshops',
   'On-site technical support',
   'Nursery setup and design',
-];
-
-// Product Reference — verbatim lists, reused everywhere.
-const trustList = [
-  'High-quality, reliable products',
-  'Competitive pricing and bulk supply',
-  'Technical expertise and support',
-  'Customised solutions',
-  'Consistent availability',
-  'Strong relationships with global manufacturers',
-  'Local stock in Kenya and Ethiopia',
-];
-
-const targetMarkets = [
-  'Commercial flower growers',
-  'Vegetable and fruit growers',
-  'Nurseries and propagation labs',
-  'Agri-businesses and distributors',
-  'Research and training institutions',
 ];
 ---
 
@@ -331,26 +313,7 @@ const targetMarkets = [
   </section>
 
   <!-- Trust + target markets -->
-  <section class="trust">
-    <div class="trust-inner">
-      <div class="trust-col">
-        <h2>Why partner with PropagAfrica</h2>
-        <ul class="check-list">
-          {trustList.map((item) => (
-            <li>{item}</li>
-          ))}
-        </ul>
-      </div>
-      <div class="trust-col">
-        <h2>Who we supply</h2>
-        <ul class="check-list">
-          {targetMarkets.map((item) => (
-            <li>{item}</li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  </section>
+  <TrustPanel />
 
   <!-- CTA band -->
   <section class="cta-band">
@@ -523,7 +486,6 @@ const targetMarkets = [
   .products-inner,
   .facilities-inner,
   .services-inner,
-  .trust-inner,
   .monitoring-inner,
   .cta-band-inner {
     max-width: var(--content-max);
@@ -772,43 +734,6 @@ const targetMarkets = [
 
   .service a:hover {
     text-decoration: underline;
-  }
-
-  /* ---------- trust + target markets ---------- */
-  .trust {
-    background: var(--mint);
-    padding: var(--space-6) 0;
-  }
-
-  .trust-inner {
-    display: grid;
-    gap: var(--space-5);
-  }
-
-  @media (min-width: 720px) {
-    .trust-inner {
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--space-6);
-    }
-  }
-
-  .check-list {
-    list-style: none;
-    margin: var(--space-3) 0 0;
-    padding: 0;
-    display: grid;
-    gap: 0;
-  }
-
-  .check-list li {
-    padding: 10px 0;
-    border-top: 1px solid var(--rule);
-    font-size: 15px;
-    line-height: 1.5;
-  }
-
-  .check-list li:first-child {
-    border-top: none;
   }
 
   /* ---------- CTA band ---------- */

@@ -167,35 +167,35 @@ describe('buildQuotationQuery', () => {
     for (const name of names) {
       expect(formFields).toContain(name);
     }
-    expect(names).toEqual(['annualVolume', 'notes']);
+    expect(names).toEqual(['enquiringAbout', 'message']);
   });
 
-  it('carries the annual total as the volume', () => {
+  it('tags the enquiry as Nursery Consumables', () => {
     const params = new URLSearchParams(query.split('?')[1]);
-    expect(params.get(QUOTATION_QUERY_PARAMS.annualVolume)).toBe('480000');
+    expect(params.get(QUOTATION_QUERY_PARAMS.enquiringAbout)).toBe('Nursery Consumables');
   });
 
-  it('carries every computed quantity and assumption in the notes', () => {
+  it('carries every computed quantity and assumption in the message', () => {
     const params = new URLSearchParams(query.split('?')[1]);
-    const notes = params.get(QUOTATION_QUERY_PARAMS.notes) ?? '';
-    expect(notes).toContain('480');
-    expect(notes).toContain('Sleeves:');
-    expect(notes).toContain('Trays:');
-    expect(notes).toContain('Growing medium:');
-    expect(notes).toContain('Thermal labels:');
-    expect(notes).toContain('Batch cards:');
-    expect(notes).toContain('QC logbooks:');
-    expect(notes).toContain('Sanitiser concentrate:');
-    expect(notes).toContain('Assumptions used:');
+    const message = params.get(QUOTATION_QUERY_PARAMS.message) ?? '';
+    expect(message).toContain('480');
+    expect(message).toContain('Sleeves:');
+    expect(message).toContain('Trays:');
+    expect(message).toContain('Growing medium:');
+    expect(message).toContain('Thermal labels:');
+    expect(message).toContain('Batch cards:');
+    expect(message).toContain('QC logbooks:');
+    expect(message).toContain('Sanitiser concentrate:');
+    expect(message).toContain('Assumptions used:');
     for (const line of assumptionLines()) {
-      expect(notes).toContain(line);
+      expect(message).toContain(line);
     }
   });
 
-  it('keeps the notes inside the form field limit', () => {
+  it('keeps the message inside the form field limit', () => {
     const params = new URLSearchParams(query.split('?')[1]);
-    const notesField = QUOTATION_FIELDS.find((field) => field.name === 'notes');
-    expect(notesField).toBeDefined();
-    expect((params.get('notes') ?? '').length).toBeLessThanOrEqual(notesField!.maxLength);
+    const messageField = QUOTATION_FIELDS.find((field) => field.name === 'message');
+    expect(messageField).toBeDefined();
+    expect((params.get('message') ?? '').length).toBeLessThanOrEqual(messageField!.maxLength);
   });
 });

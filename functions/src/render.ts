@@ -34,12 +34,13 @@ function page(title: string, heading: string, body: string): string {
 </html>`;
 }
 
-// Copy per docs/content/copy-reference.md, "/contact · SHEET 14 OF 14" success/error states.
+// Success copy per blueprint.md Section 13, verbatim.
 export function renderSuccessPage(): string {
   return page(
-    'Request received',
-    'Request received.',
-    '<p>We reply within one working day. If it is urgent, call +254 722 861 682.</p>' +
+    'Enquiry received',
+    'Thank you.',
+    '<p>Your enquiry has reached our team. Emily or a member of the technical team will come ' +
+      'back to you shortly.</p>' +
       '<p class="soft"><a href="/contact">Back to contact</a></p>',
   );
 }

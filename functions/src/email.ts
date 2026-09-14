@@ -18,19 +18,17 @@ export async function sendNotificationEmail(values: QuotationInput, docId: strin
   }
 
   const lines = [
-    `New quotation request (${docId})`,
+    `New enquiry (${docId})`,
     '',
     `Name: ${values.name}`,
-    `Farm or company: ${values.farmOrCompany}`,
+    `Company/farm name: ${values.farmOrCompany}`,
     `Email: ${values.email}`,
     `Phone: ${values.phone || '—'}`,
     `Country: ${values.country}`,
-    `Crop: ${values.crop}`,
-    `Stage: ${values.stage.join(', ') || '—'}`,
-    `Annual volume: ${values.annualVolume || '—'}`,
-    `Delivery point: ${values.deliveryPoint || '—'}`,
+    `Enquiring about: ${values.enquiringAbout.join(', ') || '—'}`,
     '',
-    values.notes || '(no further notes)',
+    values.message || '(no further message)',
+    ...(values.calculatorContext ? ['', 'Calculator context:', values.calculatorContext] : []),
   ];
 
   const response = await fetch(`${env.emailApiBaseUrl}/emails`, {
@@ -43,7 +41,7 @@ export async function sendNotificationEmail(values: QuotationInput, docId: strin
       from: env.emailFrom,
       to: [env.emailTo],
       reply_to: values.email,
-      subject: `Quotation request — ${values.farmOrCompany}`,
+      subject: `New enquiry — ${values.farmOrCompany}`,
       text: lines.join('\n'),
     }),
   });

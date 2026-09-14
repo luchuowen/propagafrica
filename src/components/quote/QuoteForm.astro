@@ -4,9 +4,14 @@
 // /api/submit-quotation — see firebase.json), and enhances to a fetch-based submit that replaces
 // itself with the success state in place when JavaScript is available.
 //
-// Copy (labels, options, button text, success/error states, the note below the form) is per
-// docs/content/copy-reference.md, section "/contact · SHEET 14 OF 14".
-import { QUOTATION_FIELDS, HONEYPOT_FIELD, TIMESTAMP_FIELD } from '../../lib/quotation/schema';
+// Copy (labels, options, button text, success state, the note below the form) is per
+// blueprint.md Section 13.
+import {
+  QUOTATION_FIELDS,
+  HONEYPOT_FIELD,
+  TIMESTAMP_FIELD,
+  CALCULATOR_CONTEXT_FIELD,
+} from '../../lib/quotation/schema';
 
 // Query-string prefill (contract documented in schema.ts, next to QUOTATION_FIELDS) happens in
 // the <script> below, not here: this site builds to static HTML (no server-rendering per
@@ -104,6 +109,7 @@ import { QUOTATION_FIELDS, HONEYPOT_FIELD, TIMESTAMP_FIELD } from '../../lib/quo
     <input id={HONEYPOT_FIELD} name={HONEYPOT_FIELD} type="text" tabindex="-1" autocomplete="off" />
   </div>
   <input type="hidden" id={TIMESTAMP_FIELD} name={TIMESTAMP_FIELD} value="" />
+  <input type="hidden" id={CALCULATOR_CONTEXT_FIELD} name={CALCULATOR_CONTEXT_FIELD} value="" />
 
   <div class="submit-row">
     <button type="submit" class="submit">
@@ -116,13 +122,22 @@ import { QUOTATION_FIELDS, HONEYPOT_FIELD, TIMESTAMP_FIELD } from '../../lib/quo
 </form>
 
 <div id="quote-form-success" class="success" hidden tabindex="-1" role="status">
-  <h2>Request received.</h2>
-  <p>We reply within one working day. If it is urgent, call +254 722 861 682.</p>
+  <h2>Thank you.</h2>
+  <p>
+    Your enquiry has reached our team. Emily or a member of the technical team will come back to you
+    shortly.
+  </p>
 </div>
 
 <script>
   import { validateField, validateMultiField } from '../../lib/quotation/validate';
-  import { HONEYPOT_FIELD, TIMESTAMP_FIELD, QUOTATION_FIELDS } from '../../lib/quotation/schema';
+  import {
+    HONEYPOT_FIELD,
+    TIMESTAMP_FIELD,
+    QUOTATION_FIELDS,
+    CALCULATOR_CONTEXT_FIELD,
+    CALCULATOR_CONTEXT_MAX_LENGTH,
+  } from '../../lib/quotation/schema';
   import type { QuotationFieldName } from '../../lib/quotation/schema';
 
   const GENERIC_ERROR =
@@ -176,6 +191,63 @@ import { QUOTATION_FIELDS, HONEYPOT_FIELD, TIMESTAMP_FIELD } from '../../lib/quo
       }
     }
     applyPrefill();
+
+    // A calculator tool's own handoff, layered on top of the generic per-field prefill above: a
+    // JSON blob in `?prefill=` (blueprint.md Section 13's "hidden field carries a JSON prefill"
+    // — crop group, product codes, quantities). The plain per-field query params a tool like the
+    // consumables planner sends (`enquiringAbout`, `message`) are already covered by
+    // applyPrefill() above, since they're named after this form's own fields; this only adds a
+    // structured JSON handoff on top, for a future tool that needs to pass more than the two
+    // visible fields can hold. Never overwrites a field the visitor or the generic prefill
+    // already filled in.
+    function applyCalculatorPrefill() {
+      const params = new URLSearchParams(window.location.search);
+      const families = new Set<string>();
+      const summaryParts: string[] = [];
+      let rawContext = '';
+
+      const prefillParam = params.get('prefill');
+      if (prefillParam) {
+        try {
+          const parsed = JSON.parse(prefillParam) as {
+            enquiringAbout?: unknown;
+            summary?: unknown;
+          };
+          if (Array.isArray(parsed.enquiringAbout)) {
+            for (const value of parsed.enquiringAbout) {
+              if (typeof value === 'string') families.add(value);
+            }
+          }
+          if (typeof parsed.summary === 'string' && parsed.summary.trim()) {
+            summaryParts.push(parsed.summary.trim());
+          }
+          rawContext = prefillParam;
+        } catch {
+          // Not valid JSON — ignore rather than fail the page.
+        }
+      }
+
+      if (families.size > 0) {
+        form?.querySelectorAll<HTMLInputElement>('input[name="enquiringAbout"]').forEach((el) => {
+          if (families.has(el.value)) el.checked = true;
+        });
+      }
+
+      if (summaryParts.length > 0) {
+        const messageEl = form?.elements.namedItem('message') as HTMLTextAreaElement | null;
+        if (messageEl && messageEl.value.trim().length === 0) {
+          messageEl.value = summaryParts.join('\n\n').slice(0, 2000);
+        }
+      }
+
+      if (rawContext) {
+        const contextEl = form?.elements.namedItem(
+          CALCULATOR_CONTEXT_FIELD,
+        ) as HTMLInputElement | null;
+        if (contextEl) contextEl.value = rawContext.slice(0, CALCULATOR_CONTEXT_MAX_LENGTH);
+      }
+    }
+    applyCalculatorPrefill();
 
     function showFieldError(name: QuotationFieldName, message: string | undefined) {
       const errorEl = document.getElementById(`${name}-error`);
@@ -254,6 +326,7 @@ import { QUOTATION_FIELDS, HONEYPOT_FIELD, TIMESTAMP_FIELD } from '../../lib/quo
         }
         payload[HONEYPOT_FIELD] = formData.get(HONEYPOT_FIELD) ?? '';
         payload[TIMESTAMP_FIELD] = formData.get(TIMESTAMP_FIELD) ?? '';
+        payload[CALCULATOR_CONTEXT_FIELD] = formData.get(CALCULATOR_CONTEXT_FIELD) ?? '';
 
         const response = await fetch(form.action, {
           method: 'POST',

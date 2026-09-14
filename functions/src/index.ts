@@ -17,7 +17,7 @@ setGlobalOptions({ region: 'europe-west1' });
 initializeApp();
 const db = getFirestore();
 
-// Error copy per docs/content/copy-reference.md, "/contact · SHEET 14 OF 14".
+// Error copy: not specified by blueprint.md Section 13, this session's own addition.
 const GENERIC_ERROR =
   'Check your connection and try again, or email info@propagafrica.com directly.';
 const RATE_LIMIT_ERROR =

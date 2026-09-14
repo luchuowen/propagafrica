@@ -212,3 +212,39 @@ dek, read link) rather than the old text-row list, matching the
 `docs/content/field-notes.md` (the old prose source) is left as-is, same as
 `docs/content/copy-supplies.md` was left after its pages were deleted in
 Prompt 0 — these are archival, not part of the built site.
+
+# Session 2026-09-14 — Prompt 6: About and Contact pages, Firestore enquiry wiring
+
+Full replacement of both pages' pre-restart copy and layout, against
+`blueprint.md` Sections 12-13. `TrustPanel.astro` + `src/data/trust.ts`
+extract the homepage's Why-Partner/Target-Markets panel so About reuses it
+verbatim instead of retyping; `index.astro` now imports it too.
+
+**Backend plumbing kept, schema reshaped.** A working `submitQuotation`
+Cloud Function (2nd gen), Firestore write, rate limiting, honeypot and Resend
+email alert already existed (pre-restart, built for a "crop/stage/annual
+volume/delivery point/notes" field set blueprint.md Section 13 no longer
+matches). Per the brief, the transport was kept; only the field contract
+changed — `crop`+`stage` became one `enquiringAbout` multi-select (the seven
+product families) and `annualVolume`+`deliveryPoint`+`notes` collapsed to one
+`message`, mirrored by hand in both schema.ts copies as before. Added
+`calculatorContext`, a hidden, unvalidated field for a future tool's raw JSON
+handoff (blueprint's "hidden field carries a JSON prefill"). `/admin` and
+`functions/src/admin.ts` now list `enquiringAbout` instead of the dropped
+crop/stage columns.
+
+The one existing calculator (`ConsumablesPlanner`, pre-restart, not mounted
+anywhere yet — `/tools/` is a later prompt) linked to `/contact` with its own
+`annualVolume`/`notes` params; retargeted to the current `enquiringAbout`/
+`message` fields so QuoteForm's generic per-field prefill reads it with no
+special-casing.
+
+Contact has no manifest-assigned photograph of its own; reuses
+`about/nairobi-hub.jpg` in the direct-contact panel rather than adding a new
+image path, since the panel is literally about the Nairobi hub.
+
+`tests/e2e/site.spec.ts`'s founding-date check banned bare "established",
+which blueprint.md Section 12's own verbatim copy trips ("established
+manufacturers" — third parties, not PropagAfrica's age). Scoped to match the
+manifest gate's own precision (a year, or "newly established"/"trading
+since") instead of the bare word.

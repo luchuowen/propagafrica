@@ -1,19 +1,21 @@
 import {
   QUOTATION_FIELDS,
   COUNTRY_OPTIONS,
-  CROP_OPTIONS,
-  STAGE_OPTIONS,
+  ENQUIRY_OPTIONS,
   MULTI_SELECT_MAX_ITEMS,
   HONEYPOT_FIELD,
   TIMESTAMP_FIELD,
+  CALCULATOR_CONTEXT_FIELD,
+  CALCULATOR_CONTEXT_MAX_LENGTH,
   MIN_ELAPSED_MS,
   type QuotationFieldName,
 } from './schema';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export type QuotationInput = Omit<Record<QuotationFieldName, string>, 'stage'> & {
-  stage: string[];
+export type QuotationInput = Omit<Record<QuotationFieldName, string>, 'enquiringAbout'> & {
+  enquiringAbout: string[];
+  calculatorContext: string;
 };
 
 export interface ValidationResult {
@@ -41,13 +43,13 @@ function asStringArray(value: unknown, maxLength: number): string[] {
 
 // Validates and length-caps every field server-side. Never trusts the client's own validation.
 export function validateSubmission(body: Record<string, unknown>): ValidationResult {
-  const values = { stage: [] } as unknown as QuotationInput;
+  const values = { enquiringAbout: [] } as unknown as QuotationInput;
   const errors: Partial<Record<QuotationFieldName, string>> = {};
 
   for (const field of QUOTATION_FIELDS) {
     if (field.type === 'multi-select') {
       const list = asStringArray(body[field.name], field.maxLength);
-      values.stage = list;
+      values.enquiringAbout = list;
       if (field.required && list.length === 0) {
         errors[field.name] = 'This field is required.';
         continue;
@@ -59,9 +61,9 @@ export function validateSubmission(body: Record<string, unknown>): ValidationRes
     }
 
     const raw = asString(body[field.name]).trim().slice(0, field.maxLength);
-    // Multi-select ("stage") already returned above, so `field.name` here is never 'stage' —
-    // TS just can't correlate that with the discriminant on `field.type` at this point.
-    values[field.name as Exclude<QuotationFieldName, 'stage'>] = raw;
+    // Multi-select ("enquiringAbout") already returned above, so `field.name` here is never
+    // that value — TS just can't correlate that with the discriminant on `field.type` here.
+    values[field.name as Exclude<QuotationFieldName, 'enquiringAbout'>] = raw;
 
     if (field.required && raw.length === 0) {
       errors[field.name] = 'This field is required.';
@@ -80,12 +82,15 @@ export function validateSubmission(body: Record<string, unknown>): ValidationRes
   if (values.country && !(COUNTRY_OPTIONS as readonly string[]).includes(values.country)) {
     errors.country = 'Select a valid option.';
   }
-  if (values.crop && !(CROP_OPTIONS as readonly string[]).includes(values.crop)) {
-    errors.crop = 'Select a valid option.';
+  if (values.enquiringAbout.some((v) => !(ENQUIRY_OPTIONS as readonly string[]).includes(v))) {
+    errors.enquiringAbout = 'Select a valid option.';
   }
-  if (values.stage.some((v) => !(STAGE_OPTIONS as readonly string[]).includes(v))) {
-    errors.stage = 'Select a valid option.';
-  }
+
+  // Never rendered, never required — a calculator tool's own JSON context, carried through to
+  // the notification email only. Length-capped, not otherwise validated.
+  values.calculatorContext = asString(body[CALCULATOR_CONTEXT_FIELD])
+    .trim()
+    .slice(0, CALCULATOR_CONTEXT_MAX_LENGTH);
 
   return { ok: Object.keys(errors).length === 0, values, errors };
 }

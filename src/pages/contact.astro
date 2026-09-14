@@ -1,97 +1,127 @@
 ---
-// Copy (eyebrow, H1, standfirst, title block, submit/success/error states, privacy note) is per
-// docs/content/copy-reference.md, section "/contact · SHEET 14 OF 14" — final, do not rephrase.
-//
-// The title block here uses this page's own DRAWING/SUBJECT/RESPONSE/SHEET rows rather than the
+// Contact — blueprint.md Section 13. Full replacement of the pre-restart page's copy and
+// layout; the working submitQuotation Cloud Function, Firestore write, rate limiting and email
+// alert (functions/**) are kept — only QuoteForm's fields, labels and copy changed to match the
+// new Enquiring-about field set (see src/lib/quotation/schema.ts).
 import BaseLayout from '../layouts/BaseLayout.astro';
-import inspectionImg from '../assets/images/inspection.jpg';
-import PageHero from '../components/PageHero.astro';
 import QuoteForm from '../components/quote/QuoteForm.astro';
 ---
 
 <BaseLayout
   title="Contact — request a quotation"
-  description="Tell PropagAfrica Technologies the crop, stage, annual volume and delivery point for a first quotation. We reply within one working day."
+  description="Tell PropagAfrica Technologies what you're growing, roughly how much, and where you're based — we'll come back with the right products, systems or services for your order."
 >
-  <PageHero
-    eyebrow="Quotation"
-    title="Tell us the programme."
-    standfirst="Crop, stage, annual volume and delivery point is enough for a first quotation. We reply within one working day."
-    image={inspectionImg}
-    imageAlt="A propagation manager inspecting a grafted rose cutting through a hand lens"
-  />
+  <section class="contact-hero">
+    <div class="contact-hero-inner">
+      <p class="eyebrow">Get in touch</p>
+      <h1>Request a Quotation</h1>
+      <p class="hero-sub">
+        Tell us what you&rsquo;re growing, roughly how much, and where you&rsquo;re based —
+        we&rsquo;ll come back with the right products, systems or services and packaging for your
+        order.
+      </p>
+    </div>
+  </section>
 
   <section class="contact">
     <div class="contact-inner">
-      <QuoteForm />
+      <div class="contact-form-col">
+        <QuoteForm />
+      </div>
+      <aside class="contact-panel">
+        <div class="panel-media">
+          <img
+            src="/images/about/nairobi-hub.jpg"
+            alt="The PropagAfrica Technologies stock and dispatch hub in Nairobi, Kenya"
+            loading="lazy"
+          />
+        </div>
+        <h2>Talk to us directly</h2>
+        <address>
+          <a href="tel:+254722861682">+254 722 861 682</a> (Emily)
+          <br />
+          <a href="mailto:info@propagafrica.com">info@propagafrica.com</a>
+          <br />
+          Nairobi, Kenya — East Africa Hub
+          <br />
+          Stock held in Kenya and Ethiopia
+        </address>
+      </aside>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .contact {
-    padding: var(--space-6) 0;
+  .contact-hero {
+    padding: var(--space-6) 0 var(--space-5);
+    border-bottom: 1px solid var(--rule);
   }
+
+  .contact-hero-inner {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 0 var(--side-gutter);
+  }
+
+  .contact-hero-inner h1 {
+    margin-top: var(--space-2);
+    max-width: 22ch;
+  }
+
+  .hero-sub {
+    margin-top: var(--space-3);
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--soft);
+    max-width: 56ch;
+  }
+
+  .contact {
+    padding: var(--space-6) 0 var(--space-7);
+  }
+
   .contact-inner {
     max-width: var(--content-max);
     margin: 0 auto;
     padding: 0 var(--side-gutter);
     display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-5);
-    align-items: start;
-  }
-  @media (min-width: 900px) {
-    .contact-inner:first-of-type {
-      grid-template-columns: 1fr auto;
-    }
-  }
-  .contact-copy {
-    max-width: 46em;
-  }
-  .contact-copy .eyebrow {
-    margin-bottom: var(--space-2);
-  }
-  .standfirst {
-    margin-top: var(--space-3);
-    font-size: 18px;
-    line-height: 1.7;
-    color: var(--ink-soft);
-    max-width: 42em;
-  }
-  .contact-inner + .contact-inner {
-    margin-top: var(--space-5);
+    gap: var(--space-6);
   }
 
-  .quotation-title-block {
+  @media (min-width: 900px) {
+    .contact-inner {
+      grid-template-columns: 1fr 320px;
+      align-items: start;
+    }
+  }
+
+  .contact-panel {
     border: 1px solid var(--rule);
-    font-family: var(--f-mono);
-    font-size: 10.5px;
-    width: max-content;
-    max-width: 100%;
-    margin: 0;
+    border-radius: var(--radius-s);
+    overflow: hidden;
   }
-  .quotation-title-block .row {
-    display: grid;
-    grid-template-columns: 9.5em 1fr;
-    border-top: 1px solid var(--rule);
+
+  .panel-media img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
   }
-  .quotation-title-block .row:first-child {
-    border-top: none;
+
+  .contact-panel h2 {
+    margin: var(--space-3) var(--space-3) 0;
+    font-size: 1.05rem;
   }
-  .quotation-title-block dt,
-  .quotation-title-block dd {
-    margin: 0;
-    padding: 5px 10px;
-    font-variant-numeric: tabular-nums;
-  }
-  .quotation-title-block dt {
-    color: var(--ink-soft);
-    border-right: 1px solid var(--rule);
-    white-space: nowrap;
-  }
-  .quotation-title-block dd {
+
+  .contact-panel address {
+    font-style: normal;
+    margin: var(--space-2) var(--space-3) var(--space-3);
+    font-size: 15px;
+    line-height: 1.8;
     color: var(--ink);
-    word-break: break-word;
+  }
+
+  .contact-panel address a {
+    color: var(--green);
   }
 </style>

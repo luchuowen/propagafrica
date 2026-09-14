@@ -51,16 +51,15 @@ test.describe('quotation request — against the Firebase emulator', () => {
   test('submits with JavaScript enabled and the document lands in Firestore', async ({ page }) => {
     await page.goto(`${HOSTING_URL}/contact`);
 
-    await page.getByLabel('Name').fill('Playwright Test');
-    await page.getByLabel('Farm or company').fill('Test Farm Ltd');
+    await page.locator('#name').fill('Playwright Test');
+    await page.getByLabel('Company/farm name').fill('Test Farm Ltd');
     await page.getByLabel('Email').fill('playwright@example.com');
     await page.getByLabel('Country').selectOption('Kenya');
-    await page.getByLabel('Crop').selectOption('Rose');
-    await page.getByLabel('Graft').check();
+    await page.getByLabel('Grafting Tubes').check();
 
     await page.getByRole('button', { name: 'Send the request' }).click();
 
-    await expect(page.getByRole('heading', { name: 'Request received.' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Thank you.' })).toBeVisible();
     await expect(page).toHaveURL(`${HOSTING_URL}/contact`);
 
     const doc = await fetchLatestQuotationRequest();
@@ -81,17 +80,16 @@ test.describe('quotation request — against the Firebase emulator', () => {
     const page = await context.newPage();
 
     await page.goto(`${HOSTING_URL}/contact`);
-    await page.getByLabel('Name').fill('No JS Test');
-    await page.getByLabel('Farm or company').fill('No JS Farm');
+    await page.locator('#name').fill('No JS Test');
+    await page.getByLabel('Company/farm name').fill('No JS Farm');
     await page.getByLabel('Email').fill('nojs@example.com');
     await page.getByLabel('Country').selectOption('Ethiopia');
-    await page.getByLabel('Crop').selectOption('Mixed nursery');
-    await page.getByLabel('Root').check();
+    await page.getByLabel('Nursery Consumables').check();
 
     await page.getByRole('button', { name: 'Send the request' }).click();
 
     // No JS: this is a real navigation to the function's own response, not an in-page swap.
-    await expect(page.getByRole('heading', { name: 'Request received.' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Thank you.' })).toBeVisible();
 
     await context.close();
   });
