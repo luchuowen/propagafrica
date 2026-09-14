@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Carousel from '../components/Carousel.astro';
 import { organizationJsonLd } from '../lib/seo';
+import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../data/products/families';
 
 const jsonLd = organizationJsonLd(Astro.site!);
 
@@ -134,71 +135,10 @@ const outcomes = [
   },
 ];
 
-// Product families — blueprint.md Sections 3-9. Descriptor is each family's
-// verbatim intro line. Tags drive the shop-by-crop filter (Section 2: tubes
-// and clips carry crop-specific tags; systems, sanitation, monitoring,
-// services and nursery consumables are tagged "Nursery and facility supplies").
-const CROP_ALL = 'All';
-const CROP_TAGS = [
-  'Roses and ornamentals',
-  'Vegetables and cucurbits',
-  'Fruit trees',
-  'Nursery and facility supplies',
-];
-
-const families = [
-  {
-    slug: 'grafting-tubes',
-    name: 'Grafting Tubes',
-    descriptor:
-      'High-quality silicone tubes designed for rose and ornamental as well as vegetable and fruit tree grafting. Ensure optimal union, high graft success and healthy growth.',
-    tags: ['Roses and ornamentals', 'Vegetables and cucurbits', 'Fruit trees'],
-    img: '/images/products/grafting-tubes/hero.jpg',
-  },
-  {
-    slug: 'grafting-clips',
-    name: 'Grafting Clips',
-    descriptor: 'Precision clips for strong graft unions and better propagation outcomes.',
-    tags: ['Roses and ornamentals', 'Vegetables and cucurbits', 'Fruit trees'],
-    img: '/images/products/grafting-clips/hero.jpg',
-  },
-  {
-    slug: 'nursery-consumables',
-    name: 'Nursery Consumables',
-    descriptor: 'Essential supplies for clean, efficient and productive nurseries.',
-    tags: ['Nursery and facility supplies'],
-    img: '/images/products/nursery-consumables/hero.jpg',
-  },
-  {
-    slug: 'propagation-systems',
-    name: 'Propagation Systems',
-    descriptor: 'Integrated systems to improve efficiency, uniformity and yield.',
-    tags: ['Nursery and facility supplies'],
-    img: '/images/products/propagation-systems/hero.jpg',
-  },
-  {
-    slug: 'sanitation',
-    name: 'Sanitation Products',
-    descriptor:
-      'Disinfectants, sanitizers and hygiene solutions for a disease-free propagation environment.',
-    tags: ['Nursery and facility supplies'],
-    img: '/images/products/sanitation/hero.jpg',
-  },
-  {
-    slug: 'monitoring',
-    name: 'Propagation Monitoring',
-    descriptor: 'Digital tools to track, manage and improve your propagation results.',
-    tags: ['Nursery and facility supplies'],
-    img: '/images/products/monitoring/hero.jpg',
-  },
-  {
-    slug: 'technical-services',
-    name: 'Technical Services',
-    descriptor: 'From training to troubleshooting, we support your propagation journey.',
-    tags: ['Nursery and facility supplies'],
-    img: '/images/products/technical-services/hero.jpg',
-  },
-];
+// Product families — blueprint.md Sections 3-9, imported from the shared
+// registry (src/data/products/families.ts) so the homepage teaser and the
+// /products/ hub can never disagree on a name, tagline or tag.
+const families = PRODUCT_FAMILIES;
 
 // Services 3-up — blueprint.md Section 9, first three "Our Services" bullets.
 const services = [
@@ -301,16 +241,16 @@ const targetMarkets = [
 
       <ul class="product-grid" data-product-grid>
         {families.map((f) => (
-          <li class="product-card" data-tags={f.tags.join('|')}>
+          <li class="product-card" data-product-card data-tags={f.tags.join('|')}>
             <div class="product-media">
               <img src={f.img} alt="" loading="lazy" />
             </div>
             <div class="product-body">
               <h3>
-                <a href={`/products/${f.slug}/`}>{f.name}</a>
+                <a href={f.href}>{f.name}</a>
               </h3>
               <p>{f.descriptor}</p>
-              <a class="link-arrow" href={`/products/${f.slug}/`}>
+              <a class="link-arrow" href={f.href}>
                 View range &rarr;
               </a>
             </div>
@@ -428,37 +368,11 @@ const targetMarkets = [
 </BaseLayout>
 
 <script>
-  const grid = document.querySelector<HTMLElement>('[data-product-grid]');
-  const empty = document.querySelector<HTMLElement>('[data-filter-empty]');
-  const pills = Array.from(document.querySelectorAll<HTMLButtonElement>('.filter-pills .pill'));
-  const cards = Array.from(document.querySelectorAll<HTMLElement>('.product-card'));
-
-  pills.forEach((pill) => {
-    pill.addEventListener('click', () => {
-      const tag = pill.dataset.tag ?? 'All';
-      pills.forEach((p) => p.classList.toggle('is-active', p === pill));
-
-      let visibleCount = 0;
-      cards.forEach((card) => {
-        const tags = (card.dataset.tags ?? '').split('|');
-        const matches = tag === 'All' || tags.includes(tag);
-        card.hidden = !matches;
-        if (matches) visibleCount += 1;
-      });
-
-      if (grid) grid.hidden = visibleCount === 0;
-      if (empty) empty.hidden = visibleCount !== 0;
-    });
-  });
+  import { initProductFilter } from '../lib/product-filter';
+  initProductFilter();
 </script>
 
 <style>
-  /* ---------- eyebrow variant ---------- */
-  .eyebrow.light {
-    color: var(--paper);
-    opacity: 0.85;
-  }
-
   .section-head {
     max-width: 62ch;
     margin-bottom: var(--space-4);

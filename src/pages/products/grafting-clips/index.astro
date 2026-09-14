@@ -1,0 +1,98 @@
+---
+// Grafting Clips — blueprint.md Section 4.
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import FamilyHero from '../../../components/products/FamilyHero.astro';
+import BulletList from '../../../components/products/BulletList.astro';
+import LabelValueList from '../../../components/products/LabelValueList.astro';
+import DetailStrip from '../../../components/products/DetailStrip.astro';
+import FamilyCta from '../../../components/products/FamilyCta.astro';
+
+const tagline = 'Secure Unions. Higher Success.';
+const intro = 'Precision clips for strong graft unions and better propagation outcomes.';
+
+const types = ['U-Clip', 'Omega Clip', 'Round Clip', 'Tomato Clip', 'V-Clip'];
+
+const keySpecifications = [
+  { label: 'Material', value: 'High-grade, UV-resistant plastic' },
+  { label: 'Sizes', value: 'Multiple sizes for different stem diameters' },
+  { label: 'Features', value: 'Secure fit, no damage, reusable (some types)' },
+  { label: 'Compatibility', value: 'Roses, vegetables, fruit trees and ornamentals' },
+];
+
+const detailImages = [
+  {
+    src: '/images/products/grafting-clips/01.jpg',
+    alt: 'Omega grafting clips holding a rose graft union',
+  },
+  { src: '/images/products/grafting-clips/02.jpg', alt: 'A tray of grafting clips sorted by type' },
+  {
+    src: '/images/products/grafting-clips/03.jpg',
+    alt: 'A tomato clip fitted to a young grafted seedling',
+  },
+  { src: '/images/products/grafting-clips/04.jpg', alt: 'Boxed grafting clips ready for despatch' },
+];
+---
+
+<BaseLayout title="Grafting Clips" description={intro}>
+  <FamilyHero
+    eyebrow="Products"
+    title="Grafting Clips"
+    tagline={tagline}
+    intro={intro}
+    image="/images/products/grafting-clips/hero.jpg"
+    imageAlt="Precision grafting clips fitted to a graft union"
+  />
+
+  <div class="family-body">
+    <BulletList heading="Types" items={types} />
+
+    <LabelValueList heading="Key specifications" items={keySpecifications} />
+
+    <LabelValueList
+      heading="Packaging"
+      items={[{ label: 'Pack size', value: '1,000-10,000 pcs/box (or as per request)' }]}
+    />
+
+    <section class="use-case">
+      <h2>Choosing a type</h2>
+      <p>
+        Omega and Round clips are commonly paired with rose grafting, Tomato Clip with tomato,
+        pepper and eggplant, U-Clip with cucurbits, and V-Clip with fruit trees &mdash; our team can
+        confirm the right pairing for your stock.
+      </p>
+    </section>
+
+    <DetailStrip images={detailImages} />
+
+    <FamilyCta
+      toolText="Not sure which size fits your stock? Use the Grafting Sleeve and Clip Calculator"
+      toolHref="/tools/grafting-calculator/"
+    />
+  </div>
+</BaseLayout>
+
+<style>
+  .family-body {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: var(--space-6) var(--side-gutter) var(--space-7);
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .use-case {
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--rule);
+  }
+
+  .use-case h2 {
+    margin-bottom: var(--space-3);
+  }
+
+  .use-case p {
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: var(--soft);
+    max-width: 68ch;
+  }
+</style>

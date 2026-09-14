@@ -5,11 +5,15 @@ import AxeBuilder from '@axe-core/playwright';
 // content, it is behind authentication, and robots.txt disallows it.
 // The pre-restart supplies/how-grafting-works/specifications/ordering routes were
 // deleted in the Prompt 0 foundations restart (see .factory/DECISIONS.md) and are
-// not yet replaced — the products/tools sessions that follow add their routes here.
+// not yet replaced — the tools session that follows adds its routes here.
 export const ROUTES = [
   '/',
   '/about',
   '/contact',
+  '/products',
+  '/products/grafting-tubes',
+  '/products/grafting-clips',
+  '/products/nursery-consumables',
   '/field-notes',
   '/field-notes/how-a-graft-knits-together',
   '/field-notes/european-rose-rules-inside-the-house',

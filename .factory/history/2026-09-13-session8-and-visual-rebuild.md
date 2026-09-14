@@ -10,13 +10,13 @@ Sessions 2–7 ran as cloud sessions on harness-assigned branch names. The mappi
 established from `git diff --stat main...origin/<branch>`:
 
 | Session | Branch                          | Scope                                                                                       |
-| ------- | -------------------------------- | -------------------------------------------------------------------------------------------- |
+| ------- | ------------------------------- | ------------------------------------------------------------------------------------------- |
 | 2       | `claude/vibrant-gauss-st1orq`   | Home page                                                                                   |
 | 3       | `claude/lucid-sagan-9f6d6y`     | Supplies stage pages                                                                        |
 | 4       | `claude/nice-hypatia-rgq275`    | Sleeve selector, consumables planner                                                        |
 | 5       | `claude/laughing-hopper-ne2aig` | How grafting works, Field Notes                                                             |
 | 6       | `claude/practical-tesla-m1pila` | Quotation form, Firestore, Cloud Functions                                                  |
-| 7       | —                                | **Never delivered.** `/specifications`, `/ordering` and `/about` were written in session 8. |
+| 7       | —                               | **Never delivered.** `/specifications`, `/ordering` and `/about` were written in session 8. |
 
 Merged in the planned order (home, supplies, tools, words, reference, quotation).
 Zero conflicts — the disjoint-ownership rule held.

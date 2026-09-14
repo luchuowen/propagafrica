@@ -116,6 +116,12 @@ h3 {
   color: var(--soft);
 }
 
+/* Reversed out over a photograph or a dark ground. */
+.eyebrow.light {
+  color: var(--paper);
+  opacity: 0.85;
+}
+
 .nav-link {
   font-family: var(--f-sans);
   font-weight: 600;

@@ -1,0 +1,64 @@
+---
+// The CTA band that closes every family page: an optional link to the
+// relevant planning tool (blueprint.md Sections 3, 4 and 5), plus the
+// Request a Quotation button every commercial path ends in.
+interface Props {
+  toolText?: string;
+  toolHref?: string;
+  quoteHref?: string;
+}
+
+const { toolText, toolHref, quoteHref = '/contact/' } = Astro.props;
+---
+
+<div class="family-cta">
+  {toolText && toolHref && (
+    <a class="tool-link" href={toolHref}>
+      {toolText} &rarr;
+    </a>
+  )}
+  <a class="btn btn-primary" href={quoteHref}>
+    Request a Quotation
+  </a>
+</div>
+
+<style>
+  .family-cta {
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .tool-link {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--green);
+    text-decoration: none;
+    max-width: 52ch;
+  }
+
+  .tool-link:hover {
+    text-decoration: underline;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 11px 22px;
+    border-radius: var(--radius-s);
+    background: var(--green);
+    color: var(--paper);
+    border: 1px solid var(--green);
+  }
+
+  .btn-primary:hover {
+    background: var(--green-dark);
+    border-color: var(--green-dark);
+  }
+</style>

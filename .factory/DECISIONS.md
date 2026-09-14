@@ -118,3 +118,44 @@ no `Carousel.astro`, no `docs/image-manifest.md`, and `blueprint.md` still descr
 deleted pre-restart "supplies" IA. `git fetch && git merge --ff-only origin/main` (the
 tree was clean, so this was a pure fast-forward, not a reset) brought it current before
 any of the above was possible.
+
+# Session 2026-09-14 — Prompt 2: products hub, grafting tubes, grafting clips,
+# nursery consumables
+
+`src/data/products/families.ts` is now the single source of truth for the seven
+product families (name, verbatim tagline, verbatim intro/descriptor, crop tags,
+hero image, first-4 "key bullets"). The homepage's product grid (Prompt 1) and the
+new `/products/` hub both import it, so a family's name or tagline can't drift
+between the two pages that list it. The shop-by-crop filter script is likewise
+shared (`src/lib/product-filter.ts`) rather than duplicated per page.
+
+Three family pages built against `blueprint.md` Sections 3-5:
+`/products/grafting-tubes/`, `/products/grafting-clips/`, `/products/nursery-consumables/`.
+The other four families link from the hub/homepage to their eventual path
+(`/products/propagation-systems/` etc.) — not yet built, expected 404s until a later
+prompt. Shared components in `src/components/products/`: `FamilyHero`, `BulletList`,
+`LabelValueList`, `DetailStrip`, `FamilyCta`. No single monolithic "family layout" —
+the three pages' middle sections genuinely differ in shape (a real spec table for
+tubes' PRO-ROSE/VEG/CUC/TREE range, a label/value list for clips' specs, plain bullet
+lists for consumables) so each page assembles the shared primitives itself rather
+than one component branching on family type.
+
+"First 4 key-product bullets" on the hub (blueprint.md Section 2) isn't a single
+named list for every family — only nursery-consumables/sanitation/monitoring/
+technical-services have an explicit "Key products"/"Key features"/"Our Services"
+list. For grafting-tubes and grafting-clips, the nearest verbatim equivalent is used
+instead: tubes' Product range codes, clips' Types.
+
+**Same grid/overflow bug as the session-4 fieldset one, new element.** The
+grafting-tubes product-range table sits in a `min-width: 34em` scroll container
+inside a CSS grid (`.family-body`); the grid item's automatic min-width ignored the
+table's own `overflow-x: auto` and blew out the page at 320px until the item itself
+got `min-width: 0`. Same root cause as the `/supplies/graft` fieldset bug (session 8
+integration, archived), different element — worth checking any new wide/scrollable
+content dropped into a grid or flex layout.
+
+Prettier's format gate is content-blind and flagged a pre-existing table-alignment
+whitespace issue in `.factory/history/2026-09-13-session8-and-visual-rebuild.md`
+(from the Prompt 0 merge) unrelated to this session's diff. Reformatted it
+(whitespace only, no text changed) since a red gate blocks `factory-check full`
+regardless of which session's diff it belongs to.
