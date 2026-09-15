@@ -37,7 +37,7 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
             <img
               src={slide.src}
               alt={slide.alt}
-              loading={lane === 0 && i === 0 ? 'eager' : 'lazy'}
+              loading={variant === 'hero' && lane === 0 && i === 0 ? 'eager' : 'lazy'}
               fetchpriority={variant === 'hero' && lane === 0 && i === 0 ? 'high' : undefined}
             />
           </figure>
