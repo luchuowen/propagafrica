@@ -189,5 +189,5 @@ Success state copy: "Thank you -- your enquiry has reached our team. Emily or a 
 
 ## Product Reference -- global verbatim lists, reuse everywhere, do not reword
 
-Why partner with PropagAfrica (verbatim): High-quality, reliable products. Competitive pricing and bulk supply. Technical expertise and support. Customised solutions. Consistent availability. Strong relationships with global manufacturers. Local stock in Kenya and Ethiopia.
+Why partner with PropagAfrica (verbatim): High-quality, reliable products. Competitive pricing and bulk supply. Technical expertise and support. Customised solutions and consistent availability. Global partnerships and local stock.
 Target markets (verbatim): Commercial flower growers. Vegetable and fruit growers. Nurseries and propagation labs. Agri-businesses and distributors. Research and training institutions.

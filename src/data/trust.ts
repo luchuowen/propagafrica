@@ -5,10 +5,8 @@ export const WHY_PARTNER: readonly string[] = [
   'High-quality, reliable products',
   'Competitive pricing and bulk supply',
   'Technical expertise and support',
-  'Customised solutions',
-  'Consistent availability',
-  'Strong relationships with global manufacturers',
-  'Local stock in Kenya and Ethiopia',
+  'Customised solutions and consistent availability',
+  'Global partnerships and local stock',
 ];
 
 export const TARGET_MARKETS: readonly string[] = [
