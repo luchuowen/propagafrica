@@ -304,8 +304,11 @@ const services = [
       <ul class="services-grid" data-reveal-group>
         {services.map((s, i) => (
           <li class="service" data-reveal>
-            <span class="service-n">{String(i + 1).padStart(2, '0')}</span>
-            <a href="/products/technical-services/">{s}</a>
+            <a class="service-card" href="/products/technical-services/">
+              <span class="service-n">{String(i + 1).padStart(2, '0')}</span>
+              <span class="service-title">{s}</span>
+              <span class="service-arrow" aria-hidden="true">&rarr;</span>
+            </a>
           </li>
         ))}
       </ul>
@@ -757,28 +760,69 @@ const services = [
   }
 
   .service {
-    border-top: 1px solid var(--ink);
-    padding-top: var(--space-2);
+    height: 100%;
+  }
+
+  .service-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: var(--space-3);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-m);
+    background: var(--paper);
+    text-decoration: none;
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease,
+      border-color 0.15s ease;
+  }
+
+  /* Three theme tints already in the system, one per card, so the row reads
+     as a set rather than one background repeated three times. */
+  .service:nth-child(2) .service-card {
+    background: var(--mint);
+  }
+
+  .service:nth-child(3) .service-card {
+    background: var(--green-pale);
+  }
+
+  .service-card:hover,
+  .service-card:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-soft);
+    border-color: var(--green);
   }
 
   .service-n {
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-s);
+    background: var(--green);
+    color: var(--paper);
     font-family: var(--f-mono);
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    color: var(--soft);
+    font-size: 12px;
+    letter-spacing: 0.04em;
   }
 
-  .service a {
-    display: block;
-    margin-top: var(--space-1);
+  .service-title {
+    margin-top: var(--space-3);
     font-weight: 600;
     font-size: 16px;
-    text-decoration: none;
+    line-height: 1.4;
+    color: var(--ink);
   }
 
-  .service a:hover {
-    text-decoration: underline;
+  .service-arrow {
+    margin-top: auto;
+    padding-top: var(--space-3);
+    color: var(--green);
+    font-weight: 600;
+    font-size: 15px;
   }
 
   /* ---------- CTA band ---------- */
