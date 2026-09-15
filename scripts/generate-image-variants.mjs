@@ -44,10 +44,18 @@ async function processFile(file) {
   const jobs = [sharp(file).webp({ quality: QUALITY }).toFile(`${base}.webp`)];
 
   if (width > SMALL_WIDTH) {
-    jobs.push(sharp(file).resize({ width: SMALL_WIDTH }).webp({ quality: QUALITY }).toFile(`${base}-${SMALL_WIDTH}.webp`));
+    jobs.push(
+      sharp(file)
+        .resize({ width: SMALL_WIDTH })
+        .webp({ quality: QUALITY })
+        .toFile(`${base}-${SMALL_WIDTH}.webp`),
+    );
     jobs.push(
       isPng
-        ? sharp(file).resize({ width: SMALL_WIDTH }).png({ compressionLevel: 9 }).toFile(`${base}-${SMALL_WIDTH}${ext}`)
+        ? sharp(file)
+            .resize({ width: SMALL_WIDTH })
+            .png({ compressionLevel: 9 })
+            .toFile(`${base}-${SMALL_WIDTH}${ext}`)
         : sharp(file)
             .resize({ width: SMALL_WIDTH })
             .jpeg({ quality: QUALITY, mozjpeg: true })
@@ -65,7 +73,9 @@ export async function generateImageVariants(imagesRoot) {
 
   if (targets.length === 0) return;
   await Promise.all(targets.map(processFile));
-  console.log(`[image-variants] generated WebP + ${SMALL_WIDTH}w variants for ${targets.length} photos`);
+  console.log(
+    `[image-variants] generated WebP + ${SMALL_WIDTH}w variants for ${targets.length} photos`,
+  );
 }
 
 // Allow running standalone: node scripts/generate-image-variants.mjs [dist dir]

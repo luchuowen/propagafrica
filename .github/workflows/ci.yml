@@ -1,0 +1,79 @@
+name: CI
+
+# Runs the factory check on every pull request into main, so a regression is
+# caught before it reaches the branch that deploys. This mirrors
+# `scripts/factory-check.sh full` step by step (each one is its own job step so
+# a failure names itself in the checks UI) with one deliberate omission:
+# `pnpm test:lighthouse`, which needs a real browser run against a preview
+# server and is slow and flaky on a shared runner. Run it locally before a
+# release instead.
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Manifest gates and context caps
+        run: bash scripts/factory-check.sh gates
+
+      - name: Typecheck
+        run: pnpm check
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Format
+        run: pnpm format
+
+      - name: Unit tests
+        run: pnpm test:unit
+
+      # Playwright previews the built site, so the build has to come first —
+      # this step doubles as the build check.
+      - name: Build
+        run: pnpm build
+
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: End-to-end tests
+        run: pnpm test:e2e
+
+      - name: Upload Playwright artefacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore
