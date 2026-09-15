@@ -14,6 +14,13 @@ import { HONEYPOT_FIELD, TIMESTAMP_FIELD } from '../lib/quotation/schema';
 
 const year = new Date().getFullYear();
 
+// Split the same NAV_ITEMS the header uses into two footer columns —
+// discovery pages vs. company-facing pages — echoing the multi-column
+// link grouping Owen pointed at (NAVAC Global's own footer). Still one
+// source of truth: order and labels can't drift from the header.
+const EXPLORE_ITEMS = NAV_ITEMS.slice(0, 4);
+const COMPANY_ITEMS = NAV_ITEMS.slice(4);
+
 const SOCIALS = [
   {
     name: 'Instagram',
@@ -55,7 +62,7 @@ const SOCIALS = [
       <div class="footer-col footer-explore" data-reveal>
         <p class="eyebrow">Explore</p>
         <ul>
-          {NAV_ITEMS.map((item) => (
+          {EXPLORE_ITEMS.map((item) => (
             <li>
               <a href={item.href}>{item.label}</a>
             </li>
@@ -63,8 +70,19 @@ const SOCIALS = [
         </ul>
       </div>
 
-      <div class="footer-col footer-social" data-reveal>
-        <p class="eyebrow">Follow Us</p>
+      <div class="footer-col footer-company-links" data-reveal>
+        <p class="eyebrow">Company</p>
+        <ul>
+          {COMPANY_ITEMS.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="footer-col footer-connect" data-reveal>
+        <p class="eyebrow">Connect</p>
         <ul class="social-list">
           {SOCIALS.map((social) => (
             <li>
@@ -78,6 +96,7 @@ const SOCIALS = [
           ))}
         </ul>
         <p class="social-note">Accounts launching soon.</p>
+        <a class="btn footer-cta" href="/contact/">Request a Quotation</a>
       </div>
 
       <div class="footer-col footer-newsletter" data-reveal>
@@ -211,19 +230,27 @@ const SOCIALS = [
   .footer-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    /* Center rather than the grid default (stretch): the four columns hold very different
-       amounts of copy (a paragraph + address vs. four icons), so stretching them to equal
-       height left the shorter columns with a trail of dead space at the bottom. Centering
-       each column's content in its row keeps the row looking composed regardless of how
-       much copy is in it. */
-    align-items: center;
+    /* Top-align every column instead of the grid default (stretch): each
+       column's heading (or the wordmark, in the brand column) sits on the
+       same line across the row, the way NAVAC Global's own footer does —
+       stretching or centering left the shorter columns' headings drifting
+       to a different height than the taller ones next to them. */
+    align-items: start;
     gap: var(--space-5);
   }
 
   @media (min-width: 720px) {
     .footer-grid {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: var(--space-4);
+    }
+  }
+
+  @media (min-width: 960px) {
+    .footer-grid {
+      /* Connect gets extra room so "Request a Quotation" sits on one line
+         instead of wrapping inside a narrower track. */
+      grid-template-columns: 1.3fr 0.9fr 0.7fr 1.4fr 1.1fr;
     }
   }
 
@@ -323,6 +350,32 @@ const SOCIALS = [
     font-size: 12px;
     color: var(--soft);
     margin: var(--space-2) 0 0;
+  }
+
+  /* The Connect column's own CTA, echoing NAVAC Global's "Request a
+     Briefing" pill — same button colours as everywhere else on the site,
+     just rounder (--radius-l, the same radius the nav filter pills use)
+     to read as a pill rather than the square-cornered primary button. */
+  /* .footer-col a (above) sets color: var(--ink) with specificity (class +
+     type) that a bare .footer-cta class can't outrank — qualified with the
+     parent class here so the button's paper-on-green text actually wins. */
+  .footer-col .footer-cta {
+    display: inline-block;
+    margin-top: var(--space-3);
+    text-decoration: none;
+    font-size: 13px;
+    white-space: nowrap;
+    padding: 10px 16px;
+    border-radius: var(--radius-l);
+    background: var(--green);
+    color: var(--paper);
+    border: 1px solid var(--green);
+  }
+
+  .footer-col .footer-cta:hover {
+    background: var(--green-dark);
+    border-color: var(--green-dark);
+    color: var(--paper);
   }
 
   .newsletter-form {
