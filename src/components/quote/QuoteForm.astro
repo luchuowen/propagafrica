@@ -433,7 +433,10 @@ import {
     font-family: var(--f-sans);
     font-size: 16px;
     color: var(--ink);
-    background: var(--paper);
+    /* White, not paper: the form now lives inside a paper-toned card
+       (contact.astro's .contact-form-card), so the fields need to read as
+       distinct inputs rather than blending into the card around them. */
+    background: var(--white);
     border: 1px solid var(--rule);
     border-radius: 0;
     padding: 10px 12px;
