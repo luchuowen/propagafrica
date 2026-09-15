@@ -68,11 +68,11 @@ const SOCIALS = [
         <ul class="social-list">
           {SOCIALS.map((social) => (
             <li>
-              <span class="social-icon" aria-disabled="true" title={`${social.name} — coming soon`}>
+              <span class="social-icon" aria-disabled="true" title={`${social.name} — account not yet live`}>
                 <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
                   <path d={social.path} />
                 </svg>
-                <span class="sr-only">{social.name} (coming soon)</span>
+                <span class="sr-only">{social.name} — account not yet live</span>
               </span>
             </li>
           ))}
