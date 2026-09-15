@@ -42,6 +42,7 @@ import { TOOLS } from '../../data/tools';
 <style>
   .hub {
     padding: var(--space-6) 0 var(--space-7);
+    background: var(--white);
   }
 
   .hub-inner {
@@ -134,6 +135,13 @@ import { TOOLS } from '../../data/tools';
     font-size: 14px;
     color: var(--green);
     text-decoration: none;
+  }
+
+  /* Pin the CTA to the same bottom edge on both cards instead of wherever
+     it lands after that tool's own description length. */
+  .tool-body .link-arrow {
+    margin-top: auto;
+    padding-top: var(--space-3);
   }
 
   .link-arrow:hover {

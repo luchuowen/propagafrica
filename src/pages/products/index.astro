@@ -68,6 +68,7 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
 <style>
   .hub {
     padding: var(--space-6) 0 var(--space-7);
+    background: var(--white);
   }
 
   .hub-inner {
@@ -229,6 +230,14 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
     font-size: 14px;
     color: var(--green);
     text-decoration: none;
+  }
+
+  /* Pin every card's CTA to the same bottom edge instead of wherever it
+     lands after that family's own bullet count and descriptor length —
+     cards already stretch to equal height via CSS Grid. */
+  .product-body .link-arrow {
+    margin-top: auto;
+    padding-top: var(--space-3);
   }
 
   .link-arrow:hover {
