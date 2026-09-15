@@ -767,52 +767,75 @@ const services = [
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding: var(--space-3);
-    border: 1px solid var(--rule);
-    border-radius: var(--radius-m);
-    background: var(--paper);
+    padding: var(--space-4) var(--space-3) var(--space-3);
+    border: 1px solid var(--accent, var(--rule));
+    border-radius: var(--radius-l);
+    background: color-mix(in srgb, var(--accent, var(--rule)) 9%, var(--paper));
     text-decoration: none;
+    position: relative;
+    overflow: hidden;
     transition:
-      transform 0.15s ease,
-      box-shadow 0.15s ease,
-      border-color 0.15s ease;
+      transform 0.18s ease,
+      box-shadow 0.18s ease,
+      background 0.18s ease;
   }
 
-  /* Three theme tints already in the system, one per card, so the row reads
-     as a set rather than one background repeated three times. */
+  /* The same three accents that carry the tri-colour bar under the hero
+     (outcomes panel above), reused here at low tint strength instead of as
+     solid fills — one accent per card, so the set reads as a family rather
+     than three identical grey tiles. */
+  .service:nth-child(1) .service-card {
+    --accent: var(--green);
+  }
+
   .service:nth-child(2) .service-card {
-    background: var(--mint);
+    --accent: var(--terra);
   }
 
   .service:nth-child(3) .service-card {
-    background: var(--green-pale);
+    --accent: var(--gold);
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 5px;
+    background: var(--accent, var(--green));
   }
 
   .service-card:hover,
   .service-card:focus-visible {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
     box-shadow: var(--shadow-soft);
-    border-color: var(--green);
+    background: color-mix(in srgb, var(--accent, var(--rule)) 16%, var(--paper));
   }
 
   .service-n {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     border-radius: var(--radius-s);
-    background: var(--green);
+    background: var(--accent, var(--green));
     color: var(--paper);
     font-family: var(--f-mono);
     font-size: 12px;
     letter-spacing: 0.04em;
   }
 
+  /* Gold fails AA contrast as white-on-gold (see tokens.css) — the outcomes
+     panel above solves it with dark ink text on that one swatch; the badge
+     here does the same. */
+  .service:nth-child(3) .service-n {
+    color: var(--ink);
+  }
+
   .service-title {
     margin-top: var(--space-3);
     font-weight: 600;
-    font-size: 16px;
+    font-size: 17px;
     line-height: 1.4;
     color: var(--ink);
   }
