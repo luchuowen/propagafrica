@@ -154,3 +154,19 @@ since") instead of the bare word.
   gutter that stops at each row edge -- it never crosses a photograph.
 - Step copy stays exactly the six captions in `blueprint.md` Section 1; the component has no
   description line because no description copy exists in the source material.
+
+## Accessibility fixes: duplicate honeypot id, reveal motion, terra panel contrast (session 9)
+
+- The newsletter honeypot in `Footer.astro` and the quotation honeypot in `QuoteForm.astro` share
+  the field NAME `companyWebsite` (both endpoints read it), but they were also sharing the DOM id,
+  and the footer renders on `/contact` too. The footer's id is now `newsletter-companyWebsite`;
+  names are untouched, so neither script nor endpoint changes.
+- `[data-reveal]` now has a `prefers-reduced-motion: reduce` branch that skips the fade entirely.
+  The axe suite runs with reduced motion so it measures settled colours, not a mid-transition frame.
+- Outcome panel 02 put `--paper` on bare `--terra`: 4.24:1, under AA for its 15px copy. The panel
+  ground is `color-mix(in srgb, var(--terra) 94%, var(--ink))` and the panel's numeral and
+  paragraph no longer carry 0.85/0.92 opacity — text on these panels is at full strength. The
+  `--terra` token itself is unchanged; it is an accent elsewhere.
+- The keyboard-traversal test excluded `disabled` but not `tabindex="-1"`, so it expected the
+  honeypot to be Tab-reachable. A field deliberately out of the tab order is not a control a
+  keyboard user should reach.

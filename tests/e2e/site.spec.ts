@@ -33,6 +33,10 @@ export const ROUTES = [
 const WIDTHS = [320, 375, 400, 768, 1024, 1440];
 
 test.describe('accessibility', () => {
+  // The scroll-reveal fade is skipped under reduced motion, so axe measures
+  // contrast against the settled colours rather than a mid-transition frame.
+  test.use({ reducedMotion: 'reduce' });
+
   for (const route of ROUTES) {
     test(`axe reports no violations on ${route}`, async ({ page }) => {
       await page.goto(route);
@@ -118,7 +122,14 @@ test.describe('keyboard traversal', () => {
     const expected = await page.evaluate(() => {
       const nodes = Array.from(
         document.querySelectorAll<HTMLElement>('a[href], button, input, select, textarea'),
-      ).filter((el) => el.offsetParent !== null && !el.hasAttribute('disabled'));
+      ).filter(
+        (el) =>
+          el.offsetParent !== null &&
+          !el.hasAttribute('disabled') &&
+          // A honeypot is deliberately out of the tab order; it is not a
+          // control a keyboard user is meant to reach.
+          el.getAttribute('tabindex') !== '-1',
+      );
       nodes.forEach((el, i) => el.setAttribute('data-tab-probe', String(i)));
       return nodes.length;
     });

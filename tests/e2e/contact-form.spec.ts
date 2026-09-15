@@ -27,12 +27,14 @@ test.describe('quotation form markup and progressive enhancement', () => {
     page,
   }) => {
     await page.goto('/contact');
-    const honeypot = page.locator('#companyWebsite');
+    // Scoped to the quotation form: the footer's newsletter form carries its
+    // own honeypot with the same field name on this page.
+    const honeypot = page.locator('#quote-form #companyWebsite');
     await expect(honeypot).toHaveAttribute('tabindex', '-1');
     await expect(honeypot).toHaveAttribute('autocomplete', 'off');
     // Clipped to a 1x1 box by its wrapper, not display:none — still technically present for a
     // bot that skips display:none fields, but invisible and untabbable for a sighted user.
-    const wrapperBox = await page.locator('.honeypot').boundingBox();
+    const wrapperBox = await page.locator('#quote-form .honeypot').boundingBox();
     expect(wrapperBox?.width).toBeLessThanOrEqual(1);
     expect(wrapperBox?.height).toBeLessThanOrEqual(1);
   });
@@ -101,7 +103,7 @@ test.describe('quotation form markup and progressive enhancement', () => {
   }) => {
     await page.goto('/contact');
     await page.locator('#name').fill('Bot');
-    await page.locator('#companyWebsite').fill('https://spam.example');
+    await page.locator('#quote-form #companyWebsite').fill('https://spam.example');
 
     let requestMade = false;
     page.on('request', (request) => {

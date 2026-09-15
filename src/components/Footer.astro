@@ -135,9 +135,13 @@ const SOCIALS = [
           </div>
 
           <div class="honeypot" aria-hidden="true">
-            <label for={HONEYPOT_FIELD}>Leave this field blank</label>
+            {/* The quotation form carries a honeypot with the same field name,
+                and the footer renders on that page too — so the id here is
+                prefixed to keep it unique in the document. The name is what
+                the script and the endpoint read, and it is unchanged. */}
+            <label for={`newsletter-${HONEYPOT_FIELD}`}>Leave this field blank</label>
             <input
-              id={HONEYPOT_FIELD}
+              id={`newsletter-${HONEYPOT_FIELD}`}
               name={HONEYPOT_FIELD}
               type="text"
               tabindex="-1"

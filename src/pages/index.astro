@@ -478,7 +478,11 @@ const services = [
   }
 
   .outcome:nth-child(2) {
-    background: var(--terra);
+    /* Paper text on bare --terra is 4.24:1 — just under AA for the 15px body
+       copy in this panel. Taking the ground a shade deeper (the hue is
+       unchanged) clears 4.5:1 without touching the brand token, which is
+       used as an accent elsewhere and must stay as it is. */
+    background: color-mix(in srgb, var(--terra) 94%, var(--ink));
     color: var(--paper);
   }
 
@@ -492,7 +496,8 @@ const services = [
     font-size: 11px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    opacity: 0.85;
+    /* Full opacity: at 0.85 this 11px numeral dropped to 3.5:1 on the terra
+       panel. It is text, so it carries the panel's full text colour. */
   }
 
   .outcome h2 {
@@ -505,7 +510,8 @@ const services = [
     font-size: 15px;
     line-height: 1.65;
     color: inherit;
-    opacity: 0.92;
+    /* Full opacity, like the numeral above: at 0.92 this 15px copy landed at
+       4.14:1 on the terra panel, under AA. */
     max-width: 34ch;
   }
 
