@@ -172,6 +172,16 @@ table {
   transform: none;
 }
 
+/* Someone who asks for reduced motion gets the end state, not the fade: the
+   element is simply in place, with no opacity or transform to animate. */
+@media (prefers-reduced-motion: reduce) {
+  .has-js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* Stagger children of a revealed group — product grids, outcome strips,
    bullet lists, detail-image rows. Covers groups up to 8 items; anything
    past that shares the last delay rather than growing unbounded. */

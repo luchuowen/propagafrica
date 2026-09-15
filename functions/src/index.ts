@@ -153,18 +153,15 @@ export const subscribeNewsletter = onRequest(async (req, res) => {
   // Keyed by a hash of the (lowercased) email so a repeat signup updates the existing record
   // instead of creating a duplicate, without using the plaintext address as a document id.
   const docId = sha256Hex(email);
-  await db
-    .collection('newsletterSubscribers')
-    .doc(docId)
-    .set(
-      {
-        email,
-        subscribedAt: FieldValue.serverTimestamp(),
-        status: 'subscribed',
-        source: 'web-footer',
-      },
-      { merge: true },
-    );
+  await db.collection('newsletterSubscribers').doc(docId).set(
+    {
+      email,
+      subscribedAt: FieldValue.serverTimestamp(),
+      status: 'subscribed',
+      source: 'web-footer',
+    },
+    { merge: true },
+  );
 
   if (asJson) {
     res.status(200).json({ ok: true });

@@ -47,8 +47,8 @@ const SOCIALS = [
       <div class="footer-col footer-company" data-reveal>
         <Wordmark markSize={26} />
         <p class="blurb">
-          Grafting tubes, clips, nursery consumables and propagation systems for commercial
-          growers, with technical support and stock held in Kenya and Ethiopia.
+          Grafting tubes, clips, nursery consumables and propagation systems for commercial growers,
+          with technical support and stock held in Kenya and Ethiopia.
         </p>
         <address>
           Nairobi, Kenya
@@ -86,7 +86,11 @@ const SOCIALS = [
         <ul class="social-list">
           {SOCIALS.map((social) => (
             <li>
-              <span class="social-icon" aria-disabled="true" title={`${social.name} — account not yet live`}>
+              <span
+                class="social-icon"
+                aria-disabled="true"
+                title={`${social.name} — account not yet live`}
+              >
                 <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
                   <path d={social.path} />
                 </svg>
@@ -96,15 +100,24 @@ const SOCIALS = [
           ))}
         </ul>
         <p class="social-note">Accounts launching soon.</p>
-        <a class="btn footer-cta" href="/contact/">Request a Quotation</a>
+        <a class="btn footer-cta" href="/contact/">
+          Request a Quotation
+        </a>
       </div>
 
       <div class="footer-col footer-newsletter" data-reveal>
         <p class="eyebrow">Newsletter</p>
         <p class="blurb">Occasional notes on stock, seasons and new product lines.</p>
 
-        <form id="newsletter-form" class="newsletter-form" method="post" action="/api/subscribe-newsletter">
-          <label for="newsletter-email" class="sr-only">Email address</label>
+        <form
+          id="newsletter-form"
+          class="newsletter-form"
+          method="post"
+          action="/api/subscribe-newsletter"
+        >
+          <label for="newsletter-email" class="sr-only">
+            Email address
+          </label>
           <div class="newsletter-row">
             <input
               id="newsletter-email"
@@ -116,13 +129,19 @@ const SOCIALS = [
               required
               aria-describedby="newsletter-status"
             />
-            <button type="submit" class="newsletter-submit">Subscribe</button>
+            <button type="submit" class="newsletter-submit">
+              Subscribe
+            </button>
           </div>
 
           <div class="honeypot" aria-hidden="true">
-            <label for={HONEYPOT_FIELD}>Leave this field blank</label>
+            {/* The quotation form carries a honeypot with the same field name,
+                and the footer renders on that page too — so the id here is
+                prefixed to keep it unique in the document. The name is what
+                the script and the endpoint read, and it is unchanged. */}
+            <label for={`newsletter-${HONEYPOT_FIELD}`}>Leave this field blank</label>
             <input
-              id={HONEYPOT_FIELD}
+              id={`newsletter-${HONEYPOT_FIELD}`}
               name={HONEYPOT_FIELD}
               type="text"
               tabindex="-1"
@@ -131,7 +150,12 @@ const SOCIALS = [
           </div>
           <input type="hidden" id={TIMESTAMP_FIELD} name={TIMESTAMP_FIELD} value="" />
 
-          <p id="newsletter-status" class="newsletter-status" role="alert" aria-live="assertive"></p>
+          <p
+            id="newsletter-status"
+            class="newsletter-status"
+            role="alert"
+            aria-live="assertive"
+          ></p>
         </form>
       </div>
     </div>
@@ -141,7 +165,8 @@ const SOCIALS = [
         <span>&copy; {year} PropagAfrica Technologies</span>
         <span class="strapline">Together we grow Africa&rsquo;s horticulture.</span>
         <a class="credit" href="https://navac.co.ke">
-          <span class="credit-label">Designed by</span> <span class="credit-brand">NAVAC GLOBAL</span>
+          <span class="credit-label">Designed by</span>{' '}
+          <span class="credit-brand">NAVAC GLOBAL</span>
         </a>
       </p>
     </div>
@@ -229,7 +254,10 @@ const SOCIALS = [
 
   .footer-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    /* One column on the narrowest phones. Two 1fr tracks inside a 320px
+       viewport leave a 116px column, which "Request a Quotation" (nowrap,
+       163px) pushed straight past the viewport edge. */
+    grid-template-columns: 1fr;
     /* Top-align every column instead of the grid default (stretch): each
        column's heading (or the wordmark, in the brand column) sits on the
        same line across the row, the way NAVAC Global's own footer does —
@@ -237,6 +265,12 @@ const SOCIALS = [
        to a different height than the taller ones next to them. */
     align-items: start;
     gap: var(--space-5);
+  }
+
+  @media (min-width: 520px) {
+    .footer-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 
   @media (min-width: 720px) {

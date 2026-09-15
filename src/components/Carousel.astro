@@ -136,7 +136,10 @@ function assetVariants(src: string) {
             {slides.map(
               (slide, i) =>
                 slide.caption && (
-                  <p class:list={['caption', i === lane && 'is-active', slide.step && 'has-step']} data-index={i}>
+                  <p
+                    class:list={['caption', i === lane && 'is-active', slide.step && 'has-step']}
+                    data-index={i}
+                  >
                     {slide.step && <span class="step-num">{slide.step}</span>}
                     {slide.caption}
                   </p>

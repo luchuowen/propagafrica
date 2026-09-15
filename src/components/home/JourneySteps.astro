@@ -1,0 +1,206 @@
+---
+// The propagation journey: six numbered steps, all visible at once. It was a
+// three-at-a-time carousel, which hid half the sequence behind autoplay — a
+// numbered process is the one thing a carousel should never hide. The step
+// markers sit on the section ground under each photograph and are joined by
+// a hairline that runs through the gutter, never across a photograph.
+interface Step {
+  src: string;
+  alt: string;
+  step: string;
+  caption: string;
+}
+
+interface Props {
+  steps: Step[];
+}
+
+const { steps } = Astro.props;
+
+// Same responsive sources as Carousel.astro: every process photo ships at
+// 1200x900 per docs/image-manifest.md, and scripts/generate-image-variants.mjs
+// (astro:build:done hook) writes a WebP copy plus a 640w WebP and same-format
+// fallback next to it in dist/.
+const NATIVE_WIDTH = 1200;
+const NATIVE_HEIGHT = 900;
+const SIZES = '(min-width: 900px) 33vw, (min-width: 620px) 50vw, 100vw';
+
+function assetVariants(src: string) {
+  const match = src.match(/\.(jpe?g|png)$/i);
+  const ext = match ? match[0] : '.jpg';
+  const base = src.slice(0, -ext.length);
+  return {
+    webp: `${base}.webp`,
+    webpSmall: `${base}-640.webp`,
+    fallbackSmall: `${base}-640${ext}`,
+  };
+}
+---
+
+<ol class="journey-steps">
+  {steps.map((step) => {
+    const { webp, webpSmall, fallbackSmall } = assetVariants(step.src);
+    return (
+      <li class="step">
+        <div class="shot">
+          <picture>
+            <source
+              type="image/webp"
+              srcset={`${webpSmall} 640w, ${webp} ${NATIVE_WIDTH}w`}
+              sizes={SIZES}
+            />
+            <img
+              src={step.src}
+              srcset={`${fallbackSmall} 640w, ${step.src} ${NATIVE_WIDTH}w`}
+              sizes={SIZES}
+              width={NATIVE_WIDTH}
+              height={NATIVE_HEIGHT}
+              alt={step.alt}
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
+        </div>
+        <p class="marker">
+          <span class="num">{step.step.padStart(2, '0')}</span>
+        </p>
+        <p class="caption">{step.caption}</p>
+      </li>
+    );
+  })}
+</ol>
+
+<style>
+  .journey-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4) var(--space-3);
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .shot {
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    border-radius: var(--radius-l);
+    box-shadow: var(--shadow-soft);
+    background: var(--green-dark);
+  }
+
+  .shot img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* The same slow zoom the photo cards elsewhere on this page carry. */
+  @media (prefers-reduced-motion: no-preference) {
+    .shot img {
+      transition: transform 600ms ease;
+    }
+
+    .step:hover .shot img {
+      transform: scale(1.045);
+    }
+  }
+
+  .marker {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    margin: var(--space-2) 0 0;
+  }
+
+  .num {
+    position: relative;
+    z-index: 1;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: var(--white);
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--f-mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--green);
+  }
+
+  .caption {
+    margin: var(--space-2) 0 0;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+
+  /* The connector runs from one step marker to the next, through the gutter,
+     and stops at the end of each row. The breakpoints below do not overlap,
+     so each row-edge rule stands on its own. */
+  @media (min-width: 620px) and (max-width: 899px) {
+    .journey-steps {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .marker::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: calc(var(--space-3) * -1);
+      top: 50%;
+      height: 1px;
+      background: color-mix(in srgb, var(--green) 22%, transparent);
+    }
+
+    /* First step in a row starts at its own marker, last one ends at it, so
+       the line never runs off into the margin. */
+    .step:nth-child(2n + 1) .marker::after {
+      left: 50%;
+    }
+
+    .step:nth-child(2n) .marker::after,
+    .step:last-child .marker::after {
+      right: 50%;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .journey-steps {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .marker::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: calc(var(--space-3) * -1);
+      top: 50%;
+      height: 1px;
+      background: color-mix(in srgb, var(--green) 22%, transparent);
+    }
+
+    /* First step in a row starts at its own marker, last one ends at it, so
+       the line never runs off into the margin. */
+    .step:nth-child(3n + 1) .marker::after {
+      left: 50%;
+    }
+
+    .step:nth-child(3n) .marker::after,
+    .step:last-child .marker::after {
+      right: 50%;
+    }
+  }
+</style>
