@@ -74,11 +74,12 @@ a {
   color: inherit;
 }
 
-/* Type scale */
+/* Type scale. Display weights are medium, not heavy — the hierarchy is
+   carried by size and tracking, not by weight. */
 .h1,
 h1 {
   font-family: var(--f-sans);
-  font-weight: 800;
+  font-weight: 500;
   font-size: clamp(30px, 5vw, 56px);
   letter-spacing: -0.037em;
   line-height: 1.08;
@@ -87,7 +88,7 @@ h1 {
 .h2,
 h2 {
   font-family: var(--f-sans);
-  font-weight: 800;
+  font-weight: 500;
   font-size: clamp(22px, 3vw, 34px);
   letter-spacing: -0.03em;
   line-height: 1.15;
@@ -96,7 +97,7 @@ h2 {
 .h3,
 h3 {
   font-family: var(--f-sans);
-  font-weight: 700;
+  font-weight: 500;
   font-size: clamp(18px, 2.2vw, 23px);
   letter-spacing: -0.024em;
   line-height: 1.25;

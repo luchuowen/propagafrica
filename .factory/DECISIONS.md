@@ -66,3 +66,10 @@ Loaded via `CLAUDE.md`. Cap: 250 lines. Compact into `.factory/history/` when cl
 - Stage copy and figures live in `src/lib/stages.ts` and are **placeholders pending confirmation**
   from operations. Photographs are not supplied yet, so each plate renders a labelled grey
   placeholder with crop ticks until a `photo` is passed.
+
+## Display weight lowered to 500 (session 2)
+
+- H1/H2/H3 were Inter 800/800/700; the owner asked for the hero and its buttons to read cleaner, so
+  all three are Inter 500 and buttons (home hero + header CTA) are 500. Body stays 400, the
+  wordmark stays 700 — it is the only heavy type on the site. `blueprint.md` §3 updated to match;
+  the table there, not this note, is the reference.

@@ -45,12 +45,15 @@ declared in `src/styles/global.css`.
 
 | Role                | Face           | Weight  | Size                     | Tracking |
 | ------------------- | -------------- | ------- | ------------------------ | -------- |
-| Page H1             | Inter          | 800     | clamp(30px, 5vw, 56px)   | -0.037em |
-| Section H2          | Inter          | 800     | clamp(22px, 3vw, 34px)   | -0.030em |
-| H3                  | Inter          | 700     | clamp(18px, 2.2vw, 23px) | -0.024em |
+| Page H1             | Inter          | 500     | clamp(30px, 5vw, 56px)   | -0.037em |
+| Section H2          | Inter          | 500     | clamp(22px, 3vw, 34px)   | -0.030em |
+| H3                  | Inter          | 500     | clamp(18px, 2.2vw, 23px) | -0.024em |
 | Body                | Inter          | 400     | 16px / 1.6               | normal   |
 | Eyebrow, label      | JetBrains Mono | 400     | 9.5–10.5px UPPERCASE     | 0.13em   |
 | Table, spec, figure | JetBrains Mono | 400/500 | 10.5–12px                | normal   |
+
+Buttons and the header call to action: Inter 500. Nothing on the site is set heavier than 500
+except the wordmark (700). Hierarchy comes from size and tracking, not weight.
 
 Every numeric column: `font-variant-numeric: tabular-nums`.
 
