@@ -115,11 +115,14 @@ function assetVariants(src: string) {
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: center;
     height: 44px;
     margin: var(--space-2) 0 0;
   }
 
   .num {
+    position: relative;
+    z-index: 1;
     width: 44px;
     height: 44px;
     flex: 0 0 auto;
@@ -137,6 +140,7 @@ function assetVariants(src: string) {
 
   .caption {
     margin: var(--space-2) 0 0;
+    text-align: center;
     font-size: 17px;
     font-weight: 600;
     letter-spacing: -0.015em;
@@ -154,16 +158,22 @@ function assetVariants(src: string) {
     .marker::after {
       content: '';
       position: absolute;
-      left: 56px;
+      left: 0;
       right: calc(var(--space-3) * -1);
       top: 50%;
       height: 1px;
       background: color-mix(in srgb, var(--green) 22%, transparent);
     }
 
+    /* First step in a row starts at its own marker, last one ends at it, so
+       the line never runs off into the margin. */
+    .step:nth-child(2n + 1) .marker::after {
+      left: 50%;
+    }
+
     .step:nth-child(2n) .marker::after,
     .step:last-child .marker::after {
-      right: 0;
+      right: 50%;
     }
   }
 
@@ -175,16 +185,22 @@ function assetVariants(src: string) {
     .marker::after {
       content: '';
       position: absolute;
-      left: 56px;
+      left: 0;
       right: calc(var(--space-3) * -1);
       top: 50%;
       height: 1px;
       background: color-mix(in srgb, var(--green) 22%, transparent);
     }
 
+    /* First step in a row starts at its own marker, last one ends at it, so
+       the line never runs off into the margin. */
+    .step:nth-child(3n + 1) .marker::after {
+      left: 50%;
+    }
+
     .step:nth-child(3n) .marker::after,
     .step:last-child .marker::after {
-      right: 0;
+      right: 50%;
     }
   }
 </style>
