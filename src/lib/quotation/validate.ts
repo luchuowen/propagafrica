@@ -26,7 +26,8 @@ export function validateField(name: QuotationFieldName, rawValue: string): strin
   return undefined;
 }
 
-// Multi-select fields ("stage") validate as a list of values rather than a single string.
+// Multi-select fields ("enquiringAbout") validate as a list of values rather than a single
+// string.
 export function validateMultiField(
   name: QuotationFieldName,
   rawValues: readonly string[],

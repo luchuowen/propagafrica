@@ -1,154 +1,193 @@
-# PropagAfrica — implementation blueprint
+# PropagAfrica Technologies -- Content Blueprint (Direction C, Living Systems)
 
-The master reference for this project. Sessions after the first read this file and `CLAUDE.md`
-instead of the original prompt. Keep it structured and scannable — a working document, not prose.
+Source of truth for every page's copy. Product facts are transcribed verbatim from the client's flyer (PropagAfrica Technologies Products Portfolio Flyer) -- do not alter them. Do not add prices, founding dates, or any claim not present in this file.
 
-## 1. What this is
+## Global
 
-A 14-page marketing and catalogue site for PropagAfrica Technologies (Nairobi; sells plant-
-propagation consumables to nurseries and cut-flower farms in Kenya and Ethiopia). No online sales,
-no prices anywhere — every commercial path ends in a quotation request. Two future interactive
-tools (sleeve selector, consumables planner) are specified in a later session; this build leaves
-room for them but does not implement them.
+Company: PropagAfrica Technologies, Nairobi, Kenya. Stock held in Kenya and Ethiopia.
+Phone: +254 722 861 682 (Emily). Email: info@propagafrica.com.
+Persistent header CTA: "Request a Quotation" to /contact/
+Footer (locked): copyright line left "(c) {year} PropagAfrica Technologies", "Designed by NAVAC GLOBAL" gold link right to https://navac.co.ke, no underline on hover/focus. Strap line below, small, centred: "Together we grow Africa's horticulture."
+Nav: Home / Products / Tools / Field Notes / About / Contact
 
-## 2. Stack
+## Section 1 -- Homepage (/)
 
-| Layer           | Choice                                                                                   |
-| --------------- | ---------------------------------------------------------------------------------------- |
-| Framework       | Astro 5, TypeScript strict                                                               |
-| Styling         | Hand-written CSS, design tokens in `src/styles/tokens.css`. No Tailwind/UI lib/CSS-in-JS |
-| Interactivity   | Vanilla TS in Astro islands (`client:visible`) — not built yet                           |
-| Unit tests      | Vitest (`tests/unit/`)                                                                   |
-| E2E / visual    | Playwright (`tests/e2e/`)                                                                |
-| Lint / format   | ESLint flat config + Prettier                                                            |
-| Hosting         | Firebase Hosting (not wired yet)                                                         |
-| Backend         | Cloud Functions (2nd gen) + Firestore, quotation requests only (not wired yet)           |
-| Package manager | pnpm, Node 22                                                                            |
+Eyebrow: "Propagation inputs and systems, East Africa"
+H1: "Propagation supplies for nurseries and flower farms across Kenya and Ethiopia"
+Sub-head: "PropagAfrica Technologies supplies the grafting tubes, clips, nursery consumables, propagation systems, sanitation products and monitoring tools that commercial growers depend on, with technical support and stock held in both countries."
+Primary CTA: "Request a Quotation". Secondary CTA: "Browse products".
+Hero carousel captions (5 slides, hero-01..05.jpg):
 
-## 3. Brand
+1. "Grafting tubes and clips built for high-volume rose production"
+2. "Nursery consumables for clean, efficient propagation"
+3. "Climate and irrigation systems designed and installed to your site"
+4. "Monitoring hardware and dashboards that track graft success in real time"
+5. "Technical support from setup to season one"
+   Outcome panels (3, keep these exact headings from the approved homepage mockup):
+   "Graft with confidence" -- "Medical-grade silicone tubes and precision clips sized for roses, vegetables and fruit trees, so unions hold and take."
+   "Grow without guesswork" -- "Temperature, humidity, VPD and soil-moisture sensors feed a dashboard you can check from a phone, so problems are caught before they cost you a batch."
+   "Scale without shortages" -- "Local stock in Kenya and Ethiopia and bulk packaging built for commercial nurseries, not hobby growers."
+   Propagation Journey carousel (6 slides, process-01..06.jpg): 1 Select and prepare stock. 2 Graft and clip the union. 3 Root under controlled humidity. 4 Monitor temperature, humidity and VPD. 5 Harden off and pot on. 6 Move to production.
+   Product grid teaser: 7 family cards (name, one-line descriptor from the family page intro below, "View range" link). Shop-by-crop filter pills: Roses and ornamentals / Vegetables and cucurbits / Fruit trees / Nursery and facility supplies (client-side filter, cuts across families 1-3 and 5).
+   Facilities-in-use carousel (8 slides, facility-01..08.jpg), captions describe the product family shown in a generic regional setting, e.g. "Misting system installed in a rose greenhouse, Rift Valley region" -- no named customers, none exist in source material.
+   Monitoring spotlight (dark section). Heading: "See what's happening in your nursery, not just what happened last week." Body: "PropagAfrica Monitoring pairs temperature, humidity, VPD, soil-moisture, EC and PAR sensors with a mobile and web dashboard, alerts and historical reporting -- hardware, software and support in one package." Example dashboard readings, each clearly labelled "Example reading": Graft Success 98.4%. Average zone temperature 24.6C.
+   Services 3-up teaser: first 3 items of the Technical Services "Our Services" list below, links to /products/technical-services/.
+   Trust panel "Why partner with PropagAfrica" -- verbatim list in Product Reference section below.
+   Target markets panel -- verbatim list in Product Reference section below.
+   CTA band. Heading: "Tell us what you're growing and how much of it." Body: "Send your crop, volume and site details and we'll come back with the right products and packaging." Button: "Request a Quotation".
 
-### Colour tokens (`src/styles/tokens.css`)
+## Section 2 -- Products hub (/products/)
 
-`--paper #FFFFFF` · `--ink #0E1211` · `--ink-soft #68716E` · `--green #0A5C3C` ·
-`--signal #E0521F` · `--rule #DCE2DF`.
+Eyebrow: "Full range"
+H1: "Everything a propagation nursery runs on"
+Sub: "Seven product families, sourced and stocked for commercial growers in Kenya and Ethiopia. Filter by what you grow, or browse the full range below."
+Shop-by-crop filter: Roses and ornamentals / Vegetables and cucurbits / Fruit trees / Nursery and facility supplies (client-side tag filter; systems, sanitation, monitoring and services tagged "Nursery and facility supplies").
+7 cards in flyer order: name, verbatim tagline, one-paragraph descriptor (reuse each family page's intro below), "View range" link, key-products preview (first 4 bullets of that family).
 
-Rules: `--signal` only on a dimension/tolerance/callout leader/figure reference, never a button or
-background or decoration, target <5% of ink coverage per page. `--green` never a gradient, never a
-large fill, never paired with yellow. No colour outside these six without adding it here and to
-`DECISIONS.md`.
+## Section 3 -- Grafting Tubes (/products/grafting-tubes/)
 
-### Type
+Tagline (verbatim): "Flexible. Transparent. Reliable."
+Intro (verbatim): "High-quality silicone tubes designed for rose and ornamental as well as vegetable and fruit tree grafting. Ensure optimal union, high graft success and healthy growth."
+Product range: PRO-ROSE 35 (3.5mm), PRO-ROSE 45 (4.5mm), PRO-ROSE 55 (5.5mm), PRO-ROSE 65 (6.5mm), PRO-ROSE 75 (7.5mm), PRO-ROSE 85 (8.5mm). Plus PRO-VEG (tomato, pepper, eggplant), PRO-CUC (cucumber, melon, watermelon), PRO-TREE (fruit-tree grafting).
+Key specifications (verbatim): Medical-grade silicone. High elasticity. UV and temperature resistant. Transparent. Smooth surface. Multiple sizes. Disposable.
+Packaging (verbatim): 50,000-100,000 pcs/box (or as per request).
+Use-case copy: "Choose PRO-ROSE by stem diameter for consistent unions across a single graft run; PRO-VEG and PRO-CUC are sized for their respective crop families; PRO-TREE is built for the thicker stems of fruit-tree grafting."
+CTA: "Not sure which size fits your stock? Use the Grafting Sleeve and Clip Calculator" to /tools/grafting-calculator/, plus "Request a Quotation".
 
-Self-hosted (see `.factory/DECISIONS.md` for the sourcing decision): Inter Variable (400–800) and
-JetBrains Mono (400/500/700), Latin subset, `font-display: swap`, files in `public/fonts/`,
-declared in `src/styles/global.css`.
+## Section 4 -- Grafting Clips (/products/grafting-clips/)
 
-| Role                | Face           | Weight  | Size                     | Tracking |
-| ------------------- | -------------- | ------- | ------------------------ | -------- |
-| Page H1             | Inter          | 800     | clamp(30px, 5vw, 56px)   | -0.037em |
-| Section H2          | Inter          | 800     | clamp(22px, 3vw, 34px)   | -0.030em |
-| H3                  | Inter          | 700     | clamp(18px, 2.2vw, 23px) | -0.024em |
-| Body                | Inter          | 400     | 16px / 1.6               | normal   |
-| Eyebrow, label      | JetBrains Mono | 400     | 9.5–10.5px UPPERCASE     | 0.13em   |
-| Table, spec, figure | JetBrains Mono | 400/500 | 10.5–12px                | normal   |
+Tagline (verbatim): "Secure Unions. Higher Success."
+Intro (verbatim): "Precision clips for strong graft unions and better propagation outcomes."
+Types: U-Clip, Omega Clip, Round Clip, Tomato Clip, V-Clip.
+Key specifications (verbatim): Material -- high-grade, UV-resistant plastic. Sizes -- multiple sizes for different stem diameters. Features -- secure fit, no damage, reusable (some types). Compatibility -- roses, vegetables, fruit trees and ornamentals.
+Packaging (verbatim): 1,000-10,000 pcs/box (or as per request).
+Use-case copy: "Omega and Round clips are commonly paired with rose grafting, Tomato Clip with tomato, pepper and eggplant, U-Clip with cucurbits, and V-Clip with fruit trees -- our team can confirm the right pairing for your stock."
+CTA: same pattern as Grafting Tubes.
 
-Every numeric column: `font-variant-numeric: tabular-nums`.
+## Section 5 -- Nursery Consumables (/products/nursery-consumables/)
 
-### Logo (`src/components/Mark.astro`)
+Tagline (verbatim): "Everything You Need for Healthy Propagation."
+Intro (verbatim): "Essential supplies for clean, efficient and productive nurseries."
+Key products (verbatim): Propagation trays and inserts. Pots, polybags and sleeves. Labels, tags and markers. Ties, tapes and twist ties. Humidity domes and covers. Edge guards and transport protection. Irrigation accessories. Cutting tools and blades.
+Specifications (verbatim): Durable and reusable. UV resistant. Food grade (where applicable). Wide range of sizes. Designed for commercial use.
+Packaging (verbatim): Bulk and farm-specific packs.
+CTA: "Plan quantities for your next batch with the Nursery Consumables Planner" to /tools/consumables-planner/, plus "Request a Quotation".
 
-Graft-union mark: one stem, two roots, a collar across the join. Props `size`, `tone` (`ink | reverse`).
-Never redrawn, no leaf, no further rounding, never in a circle/badge. Wordmark lockup
-(`src/components/Wordmark.astro`): "PropagAfrica" — Inter 700, tracking -0.028em, title case,
-never all-caps, one colour; "TECHNOLOGIES" — JetBrains Mono 6.8px, tracking 0.3em, capitals,
-`--ink-soft`, directly beneath.
+## Section 6 -- Propagation Systems (/products/propagation-systems/)
 
-### "Blueprint" design system
+Tagline (verbatim): "Efficient Systems. Better Results."
+Intro (verbatim): "Integrated systems to improve efficiency, uniformity and yield."
+Key components (verbatim): Misting and fogging systems. Climate control solutions. Heating and cooling systems. Benching and racking systems. Irrigation systems (drip, ebb and flow). Shade and screening solutions. LED grow lights. Automation and control solutions.
+Note (verbatim): "Custom design and installation available."
+Copy: "Systems are specified for your site, not sold off a shelf -- tell us your greenhouse or nursery layout, crop and target climate and we'll design and install a system around it."
+CTA: "Request a Quotation".
 
-- **SheetFrame.astro** — 1px `--rule` border inset 9–10px from the viewport edge, four `--signal`
-  registration squares at the corners. Wraps every page once.
-- **TitleBlock.astro** — bordered key/value mono block: drawing no., subject, principal SKU, key
-  dimension, scale. Sits top-right of a page's hero.
-- **Figure.astro** — full-width figure; graphic and caption run side by side (never a card), figure
-  number, caption, optional revision mark, plus a sheet footer `FIG. 0n · SUBJECT · REV. A` /
-  `SHEET 0n OF 14`.
-- Density varies deliberately page to page — do not equalise section padding.
-- **Forbidden permanently**: card grids with rounded corners + drop shadows, border-radius > 4px
-  (except the logo collar), box-shadow, gradients, backdrop-filter, icon+title+two-line feature
-  triplets, fade-up-on-scroll, animated counters, marquee logo strips, chat bubbles, 100vh hero.
+## Section 7 -- Sanitation Products (/products/sanitation/)
 
-## 4. Information architecture (14 pages)
+Tagline (verbatim): "Clean Nurseries. Healthy Plants."
+Intro (verbatim): "Disinfectants, sanitizers and hygiene solutions for a disease-free propagation environment."
+Key products (verbatim): Disinfectants and sanitizers. Algae and biofilm control. Surface and tool cleaners. Footbaths and handwash solutions. Water treatment products. Sprayers and sanitation equipment. PPE and protective wear.
+Specifications (verbatim): Effective and safe. Non-corrosive. Long-lasting protection. Compliant with industry standards.
+Packaging (verbatim): 5L, 20L, 200L, 1,000L (IBC).
+CTA: "Request a Quotation".
 
-| Route                 | Status (session 1)                                        |
-| --------------------- | --------------------------------------------------------- |
-| `/`                   | Hero built per §5 copy below; rest of the page waits      |
-| `/supplies`           | Stub                                                      |
-| `/supplies/prepare`   | Stub                                                      |
-| `/supplies/graft`     | Stub                                                      |
-| `/supplies/root`      | Stub                                                      |
-| `/supplies/protect`   | Stub                                                      |
-| `/supplies/record`    | Stub                                                      |
-| `/how-grafting-works` | Stub                                                      |
-| `/specifications`     | Stub                                                      |
-| `/ordering`           | Stub                                                      |
-| `/field-notes`        | Stub (index)                                              |
-| `/field-notes/[slug]` | Template, `getStaticPaths` returns none (no articles yet) |
-| `/about`              | Stub                                                      |
-| `/contact`            | Stub — will hold the quotation form (critical path)       |
+## Section 8 -- Propagation Monitoring (/products/monitoring/)
 
-Primary nav, fixed order/wording: Supplies · How grafting works · Specifications · Ordering ·
-Field Notes, plus a persistent "Ask for a quotation" button. No blog, news, careers, newsletter.
+Tagline (verbatim): "Data-Driven Decisions. Better Outcomes."
+Intro (verbatim): "Digital tools to track, manage and improve your propagation results."
+Key features (verbatim): Temperature, humidity and VPD sensors. Soil moisture and EC monitoring. Light intensity (PAR) sensors. Data loggers and wireless systems. Mobile and web dashboards. Alerts and historical reporting. Easy to install and use.
+Includes (verbatim): "Hardware + software + support."
+Example dashboard readings, clearly labelled "Example reading": Graft Success 98.4%. Average zone temperature 24.6C.
+CTA: "Request a Quotation".
 
-## 5. Copy rules
+## Section 9 -- Technical Services (/products/technical-services/)
 
-No founding date/company age/"newly established" anywhere. Plain English first, technical terms
-defined on first use, no adjective without a figure+unit, every research result carries its
-country, vegetable grafting in Kenya is "emerging" never "widespread". Banned words: empowering,
-transforming, unlocking, seamless, cutting-edge, revolutionary, world-class, best-in-class,
-one-stop shop, "Welcome to", "Why choose us", "at scale", bare "solutions". British spelling.
+Tagline (verbatim): "Expert Support. Lasting Success."
+Intro (verbatim): "From training to troubleshooting, we support your propagation journey."
+Our Services (verbatim): Propagation training and workshops. On-site technical support. Nursery setup and design. Crop specific propagation protocols. Troubleshooting and diagnostics. Performance audits. Custom solutions for your business.
+Includes (verbatim): "On-site, virtual and farm-based support."
+CTA: "Request a Quotation".
 
-**Home hero (built, do not rewrite):**
-Eyebrow `NAIROBI · SUPPLYING KENYA AND ETHIOPIA` — H1 "Propagation supplies for nurseries and
-flower farms." — Subhead as specified in the original brief — buttons "Ask for a quotation"
-(primary) / "See what we supply" (outline).
+## Section 10 -- Tools hub (/tools/)
 
-## 6. Accessibility / performance floor
+Eyebrow: "Planning tools"
+H1: "Work out what you need before you order"
+Two cards: "Grafting Sleeve and Clip Calculator" to /tools/grafting-calculator/ and "Nursery Consumables Planner" to /tools/consumables-planner/, each with a one-line description and "Open calculator".
+Shared disclaimer (use on both tool pages and their result states): "These are planning estimates based on standard nursery ratios and a wastage allowance you can adjust. Contact our team to confirm exact quantities and packaging for your order."
+Full calculator input fields and logic are specified in the Build Workbook's Calculator Logic section -- implement exactly as specified there, do not invent different ratios.
 
-WCAG 2.1 AA, full keyboard reachability + visible focus, `prefers-reduced-motion: reduce` disables
-motion, meaningful SVGs get `role="img"` + `aria-label`, decorative ones `aria-hidden="true"`.
-Lighthouse targets on the built home page: Performance ≥95, Accessibility 100, Best Practices ≥95,
-SEO ≥95 (mobile). No horizontal scroll at 320/375/400px. Zero JS shipped on the home page at this
-stage (no islands yet).
+## Section 11 -- Field Notes hub (/field-notes/)
 
-## 7. Component inventory
+Eyebrow: "Field Notes"
+H1: "Practical guidance for propagation nurseries"
+Sub: "Short, practical articles on grafting, propagation environment and nursery operations, written for growers in Kenya and Ethiopia."
+5 articles listed below in full -- publish exactly as written, do not shorten or paraphrase.
 
-| Component  | Path                              | Notes                                 |
-| ---------- | --------------------------------- | ------------------------------------- |
-| Mark       | `src/components/Mark.astro`       | protected path                        |
-| Wordmark   | `src/components/Wordmark.astro`   | uses Mark                             |
-| SheetFrame | `src/components/SheetFrame.astro` | wraps every page via BaseLayout       |
-| TitleBlock | `src/components/TitleBlock.astro` | drawing-number key/value block        |
-| Figure     | `src/components/Figure.astro`     | full-width figure + sheet footer      |
-| Header     | `src/components/Header.astro`     | nav from `src/lib/nav.ts`             |
-| Footer     | `src/components/Footer.astro`     | four columns + baseline row           |
-| BaseLayout | `src/layouts/BaseLayout.astro`    | head, fonts, SheetFrame/Header/Footer |
+### Article -- choosing-the-right-graft-tube-size
 
-Supporting: `src/lib/nav.ts` (typed nav model + `isActive`, unit tested).
+Title: "Choosing the right graft tube size for your crop"
+Dek: "Tube diameter is the single most common cause of a weak union. Here's how to match it to your stock."
+Cover: /images/field-notes/choosing-the-right-graft-tube-size/cover.jpg
+Body: "A silicone grafting tube that is too loose will not hold the scion and rootstock in even contact, and the union heals unevenly or fails. A tube that is too tight can restrict the stem as it thickens through the healing period. For roses, match the tube to the actual stem diameter at the graft point, not to a single default size across the whole batch -- PRO-ROSE is supplied across six diameters from 3.5mm to 8.5mm for this reason. Measure a sample of the batch before ordering rather than after a bad take rate shows up.
+For vegetable grafting (tomato, pepper, eggplant), PRO-VEG is sized for the thinner, faster-healing stems typical of those crops, while PRO-CUC is built around the growth habit of cucumber, melon and watermelon. Fruit-tree grafting uses thicker stock and a slower healing window, which is what PRO-TREE is specified for.
+If a batch mixes stem sizes, common with seedling stock that hasn't been graded, it is worth sorting into diameter bands first and ordering tubes per band, rather than picking one size and accepting a lower take rate on the outliers. Our Grafting Sleeve and Clip Calculator will suggest a starting size and clip pairing, and our technical team can confirm against a sample if you send stem measurements with your enquiry."
 
-## 8. Footer content
+### Article -- humidity-and-vpd-during-rooting
 
-Four columns: Supplies (five stages) · Tools (sleeve selector, consumables planner, ordering) ·
-Documents (product data sheets, safety data sheets, certificates of analysis, Field Notes) ·
-PropagAfrica Technologies (Nairobi, Kenya · +254 722 861 682 · info@propagafrica.com · Kenya and
-Ethiopia). Baseline row (mono, `--ink-soft`): "Specifications held to batch · Safety data sheets
-and certificates of analysis issued with consignment · © 2026." No founding year, no registration
-number (none supplied).
+Title: "Why VPD matters more than humidity alone during rooting"
+Dek: "Two nurseries running the same humidity percentage can get very different rooting results. VPD is usually why."
+Cover: /images/field-notes/humidity-and-vpd-during-rooting/cover.jpg
+Body: "Relative humidity on its own doesn't tell you how hard a cutting is working to hold water while it roots -- vapour pressure deficit (VPD) does, because it accounts for temperature as well as humidity. A propagation tent reading 85% humidity at 22C behaves very differently to the same 85% at 30C; the warmer tent has a much higher VPD and cuttings lose water faster than they can replace it without roots.
+The practical effect is wilting or stalled rooting that looks like a humidity problem but isn't one that raising humidity alone will fix -- cooling the zone, or shading it, often matters more. This is why PropagAfrica's monitoring sensors track temperature and humidity together and calculate VPD directly, rather than leaving the grower to work it out from two separate numbers.
+As a general target for softwood cuttings, aim to keep VPD low and stable during the first 7-10 days, then allow it to rise gradually as roots establish, to harden the plant off before it leaves the tent. Exact targets vary by species -- our technical team can help set them for your specific crop during a site visit or virtual consultation."
 
-## 9. What's deliberately not in session 1
+### Article -- sanitation-between-propagation-batches
 
-- No page content beyond the home hero.
-- No sleeve selector, no consumables planner (later session; components should leave room but not
-  pre-build them).
-- No Firebase/Firestore/Cloud Functions wiring — `/contact` is a stub, listed as a critical path in
-  `.factory/manifest.json` for when it's built.
-- No Field Notes articles.
-- No favicon / social meta image.
+Title: "What actually needs disinfecting between batches"
+Dek: "Algae on a bench looks cosmetic. It usually isn't."
+Cover: /images/field-notes/sanitation-between-propagation-batches/cover.jpg
+Body: "Disease pressure in a propagation house builds up on surfaces that don't get replaced between batches: benching, trays that are reused rather than discarded, irrigation lines, and tools that move from plant to plant. Algae and biofilm on benching and in irrigation lines are not just an appearance issue -- they hold moisture and organic matter that pathogens use as a foothold, and biofilm inside drip or misting lines can also block emitters over time, which shows up later as uneven watering rather than as an obvious sanitation problem.
+A basic between-batch routine covers four areas: bench and floor surfaces, reusable trays and pots, cutting tools, and irrigation lines -- each needs a product suited to it, since a general surface disinfectant is not the right tool for biofilm inside a pipe. Footbaths and handwash stations at the entrance to a propagation house reduce what gets tracked in from outside, which matters more on a shared or multi-block site.
+PropagAfrica's sanitation range is built around this routine rather than a single all-purpose product -- disinfectants and sanitizers for surfaces, dedicated algae and biofilm control for lines and benching, and PPE for staff moving between blocks. Packaging runs from 5L up to 1,000L IBC for sites large enough to dose centrally."
+
+### Article -- reading-your-monitoring-dashboard
+
+Title: "Reading a propagation dashboard without drowning in data"
+Dek: "More sensors are only useful if you know which three numbers to check first."
+Cover: /images/field-notes/reading-your-monitoring-dashboard/cover.jpg
+Body: "It's easy to install a full sensor set -- temperature, humidity, VPD, soil moisture, EC, PAR -- and then not look at most of it. In practice, three checks catch most problems early: whether the zone is holding its temperature and humidity band overnight, not just during the working day when a fault is easiest to notice; whether soil moisture is trending down between irrigation cycles rather than staying flat; and whether an alert has fired since the last check.
+Historical reporting is where the real value shows up over a season rather than a single day -- comparing this batch's environment against a previous batch that had a strong take rate tells you more than either reading alone. If a batch underperforms, the dashboard's history is usually the fastest way to find out whether it was an environment issue or something else.
+PropagAfrica's monitoring package includes the hardware, the dashboard software and support to set alert thresholds correctly for your crop -- the goal is a dashboard you check for two minutes a day, not one you have to interpret from scratch each time."
+
+### Article -- setting-up-a-new-propagation-block
+
+Title: "Setting up a new propagation block: the order that saves rework"
+Dek: "Benching, irrigation, climate control, then monitoring -- in that order, not the reverse."
+Cover: /images/field-notes/setting-up-a-new-propagation-block/cover.jpg
+Body: "The most common rework we see in new propagation blocks comes from installing climate control or monitoring before the benching and irrigation layout is finalised, which then has to be worked around rather than planned for. A practical build order is: confirm benching and racking layout first, since it fixes the walkways and bench widths everything else has to fit; install irrigation (drip or ebb-and-flow) to that fixed layout; then climate control -- misting/fogging, heating/cooling, shade and screening -- sized to the block's actual volume and glazing, not a generic figure; and add monitoring last, once sensor placement can be chosen against the real airflow and irrigation zones rather than guessed at.
+LED grow lighting and automation controls, where used, integrate at the climate-control stage since they interact with heating load and ventilation timing.
+PropagAfrica designs and installs propagation systems in this order and can also design around an existing block being upgraded in stages -- a full block does not need to be rebuilt at once. Our Technical Services team runs site visits (on-site, virtual or farm-based) to scope a new block or a staged upgrade before anything is ordered."
+
+## Section 12 -- About (/about/)
+
+Eyebrow: "About PropagAfrica Technologies"
+H1: "Propagation inputs and systems for East African horticulture"
+Body: "PropagAfrica Technologies supplies the grafting tubes, clips, nursery consumables, propagation systems, sanitation products and monitoring tools that commercial nurseries, flower farms and fruit and vegetable growers run on, with stock held in Kenya and Ethiopia and technical support from setup through to season one.
+We work with commercial flower growers, vegetable and fruit growers, nurseries and propagation labs, agri-businesses and distributors, and research and training institutions -- supplying products sourced from established manufacturers, alongside the technical expertise to specify, install and troubleshoot the systems around them.
+Our team supports customers on-site, virtually and at the farm, from choosing the right tube and clip for a graft run through to designing and installing a full propagation system and its monitoring."
+Why partner list and Target markets list: verbatim, see Product Reference section below.
+Contact block: phone, email, Nairobi Kenya, stock held in Kenya and Ethiopia.
+
+## Section 13 -- Contact (/contact/)
+
+Eyebrow: "Get in touch"
+H1: "Request a Quotation"
+Sub: "Tell us what you're growing, roughly how much, and where you're based -- we'll come back with the right products, systems or services and packaging for your order."
+Form fields: Name, Company/farm name, Email, Phone, Country (Kenya / Ethiopia / Other), Enquiring about (multi-select: Grafting Tubes, Grafting Clips, Nursery Consumables, Propagation Systems, Sanitation Products, Propagation Monitoring, Technical Services), Message. Hidden field carries a JSON prefill when arriving from a calculator (crop group, product codes, quantities).
+Direct contact panel: +254 722 861 682 (Emily), info@propagafrica.com, Nairobi, Kenya -- East Africa Hub, stock held in Kenya and Ethiopia.
+Success state copy: "Thank you -- your enquiry has reached our team. Emily or a member of the technical team will come back to you shortly."
+
+## Product Reference -- global verbatim lists, reuse everywhere, do not reword
+
+Why partner with PropagAfrica (verbatim): High-quality, reliable products. Competitive pricing and bulk supply. Technical expertise and support. Customised solutions. Consistent availability. Strong relationships with global manufacturers. Local stock in Kenya and Ethiopia.
+Target markets (verbatim): Commercial flower growers. Vegetable and fruit growers. Nurseries and propagation labs. Agri-businesses and distributors. Research and training institutions.

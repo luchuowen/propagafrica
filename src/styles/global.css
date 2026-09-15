@@ -1,18 +1,13 @@
 @import './tokens.css';
 
-/* Self-hosted fonts. Latin subset. font-display: swap per the brand spec. */
+/* Self-hosted fonts. Latin subset. font-display: swap per the brand spec.
+   Inter Variable carries every weight from 400 to 800; JetBrains Mono is
+   reserved for spec values, SKUs, dimensions and pack sizes — never body
+   copy, never an eyebrow, never a nav label. */
 @font-face {
-  font-family: 'Newsreader Variable';
-  src: url('/fonts/newsreader-var-latin.woff2') format('woff2-variations');
-  font-weight: 200 800;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Archivo Variable';
-  src: url('/fonts/archivo-var-latin.woff2') format('woff2-variations');
-  font-weight: 100 900;
+  font-family: 'Inter Variable';
+  src: url('/fonts/inter-var-latin.woff2') format('woff2-variations');
+  font-weight: 400 800;
   font-style: normal;
   font-display: swap;
 }
@@ -82,43 +77,59 @@ a {
   color: inherit;
 }
 
-/* Type scale. Sizes are working sizes, not landing-page sizes: the previous
-   build ran the H1 to 64px at weight 800 with -0.037em tracking, which is the
-   look this rebuild exists to get rid of. Tracking is normal or near it. */
+/* Type scale, Direction C. Hero H1 is the one heading that gets the full
+   800-weight tight-tracking treatment; section and product titles are 700 at
+   a lighter tracking; nav and buttons have their own weights below. */
 .h1,
 h1 {
-  font-family: var(--f-display);
-  font-weight: 600;
+  font-family: var(--f-sans);
+  font-weight: 800;
   font-size: clamp(28px, 3.4vw, 42px);
-  letter-spacing: -0.012em;
+  letter-spacing: -0.03em;
   line-height: 1.12;
 }
 
 .h2,
 h2 {
-  font-family: var(--f-display);
-  font-weight: 600;
+  font-family: var(--f-sans);
+  font-weight: 700;
   font-size: clamp(21px, 2.1vw, 27px);
-  letter-spacing: -0.008em;
+  letter-spacing: -0.02em;
   line-height: 1.22;
 }
 
 .h3,
 h3 {
   font-family: var(--f-sans);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 17px;
-  letter-spacing: 0;
+  letter-spacing: -0.02em;
   line-height: 1.35;
 }
 
 .eyebrow {
-  font-family: var(--f-mono);
-  font-weight: 400;
-  font-size: 10px;
-  letter-spacing: 0.13em;
+  font-family: var(--f-sans);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ink-soft);
+  color: var(--soft);
+}
+
+/* Reversed out over a photograph or a dark ground. */
+.eyebrow.light {
+  color: var(--paper);
+  opacity: 0.85;
+}
+
+.nav-link {
+  font-family: var(--f-sans);
+  font-weight: 600;
+}
+
+.btn {
+  font-family: var(--f-sans);
+  font-weight: 700;
 }
 
 .mono,
@@ -138,6 +149,93 @@ table {
 :focus-visible {
   outline: 2px solid var(--green);
   outline-offset: 2px;
+}
+
+/* ---------- Motion: scroll reveal ----------
+   [data-reveal] elements fade and rise into place the first time they cross
+   into view (BaseLayout.astro's inline script + reveal script drive this via
+   IntersectionObserver). Gated behind .has-js — set synchronously in <head>,
+   before first paint — so content is never stuck invisible if JS fails to
+   load or run: without that class the opacity/transform rules below simply
+   don't apply, and everything renders normally. */
+.has-js [data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.has-js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Stagger children of a revealed group — product grids, outcome strips,
+   bullet lists, detail-image rows. Covers groups up to 8 items; anything
+   past that shares the last delay rather than growing unbounded. */
+[data-reveal-group] > *:nth-child(1) {
+  --reveal-delay: 0ms;
+}
+[data-reveal-group] > *:nth-child(2) {
+  --reveal-delay: 70ms;
+}
+[data-reveal-group] > *:nth-child(3) {
+  --reveal-delay: 140ms;
+}
+[data-reveal-group] > *:nth-child(4) {
+  --reveal-delay: 210ms;
+}
+[data-reveal-group] > *:nth-child(5) {
+  --reveal-delay: 280ms;
+}
+[data-reveal-group] > *:nth-child(6) {
+  --reveal-delay: 350ms;
+}
+[data-reveal-group] > *:nth-child(n + 7) {
+  --reveal-delay: 420ms;
+}
+
+/* ---------- Motion: press feedback ----------
+   A quick, minimal scale-down on every clickable control — buttons, pills,
+   carousel controls, cards — so interaction feels immediate and tactile
+   without any flashy or bouncy easing. */
+.btn,
+.pill,
+.control,
+.dot,
+.product-card,
+.credit,
+a.link-arrow,
+a.tool-link {
+  transition:
+    transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.25s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.btn:active,
+.pill:active,
+.control:active,
+.dot:active {
+  transform: scale(0.94);
+}
+
+/* Shadow-only, deliberately: .product-card also carries [data-reveal], whose
+   .is-visible rule sets transform (needed to animate the entrance) at higher
+   specificity than a plain :hover/:active rule here could win against —
+   layering a translate/scale on top would either fight that rule or need to
+   be duplicated into it. A deepening shadow reads just as premium without
+   the conflict. */
+.product-card:hover {
+  box-shadow: var(--shadow-soft);
+}
+
+.product-card:active {
+  box-shadow: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

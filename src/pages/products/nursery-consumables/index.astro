@@ -1,0 +1,93 @@
+---
+// Nursery Consumables — blueprint.md Section 5.
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import FamilyHero from '../../../components/products/FamilyHero.astro';
+import BulletList from '../../../components/products/BulletList.astro';
+import LabelValueList from '../../../components/products/LabelValueList.astro';
+import DetailStrip from '../../../components/products/DetailStrip.astro';
+import FamilyCta from '../../../components/products/FamilyCta.astro';
+
+const tagline = 'Everything You Need for Healthy Propagation.';
+const intro = 'Essential supplies for clean, efficient and productive nurseries.';
+
+const keyProducts = [
+  'Propagation trays and inserts',
+  'Pots, polybags and sleeves',
+  'Labels, tags and markers',
+  'Ties, tapes and twist ties',
+  'Humidity domes and covers',
+  'Edge guards and transport protection',
+  'Irrigation accessories',
+  'Cutting tools and blades',
+];
+
+const specifications = [
+  'Durable and reusable',
+  'UV resistant',
+  'Food grade (where applicable)',
+  'Wide range of sizes',
+  'Designed for commercial use',
+];
+
+const detailImages = [
+  {
+    src: '/images/products/nursery-consumables/01.jpg',
+    alt: 'Propagation trays and inserts stacked for a nursery batch',
+  },
+  {
+    src: '/images/products/nursery-consumables/02.jpg',
+    alt: 'Polybags and sleeves staged for potting on',
+  },
+  {
+    src: '/images/products/nursery-consumables/03.jpg',
+    alt: 'Labels and tags marking a propagation batch',
+  },
+  {
+    src: '/images/products/nursery-consumables/04.jpg',
+    alt: 'Humidity domes covering a tray of cuttings',
+  },
+  {
+    src: '/images/products/nursery-consumables/05.jpg',
+    alt: 'Nursery consumables packed for despatch',
+  },
+];
+---
+
+<BaseLayout title="Nursery Consumables" description={intro}>
+  <FamilyHero
+    eyebrow="Products"
+    title="Nursery Consumables"
+    tagline={tagline}
+    intro={intro}
+    image="/images/products/nursery-consumables/hero.jpg"
+    imageAlt="Nursery consumables staged for a propagation batch"
+  />
+
+  <div class="family-body">
+    <BulletList heading="Key products" items={keyProducts} />
+
+    <BulletList heading="Specifications" items={specifications} />
+
+    <LabelValueList
+      heading="Packaging"
+      items={[{ label: 'Pack size', value: 'Bulk and farm-specific packs' }]}
+    />
+
+    <DetailStrip images={detailImages} />
+
+    <FamilyCta
+      toolText="Plan quantities for your next batch with the Nursery Consumables Planner"
+      toolHref="/tools/consumables-planner/"
+    />
+  </div>
+</BaseLayout>
+
+<style>
+  .family-body {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: var(--space-6) var(--side-gutter) var(--space-7);
+    display: grid;
+    gap: var(--space-5);
+  }
+</style>

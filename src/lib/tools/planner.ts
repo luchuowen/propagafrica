@@ -157,27 +157,25 @@ export function assumptionLines(): string[] {
 
 /**
  * Query-string contract for "Send this to a quotation" → /contact.
- * Param names are load-bearing for session 6 (prefill) and session 8 (mount) —
+ * Param names are load-bearing for the quotation form's prefill reader —
  * see .factory/decisions/session-4.md before changing any of them.
  */
-// Session 8 integration note — the agreed query-string contract.
-//
-// The planner originally emitted its own `pt_*` namespace. Nothing read it:
-// the quotation form's prefill reader (src/components/quote/QuoteForm.astro)
-// is generic over QUOTATION_FIELDS in src/lib/quotation/schema.ts and looks
-// for parameters named after the form's own fields. The planner side was the
-// wrong one, so it now emits field names the form actually reads — the annual
-// total into `annualVolume`, and the worked quantities into `notes` so the
-// arithmetic travels with the request instead of being retyped.
+// The quotation form's prefill reader (src/components/quote/QuoteForm.astro) is generic over
+// QUOTATION_FIELDS in src/lib/quotation/schema.ts and looks for parameters named after the
+// form's own fields, so the planner emits field names the Direction C form actually reads:
+// "Nursery Consumables" into the Enquiring-about multi-select, and the worked quantities into
+// the Message field so the arithmetic travels with the request instead of being retyped.
 export const QUOTATION_QUERY_PARAMS = {
-  annualVolume: 'annualVolume',
-  notes: 'notes',
+  enquiringAbout: 'enquiringAbout',
+  message: 'message',
 } as const;
 
-/** Keep in step with the `notes` maxLength in src/lib/quotation/schema.ts. */
-const NOTES_MAX_LENGTH = 2000;
+const QUOTATION_ENQUIRY_FAMILY = 'Nursery Consumables';
 
-export function quotationNotes(inputs: PlannerInputs, result: PlannerResult): string {
+/** Keep in step with the `message` maxLength in src/lib/quotation/schema.ts. */
+const MESSAGE_MAX_LENGTH = 2000;
+
+export function quotationMessage(inputs: PlannerInputs, result: PlannerResult): string {
   const tray = TRAY_OPTIONS.find((option) => option.cells === inputs.cells);
   const lines = [
     `Planned from the consumables planner on /ordering.`,
@@ -195,13 +193,13 @@ export function quotationNotes(inputs: PlannerInputs, result: PlannerResult): st
     'Assumptions used:',
     ...assumptionLines().map((line) => `- ${line}`),
   ];
-  return lines.join('\n').slice(0, NOTES_MAX_LENGTH);
+  return lines.join('\n').slice(0, MESSAGE_MAX_LENGTH);
 }
 
 export function buildQuotationQuery(inputs: PlannerInputs, result: PlannerResult): string {
   const params = new URLSearchParams({
-    [QUOTATION_QUERY_PARAMS.annualVolume]: String(Math.round(result.total)),
-    [QUOTATION_QUERY_PARAMS.notes]: quotationNotes(inputs, result),
+    [QUOTATION_QUERY_PARAMS.enquiringAbout]: QUOTATION_ENQUIRY_FAMILY,
+    [QUOTATION_QUERY_PARAMS.message]: quotationMessage(inputs, result),
   });
   return `/contact?${params.toString()}`;
 }

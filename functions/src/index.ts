@@ -3,10 +3,16 @@ import { onRequest } from 'firebase-functions/v2/https';
 import { initializeApp } from 'firebase-admin/app';
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';
 import { validateSubmission, checkAutomation } from './validate';
+import { validateNewsletterSubmission } from './newsletter';
 import { consumeRateLimit } from './rateLimit';
 import { sendNotificationEmail } from './email';
 import { sha256Hex } from './hash';
-import { renderSuccessPage, renderErrorPage } from './render';
+import {
+  renderSuccessPage,
+  renderErrorPage,
+  renderNewsletterSuccessPage,
+  renderNewsletterErrorPage,
+} from './render';
 import { env } from './env';
 import { makeListQuotations } from './admin';
 
@@ -17,7 +23,7 @@ setGlobalOptions({ region: 'europe-west1' });
 initializeApp();
 const db = getFirestore();
 
-// Error copy per docs/content/copy-reference.md, "/contact · SHEET 14 OF 14".
+// Error copy: not specified by blueprint.md Section 13, this session's own addition.
 const GENERIC_ERROR =
   'Check your connection and try again, or email info@propagafrica.com directly.';
 const RATE_LIMIT_ERROR =
@@ -91,6 +97,79 @@ export const submitQuotation = onRequest(async (req, res) => {
     res.status(200).json({ ok: true });
   } else {
     res.status(200).send(renderSuccessPage());
+  }
+});
+
+const NEWSLETTER_GENERIC_ERROR = 'Check your connection and try again.';
+const NEWSLETTER_RATE_LIMIT_ERROR = 'Too many attempts from this connection. Try again in an hour.';
+
+export const subscribeNewsletter = onRequest(async (req, res) => {
+  if (req.method !== 'POST') {
+    res.status(405).send('Method not allowed');
+    return;
+  }
+
+  const body = (req.body ?? {}) as Record<string, unknown>;
+  const asJson = wantsJson(req);
+
+  // Shares the quotation form's honeypot/timestamp fields and thresholds — same anti-bot
+  // contract, no reason to duplicate it for a one-field form.
+  const automation = checkAutomation(body);
+  if (automation.isAutomated) {
+    if (asJson) {
+      res.status(400).json({ ok: false, message: NEWSLETTER_GENERIC_ERROR });
+    } else {
+      res.status(400).send(renderNewsletterErrorPage(NEWSLETTER_GENERIC_ERROR));
+    }
+    return;
+  }
+
+  const { ok, email, error } = validateNewsletterSubmission(body);
+  if (!ok) {
+    const message = error ?? NEWSLETTER_GENERIC_ERROR;
+    if (asJson) {
+      res.status(400).json({ ok: false, message });
+    } else {
+      res.status(400).send(renderNewsletterErrorPage(message));
+    }
+    return;
+  }
+
+  const ip = req.ip ?? req.socket?.remoteAddress ?? 'unknown';
+  // Namespaced separately from the quotation form's rate-limit key so a visitor who has
+  // already sent a quote request today isn't also blocked from subscribing, and vice versa.
+  const identifierHash = sha256Hex(`${ip}:newsletter:${env.rateLimitHashSalt}`);
+
+  const { allowed } = await consumeRateLimit(db, identifierHash);
+  if (!allowed) {
+    if (asJson) {
+      res.status(429).json({ ok: false, message: NEWSLETTER_RATE_LIMIT_ERROR });
+    } else {
+      res.status(429).send(renderNewsletterErrorPage(NEWSLETTER_RATE_LIMIT_ERROR));
+    }
+    return;
+  }
+
+  // Keyed by a hash of the (lowercased) email so a repeat signup updates the existing record
+  // instead of creating a duplicate, without using the plaintext address as a document id.
+  const docId = sha256Hex(email);
+  await db
+    .collection('newsletterSubscribers')
+    .doc(docId)
+    .set(
+      {
+        email,
+        subscribedAt: FieldValue.serverTimestamp(),
+        status: 'subscribed',
+        source: 'web-footer',
+      },
+      { merge: true },
+    );
+
+  if (asJson) {
+    res.status(200).json({ ok: true });
+  } else {
+    res.status(200).send(renderNewsletterSuccessPage());
   }
 });
 

@@ -1,0 +1,48 @@
+---
+// A row of detail photographs beneath a family's hero image — the
+// hero.jpg + 01.jpg..0n.jpg set from docs/image-manifest.md.
+interface Props {
+  images: { src: string; alt: string }[];
+}
+
+const { images } = Astro.props;
+---
+
+<ul class="detail-strip" data-reveal-group>
+  {images.map((img) => (
+    <li data-reveal>
+      <img src={img.src} alt={img.alt} loading="lazy" />
+    </li>
+  ))}
+</ul>
+
+<style>
+  .detail-strip {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2);
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 640px) {
+    .detail-strip {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  li {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: var(--radius-m);
+    background: var(--mint);
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+</style>

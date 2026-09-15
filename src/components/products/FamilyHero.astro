@@ -1,0 +1,98 @@
+---
+// Hero band for a product family page: full-bleed photograph with a scrim,
+// eyebrow, H1 tagline and the family's verbatim intro paragraph. Same shape
+// on every family page — see blueprint.md Sections 3-9.
+interface Props {
+  eyebrow: string;
+  title: string;
+  /** Verbatim family tagline, shown as a short subtitle under the H1. */
+  tagline: string;
+  intro: string;
+  image: string;
+  imageAlt: string;
+}
+
+const { eyebrow, title, tagline, intro, image, imageAlt } = Astro.props;
+---
+
+<header class="family-hero">
+  <div class="hero-media">
+    <img src={image} alt={imageAlt} loading="eager" fetchpriority="high" />
+  </div>
+  <div class="hero-body">
+    <div class="hero-inner">
+      <p class="eyebrow light">{eyebrow}</p>
+      <h1>{title}</h1>
+      <p class="hero-tagline">{tagline}</p>
+      <p class="hero-intro">{intro}</p>
+    </div>
+  </div>
+</header>
+
+<style>
+  .family-hero {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--green-deep);
+  }
+
+  .hero-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .hero-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(6, 30, 20, 0.8) 0%,
+      rgba(6, 30, 20, 0.45) 40%,
+      rgba(6, 30, 20, 0.08) 75%,
+      rgba(6, 30, 20, 0) 100%
+    );
+  }
+
+  .hero-body {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: var(--space-7) var(--side-gutter);
+    min-height: 38vh;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .hero-inner {
+    max-width: 640px;
+  }
+
+  h1 {
+    margin-top: var(--space-2);
+    color: var(--paper);
+  }
+
+  .hero-tagline {
+    margin-top: var(--space-2);
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--paper);
+  }
+
+  .hero-intro {
+    margin-top: var(--space-2);
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--paper);
+    opacity: 0.92;
+    max-width: 56ch;
+  }
+</style>

@@ -1,0 +1,359 @@
+---
+// Nursery Consumables Planner — blueprint.md Section 10 and the Build
+// Workbook's Calculator Logic section. Client-side only: there is no server
+// to compute against (this site builds to static HTML), so the interactive
+// form stays `hidden` until the enhancement script proves JavaScript is
+// running, and a <noscript> fallback points to /contact/ instead.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ToolIntro from '../../components/tools/ToolIntro.astro';
+import { TOOLS_DISCLAIMER } from '../../data/tools';
+import { CELL_COUNTS } from '../../lib/tools/consumables-planner';
+---
+
+<BaseLayout
+  title="Nursery Consumables Planner"
+  description="Work out trays, pots, labels, domes and ties for your next propagation batch, with a wastage allowance you can adjust."
+>
+  <section class="tool-page">
+    <div class="tool-inner">
+      <ToolIntro
+        eyebrow="Planning tools"
+        title="Nursery Consumables Planner"
+        sub="Work out trays, pots, labels, domes and ties for your next propagation batch."
+        image="/images/products/nursery-consumables/hero.jpg"
+        imageAlt="Propagation trays and nursery consumables ready for a new batch"
+      />
+
+      <noscript>
+        <p class="js-required">
+          This planner needs JavaScript to run. <a href="/contact/">Request a Quotation</a> and our
+          team will help you work out quantities.
+        </p>
+      </noscript>
+
+      <div class="calculator" data-calculator hidden>
+        <form id="consumables-form" novalidate>
+          <div class="field">
+            <label for="cuttings">Cuttings/seedlings to propagate</label>
+            <input
+              id="cuttings"
+              name="cuttings"
+              type="number"
+              min="1"
+              step="1"
+              inputmode="numeric"
+              placeholder="e.g. 10000"
+            />
+          </div>
+
+          <div class="field">
+            <label for="cell-count">Tray cell count</label>
+            <select id="cell-count" name="cellCount">
+              {CELL_COUNTS.map((count) => (
+                <option value={count}>{count} cells</option>
+              ))}
+            </select>
+          </div>
+
+          <div class="field field-toggle">
+            <label for="potting-on">Potting-on stage</label>
+            <select id="potting-on" name="pottingOn">
+              <option value="no">No</option>
+              <option value="yes">Yes</option>
+            </select>
+          </div>
+
+          <div class="field field-toggle">
+            <label for="humidity-domes">Humidity domes</label>
+            <select id="humidity-domes" name="humidityDomes">
+              <option value="no">No</option>
+              <option value="yes">Yes</option>
+            </select>
+          </div>
+
+          <div class="field field-toggle">
+            <label for="staked">Staked/trellised crop</label>
+            <select id="staked" name="staked">
+              <option value="no">No</option>
+              <option value="yes">Yes</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="buffer">Wastage buffer (%)</label>
+            <input id="buffer" name="buffer" type="number" min="0" max="25" step="1" value="10" />
+          </div>
+        </form>
+
+        <div class="results">
+          <p class="hint" data-hint>
+            Enter the number of cuttings or seedlings to propagate to see quantities.
+          </p>
+          <dl class="result-list" data-result-list hidden>
+            <div class="row" data-row-trays hidden>
+              <dt>Trays</dt>
+              <dd class="mono" data-trays></dd>
+            </div>
+            <div class="row" data-row-pots hidden>
+              <dt>Pots</dt>
+              <dd class="mono" data-pots></dd>
+            </div>
+            <div class="row" data-row-labels hidden>
+              <dt>Labels</dt>
+              <dd class="mono" data-labels></dd>
+            </div>
+            <div class="row" data-row-domes hidden>
+              <dt>Domes</dt>
+              <dd class="mono" data-domes></dd>
+            </div>
+            <div class="row" data-row-ties hidden>
+              <dt>Ties</dt>
+              <dd class="mono" data-ties></dd>
+            </div>
+          </dl>
+
+          <p class="disclaimer" data-result-list hidden>
+            {TOOLS_DISCLAIMER}
+          </p>
+
+          <a class="btn-primary" id="quote-link" href="/contact/" data-result-list hidden>
+            Request a Quotation
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { computeConsumablesPlan } from '../../lib/tools/consumables-planner';
+  import { buildQuotationHref } from '../../lib/tools/handoff';
+
+  const calculator = document.querySelector<HTMLElement>('[data-calculator]');
+  const form = document.getElementById('consumables-form') as HTMLFormElement | null;
+  if (calculator && form) {
+    calculator.hidden = false;
+
+    const cuttingsEl = document.getElementById('cuttings') as HTMLInputElement;
+    const cellCountEl = document.getElementById('cell-count') as HTMLSelectElement;
+    const pottingOnEl = document.getElementById('potting-on') as HTMLSelectElement;
+    const domesEl = document.getElementById('humidity-domes') as HTMLSelectElement;
+    const stakedEl = document.getElementById('staked') as HTMLSelectElement;
+    const bufferEl = document.getElementById('buffer') as HTMLInputElement;
+
+    const hint = document.querySelector('[data-hint]') as HTMLElement;
+    const resultEls = document.querySelectorAll<HTMLElement>('[data-result-list]');
+    const traysOut = document.querySelector('[data-trays]') as HTMLElement;
+    const potsOut = document.querySelector('[data-pots]') as HTMLElement;
+    const labelsOut = document.querySelector('[data-labels]') as HTMLElement;
+    const domesOut = document.querySelector('[data-domes]') as HTMLElement;
+    const tiesOut = document.querySelector('[data-ties]') as HTMLElement;
+    const rowTrays = document.querySelector('[data-row-trays]') as HTMLElement;
+    const rowPots = document.querySelector('[data-row-pots]') as HTMLElement;
+    const rowLabels = document.querySelector('[data-row-labels]') as HTMLElement;
+    const rowDomes = document.querySelector('[data-row-domes]') as HTMLElement;
+    const rowTies = document.querySelector('[data-row-ties]') as HTMLElement;
+    const quoteLink = document.getElementById('quote-link') as HTMLAnchorElement;
+
+    function isYes(select: HTMLSelectElement): boolean {
+      return select.value === 'yes';
+    }
+
+    function readBuffer(): number {
+      const raw = Number(bufferEl.value);
+      const value = Number.isFinite(raw) ? raw : 10;
+      return Math.min(25, Math.max(0, value));
+    }
+
+    function showRow(row: HTMLElement, out: HTMLElement, value: number): void {
+      row.hidden = value <= 0;
+      out.textContent = value.toLocaleString('en-GB');
+    }
+
+    function render() {
+      const cuttings = Math.floor(Number(cuttingsEl.value));
+      if (!Number.isFinite(cuttings) || cuttings <= 0) {
+        hint.hidden = false;
+        resultEls.forEach((el) => (el.hidden = true));
+        return;
+      }
+
+      const plan = computeConsumablesPlan(
+        cuttings,
+        Number(cellCountEl.value),
+        isYes(pottingOnEl),
+        isYes(domesEl),
+        isYes(stakedEl),
+        readBuffer(),
+      );
+
+      showRow(rowTrays, traysOut, plan.traysNeeded);
+      showRow(rowPots, potsOut, plan.potsNeeded);
+      showRow(rowLabels, labelsOut, plan.labelsNeeded);
+      showRow(rowDomes, domesOut, plan.domesNeeded);
+      showRow(rowTies, tiesOut, plan.tiesNeeded);
+
+      quoteLink.href = buildQuotationHref({
+        source: 'consumables-planner',
+        items: {
+          trays: plan.traysNeeded,
+          pots: plan.potsNeeded,
+          labels: plan.labelsNeeded,
+          domes: plan.domesNeeded,
+          ties: plan.tiesNeeded,
+        },
+      });
+
+      hint.hidden = true;
+      resultEls.forEach((el) => (el.hidden = false));
+    }
+
+    form.addEventListener('input', render);
+    form.addEventListener('change', render);
+
+    render();
+  }
+</script>
+
+<style>
+  .tool-page {
+    padding: var(--space-6) 0 var(--space-7);
+  }
+
+  .tool-inner {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 0 var(--side-gutter);
+  }
+
+  .js-required {
+    margin-top: var(--space-4);
+    padding: var(--space-3);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-m);
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 60ch;
+  }
+
+  .js-required a {
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  .calculator {
+    margin-top: var(--space-5);
+    display: grid;
+    gap: var(--space-5);
+    max-width: 640px;
+  }
+
+  /* A class that sets `display` unconditionally beats the browser's own
+     `[hidden] { display: none }` rule. Every element this page hides via the
+     `hidden` property needs its own override. */
+  .calculator[hidden] {
+    display: none;
+  }
+
+  form {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  label {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  input,
+  select {
+    width: 100%;
+    font-family: var(--f-sans);
+    font-size: 16px;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-s);
+    padding: 10px 12px;
+  }
+
+  .results {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--rule);
+    display: grid;
+    gap: var(--space-3);
+    align-items: start;
+  }
+
+  .hint {
+    color: var(--soft);
+    font-size: 15px;
+  }
+
+  .result-list {
+    margin: 0;
+  }
+
+  .result-list .row {
+    display: grid;
+    grid-template-columns: 10em 1fr;
+    gap: var(--space-3);
+    padding: 10px 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .result-list .row[hidden] {
+    display: none;
+  }
+
+  .result-list .row:first-child {
+    border-top: none;
+  }
+
+  dt {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--soft);
+  }
+
+  dd {
+    margin: 0;
+    font-size: 15px;
+  }
+
+  .disclaimer {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--soft);
+  }
+
+  .btn-primary {
+    justify-self: start;
+    display: inline-block;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 11px 22px;
+    border-radius: var(--radius-s);
+    background: var(--green);
+    color: var(--paper);
+    border: 1px solid var(--green);
+  }
+
+  .btn-primary[hidden] {
+    display: none;
+  }
+
+  .btn-primary:hover {
+    background: var(--green-dark);
+    border-color: var(--green-dark);
+  }
+</style>

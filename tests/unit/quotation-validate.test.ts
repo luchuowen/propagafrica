@@ -25,12 +25,14 @@ describe('quotation form field validation', () => {
     expect(validateField('name', 'a'.repeat(200))).toMatch(/under 120 characters/);
   });
 
-  it('requires at least one stage', () => {
-    expect(validateMultiField('stage', [])).toBe('Select at least one stage.');
-    expect(validateMultiField('stage', ['Graft'])).toBeUndefined();
+  it('requires at least one enquiringAbout option', () => {
+    expect(validateMultiField('enquiringAbout', [])).toBe('Select at least one option.');
+    expect(validateMultiField('enquiringAbout', ['Grafting Tubes'])).toBeUndefined();
   });
 
-  it('rejects a stage value outside its option list', () => {
-    expect(validateMultiField('stage', ['Not a stage'])).toBe('Select at least one stage.');
+  it('rejects an enquiringAbout value outside its option list', () => {
+    expect(validateMultiField('enquiringAbout', ['Not a product'])).toBe(
+      'Select at least one option.',
+    );
   });
 });

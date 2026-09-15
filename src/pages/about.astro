@@ -1,138 +1,160 @@
 ---
+// About — blueprint.md Section 12. Full replacement of the pre-restart page: old copy, old
+// components (PageHero, NotesBlock, QuotationBlock, RuledRows) and the old farmAerialImg asset
+// are dropped entirely, same as the homepage/products/field-notes rebuilds before it. Those
+// components are left in place, unreferenced, same as StageNav.astro after Prompt 0.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import farmAerialImg from '../assets/images/farm-aerial.jpg';
-import PageHero from '../components/PageHero.astro';
-import NotesBlock from '../components/supplies/NotesBlock.astro';
-import QuotationBlock from '../components/supplies/QuotationBlock.astro';
-import RuledRows from '../components/reference/RuledRows.astro';
+import TrustPanel from '../components/TrustPanel.astro';
+import FamilyCta from '../components/products/FamilyCta.astro';
 
-// Nothing on this page states when the company was founded, how long it has
-// traded, or how many people it employs. scripts/factory-check.sh gates on it.
-const DIFFERENCES = [
-  {
-    key: 'Specialist range',
-    value:
-      'A general dealer carries propagation consumables as a footnote. It is the whole of what we do.',
-  },
-  {
-    key: 'Published specs',
-    value: 'Grade, dimension, strength and tolerance are published, not described on a phone call.',
-  },
-  {
-    key: 'Scheduled supply',
-    value:
-      'An annual framework and monthly call-offs, rather than a quotation every time you run out.',
-  },
+const bodyParagraphs = [
+  'PropagAfrica Technologies supplies the grafting tubes, clips, nursery consumables, propagation systems, sanitation products and monitoring tools that commercial nurseries, flower farms and fruit and vegetable growers run on, with stock held in Kenya and Ethiopia and technical support from setup through to season one.',
+  'We work with commercial flower growers, vegetable and fruit growers, nurseries and propagation labs, agri-businesses and distributors, and research and training institutions — supplying products sourced from established manufacturers, alongside the technical expertise to specify, install and troubleshoot the systems around them.',
+  'Our team supports customers on-site, virtually and at the farm, from choosing the right tube and clip for a graft run through to designing and installing a full propagation system and its monitoring.',
 ];
 
-const CUSTOMERS = [
+const photos = [
   {
-    key: 'Commercial flower growers',
-    value: 'Rose and summer flower propagation units.',
+    src: '/images/about/team-01.jpg',
+    alt: 'A PropagAfrica Technologies team member reviewing a grafting batch with a customer at a nursery bench',
   },
   {
-    key: 'Vegetable and fruit growers',
-    value: 'Seedling and grafted-plant production.',
+    src: '/images/about/team-02.jpg',
+    alt: 'A PropagAfrica Technologies technician working with propagation equipment on site',
   },
   {
-    key: 'Nurseries and propagation labs',
-    value: 'Specialist propagators and tissue-culture operations.',
-  },
-  {
-    key: 'Agri-business distributors',
-    value: 'Resale into regional markets.',
-  },
-  {
-    key: 'Research and training',
-    value: 'Universities, colleges and demonstration units.',
+    src: '/images/about/nairobi-hub.jpg',
+    alt: 'The PropagAfrica Technologies stock and dispatch hub in Nairobi, Kenya',
   },
 ];
 ---
 
 <BaseLayout
   title="About"
-  description="PropagAfrica Technologies supplies one part of horticulture properly: the consumables and equipment a propagation house runs on, across Kenya and Ethiopia."
+  description="PropagAfrica Technologies supplies propagation inputs and systems for East African horticulture, with stock held in Kenya and Ethiopia and technical support from setup through to season one."
 >
-  <PageHero
-    eyebrow="ABOUT"
-    title="A specialist supplier, not a general dealer."
-    standfirst="PropagAfrica Technologies supplies one part of horticulture properly: the consumables and equipment a propagation house runs on, across Kenya and Ethiopia."
-    image={farmAerialImg}
-    imageAlt="Rows of polythene greenhouses across a Kenyan flower farm with an escarpment behind"
-  />
+  <section class="about-hero">
+    <div class="about-hero-inner">
+      <p class="eyebrow">About PropagAfrica Technologies</p>
+      <h1>Propagation inputs and systems for East African horticulture</h1>
+      {bodyParagraphs.map((paragraph) => (
+        <p class="body">{paragraph}</p>
+      ))}
+    </div>
+  </section>
 
-  <div class="ref-section">
-    <h2>What we do.</h2>
-    <p class="body">
-      We source, specify and supply propagation consumables — grafting sleeves and clips, growing
-      media, nursery hygiene products, trays, labels and record books — and we specify and source
-      the equipment that sits around them. Everything we sell is bought against a written
-      specification, documented per batch, and delivered on a schedule that matches a grafting
-      calendar rather than a warehouse calendar.
-    </p>
-  </div>
+  <TrustPanel />
 
-  <div class="ref-section">
-    <h2>How we are different from a general agri-dealer.</h2>
-    <RuledRows rows={DIFFERENCES} />
-  </div>
+  <section class="about-photos">
+    <div class="about-photos-inner">
+      <ul class="photo-grid" data-reveal-group>
+        {photos.map((photo) => (
+          <li data-reveal>
+            <img src={photo.src} alt={photo.alt} loading="lazy" />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
 
-  <div class="ref-section">
-    <h2>Who we supply.</h2>
-    <RuledRows rows={CUSTOMERS} />
-  </div>
-
-  <div class="ref-section">
-    <h2>Technical services.</h2>
-    <p class="body">
-      Training, on-site support at the bench, nursery design, written crop protocols,
-      troubleshooting when take drops, performance audits and split-batch product trials are part of
-      the supply rather than something sold against it. The full list is on
-      <a href="/ordering#services">the ordering page</a>.
-    </p>
-  </div>
-
-  <div class="ref-section">
-    <h2>Contact.</h2>
-    <NotesBlock>
-      <p>
-        PropagAfrica Technologies · Nairobi, Kenya ·
-        <a href="tel:+254722861682">+254&nbsp;722&nbsp;861&nbsp;682</a> ·
-        <a href="mailto:info@propagafrica.com">info@propagafrica.com</a> · Serving Kenya and
-        Ethiopia
-      </p>
-    </NotesBlock>
-  </div>
-
-  <div class="ref-section">
-    <QuotationBlock />
-  </div>
+  <section class="about-contact">
+    <div class="about-contact-inner" data-reveal>
+      <h2>Contact</h2>
+      <address>
+        <a href="tel:+254722861682">+254 722 861 682</a>
+        <br />
+        <a href="mailto:info@propagafrica.com">info@propagafrica.com</a>
+        <br />
+        Nairobi, Kenya
+        <br />
+        Stock held in Kenya and Ethiopia
+      </address>
+      <FamilyCta />
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
-  .ref-section {
+  .about-hero {
+    padding: var(--space-6) 0 var(--space-5);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .about-hero-inner {
     max-width: var(--content-max);
     margin: 0 auto;
-    padding: var(--space-4) var(--side-gutter) 0;
+    padding: 0 var(--side-gutter);
   }
 
-  .ref-section:last-child {
-    padding-bottom: var(--space-6);
+  .about-hero-inner h1 {
+    margin-top: var(--space-2);
+    max-width: 28ch;
   }
 
-  h2 {
-    margin: 0 0 var(--space-3);
-  }
-
-  .body {
-    max-width: 42em;
+  .about-hero-inner .body {
+    margin-top: var(--space-3);
+    max-width: 62ch;
     font-size: 17px;
     line-height: 1.7;
-    margin: 0;
+    color: var(--ink);
   }
 
-  .body a,
-  .ref-section :global(.notes-block a) {
+  .about-hero-inner .body:first-of-type {
+    margin-top: var(--space-4);
+  }
+
+  .about-photos {
+    padding: var(--space-6) 0;
+  }
+
+  .about-photos-inner {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 0 var(--side-gutter);
+  }
+
+  .photo-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 720px) {
+    .photo-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .photo-grid img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-s);
+  }
+
+  .about-contact {
+    padding: var(--space-6) 0 var(--space-7);
+  }
+
+  .about-contact-inner {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 0 var(--side-gutter);
+  }
+
+  address {
+    font-style: normal;
+    margin-top: var(--space-3);
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--ink);
+  }
+
+  address a {
     color: var(--green);
   }
 </style>

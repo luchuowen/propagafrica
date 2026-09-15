@@ -1,0 +1,70 @@
+---
+// A heading with label/value rows underneath — reused for grafting clips'
+// Key specifications (Material / Sizes / Features / Compatibility) and for a
+// single-row Packaging line, both verbatim from blueprint.md.
+interface Item {
+  label: string;
+  value: string;
+}
+
+interface Props {
+  heading: string;
+  items: Item[];
+}
+
+const { heading, items } = Astro.props;
+---
+
+<section class="label-value-list" data-reveal>
+  <h2>{heading}</h2>
+  <dl>
+    {items.map((item) => (
+      <div class="row">
+        <dt>{item.label}</dt>
+        <dd>{item.value}</dd>
+      </div>
+    ))}
+  </dl>
+</section>
+
+<style>
+  .label-value-list {
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--rule);
+  }
+
+  dl {
+    margin: var(--space-3) 0 0;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 9em 1fr;
+    gap: var(--space-3);
+    padding: 10px 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .row:first-child {
+    border-top: none;
+  }
+
+  dt {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--soft);
+  }
+
+  dd {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 560px) {
+    .row {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+  }
+</style>

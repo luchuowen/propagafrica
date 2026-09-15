@@ -5,11 +5,34 @@
 */
 
 :root {
-  /* Colour */
-  --paper: #ffffff; /* ground. White. Never off-white, never beige. */
-  --ink: #0e1211; /* all body and display text */
+  /* Colour — Direction C, "Living Systems" (locked, see DECISIONS.md).
+     This is the current brand palette; use these eight for anything new.
+     The tokens below this block (--ink-soft, --signal, --rule, --green-deep,
+     --green-mid, --green-pale, --ink-overlay*) belong to the superseded
+     "Blueprint" direction and are kept only because pre-restart pages
+     (about.astro, contact.astro, field-notes pages, index.astro, 404.astro
+     and their supporting components) still read them — remove once those
+     pages are rebuilt against this palette. */
+  --paper: #fbf6ee; /* ground. Warm off-white. */
+  --ink: #20241a; /* all body and display text */
+  --soft: #5c6350; /* secondary text, annotation */
+  --green: #1f5c3f; /* structure, wordmark rule, primary buttons */
+  --green-dark: #163f2b; /* dark sections, hovers, deep fills */
+  --terra: #c1552b; /* accent — dots, small graphic details only */
+  --gold: #d9a441; /* accent — dots, small graphic details only */
+  /* --gold fails WCAG AA as text (2.09:1 on --paper). Same hue, darkened to
+     clear AA (contrast >= 4.5:1) for the one case that needs gold AS text
+     (the footer credit link) — mirrors the --signal/--signal-ink pattern
+     below. Never use bare --gold for text. */
+  --gold-ink: #7e5f26;
+  --mint: #eaf3ec; /* the one tinted ground */
+  /* Two narrow-purpose additions the logo/wordmark spec calls for on a dark
+     tone, not part of the eight named brand colours above. */
+  --white: #ffffff; /* dark-tone mark/wordmark strokes only */
+  --mint-bright: #3fa374; /* dark-tone "Africa" text and third accent dot */
+
+  /* Superseded ("Blueprint") tokens — see note above. */
   --ink-soft: #68716e; /* secondary text, annotation */
-  --green: #0a5c3c; /* structure, wordmark rule, primary buttons */
   --signal: #e0521f; /* dimensions, callouts, anything carrying a measurement */
   /* The same hue darkened to clear WCAG AA (5.02:1 on --paper). --signal is a
      graphic colour — leader lines, tick marks, rules — and drops to 3.89:1 as
@@ -17,11 +40,8 @@
      instead. Do not swap them: the graphic mark keeps the brand orange. */
   --signal-ink: #c1471b;
   --rule: #e4e7e4; /* hairlines */
-
-  /* Rebuild additions. The site is photography-led now; these carry the
-     contrast the old sheet border used to carry. */
   --green-deep: #06301f; /* full-bleed dark sections, image overlays */
-  --green-mid: #0a5c3c; /* same as --green, named for section use */
+  --green-mid: #0a5c3c; /* the old --green, named for section use */
   /* The only tinted ground. Cool, not beige. Lightened from #eef3ef, which
      put --ink-soft and --signal-ink at 4.47:1 on it — just under AA. At
      #f5f8f6 both clear 4.69:1 and the tint is still visible. */
@@ -29,20 +49,18 @@
   --ink-overlay: rgba(6, 30, 20, 0.55); /* scrim over photographs */
   --ink-overlay-strong: rgba(6, 30, 20, 0.72);
 
-  /* Radius and elevation. The old build banned both outright because the
-     blueprint idea had no use for them. A photographic site does. Kept
-     restrained: two radii, one shadow, no gradients ever. */
+  /* Radius and elevation. Two radii, one shadow, no gradients ever. */
   --radius-s: 4px;
   --radius-m: 10px;
   --radius-l: 18px;
   --shadow-soft: 0 1px 2px rgba(6, 30, 20, 0.04), 0 8px 24px rgba(6, 30, 20, 0.06);
 
-  /* Type */
-  /* Headings are an editorial serif; text is a sturdy grotesque. Inter at
-     display sizes with tight tracking was the single loudest "generated site"
-     tell in the previous build, and is gone. */
-  --f-display: 'Newsreader Variable', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
-  --f-sans: 'Archivo Variable', -apple-system, system-ui, 'Helvetica Neue', Arial, sans-serif;
+  /* Type — Inter throughout, JetBrains Mono reserved for spec data, SKUs,
+     dimensions and pack sizes only. --f-display is an alias kept only for
+     components still on the superseded serif-headed scale; it is Inter too,
+     since this direction has no serif anywhere. */
+  --f-sans: 'Inter Variable', -apple-system, system-ui, 'Helvetica Neue', Arial, sans-serif;
+  --f-display: 'Inter Variable', -apple-system, system-ui, 'Helvetica Neue', Arial, sans-serif;
   --f-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
 
   /* Spacing scale (8px base) */

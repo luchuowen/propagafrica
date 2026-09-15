@@ -1,38 +1,33 @@
 ---
-// The PropagAfrica graft-union mark. One stem, two roots, a collar across
-// the join. Do not redraw, do not add a leaf, do not round further, do not
-// place inside a circle or a badge.
+// The PropagAfrica plant mark: a central node, one root and three shoots,
+// each shoot tipped with an accent dot. Do not redraw, do not add a leaf
+// shape, do not place inside a circle or badge beyond its own centre node.
 interface Props {
   size?: number;
-  tone?: 'ink' | 'reverse';
+  tone?: 'light' | 'dark';
 }
 
-const { size = 44, tone = 'ink' } = Astro.props;
-const color = tone === 'reverse' ? 'var(--paper)' : 'var(--ink)';
-const height = Math.round((size * 52) / 44);
+const { size = 44, tone = 'light' } = Astro.props;
+const stroke = tone === 'dark' ? 'var(--white)' : 'var(--green)';
+const thirdDot = tone === 'dark' ? 'var(--mint-bright)' : 'var(--green)';
 ---
 
 <svg
-  viewBox="0 0 44 52"
+  viewBox="0 0 64 64"
   width={size}
-  height={height}
+  height={size}
   role="img"
   aria-label="PropagAfrica Technologies"
-  style={`color: ${color}`}
+  style={`color: ${stroke}`}
 >
-  <g fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="butt">
-    <path d="M22 30 V5"></path>
-    <path d="M13 47 L22 30"></path>
-    <path d="M31 47 L22 30"></path>
+  <g fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round">
+    <path d="M32 34 L32 52"></path>
+    <path d="M32 34 L16 16"></path>
+    <path d="M32 34 L44 14"></path>
+    <path d="M32 34 L48 30"></path>
   </g>
-  <rect
-    x="6.5"
-    y="18"
-    width="31"
-    height="17"
-    rx="3.5"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2.4"
-  ></rect>
+  <circle cx="32" cy="34" r="4.6" fill="currentColor"></circle>
+  <circle cx="16" cy="16" r="3.6" style="fill: var(--terra)"></circle>
+  <circle cx="44" cy="14" r="3.6" style="fill: var(--gold)"></circle>
+  <circle cx="48" cy="30" r="3.6" style={`fill: ${thirdDot}`}></circle>
 </svg>

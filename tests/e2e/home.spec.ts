@@ -18,7 +18,9 @@ test.describe('home page', () => {
   test('H1 matches the specified hero copy exactly', async ({ page }) => {
     await page.goto('/');
     const h1 = page.locator('h1');
-    await expect(h1).toHaveText('Propagation supplies for nurseries and flower farms.');
+    await expect(h1).toHaveText(
+      'Propagation supplies for nurseries and flower farms across Kenya and Ethiopia',
+    );
   });
 
   test('wordmark renders "PropagAfrica" in title case', async ({ page }) => {

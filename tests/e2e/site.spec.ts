@@ -3,25 +3,30 @@ import AxeBuilder from '@axe-core/playwright';
 
 // Every public route. /admin is deliberately excluded: it is not public
 // content, it is behind authentication, and robots.txt disallows it.
+// The pre-restart supplies/how-grafting-works/specifications/ordering routes were
+// deleted in the Prompt 0 foundations restart (see .factory/DECISIONS.md) and are
+// not yet replaced.
 export const ROUTES = [
   '/',
-  '/supplies',
-  '/supplies/prepare',
-  '/supplies/graft',
-  '/supplies/root',
-  '/supplies/protect',
-  '/supplies/record',
-  '/how-grafting-works',
-  '/specifications',
-  '/ordering',
   '/about',
   '/contact',
+  '/products',
+  '/products/grafting-tubes',
+  '/products/grafting-clips',
+  '/products/nursery-consumables',
+  '/products/propagation-systems',
+  '/products/sanitation',
+  '/products/monitoring',
+  '/products/technical-services',
+  '/tools',
+  '/tools/grafting-calculator',
+  '/tools/consumables-planner',
   '/field-notes',
-  '/field-notes/how-a-graft-knits-together',
-  '/field-notes/european-rose-rules-inside-the-house',
-  '/field-notes/choosing-a-sleeve-bore',
-  '/field-notes/hypochlorite-is-a-protocol',
-  '/field-notes/reading-a-substrate-specification',
+  '/field-notes/choosing-the-right-graft-tube-size',
+  '/field-notes/humidity-and-vpd-during-rooting',
+  '/field-notes/sanitation-between-propagation-batches',
+  '/field-notes/reading-your-monitoring-dashboard',
+  '/field-notes/setting-up-a-new-propagation-block',
   '/404',
 ];
 
@@ -83,7 +88,7 @@ test.describe('metadata', () => {
   });
 
   test('each Field Note carries Article JSON-LD with no invented date', async ({ page }) => {
-    await page.goto('/field-notes/how-a-graft-knits-together');
+    await page.goto('/field-notes/choosing-the-right-graft-tube-size');
     const raw = await page.locator('script[type="application/ld+json"]').first().textContent();
     const data = JSON.parse(raw ?? '{}');
     expect(data['@type']).toBe('Article');
@@ -132,25 +137,10 @@ test.describe('keyboard traversal', () => {
     expect(reached.size, 'every focusable element should be reachable by Tab').toBe(expected);
   });
 
-  test('the sleeve selector is operable from the keyboard', async ({ page }) => {
-    await page.goto('/supplies/graft');
-    const selector = page.locator('#sleeve-selector');
-    await expect(selector).toBeVisible();
-    const focusable = selector.locator('input, select, button');
-    expect(await focusable.count()).toBeGreaterThan(0);
-    await focusable.first().focus();
-    await expect(focusable.first()).toBeFocused();
-  });
-
-  test('the consumables planner is operable from the keyboard', async ({ page }) => {
-    await page.goto('/ordering');
-    const planner = page.locator('#consumables-planner');
-    await expect(planner).toBeVisible();
-    const focusable = planner.locator('input, select, button, a[href]');
-    expect(await focusable.count()).toBeGreaterThan(0);
-    await focusable.first().focus();
-    await expect(focusable.first()).toBeFocused();
-  });
+  // The sleeve selector and consumables planner keyboard tests were removed with
+  // /supplies/graft and /ordering in the Prompt 0 restart — the tools session that
+  // remounts them (at /tools/grafting-calculator/ and /tools/consumables-planner/)
+  // re-adds this coverage.
 
   test('the quotation form is operable from the keyboard', async ({ page }) => {
     await page.goto('/contact');
@@ -161,48 +151,11 @@ test.describe('keyboard traversal', () => {
   });
 });
 
-test.describe('the specification index', () => {
-  test('renders the sleeve table identically to /supplies/graft', async ({ page }) => {
-    async function readTable(url: string, caption: string): Promise<string[][]> {
-      await page.goto(url);
-      const figure = page.locator('figure.spec-table', { hasText: caption }).first();
-      return figure
-        .locator('table tr')
-        .evaluateAll((rows) =>
-          rows.map((row) =>
-            Array.from(row.querySelectorAll('th, td')).map((cell) =>
-              (cell.textContent ?? '').trim(),
-            ),
-          ),
-        );
-    }
-
-    const onStage = await readTable('/supplies/graft', 'Silicone grafting sleeves');
-    const onIndex = await readTable('/specifications', 'Silicone grafting sleeves');
-    expect(onStage.length).toBeGreaterThan(1);
-    expect(onIndex).toEqual(onStage);
-  });
-
-  test('renders the clip table identically to /supplies/graft', async ({ page }) => {
-    async function readTable(url: string, caption: string): Promise<string[][]> {
-      await page.goto(url);
-      const figure = page.locator('figure.spec-table', { hasText: caption }).first();
-      return figure
-        .locator('table tr')
-        .evaluateAll((rows) =>
-          rows.map((row) =>
-            Array.from(row.querySelectorAll('th, td')).map((cell) =>
-              (cell.textContent ?? '').trim(),
-            ),
-          ),
-        );
-    }
-
-    const onStage = await readTable('/supplies/graft', 'Grafting clips');
-    const onIndex = await readTable('/specifications', 'Grafting clips');
-    expect(onIndex).toEqual(onStage);
-  });
-});
+// The /specifications-vs-/supplies/graft table-identity tests were removed with
+// those two routes in the Prompt 0 restart. src/data/products/tables.ts (the
+// single-source-of-truth registry they guarded) is untouched, and
+// tests/unit/spec-tables.test.ts still covers it at the data layer; a products
+// session should reinstate a rendered-page check once a page reads from it again.
 
 // Session 7 (branch claude/jolly-lamport-fmnpd9) delivered its own version of
 // the reference pages after session 8 had already written them, and shipped one
@@ -244,9 +197,19 @@ test.describe('the rendered page, not the source', () => {
     await page.goto('/about');
     const text = (await page.locator('body').innerText()).toLowerCase();
     // A year anywhere in a sentence about the company is the failure mode the
-    // owner flagged, so this is stricter than the phrase list above.
-    expect(text).not.toMatch(/\b(founded|established|incorporated|trading since)\b/);
-    expect(text).not.toMatch(/\b(19|20)\d{2}\b(?![^.]*copyright)/);
+    // owner flagged, so this is stricter than the phrase list above. A footer
+    // copyright year is excused either way it's marked: the word "copyright"
+    // or the "©" symbol. The bare word "established" stays banned — only the
+    // one known, verbatim exception is stripped first: blueprint.md Section
+    // 12's own body copy says PropagAfrica sources from "established
+    // manufacturers" (established third parties, not a claim about when
+    // PropagAfrica itself started). Any other "established" — including a
+    // rephrase of the company's own age — still fails this check.
+    const textWithKnownExceptions = text.replace(/established manufacturers/g, '');
+    expect(textWithKnownExceptions).not.toMatch(
+      /\b(founded|established|incorporated|trading since)\b/,
+    );
+    expect(text).not.toMatch(/(?<!©\s*)\b(19|20)\d{2}\b(?![^.]*copyright)/);
     expect(text).not.toMatch(/\b\d+\s+(employees|staff|people)\b/);
   });
 });

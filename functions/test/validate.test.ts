@@ -7,11 +7,8 @@ const VALID_BODY = {
   email: 'jane@example.com',
   phone: '',
   country: 'Kenya',
-  crop: 'Rose',
-  stage: ['Graft', 'Root'],
-  annualVolume: '480 000',
-  deliveryPoint: 'Naivasha',
-  notes: '',
+  enquiringAbout: ['Grafting Tubes', 'Grafting Clips'],
+  message: '',
 };
 
 describe('validateSubmission', () => {
@@ -19,7 +16,7 @@ describe('validateSubmission', () => {
     const result = validateSubmission(VALID_BODY);
     expect(result.ok).toBe(true);
     expect(result.errors).toEqual({});
-    expect(result.values.stage).toEqual(['Graft', 'Root']);
+    expect(result.values.enquiringAbout).toEqual(['Grafting Tubes', 'Grafting Clips']);
   });
 
   it('rejects a missing required field', () => {
@@ -28,16 +25,16 @@ describe('validateSubmission', () => {
     expect(result.errors.name).toBeDefined();
   });
 
-  it('rejects an empty stage list', () => {
-    const result = validateSubmission({ ...VALID_BODY, stage: [] });
+  it('rejects an empty enquiringAbout list', () => {
+    const result = validateSubmission({ ...VALID_BODY, enquiringAbout: [] });
     expect(result.ok).toBe(false);
-    expect(result.errors.stage).toBeDefined();
+    expect(result.errors.enquiringAbout).toBeDefined();
   });
 
-  it('rejects a stage value outside the fixed option list', () => {
-    const result = validateSubmission({ ...VALID_BODY, stage: ['Not a real stage'] });
+  it('rejects an enquiringAbout value outside the fixed option list', () => {
+    const result = validateSubmission({ ...VALID_BODY, enquiringAbout: ['Not a real product'] });
     expect(result.ok).toBe(false);
-    expect(result.errors.stage).toBeDefined();
+    expect(result.errors.enquiringAbout).toBeDefined();
   });
 
   it('rejects a malformed email address', () => {
@@ -51,10 +48,16 @@ describe('validateSubmission', () => {
     expect(result.values.name).toHaveLength(120);
   });
 
-  it('accepts a single (non-array) stage value from a plain form POST', () => {
-    const result = validateSubmission({ ...VALID_BODY, stage: 'Graft' });
+  it('accepts a single (non-array) enquiringAbout value from a plain form POST', () => {
+    const result = validateSubmission({ ...VALID_BODY, enquiringAbout: 'Grafting Tubes' });
     expect(result.ok).toBe(true);
-    expect(result.values.stage).toEqual(['Graft']);
+    expect(result.values.enquiringAbout).toEqual(['Grafting Tubes']);
+  });
+
+  it('carries an optional calculator context through, length-capped', () => {
+    const result = validateSubmission({ ...VALID_BODY, calculatorContext: 'a'.repeat(5000) });
+    expect(result.ok).toBe(true);
+    expect(result.values.calculatorContext).toHaveLength(4000);
   });
 });
 

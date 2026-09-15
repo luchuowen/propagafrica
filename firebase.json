@@ -23,6 +23,13 @@
           "functionId": "submitQuotation",
           "region": "europe-west1"
         }
+      },
+      {
+        "source": "/api/subscribe-newsletter",
+        "function": {
+          "functionId": "subscribeNewsletter",
+          "region": "europe-west1"
+        }
       }
     ],
     "headers": [

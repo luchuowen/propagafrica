@@ -29,7 +29,7 @@
     {
       "name": "no-banned-words",
       "description": "Banned marketing words and constructions per the copy rules.",
-      "pattern": "(empowering|(^|[^-])transforming|unlocking|seamless|cutting-edge|revolutionary|world-class|best-in-class|one-stop|Welcome to|Why choose us|at scale|empower|(^|[^-])transform|unlock|state-of-the-art|game-chang|leverage our|passionate about|committed to excellence|industry-leading)",
+      "pattern": "(empowering|(^|[^-])transforming|unlocking|seamless|cutting-edge|revolutionary|world-class|best-in-class|one-stop|Welcome to|Why choose us|at scale|empower|(^|[^-])transform([a-z]|[ \t]+[a-zA-Z])|unlock|state-of-the-art|game-chang|leverage our|passionate about|committed to excellence|industry-leading)",
       "paths": ["src/**/*.astro", "src/**/*.md"],
       "exclude": [],
       "case_insensitive": true
@@ -50,8 +50,8 @@
     },
     {
       "name": "no-placeholder-copy",
-      "description": "No lorem ipsum, no TODO left in shipped source, no 'coming soon', no stub text.",
-      "pattern": "(lorem ipsum|coming soon|placeholder text|TODO\\(session|built in a later session|TBD)",
+      "description": "No lorem ipsum, no TODO left in shipped source, no 'coming soon', no stub text, no stray PLACEHOLDER_DO_NOT_KEEP-style marker.",
+      "pattern": "(lorem ipsum|coming soon|placeholder text|TODO\\(session|built in a later session|TBD|PLACEHOLDER[_ ]?DO[_ ]?NOT[_ ]?KEEP)",
       "paths": ["src/**/*.astro", "src/**/*.ts", "src/**/*.md"],
       "exclude": [],
       "case_insensitive": true

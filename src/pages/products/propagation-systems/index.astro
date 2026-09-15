@@ -1,0 +1,107 @@
+---
+// Propagation Systems — blueprint.md Section 6.
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import FamilyHero from '../../../components/products/FamilyHero.astro';
+import BulletList from '../../../components/products/BulletList.astro';
+import DetailStrip from '../../../components/products/DetailStrip.astro';
+import FamilyCta from '../../../components/products/FamilyCta.astro';
+
+const tagline = 'Efficient Systems. Better Results.';
+const intro = 'Integrated systems to improve efficiency, uniformity and yield.';
+
+const keyComponents = [
+  'Misting and fogging systems',
+  'Climate control solutions',
+  'Heating and cooling systems',
+  'Benching and racking systems',
+  'Irrigation systems (drip, ebb and flow)',
+  'Shade and screening solutions',
+  'LED grow lights',
+  'Automation and control solutions',
+];
+
+const detailImages = [
+  {
+    src: '/images/products/propagation-systems/01.jpg',
+    alt: 'A misting system installed above a propagation bench',
+  },
+  {
+    src: '/images/products/propagation-systems/02.jpg',
+    alt: 'Benching and racking laid out in a propagation house',
+  },
+  {
+    src: '/images/products/propagation-systems/03.jpg',
+    alt: 'Drip irrigation lines feeding a propagation bench',
+  },
+  {
+    src: '/images/products/propagation-systems/04.jpg',
+    alt: 'Shade screening fitted over a nursery structure',
+  },
+  {
+    src: '/images/products/propagation-systems/05.jpg',
+    alt: 'Automation controls for a propagation climate system',
+  },
+];
+---
+
+<BaseLayout title="Propagation Systems" description={intro}>
+  <FamilyHero
+    eyebrow="Products"
+    title="Propagation Systems"
+    tagline={tagline}
+    intro={intro}
+    image="/images/products/propagation-systems/hero.jpg"
+    imageAlt="A propagation system installed across a greenhouse bench"
+  />
+
+  <div class="family-body">
+    <BulletList heading="Key components" items={keyComponents} />
+
+    <section class="custom-note">
+      <h2>Custom design and installation</h2>
+      <p class="note-line">Custom design and installation available.</p>
+      <p>
+        Systems are specified for your site, not sold off a shelf &mdash; tell us your greenhouse or
+        nursery layout, crop and target climate and we&rsquo;ll design and install a system around
+        it.
+      </p>
+    </section>
+
+    <DetailStrip images={detailImages} />
+
+    <FamilyCta />
+  </div>
+</BaseLayout>
+
+<style>
+  .family-body {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: var(--space-6) var(--side-gutter) var(--space-7);
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .custom-note {
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--rule);
+  }
+
+  .custom-note h2 {
+    margin-bottom: var(--space-3);
+  }
+
+  .note-line {
+    font-weight: 600;
+    font-size: 15.5px;
+    color: var(--green);
+  }
+
+  .custom-note p:not(.note-line) {
+    margin-top: var(--space-2);
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: var(--soft);
+    max-width: 68ch;
+  }
+</style>

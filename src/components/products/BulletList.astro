@@ -1,0 +1,46 @@
+---
+// A heading with a plain bullet list underneath — reused for every verbatim
+// list in blueprint.md's family pages (product range, types, key products,
+// specifications).
+interface Props {
+  heading: string;
+  items: string[];
+}
+
+const { heading, items } = Astro.props;
+---
+
+<section class="bullet-list" data-reveal>
+  <h2>{heading}</h2>
+  <ul>
+    {items.map((item) => (
+      <li>{item}</li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .bullet-list {
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--rule);
+  }
+
+  ul {
+    list-style: none;
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0;
+  }
+
+  li {
+    padding: 10px 0;
+    border-top: 1px solid var(--rule);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  li:first-child {
+    border-top: none;
+  }
+</style>

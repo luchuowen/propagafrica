@@ -13,6 +13,10 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    match /newsletterSubscribers/{docId} {
+      allow read, write: if false;
+    }
+
     // Default deny for anything added later without an explicit rule above.
     match /{document=**} {
       allow read, write: if false;

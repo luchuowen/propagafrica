@@ -9,11 +9,8 @@ export interface QuotationListItem {
   email: string;
   phone: string;
   country: string;
-  crop: string;
-  stage: string[];
-  annualVolume: string;
-  deliveryPoint: string;
-  notes: string;
+  enquiringAbout: string[];
+  message: string;
   status: string;
   source: string;
   createdAt: string | null;
@@ -49,11 +46,8 @@ export function makeListQuotations(db: Firestore) {
         email: String(data.email ?? ''),
         phone: String(data.phone ?? ''),
         country: String(data.country ?? ''),
-        crop: String(data.crop ?? ''),
-        stage: Array.isArray(data.stage) ? data.stage.map(String) : [],
-        annualVolume: String(data.annualVolume ?? ''),
-        deliveryPoint: String(data.deliveryPoint ?? ''),
-        notes: String(data.notes ?? ''),
+        enquiringAbout: Array.isArray(data.enquiringAbout) ? data.enquiringAbout.map(String) : [],
+        message: String(data.message ?? ''),
         status: String(data.status ?? 'new'),
         source: String(data.source ?? 'web'),
         createdAt: data.createdAt?.toDate?.().toISOString() ?? null,

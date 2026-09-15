@@ -1,0 +1,112 @@
+---
+// Sanitation Products — blueprint.md Section 7.
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import FamilyHero from '../../../components/products/FamilyHero.astro';
+import BulletList from '../../../components/products/BulletList.astro';
+import DetailStrip from '../../../components/products/DetailStrip.astro';
+import FamilyCta from '../../../components/products/FamilyCta.astro';
+
+const tagline = 'Clean Nurseries. Healthy Plants.';
+const intro =
+  'Disinfectants, sanitizers and hygiene solutions for a disease-free propagation environment.';
+
+const keyProducts = [
+  'Disinfectants and sanitizers',
+  'Algae and biofilm control',
+  'Surface and tool cleaners',
+  'Footbaths and handwash solutions',
+  'Water treatment products',
+  'Sprayers and sanitation equipment',
+  'PPE and protective wear',
+];
+
+const specifications = [
+  'Effective and safe',
+  'Non-corrosive',
+  'Long-lasting protection',
+  'Compliant with industry standards',
+];
+
+// Packaging — blueprint.md Section 7, verbatim pack sizes rendered as spec data.
+const packSizes = ['5L', '20L', '200L', '1,000L (IBC)'];
+
+const detailImages = [
+  {
+    src: '/images/products/sanitation/01.jpg',
+    alt: 'Disinfectant being applied to a propagation bench',
+  },
+  {
+    src: '/images/products/sanitation/02.jpg',
+    alt: 'A footbath at the entrance to a nursery block',
+  },
+  { src: '/images/products/sanitation/03.jpg', alt: 'Sanitation sprayer equipment staged for use' },
+  { src: '/images/products/sanitation/04.jpg', alt: 'PPE and protective wear for nursery staff' },
+];
+---
+
+<BaseLayout title="Sanitation Products" description={intro}>
+  <FamilyHero
+    eyebrow="Products"
+    title="Sanitation Products"
+    tagline={tagline}
+    intro={intro}
+    image="/images/products/sanitation/hero.jpg"
+    imageAlt="Sanitation products staged beside a propagation bench"
+  />
+
+  <div class="family-body">
+    <BulletList heading="Key products" items={keyProducts} />
+
+    <BulletList heading="Specifications" items={specifications} />
+
+    <section class="packaging">
+      <h2>Packaging</h2>
+      <ul class="pack-sizes">
+        {packSizes.map((size) => (
+          <li class="mono">{size}</li>
+        ))}
+      </ul>
+    </section>
+
+    <DetailStrip images={detailImages} />
+
+    <FamilyCta />
+  </div>
+</BaseLayout>
+
+<style>
+  .family-body {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: var(--space-6) var(--side-gutter) var(--space-7);
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .packaging {
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--rule);
+  }
+
+  .packaging h2 {
+    margin-bottom: var(--space-3);
+  }
+
+  .pack-sizes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .pack-sizes li {
+    font-size: 14px;
+    padding: 8px 16px;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-s);
+    color: var(--ink);
+    background: var(--mint);
+  }
+</style>

@@ -1,0 +1,177 @@
+---
+// Grafting Tubes — blueprint.md Section 3.
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import FamilyHero from '../../../components/products/FamilyHero.astro';
+import BulletList from '../../../components/products/BulletList.astro';
+import LabelValueList from '../../../components/products/LabelValueList.astro';
+import DetailStrip from '../../../components/products/DetailStrip.astro';
+import FamilyCta from '../../../components/products/FamilyCta.astro';
+
+const tagline = 'Flexible. Transparent. Reliable.';
+const intro =
+  'High-quality silicone tubes designed for rose and ornamental as well as vegetable and fruit tree grafting. Ensure optimal union, high graft success and healthy growth.';
+
+// Product range — blueprint.md Section 3, verbatim sizes and crop pairings.
+const productRange = [
+  { code: 'PRO-ROSE 35', size: '3.5mm', crop: '—' },
+  { code: 'PRO-ROSE 45', size: '4.5mm', crop: '—' },
+  { code: 'PRO-ROSE 55', size: '5.5mm', crop: '—' },
+  { code: 'PRO-ROSE 65', size: '6.5mm', crop: '—' },
+  { code: 'PRO-ROSE 75', size: '7.5mm', crop: '—' },
+  { code: 'PRO-ROSE 85', size: '8.5mm', crop: '—' },
+  { code: 'PRO-VEG', size: '—', crop: 'Tomato, pepper, eggplant' },
+  { code: 'PRO-CUC', size: '—', crop: 'Cucumber, melon, watermelon' },
+  { code: 'PRO-TREE', size: '—', crop: 'Fruit-tree grafting' },
+];
+
+const keySpecifications = [
+  'Medical-grade silicone',
+  'High elasticity',
+  'UV and temperature resistant',
+  'Transparent',
+  'Smooth surface',
+  'Multiple sizes',
+  'Disposable',
+];
+
+const detailImages = [
+  {
+    src: '/images/products/grafting-tubes/01.jpg',
+    alt: 'PRO-ROSE silicone grafting tubes in use on a rose stem',
+  },
+  {
+    src: '/images/products/grafting-tubes/02.jpg',
+    alt: 'Grafting tubes sized by diameter for a propagation run',
+  },
+  {
+    src: '/images/products/grafting-tubes/03.jpg',
+    alt: 'A completed graft union held by a silicone tube',
+  },
+  { src: '/images/products/grafting-tubes/04.jpg', alt: 'Boxed grafting tubes ready for despatch' },
+];
+---
+
+<BaseLayout title="Grafting Tubes" description={intro}>
+  <FamilyHero
+    eyebrow="Products"
+    title="Grafting Tubes"
+    tagline={tagline}
+    intro={intro}
+    image="/images/products/grafting-tubes/hero.jpg"
+    imageAlt="Silicone grafting tubes fitted over a rose graft union"
+  />
+
+  <div class="family-body">
+    <section class="range">
+      <h2>Product range</h2>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Code</th>
+              <th scope="col">Size</th>
+              <th scope="col">Crop</th>
+            </tr>
+          </thead>
+          <tbody>
+            {productRange.map((row) => (
+              <tr>
+                <td class="mono">{row.code}</td>
+                <td class="mono">{row.size}</td>
+                <td>{row.crop}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <BulletList heading="Key specifications" items={keySpecifications} />
+
+    <LabelValueList
+      heading="Packaging"
+      items={[{ label: 'Pack size', value: '50,000-100,000 pcs/box (or as per request)' }]}
+    />
+
+    <section class="use-case">
+      <h2>Choosing a size</h2>
+      <p>
+        Choose PRO-ROSE by stem diameter for consistent unions across a single graft run; PRO-VEG
+        and PRO-CUC are sized for their respective crop families; PRO-TREE is built for the thicker
+        stems of fruit-tree grafting.
+      </p>
+    </section>
+
+    <DetailStrip images={detailImages} />
+
+    <FamilyCta
+      toolText="Not sure which size fits your stock? Use the Grafting Sleeve and Clip Calculator"
+      toolHref="/tools/grafting-calculator/"
+    />
+  </div>
+</BaseLayout>
+
+<style>
+  .family-body {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: var(--space-6) var(--side-gutter) var(--space-7);
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  /* Grid items get an automatic min-width based on their content's
+     min-content size, which ignores a descendant's overflow-x: auto unless
+     the item itself is told to shrink — see .factory/DECISIONS.md. Without
+     this the table's min-width blows out .family-body at 320px. */
+  .range {
+    min-width: 0;
+  }
+
+  .range h2,
+  .use-case h2 {
+    margin-bottom: var(--space-3);
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    min-width: 34em;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  th,
+  td {
+    text-align: left;
+    padding: 10px 14px 10px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  th {
+    font-family: var(--f-sans);
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--soft);
+  }
+
+  td.mono {
+    font-family: var(--f-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .use-case {
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--rule);
+  }
+
+  .use-case p {
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: var(--soft);
+    max-width: 68ch;
+  }
+</style>

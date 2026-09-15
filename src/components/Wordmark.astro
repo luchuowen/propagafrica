@@ -1,27 +1,31 @@
 ---
-// The wordmark lockup: mark + "PropagAfrica" + "TECHNOLOGIES" strap line.
-// Casing is fixed: "PropagAfrica" title case, never all-caps; one colour only.
+// The wordmark lockup: mark + two-tone "PropagAfrica" + "TECHNOLOGIES" strap
+// line. Casing is fixed: "PropagAfrica" title case, never all-caps. "Propag"
+// and "Africa" carry the two brand tones; the strap is JetBrains Mono
+// capitals, width-matched to the wordmark via the flex-letter-span technique.
 import Mark from './Mark.astro';
 
 interface Props {
-  tone?: 'ink' | 'reverse';
+  tone?: 'light' | 'dark';
   markSize?: number;
 }
 
-const { tone = 'ink', markSize = 34 } = Astro.props;
-const color = tone === 'reverse' ? 'var(--paper)' : 'var(--ink)';
+const { tone = 'light', markSize = 34 } = Astro.props;
+const propagColor = tone === 'dark' ? 'var(--white)' : 'var(--ink)';
+const africaColor = tone === 'dark' ? 'var(--mint-bright)' : 'var(--green)';
+const STRAP = 'TECHNOLOGIES'.split('');
 ---
 
-<a
-  href="/"
-  class="wordmark"
-  style={`color: ${color}`}
-  aria-label="PropagAfrica Technologies — home"
->
+<a href="/" class="wordmark" aria-label="PropagAfrica Technologies — home">
   <Mark size={markSize} tone={tone} />
   <span class="wordmark-text">
-    <span class="name">PropagAfrica</span>
-    <span class="strap">TECHNOLOGIES</span>
+    <!-- prettier-ignore -->
+    <span class="name"><span class="propag" style={`color: ${propagColor}`}>Propag</span><span class="africa" style={`color: ${africaColor}`}>Africa</span></span>
+    <span class="strap" style={`color: ${tone === 'dark' ? 'var(--white)' : 'var(--soft)'}`}>
+      {STRAP.map((letter) => (
+        <span>{letter}</span>
+      ))}
+    </span>
   </span>
 </a>
 
@@ -34,7 +38,7 @@ const color = tone === 'reverse' ? 'var(--paper)' : 'var(--ink)';
   }
 
   .wordmark-text {
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     line-height: 1;
   }
@@ -42,16 +46,18 @@ const color = tone === 'reverse' ? 'var(--paper)' : 'var(--ink)';
   .name {
     font-family: var(--f-sans);
     font-weight: 700;
-    letter-spacing: -0.028em;
+    letter-spacing: -0.02em;
     font-size: 19px;
+    white-space: nowrap;
   }
 
   .strap {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 4px;
     font-family: var(--f-mono);
     font-size: 6.8px;
-    letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: var(--ink-soft);
-    margin-top: 4px;
   }
 </style>

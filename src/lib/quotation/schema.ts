@@ -3,21 +3,12 @@
 // functions/** is a separate deployable package with its own toolchain — see
 // .factory/decisions/session-6.md).
 //
-// Field list, order, types, options and copy are per docs/content/copy-reference.md, section
-// "/contact · SHEET 14 OF 14". Per-field inline validation microcopy (requiredMessage /
-// invalidMessage below) is not specified there and is this session's own addition.
+// Field list, order, types, options and copy are per blueprint.md Section 13. Per-field inline
+// validation microcopy (requiredMessage / invalidMessage below) is not specified there and is
+// this session's own addition.
 
 export type QuotationFieldName =
-  | 'name'
-  | 'farmOrCompany'
-  | 'email'
-  | 'phone'
-  | 'country'
-  | 'crop'
-  | 'stage'
-  | 'annualVolume'
-  | 'deliveryPoint'
-  | 'notes';
+  'name' | 'farmOrCompany' | 'email' | 'phone' | 'country' | 'enquiringAbout' | 'message';
 
 export type QuotationFieldType = 'text' | 'email' | 'tel' | 'select' | 'multi-select' | 'textarea';
 
@@ -36,23 +27,20 @@ export interface QuotationFieldDef {
 
 export const COUNTRY_OPTIONS = ['Kenya', 'Ethiopia', 'Other'] as const;
 
-export const CROP_OPTIONS = [
-  'Rose',
-  'Other cut flower',
-  'Tomato, pepper, aubergine',
-  'Cucurbits',
-  'Fruit tree',
-  'Mixed nursery',
+// The seven product families — blueprint.md Section 13, same order as the /products/ hub.
+export const ENQUIRY_OPTIONS = [
+  'Grafting Tubes',
+  'Grafting Clips',
+  'Nursery Consumables',
+  'Propagation Systems',
+  'Sanitation Products',
+  'Propagation Monitoring',
+  'Technical Services',
 ] as const;
 
-export const STAGE_OPTIONS = [
-  'Prepare',
-  'Graft',
-  'Root',
-  'Protect',
-  'Record',
-  'Whole programme',
-] as const;
+// Every option can be selected at once — the cap exists to bound the payload, not to stop
+// someone enquiring about the whole range.
+export const MULTI_SELECT_MAX_ITEMS = ENQUIRY_OPTIONS.length;
 
 export const QUOTATION_FIELDS: readonly QuotationFieldDef[] = [
   {
@@ -66,12 +54,12 @@ export const QUOTATION_FIELDS: readonly QuotationFieldDef[] = [
   },
   {
     name: 'farmOrCompany',
-    label: 'Farm or company',
+    label: 'Company/farm name',
     type: 'text',
     autocomplete: 'organization',
     required: true,
     maxLength: 160,
-    requiredMessage: 'Enter your farm or company name.',
+    requiredMessage: 'Enter your company or farm name.',
   },
   {
     name: 'email',
@@ -102,73 +90,34 @@ export const QUOTATION_FIELDS: readonly QuotationFieldDef[] = [
     requiredMessage: 'Select a country.',
   },
   {
-    name: 'crop',
-    label: 'Crop',
-    type: 'select',
-    autocomplete: 'off',
-    required: true,
-    maxLength: 40,
-    options: CROP_OPTIONS,
-    requiredMessage: 'Select a crop.',
-  },
-  {
-    name: 'stage',
-    label: 'Stage',
+    name: 'enquiringAbout',
+    label: 'Enquiring about',
     type: 'multi-select',
     autocomplete: 'off',
     required: true,
     maxLength: 40,
-    options: STAGE_OPTIONS,
-    requiredMessage: 'Select at least one stage.',
+    options: ENQUIRY_OPTIONS,
+    requiredMessage: 'Select at least one option.',
   },
   {
-    name: 'annualVolume',
-    label: 'Annual volume, units',
-    type: 'text',
-    autocomplete: 'off',
-    required: false,
-    maxLength: 40,
-    placeholder: '480 000',
-  },
-  {
-    name: 'deliveryPoint',
-    label: 'Delivery point',
-    type: 'text',
-    autocomplete: 'off',
-    required: false,
-    maxLength: 120,
-    placeholder: 'Naivasha',
-  },
-  {
-    name: 'notes',
-    label: 'Specification, pack preference, call-off schedule',
+    name: 'message',
+    label: 'Message',
     type: 'textarea',
     autocomplete: 'off',
     required: false,
     maxLength: 2000,
-    placeholder:
-      'Rootstock and scion diameters, tray type, current substrate, when the next cycle starts.',
+    placeholder: 'What you are growing, roughly how much, and where you are based.',
   },
 ] as const;
-
-// Multi-select fields (currently just "stage") are submitted as several same-named form fields
-// and stored as a string array.
-export const MULTI_SELECT_MAX_ITEMS = 6;
 
 // Honeypot: a field real visitors never see or fill. Any non-empty value on submit is treated
 // as a bot. Named to not look like a trap to a scraping bot.
 export const HONEYPOT_FIELD = 'companyWebsite';
-
-// Hidden timestamp, filled client-side (see QuoteForm.astro's enhancement script) with the time
-// the form finished rendering. A submission faster than MIN_ELAPSED_MS after that is rejected as
-// automated. Left empty for a no-JavaScript submission — see functions/src/validate.ts for why
-// the server treats an absent timestamp as "cannot check elapsed time" rather than "reject".
 export const TIMESTAMP_FIELD = 'renderedAt';
 
-// Query-string prefill contract. Session 4's own contract doc
-// (.factory/decisions/session-4.md) does not exist in this repository, so this reads defensively:
-// same-named params as the form fields (QUOTATION_FIELDS' own names), trimmed and length-capped,
-// anything else ignored. Multi-select ("stage") is read as a repeated ?stage=Graft&stage=Root or
-// a single comma-separated ?stage=Graft,Root. Implemented client-side in QuoteForm.astro's
-// enhancement script, since this site builds to static HTML with no per-request server to read a
-// query string at — see .factory/decisions/session-6.md.
+// Carries a calculator tool's own JSON context (crop group, product codes, quantities) through
+// to the sales team alongside the human-readable Message summary the same prefill builds —
+// blueprint.md Section 13's "hidden field carries a JSON prefill". Never rendered or required;
+// only present when the form was opened from a calculator's "Send to a quotation" link.
+export const CALCULATOR_CONTEXT_FIELD = 'calculatorContext';
+export const CALCULATOR_CONTEXT_MAX_LENGTH = 4000;
