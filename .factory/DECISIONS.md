@@ -12,111 +12,8 @@ pages it deleted) is archived in
 `.factory/history/2026-09-14-prompt0-foundations-restart.md` — its decisions still hold,
 Prompts 1–5 below have since rebuilt everything it left mid-restart.
 
-# Session 2026-09-14 — Prompt 1: homepage
-
-Rebuilt `src/pages/index.astro` from scratch against `blueprint.md` Section 1 (Direction
-C) and `docs/image-manifest.md`: sticky header, hero carousel (5 slides), 3 outcome
-panels, Propagation Journey carousel (6 slides), a 7-family product grid with a
-client-side shop-by-crop filter, Facilities-in-use carousel (8 slides), a dark Monitoring
-spotlight, a Technical Services 3-up, trust/target-markets panels, and a CTA band.
-`SupplyStages.astro` and `FieldNotesTeaser.astro` are no longer mounted on the home page
-(pre-restart, tied to the deleted `/supplies` routes and old copy) — left in place,
-unreferenced, not deleted.
-
-## Carousel.astro got two small, generic fixes, not homepage-specific
-
-- Added `fetchpriority="high"` to the hero variant's first slide only (`loading="eager"`
-  was already conditional; `fetchpriority` was missing). Home page LCP scores 99 on
-  Lighthouse mobile with this in place.
-- The dot controls were an 8×8px hit target — axe/Lighthouse `target-size` failure (needs
-  24×24px, WCAG 2.5.8). Fixed by making the `<button>` itself 24×24 with a smaller
-  8×8px `::after` as the visible dot, so the dot row still reads as small marks. This
-  applies to every carousel, not just the homepage's three.
-
-## The homepage carries one H1/sub-head/CTA overlay, not one per slide
-
-`blueprint.md` says the H1/sub-head is "overlaid on slide 1 only" but the copy is
-singular — there's one hero headline, not five. `Carousel.astro` has no slot for
-per-slide extra content (by design: "do not put homepage-specific content... in this
-file"), so the hero copy is a separate absolutely-positioned layer on top of the whole
-carousel section, visible from first paint (when slide 1 is showing) rather than
-disappearing on slide 2+. Reuses the existing `--ink-overlay-strong` token for the scrim
-rather than adding a new one to the protected `tokens.css`.
-
-## Product card image links were dropped, not made `aria-hidden`
-
-Each family card originally wrapped its image in its own link to the product page,
-duplicating the title link right below it. `aria-hidden="true" tabindex="-1"` satisfies
-axe (no unnamed link in the accessibility tree) but breaks
-`tests/e2e/site.spec.ts`'s keyboard-traversal count, which selects `a[href]` without
-checking `tabindex` — so it still counts the element as "expected reachable" while Tab
-correctly skips it. Simplest fix that satisfies both: the image is a plain `<div>`, not a
-link; the card's `<h3>` title and "View range" link already cover the same href.
-
-## `tests/e2e/home.spec.ts` still asserted the pre-restart H1
-
-`H1 matches the specified hero copy exactly` checked the deleted "Propagation supplies
-for nurseries and flower farms." string. Updated to the Direction C H1 from
-`blueprint.md` Section 1.
-
-## Shop-by-crop tagging for the product grid
-
-`blueprint.md` Section 1 and Section 2 give slightly different summaries of which
-families carry which crop tags; Section 2's is the explicit one ("systems, sanitation,
-monitoring and services tagged 'Nursery and facility supplies'"). Grafting Tubes and
-Grafting Clips carry the three crop-specific tags (Roses and ornamentals / Vegetables and
-cucurbits / Fruit trees); the other five families carry "Nursery and facility supplies"
-only. An "All" pill was added for usability — not in the copy deck, a UI affordance only.
-
-## Session checked out a stale branch at start
-
-The session's working tree started 8 commits behind `origin/main` — pre-Prompt-0, with
-no `Carousel.astro`, no `docs/image-manifest.md`, and `blueprint.md` still describing the
-deleted pre-restart "supplies" IA. `git fetch && git merge --ff-only origin/main` (the
-tree was clean, so this was a pure fast-forward, not a reset) brought it current before
-any of the above was possible.
-
-# Session 2026-09-14 — Prompt 2: products hub, grafting tubes, grafting clips,
-
-# nursery consumables
-
-`src/data/products/families.ts` is now the single source of truth for the seven
-product families (name, verbatim tagline, verbatim intro/descriptor, crop tags,
-hero image, first-4 "key bullets"). The homepage's product grid (Prompt 1) and the
-new `/products/` hub both import it, so a family's name or tagline can't drift
-between the two pages that list it. The shop-by-crop filter script is likewise
-shared (`src/lib/product-filter.ts`) rather than duplicated per page.
-
-Three family pages built against `blueprint.md` Sections 3-5:
-`/products/grafting-tubes/`, `/products/grafting-clips/`, `/products/nursery-consumables/`.
-The other four families link from the hub/homepage to their eventual path
-(`/products/propagation-systems/` etc.) — not yet built, expected 404s until a later
-prompt. Shared components in `src/components/products/`: `FamilyHero`, `BulletList`,
-`LabelValueList`, `DetailStrip`, `FamilyCta`. No single monolithic "family layout" —
-the three pages' middle sections genuinely differ in shape (a real spec table for
-tubes' PRO-ROSE/VEG/CUC/TREE range, a label/value list for clips' specs, plain bullet
-lists for consumables) so each page assembles the shared primitives itself rather
-than one component branching on family type.
-
-"First 4 key-product bullets" on the hub (blueprint.md Section 2) isn't a single
-named list for every family — only nursery-consumables/sanitation/monitoring/
-technical-services have an explicit "Key products"/"Key features"/"Our Services"
-list. For grafting-tubes and grafting-clips, the nearest verbatim equivalent is used
-instead: tubes' Product range codes, clips' Types.
-
-**Same grid/overflow bug as the session-4 fieldset one, new element.** The
-grafting-tubes product-range table sits in a `min-width: 34em` scroll container
-inside a CSS grid (`.family-body`); the grid item's automatic min-width ignored the
-table's own `overflow-x: auto` and blew out the page at 320px until the item itself
-got `min-width: 0`. Same root cause as the `/supplies/graft` fieldset bug (session 8
-integration, archived), different element — worth checking any new wide/scrollable
-content dropped into a grid or flex layout.
-
-Prettier's format gate is content-blind and flagged a pre-existing table-alignment
-whitespace issue in `.factory/history/2026-09-13-session8-and-visual-rebuild.md`
-(from the Prompt 0 merge) unrelated to this session's diff. Reformatted it
-(whitespace only, no text changed) since a red gate blocks `factory-check full`
-regardless of which session's diff it belongs to.
+Prompts 1 and 2 (homepage build, products hub and the first three family pages) are
+archived in `.factory/history/2026-09-15-prompts-1-2.md` — those decisions still hold.
 
 # Session 2026-09-14 — Prompt 3: propagation systems, sanitation, monitoring,
 
@@ -246,3 +143,14 @@ which blueprint.md Section 12's own verbatim copy trips ("established
 manufacturers" — third parties, not PropagAfrica's age). Scoped to match the
 manifest gate's own precision (a year, or "newly established"/"trading
 since") instead of the bare word.
+
+## Propagation journey is a six-step grid, not a carousel (session 9)
+
+- `src/components/home/JourneySteps.astro` replaces the `Carousel variant="grid"` on the home page
+  journey section: all six steps are visible at once, three across (two at 620-899px, one below).
+  The owner chose this over the three-at-a-time carousel, which hid half a numbered sequence
+  behind autoplay. `Carousel.astro` is unchanged and still runs the hero and facilities sections.
+- Step markers sit on the section ground under each photograph, joined by a hairline through the
+  gutter that stops at each row edge -- it never crosses a photograph.
+- Step copy stays exactly the six captions in `blueprint.md` Section 1; the component has no
+  description line because no description copy exists in the source material.

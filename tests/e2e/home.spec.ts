@@ -23,6 +23,14 @@ test.describe('home page', () => {
     );
   });
 
+  test('propagation journey shows all six steps at once', async ({ page }) => {
+    await page.goto('/');
+    const steps = page.locator('.journey-steps .step');
+    await expect(steps).toHaveCount(6);
+    await expect(steps.first()).toContainText('Select and prepare stock');
+    await expect(steps.last()).toContainText('Move to production');
+  });
+
   test('wordmark renders "PropagAfrica" in title case', async ({ page }) => {
     await page.goto('/');
     const wordmarkName = page.locator('.wordmark .name').first();

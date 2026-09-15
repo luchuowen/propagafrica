@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Carousel from '../components/Carousel.astro';
+import JourneySteps from '../components/home/JourneySteps.astro';
 import TrustPanel from '../components/TrustPanel.astro';
 import { organizationJsonLd } from '../lib/seo';
 import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../data/products/families';
@@ -201,7 +202,7 @@ const services = [
         <p class="eyebrow">The propagation journey</p>
         <h2>From selected stock to finished plant</h2>
       </div>
-      <Carousel slides={journeySlides} label="The propagation journey" variant="grid" />
+      <JourneySteps steps={journeySlides} />
     </div>
   </section>
 
@@ -307,7 +308,9 @@ const services = [
             <a class="service-card" href="/products/technical-services/">
               <span class="service-n">{String(i + 1).padStart(2, '0')}</span>
               <span class="service-title">{s}</span>
-              <span class="service-arrow" aria-hidden="true">&rarr;</span>
+              <span class="service-arrow" aria-hidden="true">
+                &rarr;
+              </span>
             </a>
           </li>
         ))}
