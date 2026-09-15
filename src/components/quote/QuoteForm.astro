@@ -391,6 +391,9 @@ import {
     display: flex;
     flex-direction: column;
     gap: 6px;
+    /* Without this the field keeps a text input's intrinsic width (260px),
+       which pushed the whole card past the viewport on a 320px screen. */
+    min-width: 0;
   }
 
   label,
@@ -430,6 +433,9 @@ import {
   input,
   select,
   textarea {
+    /* Fields take the column's width rather than their own intrinsic one. */
+    width: 100%;
+    min-width: 0;
     font-family: var(--f-sans);
     font-size: 16px;
     color: var(--ink);
