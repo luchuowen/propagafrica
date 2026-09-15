@@ -1,0 +1,329 @@
+---
+// The propagation sequence: five stages read left to right, with one
+// dimension rail carrying the elapsed time under the photographs. The rail
+// is the only --signal ink here; it measures, so it is allowed to.
+// Not a card grid: no radius, no shadow, no fill behind a stage.
+import { STAGES, railSpan, stageNumber, type Stage } from '../lib/stages';
+
+interface Props {
+  eyebrow?: string;
+  heading: string;
+  stages?: readonly Stage[];
+  figure?: number;
+  sheet?: number;
+  sheetsTotal?: number;
+}
+
+const {
+  eyebrow = 'The propagation journey',
+  heading,
+  stages = STAGES,
+  figure = 1,
+  sheet = 1,
+  sheetsTotal = 14,
+} = Astro.props;
+
+const figNo = String(figure).padStart(2, '0');
+const sheetNo = String(sheet).padStart(2, '0');
+---
+
+<section class="rail-section">
+  <div class="rail-head">
+    <div>
+      <p class="eyebrow">{eyebrow}</p>
+      <h2>{heading}</h2>
+    </div>
+    <p class="rail-span">ELAPSED TIME · {railSpan(stages)}</p>
+  </div>
+
+  <ol class="rail">
+    {stages.map((stage, i) => (
+      <li class="stage">
+        <div class="plate">
+          {stage.photo ? (
+            <img src={stage.photo.src} alt={stage.photo.alt} width="600" height="400" />
+          ) : (
+            <>
+              <span class="plate-label">PHOTOGRAPH 3:2</span>
+              <span class="tick tl" aria-hidden="true" />
+              <span class="tick tr" aria-hidden="true" />
+              <span class="tick bl" aria-hidden="true" />
+              <span class="tick br" aria-hidden="true" />
+            </>
+          )}
+        </div>
+
+        <p class="mark">
+          <span class="day">DAY {stage.day}</span>
+        </p>
+
+        <div class="cap">
+          <p class="idx">
+            {stageNumber(i)} · {stage.code}
+          </p>
+          <h3>
+            <a href={stage.href}>{stage.title}</a>
+          </h3>
+          <p class="body">{stage.body}</p>
+          <p class="spec">{stage.spec}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+
+  <p class="sheet-foot">
+    <span>FIG. {figNo} · PROPAGATION SEQUENCE · REV. A</span>
+    <span>
+      SHEET {sheetNo} OF {sheetsTotal}
+    </span>
+  </p>
+</section>
+
+<style>
+  .rail-section {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 0 var(--side-gutter) var(--space-6);
+  }
+
+  .rail-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--space-2) var(--space-4);
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: var(--space-2);
+  }
+
+  .rail-head .eyebrow {
+    margin-bottom: var(--space-1);
+  }
+
+  .rail-span {
+    font-family: var(--f-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .rail {
+    list-style: none;
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4) 18px;
+  }
+
+  .stage {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Photograph. Grey plate with crop ticks until the photograph lands. */
+  .plate {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    border: 1px solid var(--rule);
+    background: color-mix(in srgb, var(--rule) 26%, var(--paper));
+    overflow: hidden;
+  }
+
+  .plate img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .plate-label {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 8px;
+    text-align: center;
+    font-family: var(--f-mono);
+    font-size: 8.5px;
+    letter-spacing: 0.14em;
+    color: var(--ink-soft);
+  }
+
+  .tick {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-top: 1px solid var(--ink-soft);
+    border-left: 1px solid var(--ink-soft);
+    opacity: 0.55;
+  }
+
+  .tick.tl {
+    top: 6px;
+    left: 6px;
+  }
+
+  .tick.tr {
+    top: 6px;
+    right: 6px;
+    transform: rotate(90deg);
+  }
+
+  .tick.bl {
+    bottom: 6px;
+    left: 6px;
+    transform: rotate(-90deg);
+  }
+
+  .tick.br {
+    bottom: 6px;
+    right: 6px;
+    transform: rotate(180deg);
+  }
+
+  /* The dimension rail: one continuous line, a tick and a day under each
+     stage. Segments are drawn per stage and join across the 18px gutter;
+     the segment at each end of a row stops flush with the grid edge. */
+  .mark {
+    position: relative;
+    margin: 14px 0 0;
+    padding-bottom: 24px;
+    text-align: center;
+  }
+
+  .mark::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    height: 1px;
+    background: var(--signal);
+  }
+
+  .mark::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    width: 1px;
+    height: 12px;
+    background: var(--signal);
+  }
+
+  .day {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    font-variant-numeric: tabular-nums;
+    color: var(--signal);
+  }
+
+  .cap {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    border-top: 1px solid var(--rule);
+    padding-top: 14px;
+  }
+
+  .idx {
+    font-family: var(--f-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    color: var(--ink-soft);
+    margin-bottom: 9px;
+  }
+
+  .cap h3 {
+    font-size: clamp(16px, 1.5vw, 19px);
+    margin-bottom: 9px;
+  }
+
+  .cap h3 a {
+    text-decoration: none;
+  }
+
+  .cap h3 a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .body {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    padding-bottom: 14px;
+  }
+
+  .spec {
+    margin-top: auto;
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+
+  .sheet-foot {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    padding-top: var(--space-1);
+    border-top: 1px solid var(--rule);
+    font-family: var(--f-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+  }
+
+  /* Three across, then five. The media queries do not overlap, so the
+     row-edge rules below never need undoing. */
+  @media (min-width: 620px) and (max-width: 1023px) {
+    .rail {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .stage .mark::before {
+      left: -9px;
+      right: -9px;
+    }
+
+    .stage:nth-child(3n + 1) .mark::before {
+      left: 0;
+    }
+
+    .stage:nth-child(3n) .mark::before {
+      right: 0;
+    }
+
+    .stage:last-child .mark::before {
+      right: 0;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .rail {
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+    .stage .mark::before {
+      left: -9px;
+      right: -9px;
+    }
+
+    .stage:nth-child(5n + 1) .mark::before {
+      left: 0;
+    }
+
+    .stage:nth-child(5n) .mark::before {
+      right: 0;
+    }
+
+    .stage:last-child .mark::before {
+      right: 0;
+    }
+  }
+</style>

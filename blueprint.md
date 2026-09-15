@@ -68,6 +68,9 @@ never all-caps, one colour; "TECHNOLOGIES" — JetBrains Mono 6.8px, tracking 0.
   registration squares at the corners. Wraps every page once.
 - **TitleBlock.astro** — bordered key/value mono block: drawing no., subject, principal SKU, key
   dimension, scale. Sits top-right of a page's hero.
+- **StageRail.astro** — the propagation sequence: five stages side by side, each a photograph,
+  stage title, one line of copy and a key figure, with one `--signal` dimension rail carrying
+  elapsed days under the photographs. Every stage visible at every width — never a carousel.
 - **Figure.astro** — full-width figure; graphic and caption run side by side (never a card), figure
   number, caption, optional revision mark, plus a sheet footer `FIG. 0n · SUBJECT · REV. A` /
   `SHEET 0n OF 14`.
@@ -78,22 +81,22 @@ never all-caps, one colour; "TECHNOLOGIES" — JetBrains Mono 6.8px, tracking 0.
 
 ## 4. Information architecture (14 pages)
 
-| Route                 | Status (session 1)                                        |
-| --------------------- | --------------------------------------------------------- |
-| `/`                   | Hero built per §5 copy below; rest of the page waits      |
-| `/supplies`           | Stub                                                      |
-| `/supplies/prepare`   | Stub                                                      |
-| `/supplies/graft`     | Stub                                                      |
-| `/supplies/root`      | Stub                                                      |
-| `/supplies/protect`   | Stub                                                      |
-| `/supplies/record`    | Stub                                                      |
-| `/how-grafting-works` | Stub                                                      |
-| `/specifications`     | Stub                                                      |
-| `/ordering`           | Stub                                                      |
-| `/field-notes`        | Stub (index)                                              |
-| `/field-notes/[slug]` | Template, `getStaticPaths` returns none (no articles yet) |
-| `/about`              | Stub                                                      |
-| `/contact`            | Stub — will hold the quotation form (critical path)       |
+| Route                 | Status (session 1)                                           |
+| --------------------- | ------------------------------------------------------------ |
+| `/`                   | Hero per §5 + propagation sequence (`StageRail`); rest waits |
+| `/supplies`           | Stub                                                         |
+| `/supplies/prepare`   | Stub                                                         |
+| `/supplies/graft`     | Stub                                                         |
+| `/supplies/root`      | Stub                                                         |
+| `/supplies/protect`   | Stub                                                         |
+| `/supplies/record`    | Stub                                                         |
+| `/how-grafting-works` | Stub                                                         |
+| `/specifications`     | Stub                                                         |
+| `/ordering`           | Stub                                                         |
+| `/field-notes`        | Stub (index)                                                 |
+| `/field-notes/[slug]` | Template, `getStaticPaths` returns none (no articles yet)    |
+| `/about`              | Stub                                                         |
+| `/contact`            | Stub — will hold the quotation form (critical path)          |
 
 Primary nav, fixed order/wording: Supplies · How grafting works · Specifications · Ordering ·
 Field Notes, plus a persistent "Ask for a quotation" button. No blog, news, careers, newsletter.
@@ -128,11 +131,13 @@ stage (no islands yet).
 | SheetFrame | `src/components/SheetFrame.astro` | wraps every page via BaseLayout       |
 | TitleBlock | `src/components/TitleBlock.astro` | drawing-number key/value block        |
 | Figure     | `src/components/Figure.astro`     | full-width figure + sheet footer      |
+| StageRail  | `src/components/StageRail.astro`  | propagation sequence + dimension rail |
 | Header     | `src/components/Header.astro`     | nav from `src/lib/nav.ts`             |
 | Footer     | `src/components/Footer.astro`     | four columns + baseline row           |
 | BaseLayout | `src/layouts/BaseLayout.astro`    | head, fonts, SheetFrame/Header/Footer |
 
-Supporting: `src/lib/nav.ts` (typed nav model + `isActive`, unit tested).
+Supporting: `src/lib/nav.ts` (typed nav model + `isActive`, unit tested), `src/lib/stages.ts`
+(the five propagation stages, their copy and figures, unit tested).
 
 ## 8. Footer content
 

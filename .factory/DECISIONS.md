@@ -54,3 +54,15 @@ Loaded via `CLAUDE.md`. Cap: 250 lines. Compact into `.factory/history/` when cl
 - Home page ships only the hero (eyebrow, H1, subhead, two buttons) inside the sheet frame, per
   the brief. All 13 other routes are stubs that render the shell (header, title block, footer) so
   navigation never 404s; no page content beyond that is in scope for this session.
+
+## Propagation sequence on the home page (session 2)
+
+- `StageRail.astro` + `src/lib/stages.ts` render the five supplies stages on `/`. All five are
+  visible at every width (five across ≥1024px, three across 620–1023px, one below) — no carousel,
+  no JS. The owner's reference screenshot used rounded, shadowed, pastel cards in a three-at-a-time
+  carousel; that style is forbidden by the blueprint, so it was replaced, not matched.
+- The `--signal` dimension rail under the photographs (day ticks, DAY 0 → DAY 38) is the only
+  signal ink in the section: it measures elapsed time, which is what the token is for.
+- Stage copy and figures live in `src/lib/stages.ts` and are **placeholders pending confirmation**
+  from operations. Photographs are not supplied yet, so each plate renders a labelled grey
+  placeholder with crop ticks until a `photo` is passed.
