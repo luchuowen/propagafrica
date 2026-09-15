@@ -523,6 +523,7 @@ const services = [
   /* ---------- product grid teaser ---------- */
   .products {
     padding: var(--space-6) 0;
+    background: var(--white);
   }
 
   .filter-pills {
@@ -576,6 +577,8 @@ const services = [
   }
 
   .product-card {
+    display: flex;
+    flex-direction: column;
     border: 1px solid var(--rule);
     border-radius: var(--radius-m);
     overflow: hidden;
@@ -597,6 +600,9 @@ const services = [
   }
 
   .product-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
     padding: var(--space-3);
   }
 
@@ -634,6 +640,16 @@ const services = [
     text-decoration: none;
   }
 
+  /* Pin the CTA to the bottom of the card instead of letting it sit right
+     under whichever description happens to be shortest — the grid stretches
+     every card to match the tallest one already (CSS Grid default), so this
+     is what actually lines every "View range" link up, without touching a
+     word of the (verbatim, blueprint.md) descriptor copy. */
+  .product-body .link-arrow {
+    margin-top: auto;
+    padding-top: var(--space-3);
+  }
+
   .link-arrow:hover {
     text-decoration: underline;
   }
@@ -646,6 +662,7 @@ const services = [
   .facilities {
     padding: var(--space-6) 0;
     border-top: 1px solid var(--rule);
+    background: var(--paper);
   }
 
   /* ---------- monitoring spotlight ---------- */
@@ -722,6 +739,7 @@ const services = [
   /* ---------- services 3-up ---------- */
   .services {
     padding: var(--space-6) 0;
+    background: var(--white);
   }
 
   .services-grid {
