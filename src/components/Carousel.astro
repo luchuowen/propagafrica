@@ -20,6 +20,7 @@ interface Props {
 const { slides, label, variant = 'hero' } = Astro.props;
 const lanes = variant === 'grid' ? 3 : 1;
 const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
+const hasCaptions = slides.some((slide) => slide.caption);
 ---
 
 <section
@@ -33,54 +34,83 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
   <div class="viewport">
     {laneIndexes.map((lane) => (
       <div class="lane" data-lane={lane}>
-        {slides.map((slide, i) => (
-          <figure class:list={['slide', i === lane && 'is-active']} data-index={i}>
-            <img
-              src={slide.src}
-              alt={slide.alt}
-              loading={variant === 'hero' && lane === 0 && i === 0 ? 'eager' : 'lazy'}
-              fetchpriority={variant === 'hero' && lane === 0 && i === 0 ? 'high' : undefined}
-            />
-            {slide.caption && (
-              <figcaption class:list={['caption', slide.step && 'has-step']}>
-                {slide.step && <span class="step-num">{slide.step}</span>}
-                {slide.caption}
-              </figcaption>
+        <div class="media">
+          {slides.map((slide, i) => (
+            <div class:list={['frame', i === lane && 'is-active']} data-index={i}>
+              <img
+                src={slide.src}
+                alt={slide.alt}
+                loading={variant === 'hero' && lane === 0 && i === 0 ? 'eager' : 'lazy'}
+                fetchpriority={variant === 'hero' && lane === 0 && i === 0 ? 'high' : undefined}
+              />
+            </div>
+          ))}
+          {/* Anchored to this lane's media box (not the whole card) so the
+              arrows stay centred on the photo even when a caption panel
+              beneath it changes the card's total height. */}
+          {lane === 0 && slides.length > 1 && (
+            <button type="button" class="control prev" aria-label="Previous slide">
+              <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+                <path
+                  d="M12.5 4 L7 10 L12.5 16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </svg>
+            </button>
+          )}
+          {/* A grid carousel only shows lane 0 below the 900px breakpoint
+              (see the [data-variant='grid'] rule below), so its "next"
+              button needs a mobile copy here too — hidden once the other
+              lanes, and the real end-of-row button, appear. */}
+          {lane === 0 && laneIndexes.length > 1 && slides.length > 1 && (
+            <button type="button" class="control next next-mobile" aria-label="Next slide">
+              <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+                <path
+                  d="M7.5 4 L13 10 L7.5 16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </svg>
+            </button>
+          )}
+          {lane === laneIndexes.length - 1 && slides.length > 1 && (
+            <button type="button" class="control next" aria-label="Next slide">
+              <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+                <path
+                  d="M7.5 4 L13 10 L7.5 16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </svg>
+            </button>
+          )}
+        </div>
+        {hasCaptions && (
+          <div class="caption-box">
+            {slides.map(
+              (slide, i) =>
+                slide.caption && (
+                  <p class:list={['caption', i === lane && 'is-active', slide.step && 'has-step']} data-index={i}>
+                    {slide.step && <span class="step-num">{slide.step}</span>}
+                    {slide.caption}
+                  </p>
+                ),
             )}
-          </figure>
-        ))}
+          </div>
+        )}
       </div>
     ))}
   </div>
-
-  {slides.length > 1 && (
-    <>
-      <button type="button" class="control prev" aria-label="Previous slide">
-        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
-          <path
-            d="M12.5 4 L7 10 L12.5 16"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-        </svg>
-      </button>
-      <button type="button" class="control next" aria-label="Next slide">
-        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
-          <path
-            d="M7.5 4 L13 10 L7.5 16"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-        </svg>
-      </button>
-    </>
-  )}
 </section>
 
 <style>
@@ -98,13 +128,11 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
   .lane {
     position: relative;
     flex: 1 1 0;
-    aspect-ratio: 16 / 9;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     border-radius: var(--radius-m);
-    /* Fallback fill while a slide's photo is still loading (large hero JPEGs on a slow
-       connection), so a not-yet-painted image shows a dark, on-brand panel instead of the
-       browser's default white/grey — reported as a "gray band" flash at the top of the hero. */
-    background: var(--green-dark);
+    overflow: hidden;
+    background: var(--paper);
   }
 
   [data-variant='hero'] .viewport {
@@ -112,8 +140,17 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
   }
 
   [data-variant='hero'] .lane {
-    aspect-ratio: 16 / 9;
     border-radius: 0;
+  }
+
+  .media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    /* Fallback fill while a slide's photo is still loading (large hero JPEGs on a slow
+       connection), so a not-yet-painted image shows a dark, on-brand panel instead of the
+       browser's default white/grey — reported as a "gray band" flash at the top of the hero. */
+    background: var(--green-dark);
   }
 
   /* Below ~640px the hero copy (heading, standfirst, buttons) needs more
@@ -121,7 +158,7 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
      overflowing the hero band and colliding with the section below. Drop
      the fixed aspect ratio there and guarantee enough height instead. */
   @media (max-width: 640px) {
-    [data-variant='hero'] .lane {
+    [data-variant='hero'] .media {
       aspect-ratio: auto;
       min-height: 560px;
     }
@@ -135,10 +172,15 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
     [data-variant='grid'] .lane:nth-child(n + 2) {
       display: block;
     }
+
+    /* The end-of-row "next" button (in the now-visible last lane) takes
+       over from the mobile copy once there is a real end of the row. */
+    .control.next-mobile {
+      display: none;
+    }
   }
 
-  .slide {
-    margin: 0;
+  .frame {
     position: absolute;
     inset: 0;
     opacity: 0;
@@ -148,13 +190,13 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
       transform 700ms ease;
   }
 
-  .slide.is-active {
+  .frame.is-active {
     opacity: 1;
     transform: scale(1);
     z-index: 1;
   }
 
-  .slide img {
+  .frame img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -190,22 +232,33 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
     background: var(--mint);
   }
 
-  /* The caption reads directly off the photo now — no dot row, no hover
-     tooltip to discover it through. A solid scrim (not backdrop-filter,
-     which is banned sitewide) keeps it legible over any image. */
+  /* The caption now lives on its own paper panel under the photo, not as a
+     scrim overlaid on top of it — a translucent band over half the image
+     read as cut-rate, and it hid part of every photo. Every caption in a
+     lane is stacked in the same CSS grid cell so the panel's height comes
+     from the tallest one (no fixed height, no JS measuring), and only the
+     active caption is shown at a time via opacity, matching the photo
+     crossfade above it. */
+  .caption-box {
+    display: grid;
+  }
+
   .caption {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    grid-area: 1 / 1;
     margin: 0;
-    z-index: 2;
     padding: var(--space-2) var(--space-3);
-    background: var(--ink-overlay-strong);
-    color: var(--paper);
+    color: var(--soft);
     font-family: var(--f-sans);
     font-size: 13px;
     line-height: 1.4;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 400ms ease;
+  }
+
+  .caption.is-active {
+    opacity: 1;
+    visibility: visible;
   }
 
   /* A numbered step (the propagation journey) reads as a sequence, not a
@@ -219,6 +272,7 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
     gap: var(--space-1);
     padding-block: var(--space-3);
     text-align: center;
+    color: var(--ink);
   }
 
   .step-num {
@@ -228,11 +282,11 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    border: 1px solid var(--paper);
+    border: 1px solid var(--rule);
+    color: var(--soft);
     font-family: var(--f-mono);
     font-size: 11px;
     letter-spacing: 0.02em;
-    opacity: 0.9;
   }
 
   .pa-carousel:focus-visible,
@@ -253,11 +307,11 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
 
   carousels.forEach((root) => {
     const lanes = Array.from(root.querySelectorAll<HTMLElement>('.lane'));
-    const slideCount = root.querySelectorAll('.lane:first-child .slide').length;
+    const slideCount = root.querySelectorAll('.lane:first-child .frame').length;
     if (slideCount === 0) return;
 
-    const prevBtn = root.querySelector<HTMLButtonElement>('.control.prev');
-    const nextBtn = root.querySelector<HTMLButtonElement>('.control.next');
+    const prevBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('.control.prev'));
+    const nextBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('.control.next'));
     const interval = Number(root.dataset.interval || '5500');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -273,9 +327,9 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
     function render() {
       lanes.forEach((lane, laneOffset) => {
         const target = (index + laneOffset) % slideCount;
-        const slides = lane.querySelectorAll<HTMLElement>('.slide');
-        slides.forEach((slide) => {
-          slide.classList.toggle('is-active', Number(slide.dataset.index) === target);
+        const items = lane.querySelectorAll<HTMLElement>('[data-index]');
+        items.forEach((item) => {
+          item.classList.toggle('is-active', Number(item.dataset.index) === target);
         });
       });
     }
@@ -315,8 +369,8 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
       startAutoplay();
     }
 
-    prevBtn?.addEventListener('click', () => onUserInteraction(prev));
-    nextBtn?.addEventListener('click', () => onUserInteraction(next));
+    prevBtns.forEach((btn) => btn.addEventListener('click', () => onUserInteraction(prev)));
+    nextBtns.forEach((btn) => btn.addEventListener('click', () => onUserInteraction(next)));
 
     root.addEventListener('keydown', (event) => {
       const key = (event as KeyboardEvent).key;
