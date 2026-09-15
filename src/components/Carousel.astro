@@ -143,6 +143,18 @@ const hasCaptions = slides.some((slide) => slide.caption);
     border-radius: 0;
   }
 
+  /* Grid carousels (propagation journey, facilities-in-use) read as a row of
+     photo cards, not a filmstrip — more air between them and enough radius
+     and lift to separate each card from whatever sits behind it. */
+  [data-variant='grid'] .viewport {
+    gap: var(--space-3);
+  }
+
+  [data-variant='grid'] .lane {
+    border-radius: var(--radius-l);
+    box-shadow: var(--shadow-soft);
+  }
+
   .media {
     position: relative;
     aspect-ratio: 16 / 9;
@@ -203,6 +215,18 @@ const hasCaptions = slides.some((slide) => slide.caption);
     display: block;
   }
 
+  /* A slow, subtle zoom on hover — the one bit of "alive" motion a static
+     documentary photo card can carry without turning into a gimmick. */
+  @media (prefers-reduced-motion: no-preference) {
+    [data-variant='grid'] .frame img {
+      transition: transform 600ms ease;
+    }
+
+    [data-variant='grid'] .lane:hover .frame.is-active img {
+      transform: scale(1.045);
+    }
+  }
+
   .control {
     position: absolute;
     top: 50%;
@@ -218,6 +242,10 @@ const hasCaptions = slides.some((slide) => slide.caption);
     background: var(--paper);
     color: var(--ink);
     cursor: pointer;
+    box-shadow: var(--shadow-soft);
+    transition:
+      transform 150ms ease,
+      background 150ms ease;
   }
 
   .control.prev {
@@ -230,6 +258,7 @@ const hasCaptions = slides.some((slide) => slide.caption);
 
   .control:hover {
     background: var(--mint);
+    transform: translateY(-50%) scale(1.08);
   }
 
   /* The caption now lives on its own paper panel under the photo, not as a
@@ -246,14 +275,22 @@ const hasCaptions = slides.some((slide) => slide.caption);
   .caption {
     grid-area: 1 / 1;
     margin: 0;
-    padding: var(--space-2) var(--space-3);
+    padding: var(--space-3);
     color: var(--soft);
     font-family: var(--f-sans);
-    font-size: 13px;
-    line-height: 1.4;
+    font-size: 13.5px;
+    line-height: 1.5;
     opacity: 0;
     visibility: hidden;
     transition: opacity 400ms ease;
+  }
+
+  /* Grid cards carry the caption on the same paper the card already sits
+     on, with a hairline to mark where the photo ends — the panel reads as
+     part of the card, not a loose line of text under a picture. */
+  [data-variant='grid'] .caption-box {
+    background: var(--paper);
+    border-top: 1px solid var(--rule);
   }
 
   .caption.is-active {
