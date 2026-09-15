@@ -40,6 +40,7 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
               loading={variant === 'hero' && lane === 0 && i === 0 ? 'eager' : 'lazy'}
               fetchpriority={variant === 'hero' && lane === 0 && i === 0 ? 'high' : undefined}
             />
+            {slide.caption && <figcaption class="caption">{slide.caption}</figcaption>}
           </figure>
         ))}
       </div>
@@ -72,18 +73,6 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
           ></path>
         </svg>
       </button>
-      <div class="dots">
-        {slides.map((slide, i) => (
-          <button
-            type="button"
-            class="dot"
-            data-index={i}
-            data-tooltip={slide.caption}
-            aria-current={i === 0 ? 'true' : undefined}
-            aria-label={`Go to slide ${i + 1}: ${slide.caption ?? slide.alt}`}
-          ></button>
-        ))}
-      </div>
     </>
   )}
 </section>
@@ -195,117 +184,26 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
     background: var(--mint);
   }
 
-  .dots {
+  /* The caption reads directly off the photo now — no dot row, no hover
+     tooltip to discover it through. A solid scrim (not backdrop-filter,
+     which is banned sitewide) keeps it legible over any image. */
+  .caption {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: var(--space-2);
+    bottom: 0;
+    margin: 0;
     z-index: 2;
-    display: flex;
-    justify-content: center;
-    gap: 2px;
-  }
-
-  /* Grid-variant slides always carry a caption bar along the bottom edge;
-     an overlaid dot row collides with it (see the homepage bug report).
-     Flow the dots below the photo instead, clear of any caption. */
-  [data-variant='grid'] .dots {
-    position: static;
-    margin-top: var(--space-2);
-  }
-
-  /* The button is a 24x24 hit target (WCAG 2.5.8); the visible dot is a
-     smaller centred pseudo-element so the dot row still reads as small marks. */
-  .dot {
-    position: relative;
-    width: 24px;
-    height: 24px;
-    padding: 0;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .dot::after {
-    content: '';
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--white);
-    opacity: 0.55;
-  }
-
-  .dot[aria-current='true']::after {
-    opacity: 1;
-    background: var(--gold);
-  }
-
-  /* The caption that used to sit as a permanent bar across the photo (see the homepage bug
-     report — it collided with the dots) now lives here instead: a small tooltip that only
-     appears while a dot is hovered or focused, naming the slide it jumps to. */
-  .dot[data-tooltip]::before {
-    content: attr(data-tooltip);
-    position: absolute;
-    left: 50%;
-    bottom: calc(100% + 10px);
-    transform: translateX(-50%) translateY(4px);
-    width: max-content;
-    max-width: 200px;
-    padding: 7px 10px;
-    border-radius: var(--radius-s);
-    background: var(--ink);
+    padding: var(--space-2) var(--space-3);
+    background: var(--ink-overlay-strong);
     color: var(--paper);
     font-family: var(--f-sans);
-    font-size: 12px;
+    font-size: 13px;
     line-height: 1.4;
-    text-align: center;
-    white-space: normal;
-    opacity: 0;
-    pointer-events: none;
-    transition:
-      opacity 200ms cubic-bezier(0.16, 1, 0.3, 1),
-      transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 3;
-  }
-
-  /* Keep the tooltip from spilling past the edge of the dot row for the first/last dots,
-     where a centred bubble would otherwise overhang the carousel. */
-  .dot[data-tooltip]:first-child::before {
-    left: 0;
-    transform: translateX(0) translateY(4px);
-  }
-
-  .dot[data-tooltip]:last-child::before {
-    left: auto;
-    right: 0;
-    transform: translateX(0) translateY(4px);
-  }
-
-  .dot[data-tooltip]:hover::before,
-  .dot[data-tooltip]:focus-visible::before {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-
-  .dot[data-tooltip]:first-child:hover::before,
-  .dot[data-tooltip]:first-child:focus-visible::before,
-  .dot[data-tooltip]:last-child:hover::before,
-  .dot[data-tooltip]:last-child:focus-visible::before {
-    transform: translateX(0) translateY(0);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .dot[data-tooltip]::before {
-      transition: opacity 120ms linear;
-    }
   }
 
   .pa-carousel:focus-visible,
-  .control:focus-visible,
-  .dot:focus-visible {
+  .control:focus-visible {
     outline: 2px solid var(--green);
     outline-offset: 2px;
   }
@@ -327,12 +225,10 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
 
     const prevBtn = root.querySelector<HTMLButtonElement>('.control.prev');
     const nextBtn = root.querySelector<HTMLButtonElement>('.control.next');
-    const dots = Array.from(root.querySelectorAll<HTMLButtonElement>('.dot'));
     const interval = Number(root.dataset.interval || '5500');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     let index = 0;
-    let userInteracted = false;
     let timer: number | null = null;
 
     function render() {
@@ -342,13 +238,6 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
         slides.forEach((slide) => {
           slide.classList.toggle('is-active', Number(slide.dataset.index) === target);
         });
-      });
-      dots.forEach((dot, i) => {
-        if (i === index) {
-          dot.setAttribute('aria-current', 'true');
-        } else {
-          dot.removeAttribute('aria-current');
-        }
       });
     }
 
@@ -373,22 +262,22 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
     }
 
     function startAutoplay() {
-      if (reducedMotion || userInteracted || slideCount < 2) return;
+      if (reducedMotion || slideCount < 2) return;
       stopAutoplay();
       timer = window.setInterval(next, interval);
     }
 
+    // A manual nudge (arrow, keyboard, swipe) resets the timer rather than
+    // killing it for good, so the carousel keeps advancing on its own
+    // afterwards instead of going static the moment someone touches it.
     function onUserInteraction(action: () => void) {
-      userInteracted = true;
       stopAutoplay();
       action();
+      startAutoplay();
     }
 
     prevBtn?.addEventListener('click', () => onUserInteraction(prev));
     nextBtn?.addEventListener('click', () => onUserInteraction(next));
-    dots.forEach((dot, i) => {
-      dot.addEventListener('click', () => onUserInteraction(() => goTo(i)));
-    });
 
     root.addEventListener('keydown', (event) => {
       const key = (event as KeyboardEvent).key;
