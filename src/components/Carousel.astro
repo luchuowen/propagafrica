@@ -8,6 +8,7 @@ interface Slide {
   src: string;
   alt: string;
   caption?: string;
+  step?: string;
 }
 
 interface Props {
@@ -40,7 +41,12 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
               loading={variant === 'hero' && lane === 0 && i === 0 ? 'eager' : 'lazy'}
               fetchpriority={variant === 'hero' && lane === 0 && i === 0 ? 'high' : undefined}
             />
-            {slide.caption && <figcaption class="caption">{slide.caption}</figcaption>}
+            {slide.caption && (
+              <figcaption class:list={['caption', slide.step && 'has-step']}>
+                {slide.step && <span class="step-num">{slide.step}</span>}
+                {slide.caption}
+              </figcaption>
+            )}
           </figure>
         ))}
       </div>
@@ -202,6 +208,33 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
     line-height: 1.4;
   }
 
+  /* A numbered step (the propagation journey) reads as a sequence, not a
+     photo credit — centre it and lead with a small ring-badge numeral in
+     the site's spec-label mono, echoing the "01/02/03" numerals used for
+     the outcome panels elsewhere on this page. */
+  .caption.has-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    padding-block: var(--space-3);
+    text-align: center;
+  }
+
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid var(--paper);
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    opacity: 0.9;
+  }
+
   .pa-carousel:focus-visible,
   .control:focus-visible {
     outline: 2px solid var(--green);
@@ -228,6 +261,12 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
     const interval = Number(root.dataset.interval || '5500');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // A grid carousel advances a whole lane's worth of slides at once, so
+    // each tick swaps in a fresh, complete group (e.g. steps 1-3, then
+    // 4-6) rather than sliding one slide at a time and leaving two of the
+    // three lanes unchanged — which read as a stall, not a step forward,
+    // for a numbered sequence like the propagation journey.
+    const step = lanes.length;
     let index = 0;
     let timer: number | null = null;
 
@@ -247,11 +286,11 @@ const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
     }
 
     function next() {
-      goTo(index + 1);
+      goTo(index + step);
     }
 
     function prev() {
-      goTo(index - 1);
+      goTo(index - step);
     }
 
     function stopAutoplay() {
