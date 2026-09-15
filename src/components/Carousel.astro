@@ -21,6 +21,26 @@ const { slides, label, variant = 'hero' } = Astro.props;
 const lanes = variant === 'grid' ? 3 : 1;
 const laneIndexes = Array.from({ length: lanes }, (_, i) => i);
 const hasCaptions = slides.some((slide) => slide.caption);
+
+// Every carousel photo ships at a fixed size per docs/image-manifest.md
+// (hero: 1920x1080, journey/facilities: 1200x900) — width/height here avoid
+// layout shift, and the srcset below leans on scripts/generate-image-variants.mjs
+// (wired into the astro:build:done hook) generating a WebP copy plus a 640w
+// WebP + same-format fallback alongside every source photo in dist/.
+const nativeWidth = variant === 'hero' ? 1920 : 1200;
+const nativeHeight = variant === 'hero' ? 1080 : 900;
+const sizes = variant === 'hero' ? '100vw' : '(min-width: 900px) 33vw, 100vw';
+
+function assetVariants(src: string) {
+  const match = src.match(/\.(jpe?g|png)$/i);
+  const ext = match ? match[0] : '.jpg';
+  const base = src.slice(0, -ext.length);
+  return {
+    webp: `${base}.webp`,
+    webpSmall: `${base}-640.webp`,
+    fallbackSmall: `${base}-640${ext}`,
+  };
+}
 ---
 
 <section
@@ -35,16 +55,32 @@ const hasCaptions = slides.some((slide) => slide.caption);
     {laneIndexes.map((lane) => (
       <div class="lane" data-lane={lane}>
         <div class="media">
-          {slides.map((slide, i) => (
-            <div class:list={['frame', i === lane && 'is-active']} data-index={i}>
-              <img
-                src={slide.src}
-                alt={slide.alt}
-                loading={variant === 'hero' && lane === 0 && i === 0 ? 'eager' : 'lazy'}
-                fetchpriority={variant === 'hero' && lane === 0 && i === 0 ? 'high' : undefined}
-              />
-            </div>
-          ))}
+          {slides.map((slide, i) => {
+            const { webp, webpSmall, fallbackSmall } = assetVariants(slide.src);
+            const isFirstPaint = variant === 'hero' && lane === 0 && i === 0;
+            return (
+              <div class:list={['frame', i === lane && 'is-active']} data-index={i}>
+                <picture>
+                  <source
+                    type="image/webp"
+                    srcset={`${webpSmall} 640w, ${webp} ${nativeWidth}w`}
+                    sizes={sizes}
+                  />
+                  <img
+                    src={slide.src}
+                    srcset={`${fallbackSmall} 640w, ${slide.src} ${nativeWidth}w`}
+                    sizes={sizes}
+                    width={nativeWidth}
+                    height={nativeHeight}
+                    alt={slide.alt}
+                    loading={isFirstPaint ? 'eager' : 'lazy'}
+                    fetchpriority={isFirstPaint ? 'high' : undefined}
+                    decoding={isFirstPaint ? 'sync' : 'async'}
+                  />
+                </picture>
+              </div>
+            );
+          })}
           {/* Anchored to this lane's media box (not the whole card) so the
               arrows stay centred on the photo even when a caption panel
               beneath it changes the card's total height. */}
@@ -208,11 +244,15 @@ const hasCaptions = slides.some((slide) => slide.caption);
     z-index: 1;
   }
 
+  .frame picture,
   .frame img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
     display: block;
+  }
+
+  .frame img {
+    object-fit: cover;
   }
 
   /* A slow, subtle zoom on hover — the one bit of "alive" motion a static

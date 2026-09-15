@@ -1,6 +1,27 @@
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { visit } from 'unist-util-visit';
+import { generateImageVariants } from './scripts/generate-image-variants.mjs';
+
+/**
+ * Generates the WebP + 640w variants the carousel's <picture> markup
+ * references, once the build output exists. Runs for every `astro build`
+ * regardless of which script invokes it (`pnpm build`, `pnpm exec astro
+ * build` in factory-check, CI) since it hooks the Astro build lifecycle
+ * itself rather than a package.json script.
+ */
+function imageVariants() {
+  return {
+    name: 'image-variants',
+    hooks: {
+      'astro:build:done': async ({ dir }) => {
+        await generateImageVariants(path.join(fileURLToPath(dir), 'images'));
+      },
+    },
+  };
+}
 
 /**
  * Wrap every markdown table in a focusable, labelled scroll container.
@@ -47,5 +68,6 @@ export default defineConfig({
       // The admin console is not public content.
       filter: (page) => !page.includes('/admin'),
     }),
+    imageVariants(),
   ],
 });
