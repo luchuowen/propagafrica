@@ -28,7 +28,7 @@ const LOOP_SECONDS = 72;
 // fallback next to it in dist/.
 const NATIVE_WIDTH = 1200;
 const NATIVE_HEIGHT = 900;
-const SIZES = '(min-width: 1810px) 560px, (min-width: 840px) 31vw, 260px';
+const SIZES = '(min-width: 1440px) 360px, (min-width: 840px) 25vw, 220px';
 
 function assetVariants(src: string) {
   const match = src.match(/\.(jpe?g|png)$/i);
@@ -140,12 +140,13 @@ keyboard (axe: scrollable-region-focusable). -->
     width: max-content;
   }
 
-  /* Sized so roughly three steps are on screen at once. Six at a time read as
-     a wall of thumbnails; three give each photograph room and let a caption be
-     read as it goes past. */
+  /* Sized so roughly three steps are on screen at once, matching the product
+     grid card width (~357px at the content-max breakpoint) rather than
+     dwarfing it. Six at a time read as a wall of thumbnails; three give each
+     photograph room and let a caption be read as it goes past. */
   .step {
     flex: 0 0 auto;
-    width: clamp(260px, 31vw, 560px);
+    width: clamp(220px, 25vw, 360px);
     margin-right: var(--space-3);
     display: flex;
     flex-direction: column;
