@@ -204,3 +204,29 @@ Owner call. `.trust-item` (the "Why partner with PropagAfrica" / "Who we
 supply" list text, shared by Home and About) was 15.5px with no explicit
 weight; now 14px/400 explicitly, so it can't inherit heavier from
 elsewhere. Headings and eyebrows on the same panel are unchanged.
+
+## Hero carousel: dots instead of arrows, Ken Burns motion (2026-09-16)
+
+Owner call — the hero's overlay prev/next circles read as dated slideshow
+chrome. Removed for the hero variant only (`Carousel.astro`'s grid variant
+— facilities, journey — keeps its own rail arrows, a separate, already
+above-the-photo control unaffected by this). Replaced with a `role="group"`
+row of small dot buttons that jump straight to a slide on click; touch
+swipe and the existing ArrowLeft/ArrowRight keyboard handling were already
+wired to the whole carousel root, not the removed buttons, so both still
+work unchanged.
+
+First pass made each dot's clickable box the same 7px as its visible
+circle — Lighthouse's `target-size` audit failed the home page (97, not 100) on that alone. Fixed by keeping each `<button>` at a full 24x24px hit
+area with the small dot drawn via `::after`, centred inside — the touch
+target is generous without the marker looking heavy. Re-ran Lighthouse
+directly (not just the axe-core Playwright suite, which doesn't cover this
+audit) to confirm 100 again before shipping.
+
+Also added a continuous slow zoom-and-pan ("Ken Burns") on the hero's
+active `<img>` — 9s, alternating direction by slide index (even/odd) so
+five slides don't all drift identically — layered under `.frame`'s own
+crossfade/scale entrance rather than replacing it. Hero only; the grid
+variant already has its own hover-zoom for the same "alive photograph"
+effect at thumbnail scale. Skipped entirely under
+`prefers-reduced-motion: reduce`, same as every other motion in this file.
