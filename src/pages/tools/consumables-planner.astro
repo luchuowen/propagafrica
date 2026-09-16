@@ -32,60 +32,55 @@ import { CELL_COUNTS } from '../../lib/tools/consumables-planner';
       </noscript>
 
       <div class="calculator" data-calculator hidden>
-        <form id="consumables-form" novalidate>
-          <div class="field">
-            <label for="cuttings">Cuttings/seedlings to propagate</label>
-            <input
-              id="cuttings"
-              name="cuttings"
-              type="number"
-              min="1"
-              step="1"
-              inputmode="numeric"
-              placeholder="e.g. 10000"
-            />
-          </div>
+        <div class="form-panel">
+          <p class="panel-label">Your propagation batch</p>
+          <form id="consumables-form" novalidate>
+            <div class="field">
+              <label for="cuttings">Cuttings/seedlings to propagate</label>
+              <input
+                id="cuttings"
+                name="cuttings"
+                type="number"
+                min="1"
+                step="1"
+                inputmode="numeric"
+                placeholder="e.g. 10000"
+              />
+            </div>
 
-          <div class="field">
-            <label for="cell-count">Tray cell count</label>
-            <select id="cell-count" name="cellCount">
-              {CELL_COUNTS.map((count) => (
-                <option value={count}>{count} cells</option>
-              ))}
-            </select>
-          </div>
+            <div class="field">
+              <label for="cell-count">Tray cell count</label>
+              <select id="cell-count" name="cellCount">
+                {CELL_COUNTS.map((count) => (
+                  <option value={count}>{count} cells</option>
+                ))}
+              </select>
+            </div>
 
-          <div class="field field-toggle">
-            <label for="potting-on">Potting-on stage</label>
-            <select id="potting-on" name="pottingOn">
-              <option value="no">No</option>
-              <option value="yes">Yes</option>
-            </select>
-          </div>
+            <div class="field">
+              <label for="buffer">Wastage buffer (%)</label>
+              <input id="buffer" name="buffer" type="number" min="0" max="25" step="1" value="10" />
+            </div>
 
-          <div class="field field-toggle">
-            <label for="humidity-domes">Humidity domes</label>
-            <select id="humidity-domes" name="humidityDomes">
-              <option value="no">No</option>
-              <option value="yes">Yes</option>
-            </select>
-          </div>
+            <div class="toggle-group">
+              <label class="toggle">
+                <input id="potting-on" name="pottingOn" type="checkbox" />
+                <span>Potting-on stage</span>
+              </label>
+              <label class="toggle">
+                <input id="humidity-domes" name="humidityDomes" type="checkbox" />
+                <span>Humidity domes</span>
+              </label>
+              <label class="toggle">
+                <input id="staked" name="staked" type="checkbox" />
+                <span>Staked/trellised crop</span>
+              </label>
+            </div>
+          </form>
+        </div>
 
-          <div class="field field-toggle">
-            <label for="staked">Staked/trellised crop</label>
-            <select id="staked" name="staked">
-              <option value="no">No</option>
-              <option value="yes">Yes</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="buffer">Wastage buffer (%)</label>
-            <input id="buffer" name="buffer" type="number" min="0" max="25" step="1" value="10" />
-          </div>
-        </form>
-
-        <div class="results">
+        <div class="results-panel">
+          <p class="panel-label">Your quantities</p>
           <p class="hint" data-hint>
             Enter the number of cuttings or seedlings to propagate to see quantities.
           </p>
@@ -112,13 +107,16 @@ import { CELL_COUNTS } from '../../lib/tools/consumables-planner';
             </div>
           </dl>
 
+          <a class="btn-primary" id="quote-link" href="/contact/" data-result-list hidden>
+            Request a Quotation
+            <span class="btn-arrow" aria-hidden="true">
+              &rarr;
+            </span>
+          </a>
+
           <p class="disclaimer" data-result-list hidden>
             {TOOLS_DISCLAIMER}
           </p>
-
-          <a class="btn-primary" id="quote-link" href="/contact/" data-result-list hidden>
-            Request a Quotation
-          </a>
         </div>
       </div>
     </div>
@@ -136,9 +134,9 @@ import { CELL_COUNTS } from '../../lib/tools/consumables-planner';
 
     const cuttingsEl = document.getElementById('cuttings') as HTMLInputElement;
     const cellCountEl = document.getElementById('cell-count') as HTMLSelectElement;
-    const pottingOnEl = document.getElementById('potting-on') as HTMLSelectElement;
-    const domesEl = document.getElementById('humidity-domes') as HTMLSelectElement;
-    const stakedEl = document.getElementById('staked') as HTMLSelectElement;
+    const pottingOnEl = document.getElementById('potting-on') as HTMLInputElement;
+    const domesEl = document.getElementById('humidity-domes') as HTMLInputElement;
+    const stakedEl = document.getElementById('staked') as HTMLInputElement;
     const bufferEl = document.getElementById('buffer') as HTMLInputElement;
 
     const hint = document.querySelector('[data-hint]') as HTMLElement;
@@ -155,8 +153,8 @@ import { CELL_COUNTS } from '../../lib/tools/consumables-planner';
     const rowTies = document.querySelector('[data-row-ties]') as HTMLElement;
     const quoteLink = document.getElementById('quote-link') as HTMLAnchorElement;
 
-    function isYes(select: HTMLSelectElement): boolean {
-      return select.value === 'yes';
+    function isYes(checkbox: HTMLInputElement): boolean {
+      return checkbox.checked;
     }
 
     function readBuffer(): number {
@@ -218,6 +216,7 @@ import { CELL_COUNTS } from '../../lib/tools/consumables-planner';
 <style>
   .tool-page {
     padding: var(--space-6) 0 var(--space-7);
+    background: var(--white);
   }
 
   .tool-inner {
@@ -241,11 +240,26 @@ import { CELL_COUNTS } from '../../lib/tools/consumables-planner';
     font-weight: 600;
   }
 
+  /* Inputs on the left, a live answer panel on the right — the two things a
+     calculator is, side by side instead of stacked with a rule between them.
+     Below 900px there isn't room for both at once, so it drops to a single
+     column in reading order: fill in the form, then see what it worked out. */
   .calculator {
     margin-top: var(--space-5);
     display: grid;
-    gap: var(--space-5);
-    max-width: 640px;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 900px) {
+    .calculator {
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+      align-items: start;
+    }
+
+    .results-panel {
+      position: sticky;
+      top: calc(var(--space-4) + 68px);
+    }
   }
 
   /* A class that sets `display` unconditionally beats the browser's own
@@ -253,6 +267,33 @@ import { CELL_COUNTS } from '../../lib/tools/consumables-planner';
      `hidden` property needs its own override. */
   .calculator[hidden] {
     display: none;
+  }
+
+  .form-panel,
+  .results-panel {
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-l);
+    padding: var(--space-4);
+  }
+
+  .form-panel {
+    background: var(--white);
+  }
+
+  /* The one tinted ground the palette allows — used here, not as decoration,
+     to mark this panel as the calculator's answer rather than more input. */
+  .results-panel {
+    background: var(--mint);
+  }
+
+  .panel-label {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--soft);
+    margin: 0 0 var(--space-3);
   }
 
   form {
@@ -278,70 +319,110 @@ import { CELL_COUNTS } from '../../lib/tools/consumables-planner';
     font-family: var(--f-sans);
     font-size: 16px;
     color: var(--ink);
-    background: var(--paper);
+    background: var(--white);
     border: 1px solid var(--rule);
     border-radius: var(--radius-s);
-    padding: 10px 12px;
+    padding: 11px 12px;
   }
 
-  .results {
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--rule);
+  input:focus-visible,
+  select:focus-visible {
+    border-color: var(--green);
+  }
+
+  /* Three related yes/no facts, grouped as checkboxes rather than three
+     separate "No / Yes" dropdowns — the same choice, read at a glance
+     instead of opened one at a time. */
+  .toggle-group {
     display: grid;
-    gap: var(--space-3);
-    align-items: start;
+    gap: var(--space-2);
+    padding-top: var(--space-1);
+    border-top: 1px solid var(--rule);
+  }
+
+  .toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .toggle input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--green);
+    cursor: pointer;
   }
 
   .hint {
     color: var(--soft);
     font-size: 15px;
+    line-height: 1.55;
   }
 
   .result-list {
     margin: 0;
+    display: grid;
+    gap: 2px;
+  }
+
+  .result-list[hidden] {
+    display: none;
   }
 
   .result-list .row {
-    display: grid;
-    grid-template-columns: 10em 1fr;
-    gap: var(--space-3);
-    padding: 10px 0;
+    padding: var(--space-2) 0;
     border-top: 1px solid var(--rule);
-  }
-
-  .result-list .row[hidden] {
-    display: none;
   }
 
   .result-list .row:first-child {
     border-top: none;
+    padding-top: 0;
   }
 
   dt {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
     font-weight: 600;
-    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     color: var(--soft);
   }
 
   dd {
-    margin: 0;
-    font-size: 15px;
+    margin: 2px 0 0;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  dd.mono {
+    font-family: var(--f-mono);
+    font-variant-numeric: tabular-nums;
   }
 
   .disclaimer {
-    margin: 0;
-    font-size: 13.5px;
+    margin: var(--space-3) 0 0;
+    font-size: 12.5px;
     line-height: 1.6;
     color: var(--soft);
   }
 
   .btn-primary {
-    justify-self: start;
-    display: inline-block;
+    margin-top: var(--space-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+    width: 100%;
     text-decoration: none;
     font-weight: 700;
     font-size: 15px;
-    padding: 11px 22px;
+    padding: 12px 22px;
     border-radius: var(--radius-s);
     background: var(--green);
     color: var(--paper);
@@ -355,5 +436,16 @@ import { CELL_COUNTS } from '../../lib/tools/consumables-planner';
   .btn-primary:hover {
     background: var(--green-dark);
     border-color: var(--green-dark);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .btn-arrow {
+      display: inline-block;
+      transition: transform 300ms cubic-bezier(0.2, 0.7, 0.3, 1);
+    }
+
+    .btn-primary:hover .btn-arrow {
+      transform: translateX(3px);
+    }
   }
 </style>
