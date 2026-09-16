@@ -43,6 +43,12 @@ function assetVariants(src: string) {
 
 // The clones carry the same image URLs, so they come straight off the cache and
 // never pop in mid-loop.
+//
+// Every photo loads eagerly. These were lazy, and steps 05 and 06 then never
+// loaded at all: they start outside the viewport, and the loop brings them in
+// by CSS transform, which does not re-run the lazy-load intersection check, so
+// they arrived as flat --green-dark panels (the .shot fallback fill) instead of
+// photographs. Six unique files; the clone half reuses the same URLs.
 const cycle = [
   ...steps.map((step) => ({ step, clone: false })),
   ...steps.map((step) => ({ step, clone: true })),
@@ -77,7 +83,7 @@ keyboard (axe: scrollable-region-focusable). -->
                 width={NATIVE_WIDTH}
                 height={NATIVE_HEIGHT}
                 alt={clone ? '' : step.alt}
-                loading="lazy"
+                loading="eager"
                 decoding="async"
               />
             </picture>
