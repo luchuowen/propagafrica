@@ -152,3 +152,19 @@ screen at any moment and each photograph has room; the caption went back up to
 pass covers more ground. Nothing else about the loop changed - still six steps
 plus an inert clone half, still paused on hover and focus, still a scroll-
 snapped row under prefers-reduced-motion.
+
+## Both trust panels are dark; card chrome trimmed (2026-09-16)
+
+The trust panel is two matching --green-dark panels rather than a dark/light
+pair - the owner wanted "Who we supply" to read as the same object as "Why
+partner with PropagAfrica", not its lighter counterpart.
+
+The grid carousel's progress rule is gone. Eight segments with three lit said
+nothing the per-card "NN / NN" index was not already saying, and with eight
+slides advancing three at a time the lit group jumped rather than progressing,
+so it read as a broken bar. The card index is now the whole position marker.
+
+Product cards: no hover underline on the family name, no terra dot before the
+tagline or the key-products list, and the card contents are centred. The dots
+were the only place terra appeared on these cards, so it now shows only on the
+tri-colour bar and the outcome panels.

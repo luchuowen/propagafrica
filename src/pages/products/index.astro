@@ -208,6 +208,7 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
     display: flex;
     flex-direction: column;
     flex: 1;
+    text-align: center;
   }
 
   /* The flyer tagline as the card's eyebrow, with two lines reserved so every
@@ -215,7 +216,7 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
   .tagline {
     display: flex;
     align-items: flex-start;
-    gap: 8px;
+    justify-content: center;
     min-height: 2.9em;
     margin: 0 0 var(--space-1);
     font-family: var(--f-mono);
@@ -225,16 +226,6 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
     line-height: 1.45;
     text-transform: uppercase;
     color: var(--soft);
-  }
-
-  .tagline::before {
-    content: '';
-    flex: 0 0 auto;
-    width: 6px;
-    height: 6px;
-    margin-top: 0.4em;
-    border-radius: 50%;
-    background: var(--terra);
   }
 
   .product-body h2 {
@@ -254,10 +245,6 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
     position: absolute;
     inset: 0;
     border-radius: var(--radius-l);
-  }
-
-  .product-body h2 a:hover {
-    text-decoration: underline;
   }
 
   .descriptor {
@@ -280,19 +267,6 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
     font-size: 12px;
     line-height: 1.5;
     color: var(--ink);
-    padding-left: 14px;
-    position: relative;
-  }
-
-  .key-bullets li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 7px;
-    width: 4px;
-    height: 4px;
-    background: var(--terra);
-    border-radius: 50%;
   }
 
   /* Pinned to the bottom of the card so every "View range" in the row lines
@@ -300,7 +274,7 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
   .product-foot {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: var(--space-2);
     margin-top: auto;
     padding-top: var(--space-3);
