@@ -12,10 +12,20 @@ interface Props {
   ogType?: 'website' | 'article';
 }
 
-const { title, description, image = '/og-default.png', jsonLd, ogType = 'website' } = Astro.props;
+// og-card.png, not og-default.png: WhatsApp, Slack and Facebook cache a link
+// preview against the image URL, so replacing a file in place leaves every
+// chat that has already scraped the site showing the old card. A new filename
+// is a new cache key and forces a fresh fetch.
+const { title, description, image = '/og-card.png', jsonLd, ogType = 'website' } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const imageUrl = new URL(image, Astro.site).href;
+
+// Declared so a scraper can lay out the full-width card before it has
+// downloaded the file. Without these WhatsApp falls back to the small cropped
+// thumbnail. Matches public/og-card.png exactly.
+const OG_IMAGE_WIDTH = 1200;
+const OG_IMAGE_HEIGHT = 630;
 ---
 
 <link rel="canonical" href={canonical} />
@@ -25,6 +35,13 @@ const imageUrl = new URL(image, Astro.site).href;
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={imageUrl} />
+<meta property="og:image:width" content={String(OG_IMAGE_WIDTH)} />
+<meta property="og:image:height" content={String(OG_IMAGE_HEIGHT)} />
+<meta property="og:image:type" content="image/png" />
+<meta
+  property="og:image:alt"
+  content="PropagAfrica Technologies — propagation supplies for nurseries and flower farms"
+/>
 <meta property="og:locale" content="en_KE" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />
