@@ -41,11 +41,7 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
                 <a href={f.href}>{f.name}</a>
               </h2>
               <p class="descriptor">{f.descriptor}</p>
-              <ul class="key-bullets">
-                {f.keyBullets.map((item) => (
-                  <li>{item}</li>
-                ))}
-              </ul>
+              <p class="key-bullets">{f.keyBullets.join(' · ')}</p>
               <span class="product-foot">
                 <span>View range</span>
                 <span class="product-arrow" aria-hidden="true">
@@ -213,7 +209,7 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
   }
 
   .product-body {
-    padding: var(--space-3) 14px 14px;
+    padding: var(--space-2) 14px 14px;
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -240,24 +236,22 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
   }
 
   .descriptor {
-    margin-top: var(--space-2);
-    font-size: 15px;
-    line-height: 1.6;
+    margin-top: 6px;
+    font-size: 14.5px;
+    line-height: 1.55;
     color: var(--soft);
   }
 
+  /* A single wrapped spec line rather than one bullet per row — the same
+     four facts, at roughly a third of the vertical space. Reads as a
+     catalogue spec (mono, like a SKU) rather than a feature list, which
+     suits facts this short anyway. */
   .key-bullets {
-    list-style: none;
-    margin: var(--space-3) 0 0;
-    padding: 0;
-    display: grid;
-    gap: 4px;
-  }
-
-  .key-bullets li {
+    margin: var(--space-2) 0 0;
     font-family: var(--f-mono);
-    font-size: 12px;
+    font-size: 11.5px;
     line-height: 1.5;
+    letter-spacing: 0.01em;
     color: var(--ink);
   }
 
@@ -269,7 +263,7 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
     justify-content: center;
     gap: var(--space-2);
     margin-top: auto;
-    padding-top: var(--space-3);
+    padding-top: var(--space-2);
     font-weight: 600;
     font-size: 14px;
     color: var(--green);

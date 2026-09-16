@@ -101,3 +101,28 @@ as one gap there instead of stranding content or padding the card's foot.
 The card also gained `box-shadow: var(--shadow-soft)` — the one shared
 shadow token, not an ad-hoc value — so it reads as a raised object against
 the beige footer rather than a flat bordered box.
+
+## Font consistency audit; product cards compacted (2026-09-16)
+
+Owner call, checked against a reference file: the brand type is Inter
+throughout (this design direction's token comment already says so — "no
+serif anywhere" — so no second typeface was introduced). Two real gaps
+found and fixed rather than a cosmetic pass:
+- `functions/src/render.ts` (the no-JS form-submission fallback page — a
+  real destination, not a dead end) hard-coded
+  `-apple-system, system-ui, sans-serif` instead of the site's Inter, so a
+  visitor who lands there after a JS failure saw different type from every
+  other page. It now ships the same self-hosted `@font-face` at `/fonts/`.
+- `button, input, select, textarea` don't inherit the page font by default
+  (Chromium gives them their own UI font stack) — most already set
+  `font-family` themselves, but the admin sign-in form's input and button
+  didn't, and silently fell back to the OS font. Added a global reset in
+  `global.css` so any control that doesn't set its own family inherits Inter
+  by default, closing this off for good rather than patching one form.
+
+Separately: the /products/ hub's cards were the tallest thing on the page —
+`key-bullets` stacked one fact per line (up to four rows) under a
+`text-align: center` descriptor. It's now one wrapped mono spec line
+(`f.keyBullets.join(' · ')`) instead of a `<ul>`, and `.product-body`'s
+padding/margins were trimmed (space-3 → space-2 in three places), cutting
+card height by roughly a third with the same facts still visible.
