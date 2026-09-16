@@ -197,3 +197,10 @@ change. Textarea trimmed 5 rows → 4. No copy changed.
 Owner call. `.caption` in `JourneySteps.astro` was 17px/600 weight, reading
 heavier than the mono step numerals beside it; now 14px/400, tracking and
 line-height adjusted to match.
+
+## Trust panel list items: lighter and smaller (2026-09-16)
+
+Owner call. `.trust-item` (the "Why partner with PropagAfrica" / "Who we
+supply" list text, shared by Home and About) was 15.5px with no explicit
+weight; now 14px/400 explicitly, so it can't inherit heavier from
+elsewhere. Headings and eyebrows on the same panel are unchanged.
