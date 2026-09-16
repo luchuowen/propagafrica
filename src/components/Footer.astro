@@ -50,8 +50,8 @@ const SOCIALS = [
       <div class="footer-col footer-company" data-reveal>
         <Wordmark markSize={26} />
         <p class="blurb">
-          Grafting tubes, clips, nursery consumables and propagation systems for commercial growers,
-          with technical support and stock held in Kenya and Ethiopia.
+          Grafting tubes, clips, nursery consumables and propagation systems for commercial growers
+          across Africa, with technical support and regional stock hubs in Kenya and Ethiopia.
         </p>
         <address>
           <a href="tel:+254722861682">+254 722 861 682</a>
@@ -103,67 +103,71 @@ const SOCIALS = [
 
       <div class="footer-col footer-actions" data-reveal>
         <div class="action-panel">
-          <p class="eyebrow">Newsletter</p>
-          <p class="blurb">Occasional notes on stock, seasons and new product lines.</p>
+          <div class="action-top">
+            <p class="eyebrow">Newsletter</p>
+            <p class="blurb">Occasional notes on stock, seasons and new product lines.</p>
 
-          <form
-            id="newsletter-form"
-            class="newsletter-form"
-            method="post"
-            action="/api/subscribe-newsletter"
-          >
-            <label for="newsletter-email" class="sr-only">
-              Email address
-            </label>
-            <div class="newsletter-row">
-              <input
-                id="newsletter-email"
-                name="email"
-                type="email"
-                autocomplete="email"
-                placeholder="you@company.com"
-                maxlength="254"
-                required
-                aria-describedby="newsletter-status"
-              />
-              <button type="submit" class="newsletter-submit">
-                Subscribe
-              </button>
-            </div>
+            <form
+              id="newsletter-form"
+              class="newsletter-form"
+              method="post"
+              action="/api/subscribe-newsletter"
+            >
+              <label for="newsletter-email" class="sr-only">
+                Email address
+              </label>
+              <div class="newsletter-row">
+                <input
+                  id="newsletter-email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  placeholder="you@company.com"
+                  maxlength="254"
+                  required
+                  aria-describedby="newsletter-status"
+                />
+                <button type="submit" class="newsletter-submit">
+                  Subscribe
+                </button>
+              </div>
 
-            <div class="honeypot" aria-hidden="true">
-              {/* The quotation form carries a honeypot with the same field name,
-                  and the footer renders on that page too — so the id here is
-                  prefixed to keep it unique in the document. The name is what
-                  the script and the endpoint read, and it is unchanged. */}
-              <label for={`newsletter-${HONEYPOT_FIELD}`}>Leave this field blank</label>
-              <input
-                id={`newsletter-${HONEYPOT_FIELD}`}
-                name={HONEYPOT_FIELD}
-                type="text"
-                tabindex="-1"
-                autocomplete="off"
-              />
-            </div>
-            <input type="hidden" id={TIMESTAMP_FIELD} name={TIMESTAMP_FIELD} value="" />
+              <div class="honeypot" aria-hidden="true">
+                {/* The quotation form carries a honeypot with the same field name,
+                    and the footer renders on that page too — so the id here is
+                    prefixed to keep it unique in the document. The name is what
+                    the script and the endpoint read, and it is unchanged. */}
+                <label for={`newsletter-${HONEYPOT_FIELD}`}>Leave this field blank</label>
+                <input
+                  id={`newsletter-${HONEYPOT_FIELD}`}
+                  name={HONEYPOT_FIELD}
+                  type="text"
+                  tabindex="-1"
+                  autocomplete="off"
+                />
+              </div>
+              <input type="hidden" id={TIMESTAMP_FIELD} name={TIMESTAMP_FIELD} value="" />
 
-            <p
-              id="newsletter-status"
-              class="newsletter-status"
-              role="alert"
-              aria-live="assertive"
-            ></p>
-          </form>
+              <p
+                id="newsletter-status"
+                class="newsletter-status"
+                role="alert"
+                aria-live="assertive"
+              ></p>
+            </form>
+          </div>
 
-          <hr class="action-rule" />
+          <div class="action-bottom">
+            <hr class="action-rule" />
 
-          <p class="blurb">Ready to order? Tell us your crop, volume and site.</p>
-          <a class="footer-cta" href="/contact/">
-            Request a Quotation
-            <span class="btn-arrow" aria-hidden="true">
-              &rarr;
-            </span>
-          </a>
+            <p class="blurb">Ready to order? Tell us your crop, volume and site.</p>
+            <a class="footer-cta" href="/contact/">
+              Request a Quotation
+              <span class="btn-arrow" aria-hidden="true">
+                &rarr;
+              </span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -301,6 +305,10 @@ const SOCIALS = [
 
     .footer-actions {
       grid-column: auto;
+      /* The grid's own align-items: start would otherwise leave the panel as
+         tall as its own content — stretch it to match the brand column (the
+         tallest of the three) instead of ending short of the social icons. */
+      align-self: stretch;
     }
   }
 
@@ -457,16 +465,30 @@ const SOCIALS = [
   }
 
   /* Both actions in one object, so the footer has a single place to "do
-     something" instead of a button adrift in a nav column. */
+     something" instead of a button adrift in a nav column. A subtle lift
+     (the shared --shadow-soft token, never an ad-hoc shadow) keeps it from
+     reading as flat as a bare-bordered box against the beige footer. */
   .action-panel {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     background: var(--white);
     border: 1px solid var(--rule);
     border-radius: var(--radius-l);
+    box-shadow: var(--shadow-soft);
     padding: var(--space-3);
   }
 
   .action-panel .blurb {
     max-width: none;
+  }
+
+  /* Pinned to the panel's foot with margin-top: auto, so when the panel is
+     stretched to match the brand column's height (see .footer-actions
+     above) the extra room opens as one gap here rather than stranding the
+     CTA mid-card or padding out the bottom edge. */
+  .action-bottom {
+    margin-top: auto;
   }
 
   .action-rule {

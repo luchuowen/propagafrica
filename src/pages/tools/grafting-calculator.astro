@@ -35,54 +35,58 @@ const PACKAGING_NOTE =
       </noscript>
 
       <div class="calculator" data-calculator hidden>
-        <form id="grafting-form" novalidate>
-          <div class="field">
-            <label for="crop-group">Crop group</label>
-            <select id="crop-group" name="cropGroup">
-              {CROP_GROUPS.map((group) => (
-                <option value={group}>{group}</option>
-              ))}
-            </select>
-          </div>
+        <div class="form-panel">
+          <p class="panel-label">Your graft run</p>
+          <form id="grafting-form" novalidate>
+            <div class="field">
+              <label for="crop-group">Crop group</label>
+              <select id="crop-group" name="cropGroup">
+                {CROP_GROUPS.map((group) => (
+                  <option value={group}>{group}</option>
+                ))}
+              </select>
+            </div>
 
-          <div class="field" id="rose-size-field">
-            <label for="rose-size">Rose stem diameter</label>
-            <select id="rose-size" name="roseSize">
-              {ROSE_SIZES.map((size) => (
-                <option value={size.diameter}>{size.label}</option>
-              ))}
-            </select>
-          </div>
+            <div class="field" id="rose-size-field">
+              <label for="rose-size">Rose stem diameter</label>
+              <select id="rose-size" name="roseSize">
+                {ROSE_SIZES.map((size) => (
+                  <option value={size.diameter}>{size.label}</option>
+                ))}
+              </select>
+            </div>
 
-          <div class="field">
-            <label for="grafts">Number of grafts planned</label>
-            <input
-              id="grafts"
-              name="grafts"
-              type="number"
-              min="1"
-              step="1"
-              inputmode="numeric"
-              placeholder="e.g. 5000"
-            />
-          </div>
+            <div class="field">
+              <label for="grafts">Number of grafts planned</label>
+              <input
+                id="grafts"
+                name="grafts"
+                type="number"
+                min="1"
+                step="1"
+                inputmode="numeric"
+                placeholder="e.g. 5000"
+              />
+            </div>
 
-          <div class="field">
-            <label for="clip-type">Clip type</label>
-            <select id="clip-type" name="clipType">
-              {CLIP_TYPES.map((clip) => (
-                <option value={clip}>{clip}</option>
-              ))}
-            </select>
-          </div>
+            <div class="field">
+              <label for="clip-type">Clip type</label>
+              <select id="clip-type" name="clipType">
+                {CLIP_TYPES.map((clip) => (
+                  <option value={clip}>{clip}</option>
+                ))}
+              </select>
+            </div>
 
-          <div class="field">
-            <label for="buffer">Wastage buffer (%)</label>
-            <input id="buffer" name="buffer" type="number" min="0" max="25" step="1" value="10" />
-          </div>
-        </form>
+            <div class="field">
+              <label for="buffer">Wastage buffer (%)</label>
+              <input id="buffer" name="buffer" type="number" min="0" max="25" step="1" value="10" />
+            </div>
+          </form>
+        </div>
 
-        <div class="results">
+        <div class="results-panel">
+          <p class="panel-label">Your quantities</p>
           <p class="hint" data-hint>
             Enter the number of grafts planned to see quantities.
           </p>
@@ -108,11 +112,15 @@ const PACKAGING_NOTE =
           <p class="packaging-note" data-result-list hidden>
             {PACKAGING_NOTE}
           </p>
-          <p class="disclaimer">{TOOLS_DISCLAIMER}</p>
 
           <a class="btn-primary" id="quote-link" href="/contact/" data-result-list hidden>
             Request a Quotation
+            <span class="btn-arrow" aria-hidden="true">
+              &rarr;
+            </span>
           </a>
+
+          <p class="disclaimer">{TOOLS_DISCLAIMER}</p>
         </div>
       </div>
     </div>
@@ -214,6 +222,7 @@ const PACKAGING_NOTE =
 <style>
   .tool-page {
     padding: var(--space-6) 0 var(--space-7);
+    background: var(--white);
   }
 
   .tool-inner {
@@ -237,11 +246,26 @@ const PACKAGING_NOTE =
     font-weight: 600;
   }
 
+  /* Inputs on the left, a live answer panel on the right — the two things a
+     calculator is, side by side instead of stacked with a rule between them.
+     Below 900px there isn't room for both at once, so it drops to a single
+     column in reading order: fill in the form, then see what it worked out. */
   .calculator {
     margin-top: var(--space-5);
     display: grid;
-    gap: var(--space-5);
-    max-width: 640px;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 900px) {
+    .calculator {
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+      align-items: start;
+    }
+
+    .results-panel {
+      position: sticky;
+      top: calc(var(--space-4) + 68px);
+    }
   }
 
   /* A class that sets `display` unconditionally beats the browser's own
@@ -251,6 +275,33 @@ const PACKAGING_NOTE =
      this page hides via the `hidden` property needs its own override. */
   .calculator[hidden] {
     display: none;
+  }
+
+  .form-panel,
+  .results-panel {
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-l);
+    padding: var(--space-4);
+  }
+
+  .form-panel {
+    background: var(--white);
+  }
+
+  /* The one tinted ground the palette allows — used here, not as decoration,
+     to mark this panel as the calculator's answer rather than more input. */
+  .results-panel {
+    background: var(--mint);
+  }
+
+  .panel-label {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--soft);
+    margin: 0 0 var(--space-3);
   }
 
   form {
@@ -280,67 +331,92 @@ const PACKAGING_NOTE =
     font-family: var(--f-sans);
     font-size: 16px;
     color: var(--ink);
-    background: var(--paper);
+    background: var(--white);
     border: 1px solid var(--rule);
     border-radius: var(--radius-s);
-    padding: 10px 12px;
+    padding: 11px 12px;
   }
 
-  .results {
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--rule);
-    display: grid;
-    gap: var(--space-3);
-    align-items: start;
+  input:focus-visible,
+  select:focus-visible {
+    border-color: var(--green);
   }
 
   .hint {
     color: var(--soft);
     font-size: 15px;
+    line-height: 1.55;
   }
 
   .result-list {
     margin: 0;
+    display: grid;
+    gap: 2px;
+  }
+
+  .result-list[hidden] {
+    display: none;
   }
 
   .result-list .row {
-    display: grid;
-    grid-template-columns: 10em 1fr;
-    gap: var(--space-3);
-    padding: 10px 0;
+    padding: var(--space-2) 0;
     border-top: 1px solid var(--rule);
   }
 
   .result-list .row:first-child {
     border-top: none;
+    padding-top: 0;
   }
 
   dt {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
     font-weight: 600;
-    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     color: var(--soft);
   }
 
   dd {
-    margin: 0;
-    font-size: 15px;
+    margin: 2px 0 0;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
   }
 
-  .packaging-note,
+  dd.mono {
+    font-family: var(--f-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .packaging-note {
+    margin: var(--space-3) 0 0;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--rule);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--soft);
+  }
+
   .disclaimer {
-    margin: 0;
-    font-size: 13.5px;
+    margin: var(--space-3) 0 0;
+    font-size: 12.5px;
     line-height: 1.6;
     color: var(--soft);
   }
 
   .btn-primary {
-    justify-self: start;
-    display: inline-block;
+    margin-top: var(--space-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+    width: 100%;
     text-decoration: none;
     font-weight: 700;
     font-size: 15px;
-    padding: 11px 22px;
+    padding: 12px 22px;
     border-radius: var(--radius-s);
     background: var(--green);
     color: var(--paper);
@@ -354,5 +430,16 @@ const PACKAGING_NOTE =
   .btn-primary:hover {
     background: var(--green-dark);
     border-color: var(--green-dark);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .btn-arrow {
+      display: inline-block;
+      transition: transform 300ms cubic-bezier(0.2, 0.7, 0.3, 1);
+    }
+
+    .btn-primary:hover .btn-arrow {
+      transform: translateX(3px);
+    }
   }
 </style>

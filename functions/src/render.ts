@@ -17,7 +17,19 @@ function page(title: string, heading: string, body: string): string {
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>${title} · PropagAfrica Technologies</title>
 <style>
-  body { margin: 0; background: ${PAPER}; color: ${INK}; font-family: -apple-system, system-ui, sans-serif; line-height: 1.6; }
+  /* Same self-hosted Inter Variable the Astro build serves at /fonts — this
+     page is a real destination (the no-JS form-submission fallback), not a
+     dead end, so it fell back to the OS system font while every other page
+     rendered in Inter. font-display: swap and the system stack as a fallback
+     both still apply, so a slow font fetch never blocks the page. */
+  @font-face {
+    font-family: 'Inter Variable';
+    src: url('/fonts/inter-var-latin.woff2') format('woff2-variations');
+    font-weight: 400 800;
+    font-style: normal;
+    font-display: swap;
+  }
+  body { margin: 0; background: ${PAPER}; color: ${INK}; font-family: 'Inter Variable', -apple-system, system-ui, sans-serif; line-height: 1.6; }
   main { max-width: 640px; margin: 0 auto; padding: 48px 20px; }
   h1 { font-size: 28px; }
   a { color: ${GREEN}; }

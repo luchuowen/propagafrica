@@ -4,7 +4,7 @@ Source of truth for every page's copy. Product facts are transcribed verbatim fr
 
 ## Global
 
-Company: PropagAfrica Technologies, Nairobi, Kenya. Stock held in Kenya and Ethiopia.
+Company: PropagAfrica Technologies, Nairobi, Kenya. Regional stock hubs in Kenya and Ethiopia supply growers across Africa.
 Phone: +254 722 861 682 (Emily). Email: info@propagafrica.com.
 Persistent header CTA: "Request a Quotation" to /contact/
 Footer (locked): copyright line left "(c) {year} PropagAfrica Technologies", "Designed by NAVAC GLOBAL" gold link right to https://navac.co.ke, no underline on hover/focus. Strap line below, small, centred: "Together we grow Africa's horticulture."
@@ -14,7 +14,7 @@ Nav: Home / Products / Tools / Field Notes / About / Contact
 
 Eyebrow: "Propagation inputs and systems, Africa"
 H1: "Propagation supplies for nurseries and flower farms across Africa"
-Sub-head: "PropagAfrica Technologies supplies the grafting tubes, clips, nursery consumables, propagation systems, sanitation products and monitoring tools that commercial growers across Africa depend on, with technical support and stock held in Kenya and Ethiopia."
+Sub-head: "PropagAfrica Technologies supplies the grafting tubes, clips, nursery consumables, propagation systems, sanitation products and monitoring tools that commercial growers across Africa depend on, with technical support and regional stock hubs in Kenya and Ethiopia."
 Primary CTA: "Request a Quotation". Secondary CTA: "Browse products".
 Hero carousel captions (5 slides, hero-01..05.jpg):
 
@@ -26,7 +26,7 @@ Hero carousel captions (5 slides, hero-01..05.jpg):
    Outcome panels (3, keep these exact headings from the approved homepage mockup):
    "Graft with confidence" -- "Medical-grade silicone tubes and precision clips sized for roses, vegetables and fruit trees, so unions hold and take."
    "Grow without guesswork" -- "Temperature, humidity, VPD and soil-moisture sensors feed a dashboard you can check from a phone, so problems are caught before they cost you a batch."
-   "Scale without shortages" -- "Local stock in Kenya and Ethiopia and bulk packaging built for commercial nurseries, not hobby growers."
+   "Scale without shortages" -- "Regional stock hubs in Kenya and Ethiopia and bulk packaging built for commercial nurseries, not hobby growers."
    Propagation Journey, six numbered steps on one full-bleed line that loops 01 to 06 continuously and fades the cards out at the section edges (process-01..06.jpg; all six are in the DOM in order and the loop pauses on hover or focus, so no step is ever hidden behind autoplay): 1 Select and prepare stock. 2 Graft and clip the union. 3 Root under controlled humidity. 4 Monitor temperature, humidity and VPD. 5 Harden off and pot on. 6 Move to production.
    Product grid teaser: 7 family cards (name, one-line descriptor from the family page intro below, "View range" link). Shop-by-crop filter pills: Roses and ornamentals / Vegetables and cucurbits / Fruit trees / Nursery and facility supplies (client-side filter, cuts across families 1-3 and 5).
    Facilities-in-use carousel (8 slides, facility-01..08.jpg), captions describe the product family shown in a generic regional setting, e.g. "Misting system installed in a rose greenhouse, Rift Valley region" -- no named customers, none exist in source material.
@@ -40,7 +40,7 @@ Hero carousel captions (5 slides, hero-01..05.jpg):
 
 Eyebrow: "Full range"
 H1: "Everything a propagation nursery runs on"
-Sub: "Seven product families for commercial growers across Africa, sourced and stocked in Kenya and Ethiopia. Filter by what you grow, or browse the full range below."
+Sub: "Seven product families for commercial growers across Africa, sourced and stocked from regional hubs in Kenya and Ethiopia. Filter by what you grow, or browse the full range below."
 Shop-by-crop filter: Roses and ornamentals / Vegetables and cucurbits / Fruit trees / Nursery and facility supplies (client-side tag filter; systems, sanitation, monitoring and services tagged "Nursery and facility supplies").
 7 cards in flyer order: name, card descriptor, "View range" link, key-products preview (first 4 bullets of that family). The card descriptor is a 90-107 character line drawn from that family's own flyer copy below -- its intro, key products, specifications and packaging -- so the seven cards read as an even two lines each. It adds no fact that is not already in this file. Each family page still opens with its own verbatim intro and tagline, unchanged; the cards no longer repeat the tagline. Descriptors: Grafting Tubes -- "Medical-grade silicone tubes in 3.5mm to 8.5mm, for roses, ornamentals, vegetables and fruit trees." Grafting Clips -- "Precision clips in five types, sized by stem diameter for strong unions on roses, vegetables and trees." Nursery Consumables -- "Trays, pots, labels, ties, domes and cutting tools for a clean, efficient and productive nursery." Propagation Systems -- "Misting, climate control, irrigation and benching, designed and installed for your site and crop." Sanitation Products -- "Disinfectants, footbaths, water treatment and PPE for a disease-free nursery, in 5L to 1,000L packs." Propagation Monitoring -- "Temperature, humidity, VPD and soil-moisture sensors on a dashboard you can check from a phone." Technical Services -- "Training, nursery setup and design, crop protocols and troubleshooting, on-site or virtual."
 
@@ -172,14 +172,14 @@ PropagAfrica designs and installs propagation systems in this order and can also
 
 Eyebrow: "About PropagAfrica Technologies"
 H1: "Propagation inputs and systems for African horticulture"
-Body: "PropagAfrica Technologies supplies the grafting tubes, clips, nursery consumables, propagation systems, sanitation products and monitoring tools that commercial nurseries, flower farms and fruit and vegetable growers run on, with stock held in Kenya and Ethiopia and technical support from setup through to season one.
+Body: "PropagAfrica Technologies supplies the grafting tubes, clips, nursery consumables, propagation systems, sanitation products and monitoring tools that commercial nurseries, flower farms and fruit and vegetable growers across Africa run on, with regional stock hubs in Kenya and Ethiopia and technical support from setup through to season one.
 We work with commercial flower growers, vegetable and fruit growers, nurseries and propagation labs, agri-businesses and distributors, and research and training institutions -- supplying products sourced from established manufacturers, alongside the technical expertise to specify, install and troubleshoot the systems around them.
 Our team supports customers on-site, virtually and at the farm, from choosing the right tube and clip for a graft run through to designing and installing a full propagation system and its monitoring."
 Why partner list and Target markets list: verbatim, see Product Reference section below.
 No contact block: the footer carries phone, email and the strap line on every page, and
 Section 13 is the contact page, so repeating it here was a third copy. The operating facts
 appear instead as a ruled strip under the H1 -- "Seven product families" (Section 2),
-"Stock held in Kenya and Ethiopia" (Global) and "On-site, virtual and farm-based support"
+"Regional stock hubs in Kenya and Ethiopia" (Global) and "On-site, virtual and farm-based support"
 (Section 9 Includes). Page order: hero spread, facts strip, lead photograph
 (nairobi-hub.jpg), "How we work" prose band, Why partner / Who we supply, team
 photographs, Request a Quotation.
@@ -190,7 +190,7 @@ Eyebrow: "Get in touch"
 H1: "Request a Quotation"
 Sub: "Tell us what you're growing, roughly how much, and where you're based -- we'll come back with the right products, systems or services and packaging for your order."
 Form fields: Name, Company/farm name, Email, Phone, Country (Kenya / Ethiopia / Other), Enquiring about (multi-select: Grafting Tubes, Grafting Clips, Nursery Consumables, Propagation Systems, Sanitation Products, Propagation Monitoring, Technical Services), Message. Hidden field carries a JSON prefill when arriving from a calculator (crop group, product codes, quantities).
-Direct contact panel: +254 722 861 682 (Emily), info@propagafrica.com, Nairobi, Kenya -- East Africa Hub, stock held in Kenya and Ethiopia.
+Direct contact panel: +254 722 861 682 (Emily), info@propagafrica.com, Nairobi, Kenya -- East Africa Hub, regional stock hubs in Kenya and Ethiopia.
 Success state copy: "Thank you -- your enquiry has reached our team. Emily or a member of the technical team will come back to you shortly."
 
 ## Product Reference -- global verbatim lists, reuse everywhere, do not reword

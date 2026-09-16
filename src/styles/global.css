@@ -56,6 +56,20 @@ body {
   font-weight: 400;
 }
 
+/* Form controls don't inherit the page font by default (Chromium gives them
+   its own UI font stack) — without this, any input/button/select/textarea
+   that doesn't set font-family itself quietly falls back to the OS system
+   font instead of Inter, which is how a few (the admin sign-in form's input
+   and button) ended up inconsistent with the rest of the site. Individual
+   components may still set their own family (mono for a SKU-style field);
+   this is only the default for the ones that don't. */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
 img,
 svg {
   max-width: 100%;
