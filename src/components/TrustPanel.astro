@@ -4,22 +4,19 @@
 // and the About page (blueprint.md Section 12) so the markup and the list
 // content aren't retyped on the second page.
 //
-// The two lists used to sit side by side at identical weight, which made the
-// section read as one table split in half with nothing leading. They are now a
-// dark/light pair: the reasons carry the section on --green-dark, the
-// audiences answer on white. Both are numbered, so each line has a left edge
-// to sit against instead of trailing off into empty ground.
+// Two matching panels on --green-dark, each numbered, so every line has a left
+// edge to sit against instead of trailing off into empty ground. They were a
+// plain pair of lists at identical weight on the section's own mint, which
+// read as one table split in half.
 import { WHY_PARTNER, TARGET_MARKETS } from '../data/trust';
 
 const PANELS = [
   {
-    tone: 'dark',
     eyebrow: 'Why us',
     heading: 'Why partner with PropagAfrica',
     items: WHY_PARTNER,
   },
   {
-    tone: 'light',
     eyebrow: 'Target markets',
     heading: 'Who we supply',
     items: TARGET_MARKETS,
@@ -30,7 +27,7 @@ const PANELS = [
 <section class="trust">
   <div class="trust-inner" data-reveal-group>
     {PANELS.map((panel) => (
-      <div class:list={['trust-panel', panel.tone]} data-reveal>
+      <div class="trust-panel" data-reveal>
         <p class="eyebrow">{panel.eyebrow}</p>
         <h2>{panel.heading}</h2>
         <ol class="trust-list">
@@ -67,15 +64,13 @@ const PANELS = [
     }
   }
 
-  /* Both panels carry a 1px border — transparent on the dark one — so their
-     padding boxes start on the same pixel and every row in the left panel
-     lines up with its opposite number on the right. */
   .trust-panel {
     display: flex;
     flex-direction: column;
     padding: var(--space-4);
-    border: 1px solid transparent;
     border-radius: var(--radius-l);
+    background: var(--green-dark);
+    color: var(--paper);
   }
 
   @media (min-width: 720px) {
@@ -84,21 +79,8 @@ const PANELS = [
     }
   }
 
-  .trust-panel.dark {
-    background: var(--green-dark);
-    color: var(--paper);
-  }
-
-  .trust-panel.light {
-    background: var(--white);
-    border-color: var(--rule);
-  }
-
   .trust-panel .eyebrow {
     margin: 0 0 var(--space-1);
-  }
-
-  .trust-panel.dark .eyebrow {
     color: var(--paper);
     opacity: 0.62;
   }
@@ -108,9 +90,6 @@ const PANELS = [
     font-size: 23px;
     letter-spacing: -0.022em;
     line-height: 1.25;
-  }
-
-  .trust-panel.dark h2 {
     color: var(--paper);
   }
 
@@ -127,25 +106,17 @@ const PANELS = [
     grid-template-columns: 2.25rem 1fr;
     align-items: baseline;
     padding: var(--space-2) 0;
-    border-top: 1px solid var(--rule);
-  }
-
-  .trust-panel.dark .trust-list li {
-    border-top-color: color-mix(in srgb, var(--paper) 22%, transparent);
-  }
-
-  .trust-n {
-    font-family: var(--f-mono);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    color: var(--green);
+    border-top: 1px solid color-mix(in srgb, var(--paper) 22%, transparent);
   }
 
   /* --mint-bright on --green-dark is 3.76:1 — under AA for 11px text. Lifting
      it towards paper takes the numeral to 5.3:1 while it still reads as the
      accent rather than plain white. */
-  .trust-panel.dark .trust-n {
+  .trust-n {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
     color: color-mix(in srgb, var(--mint-bright) 70%, var(--paper));
   }
 

@@ -19,8 +19,8 @@ interface Props {
 const { steps } = Astro.props;
 
 // Seconds for one pass through the six steps. At the card widths below this is
-// roughly 30px a second — slow enough to read a caption as it goes past.
-const LOOP_SECONDS = 48;
+// roughly 40px a second — slow enough to read a caption as it goes past.
+const LOOP_SECONDS = 72;
 
 // Same responsive sources as Carousel.astro: every process photo ships at
 // 1200x900 per docs/image-manifest.md, and scripts/generate-image-variants.mjs
@@ -28,7 +28,7 @@ const LOOP_SECONDS = 48;
 // fallback next to it in dist/.
 const NATIVE_WIDTH = 1200;
 const NATIVE_HEIGHT = 900;
-const SIZES = '(min-width: 1540px) 230px, (min-width: 1270px) 15vw, 190px';
+const SIZES = '(min-width: 1810px) 560px, (min-width: 840px) 31vw, 260px';
 
 function assetVariants(src: string) {
   const match = src.match(/\.(jpe?g|png)$/i);
@@ -134,10 +134,13 @@ keyboard (axe: scrollable-region-focusable). -->
     width: max-content;
   }
 
+  /* Sized so roughly three steps are on screen at once. Six at a time read as
+     a wall of thumbnails; three give each photograph room and let a caption be
+     read as it goes past. */
   .step {
     flex: 0 0 auto;
-    width: clamp(190px, 15vw, 230px);
-    margin-right: var(--space-2);
+    width: clamp(260px, 31vw, 560px);
+    margin-right: var(--space-3);
     display: flex;
     flex-direction: column;
   }
@@ -173,7 +176,7 @@ keyboard (axe: scrollable-region-focusable). -->
     content: '';
     position: absolute;
     left: 50%;
-    right: calc((50% + var(--space-2)) * -1);
+    right: calc((50% + var(--space-3)) * -1);
     top: 50%;
     height: 1px;
     background: color-mix(in srgb, var(--green) 22%, transparent);
@@ -206,7 +209,7 @@ keyboard (axe: scrollable-region-focusable). -->
   .caption {
     margin: var(--space-2) 0 0;
     text-align: center;
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 600;
     letter-spacing: -0.015em;
     line-height: 1.3;

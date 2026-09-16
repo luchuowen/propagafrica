@@ -165,13 +165,6 @@ function assetVariants(src: string) {
       </div>
     ))}
   </div>
-  {variant === 'grid' && slides.length > 1 && (
-    <div class="progress" aria-hidden="true">
-      {slides.map((_, i) => (
-        <span data-dot={i} />
-      ))}
-    </div>
-  )}
 </section>
 
 <style>
@@ -274,25 +267,6 @@ function assetVariants(src: string) {
     border-color: var(--green);
     color: var(--white);
     transform: none;
-  }
-
-  /* Where you are in the set, without a row of dots to aim at. */
-  .progress {
-    display: flex;
-    gap: 6px;
-    margin-top: var(--space-4);
-  }
-
-  .progress span {
-    flex: 1;
-    height: 2px;
-    border-radius: var(--radius-s);
-    background: var(--rule);
-    transition: background-color 300ms ease;
-  }
-
-  .progress span.is-on {
-    background: var(--green);
   }
 
   .media {
@@ -429,8 +403,10 @@ function assetVariants(src: string) {
     transition: opacity 400ms ease;
   }
 
-  /* The caption sits on the card's own white, led by a mono index so the row
-     reads as one numbered set rather than three loose photographs. */
+  /* The caption sits on the card's own white, led by a mono index. That index
+     is the whole position marker: a progress rule under the row lit three
+     segments of eight, which said nothing the cards were not already saying
+     and read as a broken bar. */
   [data-variant='grid'] .caption {
     padding: var(--space-3) 14px 10px;
     color: var(--ink);
@@ -516,24 +492,13 @@ function assetVariants(src: string) {
     let index = 0;
     let timer: number | null = null;
 
-    const dots = Array.from(root.querySelectorAll<HTMLElement>('.progress [data-dot]'));
-
     function render() {
-      const showing = new Set<number>();
       lanes.forEach((lane, laneOffset) => {
         const target = (index + laneOffset) % slideCount;
-        // Below 900px a grid carousel hides every lane but the first, so only
-        // count the lanes actually on screen — otherwise the progress rule
-        // claims three slides are showing when one is. Autoplay re-renders on
-        // every tick, so this self-corrects after a resize.
-        if (lane.offsetParent !== null) showing.add(target);
         const items = lane.querySelectorAll<HTMLElement>('[data-index]');
         items.forEach((item) => {
           item.classList.toggle('is-active', Number(item.dataset.index) === target);
         });
-      });
-      dots.forEach((dot) => {
-        dot.classList.toggle('is-on', showing.has(Number(dot.dataset.dot)));
       });
     }
 

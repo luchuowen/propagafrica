@@ -691,6 +691,7 @@ const services = [
     flex-direction: column;
     flex: 1;
     padding: var(--space-3) 14px 14px;
+    text-align: center;
   }
 
   /* The family's own flyer tagline, as the card's eyebrow. Two lines are
@@ -699,7 +700,7 @@ const services = [
   .product-tagline {
     display: flex;
     align-items: flex-start;
-    gap: 8px;
+    justify-content: center;
     min-height: 2.9em;
     margin: 0 0 var(--space-1);
     font-family: var(--f-mono);
@@ -709,16 +710,6 @@ const services = [
     line-height: 1.45;
     text-transform: uppercase;
     color: var(--soft);
-  }
-
-  .product-tagline::before {
-    content: '';
-    flex: 0 0 auto;
-    width: 6px;
-    height: 6px;
-    margin-top: 0.4em;
-    border-radius: 50%;
-    background: var(--terra);
   }
 
   .product-body h3 {
@@ -740,10 +731,6 @@ const services = [
     border-radius: var(--radius-l);
   }
 
-  .product-body h3 a:hover {
-    text-decoration: underline;
-  }
-
   .product-descriptor {
     margin-top: var(--space-2);
     font-size: 15px;
@@ -756,7 +743,7 @@ const services = [
   .product-foot {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: var(--space-2);
     margin-top: auto;
     padding-top: var(--space-3);
