@@ -206,3 +206,32 @@ Watch for this: an <img> with width and height attributes has those mapped to
 CSS presentational hints, and the used height then beats aspect-ratio. The
 team photographs rendered 556x900 portrait until height: auto was added
 alongside. The lead photograph never showed it because it already had one.
+
+## Mobile nav, hero copy and footer pass (2026-09-16)
+
+Header below 720px: a hamburger button + collapsible panel (vanilla script,
+no framework), wordmark centred via a 3-column `40px 1fr 40px` grid so the
+logo sits on the true centre rather than the space left of the toggle.
+
+Homepage hero sub-head is blueprint.md-locked copy — kept verbatim for
+desktop as `.hero-sub-full`; a `.hero-sub-short` condensed line (not a
+reword, a shorter reading of the same sentence) swaps in below 640px by
+CSS only, so the full copy still ships to every viewport.
+
+Below 640px, prose blocks across the homepage (section heads, outcome
+panels, filter pills, the monitoring spotlight, the services intro) are
+centred. Structural grids that would break if centred — the services
+index's numbered rows, the readings' two-column grid — were left alone.
+
+Footer: the sitemap column is a `<details>` disclosure, closed by default
+below 720px (the stacked mobile footer's tallest block), forced open above
+720px via `display: flex !important` on its list (overriding the UA
+`details:not([open])` rule — the one deliberate !important in the file).
+Baseline row (copyright / strapline / credit) stacks and centres below
+640px instead of wrapping ragged.
+
+Branch note: `claude/epic-bell-w123i8` had been cut from a stale, pre-rebuild
+commit (`083281d`, the same one `claude/eloquent-euler-cc6v7j` — this repo's
+misconfigured GitHub default branch — still points at). All of the above was
+done after resetting it onto `origin/main` (tip `8a8217a`, includes the
+`claude/og-card` work), which is what the live site actually runs.

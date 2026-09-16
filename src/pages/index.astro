@@ -165,10 +165,18 @@ const services = [
     <div class="hero-copy">
       <div class="hero-copy-inner">
         <h1>Propagation supplies for nurseries and flower farms across Kenya and Ethiopia</h1>
-        <p class="hero-sub">
+        <!-- blueprint.md Section 1 sub-head is locked, verbatim copy — kept in full for
+             desktop. The mobile-only line below is a condensed reading of the same
+             sentence, not a rewrite, swapped in purely by CSS so the full copy still
+             ships to every viewport. -->
+        <p class="hero-sub hero-sub-full">
           PropagAfrica Technologies supplies the grafting tubes, clips, nursery consumables,
           propagation systems, sanitation products and monitoring tools that commercial growers
           depend on, with technical support and stock held in both countries.
+        </p>
+        <p class="hero-sub hero-sub-short">
+          Grafting supplies, nursery consumables and monitoring tools, with technical support and
+          stock held in Kenya and Ethiopia.
         </p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="/contact/">
@@ -431,6 +439,20 @@ const services = [
   @media (min-width: 820px) {
     .hero-copy-inner {
       max-width: 640px;
+    }
+  }
+
+  .hero-sub-short {
+    display: none;
+  }
+
+  @media (max-width: 640px) {
+    .hero-sub-full {
+      display: none;
+    }
+
+    .hero-sub-short {
+      display: block;
     }
   }
 
@@ -1060,5 +1082,53 @@ const services = [
   .cta-band .btn-primary:hover {
     background: var(--mint);
     border-color: var(--mint);
+  }
+
+  /* ---------- mobile centring ---------- */
+  /* Below 640px every prose block on this page reads as one centred column
+     rather than left-aligned text with a ragged right edge. Structural
+     layouts that would break if centred (the services index's numbered
+     rows, the two-column readings grid) are left as they are. */
+  @media (max-width: 640px) {
+    .section-head {
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .outcome {
+      text-align: center;
+    }
+
+    .outcome p {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .filter-pills {
+      justify-content: center;
+    }
+
+    .monitoring-copy {
+      text-align: center;
+    }
+
+    .monitoring-body {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .readings {
+      text-align: center;
+    }
+
+    .services-body {
+      text-align: center;
+    }
+
+    .services-intro {
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
 </style>

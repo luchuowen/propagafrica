@@ -72,8 +72,27 @@ const SOCIALS = [
       </div>
 
       <div class="footer-col footer-sitemap" data-reveal>
-        <p class="eyebrow">Sitemap</p>
-        <ul>
+        <!-- A button + class toggle, not <details>: Chromium excludes a closed
+             <details>'s content from the Tab order even when an author style
+             forces it to paint (offsetParent is non-null, but it's still
+             unreachable by keyboard) — a real accessibility regression a
+             `display: flex !important` override can't fix. This mirrors the
+             header's own hamburger toggle instead. The list is the tallest
+             thing in a stacked mobile footer, so it starts closed there; the
+             toggle button only becomes interactive below 720px — on desktop
+             it's a static label and the list stays open. -->
+        <p class="eyebrow sitemap-label">Sitemap</p>
+        <button
+          type="button"
+          class="sitemap-toggle eyebrow"
+          id="sitemap-toggle"
+          aria-expanded="false"
+          aria-controls="sitemap-list"
+        >
+          Sitemap
+          <span class="sitemap-chevron" aria-hidden="true"></span>
+        </button>
+        <ul id="sitemap-list">
           {NAV_ITEMS.map((item) => (
             <li>
               <a href={item.href}>{item.label}</a>
@@ -164,6 +183,15 @@ const SOCIALS = [
 
 <script>
   import { HONEYPOT_FIELD, TIMESTAMP_FIELD } from '../lib/quotation/schema';
+
+  const sitemapToggle = document.querySelector<HTMLButtonElement>('#sitemap-toggle');
+  const sitemapList = document.querySelector<HTMLElement>('#sitemap-list');
+  if (sitemapToggle && sitemapList) {
+    sitemapToggle.addEventListener('click', () => {
+      const isOpen = sitemapList.classList.toggle('is-open');
+      sitemapToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+  }
 
   const GENERIC_ERROR = 'That did not send. Check your connection and try again.';
 
@@ -290,6 +318,58 @@ const SOCIALS = [
     display: flex;
     flex-direction: column;
     gap: 8px;
+  }
+
+  /* Hidden outside the mobile breakpoint — same as the header's hamburger
+     button — so it is genuinely out of the tab order on desktop (a
+     `display: none` element is never a Tab stop), not just visually inert.
+     The static label above takes its place there. */
+  .sitemap-toggle {
+    display: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    font: inherit;
+    color: inherit;
+    text-align: inherit;
+  }
+
+  @media (max-width: 720px) {
+    .sitemap-label {
+      display: none;
+    }
+
+    .sitemap-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .sitemap-chevron {
+      flex: 0 0 auto;
+      width: 8px;
+      height: 8px;
+      margin-left: var(--space-2);
+      border-right: 1.5px solid var(--soft);
+      border-bottom: 1.5px solid var(--soft);
+      transform: rotate(45deg);
+      transition: transform 150ms ease;
+    }
+
+    .sitemap-toggle[aria-expanded='true'] .sitemap-chevron {
+      transform: rotate(-135deg);
+    }
+
+    #sitemap-list {
+      display: none;
+    }
+
+    #sitemap-list.is-open {
+      display: flex;
+    }
   }
 
   .footer-col a {
@@ -561,5 +641,22 @@ const SOCIALS = [
 
   .strapline {
     color: var(--soft);
+  }
+
+  /* ---------- mobile: compact, centred ---------- */
+  @media (max-width: 640px) {
+    .footer-inner {
+      padding-top: var(--space-4);
+    }
+
+    .footer-grid {
+      gap: var(--space-4);
+    }
+
+    .baseline-row {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
   }
 </style>
