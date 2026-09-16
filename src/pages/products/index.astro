@@ -36,19 +36,22 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
               <img src={f.img} alt="" loading="lazy" />
             </div>
             <div class="product-body">
+              <p class="tagline">{f.tagline}</p>
               <h2>
                 <a href={f.href}>{f.name}</a>
               </h2>
-              <p class="tagline">{f.tagline}</p>
               <p class="descriptor">{f.descriptor}</p>
               <ul class="key-bullets">
                 {f.keyBullets.map((item) => (
                   <li>{item}</li>
                 ))}
               </ul>
-              <a class="link-arrow" href={f.href}>
-                View range &rarr;
-              </a>
+              <span class="product-foot">
+                <span>View range</span>
+                <span class="product-arrow" aria-hidden="true">
+                  &rarr;
+                </span>
+              </span>
             </div>
           </li>
         ))}
@@ -104,7 +107,7 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
     padding: 8px 16px;
     border-radius: var(--radius-l);
     border: 1px solid var(--rule);
-    background: var(--paper);
+    background: var(--white);
     color: var(--ink);
     cursor: pointer;
   }
@@ -140,11 +143,14 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
     }
   }
 
+  /* A white mount with the photograph inset on it — the same card as the
+     homepage teaser, with this page's key-products list added. */
   .product-card {
+    position: relative;
     border: 1px solid var(--rule);
-    border-radius: var(--radius-m);
-    overflow: hidden;
-    background: var(--paper);
+    border-radius: var(--radius-l);
+    padding: 10px;
+    background: var(--white);
     display: flex;
     flex-direction: column;
   }
@@ -153,6 +159,7 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
     display: block;
     aspect-ratio: 4 / 3;
     overflow: hidden;
+    border-radius: var(--radius-m);
     background: var(--mint);
   }
 
@@ -163,49 +170,114 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
     display: block;
   }
 
+  @media (prefers-reduced-motion: no-preference) {
+    .product-card {
+      transition:
+        transform 300ms cubic-bezier(0.2, 0.7, 0.3, 1),
+        box-shadow 300ms ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .product-media img {
+      transition: transform 600ms ease;
+    }
+
+    .product-card:hover .product-media img {
+      transform: scale(1.04);
+    }
+
+    .product-arrow {
+      transition:
+        background-color 300ms ease,
+        border-color 300ms ease,
+        color 300ms ease,
+        transform 300ms cubic-bezier(0.2, 0.7, 0.3, 1);
+    }
+
+    .product-card:hover .product-arrow {
+      transform: translateX(3px);
+    }
+  }
+
   .product-body {
-    padding: var(--space-3);
+    padding: var(--space-3) 14px 14px;
     display: flex;
     flex-direction: column;
     flex: 1;
   }
 
+  /* The flyer tagline as the card's eyebrow, with two lines reserved so every
+     family name in the row sits on the same baseline. */
+  .tagline {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    min-height: 2.9em;
+    margin: 0 0 var(--space-1);
+    font-family: var(--f-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    line-height: 1.45;
+    text-transform: uppercase;
+    color: var(--soft);
+  }
+
+  .tagline::before {
+    content: '';
+    flex: 0 0 auto;
+    width: 6px;
+    height: 6px;
+    margin-top: 0.4em;
+    border-radius: 50%;
+    background: var(--terra);
+  }
+
   .product-body h2 {
-    font-size: 18px;
+    font-size: 21px;
+    letter-spacing: -0.022em;
+    line-height: 1.2;
   }
 
   .product-body h2 a {
     text-decoration: none;
   }
 
+  /* The whole card is the target; the heading link carries the accessible
+     name and the focus ring. */
+  .product-body h2 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-l);
+  }
+
   .product-body h2 a:hover {
     text-decoration: underline;
   }
 
-  .tagline {
-    margin-top: 4px;
-    font-weight: 600;
-    font-size: 13.5px;
-    color: var(--green);
-  }
-
   .descriptor {
     margin-top: var(--space-2);
-    font-size: 14.5px;
-    line-height: 1.55;
+    font-size: 15px;
+    line-height: 1.6;
     color: var(--soft);
   }
 
   .key-bullets {
     list-style: none;
-    margin: var(--space-2) 0 0;
+    margin: var(--space-3) 0 0;
     padding: 0;
     display: grid;
     gap: 4px;
   }
 
   .key-bullets li {
-    font-size: 13.5px;
+    font-family: var(--f-mono);
+    font-size: 12px;
     line-height: 1.5;
     color: var(--ink);
     padding-left: 14px;
@@ -216,32 +288,42 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
     content: '';
     position: absolute;
     left: 0;
-    top: 8px;
-    width: 5px;
-    height: 5px;
+    top: 7px;
+    width: 4px;
+    height: 4px;
     background: var(--terra);
     border-radius: 50%;
   }
 
-  .link-arrow {
-    display: inline-block;
-    margin-top: var(--space-3);
+  /* Pinned to the bottom of the card so every "View range" in the row lines
+     up, whatever that family's bullet count and descriptor do. */
+  .product-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin-top: auto;
+    padding-top: var(--space-3);
     font-weight: 600;
     font-size: 14px;
     color: var(--green);
-    text-decoration: none;
   }
 
-  /* Pin every card's CTA to the same bottom edge instead of wherever it
-     lands after that family's own bullet count and descriptor length —
-     cards already stretch to equal height via CSS Grid. */
-  .product-body .link-arrow {
-    margin-top: auto;
-    padding-top: var(--space-3);
+  .product-arrow {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+    color: var(--green);
   }
 
-  .link-arrow:hover {
-    text-decoration: underline;
+  .product-card:hover .product-arrow {
+    background: var(--green);
+    border-color: var(--green);
+    color: var(--white);
   }
 
   .filter-empty {

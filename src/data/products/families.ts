@@ -7,7 +7,14 @@ export interface ProductFamily {
   name: string;
   /** Verbatim family tagline from its own page (Sections 3-9). */
   tagline: string;
-  /** Verbatim family intro paragraph, reused as the one-paragraph descriptor. */
+  /**
+   * Card descriptor. Every fact in it is drawn from the family's own flyer
+   * copy (intro, key products, specifications, packaging) in blueprint.md;
+   * nothing here is new. It is deliberately not the verbatim intro: those run
+   * 63 to 167 characters, which left the card grid ragged. These sit in a
+   * 90-107 character band so every card reads as two lines. The verbatim
+   * intro still opens each family's own page, untouched.
+   */
   descriptor: string;
   /** Shop-by-crop filter tags (blueprint.md Section 2). */
   tags: string[];
@@ -32,7 +39,7 @@ export const PRODUCT_FAMILIES: readonly ProductFamily[] = [
     name: 'Grafting Tubes',
     tagline: 'Flexible. Transparent. Reliable.',
     descriptor:
-      'High-quality silicone tubes designed for rose and ornamental as well as vegetable and fruit tree grafting. Ensure optimal union, high graft success and healthy growth.',
+      'Medical-grade silicone tubes in 3.5mm to 8.5mm, for roses, ornamentals, vegetables and fruit trees.',
     tags: ['Roses and ornamentals', 'Vegetables and cucurbits', 'Fruit trees'],
     img: '/images/products/grafting-tubes/hero.jpg',
     keyBullets: [
@@ -47,7 +54,8 @@ export const PRODUCT_FAMILIES: readonly ProductFamily[] = [
     slug: 'grafting-clips',
     name: 'Grafting Clips',
     tagline: 'Secure Unions. Higher Success.',
-    descriptor: 'Precision clips for strong graft unions and better propagation outcomes.',
+    descriptor:
+      'Precision clips in five types, sized by stem diameter for strong unions on roses, vegetables and trees.',
     tags: ['Roses and ornamentals', 'Vegetables and cucurbits', 'Fruit trees'],
     img: '/images/products/grafting-clips/hero.jpg',
     keyBullets: ['U-Clip', 'Omega Clip', 'Round Clip', 'Tomato Clip'],
@@ -57,7 +65,8 @@ export const PRODUCT_FAMILIES: readonly ProductFamily[] = [
     slug: 'nursery-consumables',
     name: 'Nursery Consumables',
     tagline: 'Everything You Need for Healthy Propagation.',
-    descriptor: 'Essential supplies for clean, efficient and productive nurseries.',
+    descriptor:
+      'Trays, pots, labels, ties, domes and cutting tools for a clean, efficient and productive nursery.',
     tags: ['Nursery and facility supplies'],
     img: '/images/products/nursery-consumables/hero.jpg',
     keyBullets: [
@@ -72,7 +81,8 @@ export const PRODUCT_FAMILIES: readonly ProductFamily[] = [
     slug: 'propagation-systems',
     name: 'Propagation Systems',
     tagline: 'Efficient Systems. Better Results.',
-    descriptor: 'Integrated systems to improve efficiency, uniformity and yield.',
+    descriptor:
+      'Misting, climate control, irrigation and benching, designed and installed for your site and crop.',
     tags: ['Nursery and facility supplies'],
     img: '/images/products/propagation-systems/hero.jpg',
     keyBullets: [
@@ -88,7 +98,7 @@ export const PRODUCT_FAMILIES: readonly ProductFamily[] = [
     name: 'Sanitation Products',
     tagline: 'Clean Nurseries. Healthy Plants.',
     descriptor:
-      'Disinfectants, sanitizers and hygiene solutions for a disease-free propagation environment.',
+      'Disinfectants, footbaths, water treatment and PPE for a disease-free nursery, in 5L to 1,000L packs.',
     tags: ['Nursery and facility supplies'],
     img: '/images/products/sanitation/hero.jpg',
     keyBullets: [
@@ -103,7 +113,8 @@ export const PRODUCT_FAMILIES: readonly ProductFamily[] = [
     slug: 'monitoring',
     name: 'Propagation Monitoring',
     tagline: 'Data-Driven Decisions. Better Outcomes.',
-    descriptor: 'Digital tools to track, manage and improve your propagation results.',
+    descriptor:
+      'Temperature, humidity, VPD and soil-moisture sensors on a dashboard you can check from a phone.',
     tags: ['Nursery and facility supplies'],
     img: '/images/products/monitoring/hero.jpg',
     keyBullets: [
@@ -118,7 +129,8 @@ export const PRODUCT_FAMILIES: readonly ProductFamily[] = [
     slug: 'technical-services',
     name: 'Technical Services',
     tagline: 'Expert Support. Lasting Success.',
-    descriptor: 'From training to troubleshooting, we support your propagation journey.',
+    descriptor:
+      'Training, nursery setup and design, crop protocols and troubleshooting, on-site or virtual.',
     tags: ['Nursery and facility supplies'],
     img: '/images/products/technical-services/hero.jpg',
     keyBullets: [
