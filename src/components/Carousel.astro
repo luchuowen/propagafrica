@@ -109,36 +109,23 @@ function assetVariants(src: string) {
               </div>
             );
           })}
-          {/* Anchored to this lane's media box (not the whole card) so the
-              arrows stay centred on the photo even when a caption panel
-              beneath it changes the card's total height. */}
+          {/* Overlay arrow buttons read as dated slideshow chrome. A tap or
+              swipe already moves the hero along (see the script below); this
+              dot row is the one visible control — click a dot to jump
+              straight to that slide, with the active one drawn as a pill so
+              position is legible at a glance. */}
           {variant === 'hero' && lane === 0 && slides.length > 1 && (
-            <button type="button" class="control prev" aria-label="Previous slide">
-              <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
-                <path
-                  d="M12.5 4 L7 10 L12.5 16"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ></path>
-              </svg>
-            </button>
-          )}
-          {variant === 'hero' && lane === laneIndexes.length - 1 && slides.length > 1 && (
-            <button type="button" class="control next" aria-label="Next slide">
-              <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
-                <path
-                  d="M7.5 4 L13 10 L7.5 16"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ></path>
-              </svg>
-            </button>
+            <div class="dots" role="group" aria-label="Choose a slide">
+              {slides.map((_, i) => (
+                <button
+                  type="button"
+                  class:list={['dot', i === 0 && 'is-active']}
+                  data-dot={i}
+                  aria-label={`Go to slide ${i + 1}`}
+                  aria-current={i === 0 ? 'true' : undefined}
+                ></button>
+              ))}
+            </div>
           )}
         </div>
         {hasCaptions && (
@@ -345,6 +332,47 @@ function assetVariants(src: string) {
     }
   }
 
+  /* Ken Burns drift on the hero only — a slow, continuous zoom-and-pan for
+     as long as a slide is on screen, run on the <img> itself so it layers
+     under (not instead of) .frame's own crossfade/scale entrance above.
+     Duration outlasts the 5.5s autoplay interval so it never visibly
+     settles into a static frame before the next slide crossfades in.
+     Direction alternates by slide (even/odd) so five slides in a row don't
+     all drift the same way. Skipped entirely under reduced motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    [data-variant='hero'] .frame img {
+      transform-origin: 50% 50%;
+    }
+
+    [data-variant='hero'] .frame.is-active img {
+      animation: ken-burns-a 9s ease-out forwards;
+    }
+
+    [data-variant='hero'] .frame:nth-child(even).is-active img {
+      animation-name: ken-burns-b;
+    }
+
+    @keyframes ken-burns-a {
+      from {
+        transform: scale(1) translate(0, 0);
+      }
+
+      to {
+        transform: scale(1.12) translate(-1.6%, -1.2%);
+      }
+    }
+
+    @keyframes ken-burns-b {
+      from {
+        transform: scale(1) translate(0, 0);
+      }
+
+      to {
+        transform: scale(1.12) translate(1.6%, 1%);
+      }
+    }
+  }
+
   .control {
     position: absolute;
     top: 50%;
@@ -377,6 +405,60 @@ function assetVariants(src: string) {
   .control:hover {
     background: var(--mint);
     transform: translateY(-50%) scale(1.08);
+  }
+
+  /* Replaces the hero's old overlay prev/next buttons — a row of small
+     dots a tap or click can jump to directly, low enough in contrast to
+     read as a position marker rather than UI chrome sitting on the photo.
+     Each button is a full 24x24px hit target (Lighthouse's target-size
+     minimum) with the visible dot drawn smaller, centred, via ::after —
+     the touch area is generous without the marker itself looking heavy. */
+  .dots {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    bottom: var(--space-2);
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+  }
+
+  .dot {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dot::after {
+    content: '';
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  .dot:hover::after {
+    background: rgba(255, 255, 255, 0.75);
+  }
+
+  .dot.is-active::after {
+    width: 22px;
+    background: var(--paper);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .dot::after {
+      transition:
+        width 250ms ease,
+        background-color 200ms ease;
+    }
   }
 
   /* The caption now lives on its own paper panel under the photo, not as a
@@ -464,7 +546,8 @@ function assetVariants(src: string) {
   }
 
   .pa-carousel:focus-visible,
-  .control:focus-visible {
+  .control:focus-visible,
+  .dot:focus-visible {
     outline: 2px solid var(--green);
     outline-offset: 2px;
   }
@@ -486,6 +569,7 @@ function assetVariants(src: string) {
 
     const prevBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('.control.prev'));
     const nextBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('.control.next'));
+    const dotBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('.dot'));
     const interval = Number(root.dataset.interval || '5500');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -505,6 +589,15 @@ function assetVariants(src: string) {
         items.forEach((item) => {
           item.classList.toggle('is-active', Number(item.dataset.index) === target);
         });
+      });
+      dotBtns.forEach((dot) => {
+        const isActive = Number(dot.dataset.dot) === index;
+        dot.classList.toggle('is-active', isActive);
+        if (isActive) {
+          dot.setAttribute('aria-current', 'true');
+        } else {
+          dot.removeAttribute('aria-current');
+        }
       });
     }
 
@@ -545,6 +638,9 @@ function assetVariants(src: string) {
 
     prevBtns.forEach((btn) => btn.addEventListener('click', () => onUserInteraction(prev)));
     nextBtns.forEach((btn) => btn.addEventListener('click', () => onUserInteraction(next)));
+    dotBtns.forEach((dot) => {
+      dot.addEventListener('click', () => onUserInteraction(() => goTo(Number(dot.dataset.dot))));
+    });
 
     root.addEventListener('keydown', (event) => {
       const key = (event as KeyboardEvent).key;
