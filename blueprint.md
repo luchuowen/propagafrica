@@ -42,7 +42,7 @@ Eyebrow: "Full range"
 H1: "Everything a propagation nursery runs on"
 Sub: "Seven product families, sourced and stocked for commercial growers in Kenya and Ethiopia. Filter by what you grow, or browse the full range below."
 Shop-by-crop filter: Roses and ornamentals / Vegetables and cucurbits / Fruit trees / Nursery and facility supplies (client-side tag filter; systems, sanitation, monitoring and services tagged "Nursery and facility supplies").
-7 cards in flyer order: name, verbatim tagline, card descriptor, "View range" link, key-products preview (first 4 bullets of that family). The card descriptor is a 90-107 character line drawn from that family's own flyer copy below -- its intro, key products, specifications and packaging -- so the seven cards read as an even two lines each. It adds no fact that is not already in this file. Each family page still opens with its own verbatim intro, unchanged. Descriptors: Grafting Tubes -- "Medical-grade silicone tubes in 3.5mm to 8.5mm, for roses, ornamentals, vegetables and fruit trees." Grafting Clips -- "Precision clips in five types, sized by stem diameter for strong unions on roses, vegetables and trees." Nursery Consumables -- "Trays, pots, labels, ties, domes and cutting tools for a clean, efficient and productive nursery." Propagation Systems -- "Misting, climate control, irrigation and benching, designed and installed for your site and crop." Sanitation Products -- "Disinfectants, footbaths, water treatment and PPE for a disease-free nursery, in 5L to 1,000L packs." Propagation Monitoring -- "Temperature, humidity, VPD and soil-moisture sensors on a dashboard you can check from a phone." Technical Services -- "Training, nursery setup and design, crop protocols and troubleshooting, on-site or virtual."
+7 cards in flyer order: name, card descriptor, "View range" link, key-products preview (first 4 bullets of that family). The card descriptor is a 90-107 character line drawn from that family's own flyer copy below -- its intro, key products, specifications and packaging -- so the seven cards read as an even two lines each. It adds no fact that is not already in this file. Each family page still opens with its own verbatim intro and tagline, unchanged; the cards no longer repeat the tagline. Descriptors: Grafting Tubes -- "Medical-grade silicone tubes in 3.5mm to 8.5mm, for roses, ornamentals, vegetables and fruit trees." Grafting Clips -- "Precision clips in five types, sized by stem diameter for strong unions on roses, vegetables and trees." Nursery Consumables -- "Trays, pots, labels, ties, domes and cutting tools for a clean, efficient and productive nursery." Propagation Systems -- "Misting, climate control, irrigation and benching, designed and installed for your site and crop." Sanitation Products -- "Disinfectants, footbaths, water treatment and PPE for a disease-free nursery, in 5L to 1,000L packs." Propagation Monitoring -- "Temperature, humidity, VPD and soil-moisture sensors on a dashboard you can check from a phone." Technical Services -- "Training, nursery setup and design, crop protocols and troubleshooting, on-site or virtual."
 
 ## Section 3 -- Grafting Tubes (/products/grafting-tubes/)
 
@@ -176,7 +176,13 @@ Body: "PropagAfrica Technologies supplies the grafting tubes, clips, nursery con
 We work with commercial flower growers, vegetable and fruit growers, nurseries and propagation labs, agri-businesses and distributors, and research and training institutions -- supplying products sourced from established manufacturers, alongside the technical expertise to specify, install and troubleshoot the systems around them.
 Our team supports customers on-site, virtually and at the farm, from choosing the right tube and clip for a graft run through to designing and installing a full propagation system and its monitoring."
 Why partner list and Target markets list: verbatim, see Product Reference section below.
-Contact block: phone, email, Nairobi Kenya, stock held in Kenya and Ethiopia.
+No contact block: the footer carries phone, email and the strap line on every page, and
+Section 13 is the contact page, so repeating it here was a third copy. The operating facts
+appear instead as a ruled strip under the H1 -- "Seven product families" (Section 2),
+"Stock held in Kenya and Ethiopia" (Global) and "On-site, virtual and farm-based support"
+(Section 9 Includes). Page order: hero spread, facts strip, lead photograph
+(nairobi-hub.jpg), "How we work" prose band, Why partner / Who we supply, team
+photographs, Request a Quotation.
 
 ## Section 13 -- Contact (/contact/)
 

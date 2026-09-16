@@ -168,3 +168,41 @@ Product cards: no hover underline on the family name, no terra dot before the
 tagline or the key-products list, and the card contents are centred. The dots
 were the only place terra appeared on these cards, so it now shows only on the
 tri-colour bar and the outcome panels.
+
+## Journey photos load eagerly; carousels start at 01 (2026-09-16)
+
+Steps 05 and 06 never loaded. They start outside the viewport and the loop
+brings them in by CSS transform, which does not re-run the lazy-load
+intersection check, so they arrived as flat --green-dark panels - the .shot
+fallback fill - and read as black boxes. All six now load eagerly; the clone
+half reuses the same URLs, so it costs six files, not twelve.
+
+Carousel autoplay now waits for the carousel to be 25% on screen before it
+starts, via IntersectionObserver, and falls back to starting immediately
+where that is unavailable. It used to start at page load, so a carousel far
+down the page had already advanced by the time it was scrolled to and opened
+on, say, 04 / 08 - which the numbering made look like a bug.
+
+The product cards no longer repeat the family tagline; the name, descriptor
+and CTA carry the card. blueprint.md Section 2 updated to match. Each family
+page still opens with its own verbatim tagline and intro.
+
+## About page rebuilt; no contact block (2026-09-16)
+
+The page was four paper-coloured bands of left-aligned prose closing on a
+contact block that repeated the footer and the whole of /contact/ - a third
+copy of the same four lines. It now runs white hero spread, ruled facts strip,
+lead photograph at 21:9, a "How we work" prose band on --green-pale, the dark
+trust pair, team photographs 2-up, then the CTA. Beige is left to the header
+and footer.
+
+The contact block is gone. The operating facts take its place as a numbered
+strip: "Seven product families", "Stock held in Kenya and Ethiopia" and
+"On-site, virtual and farm-based support" - each already stated in
+blueprint.md, which is updated to match. All body copy is unchanged and
+verbatim.
+
+Watch for this: an <img> with width and height attributes has those mapped to
+CSS presentational hints, and the used height then beats aspect-ratio. The
+team photographs rendered 556x900 portrait until height: auto was added
+alongside. The lead photograph never showed it because it already had one.

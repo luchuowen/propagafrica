@@ -1,17 +1,32 @@
 ---
-// About — blueprint.md Section 12. Full replacement of the pre-restart page: old copy, old
-// components (PageHero, NotesBlock, QuotationBlock, RuledRows) and the old farmAerialImg asset
-// are dropped entirely, same as the homepage/products/field-notes rebuilds before it. Those
-// components are left in place, unreferenced, same as StageNav.astro after Prompt 0.
+// About — blueprint.md Section 12. Rebuilt 2026-09-16: the page was four
+// paper-coloured bands of left-aligned prose closing on a contact block that
+// repeats the footer and the whole of /contact/. It now runs white → a lead
+// photograph → a cool-tinted band of prose → the dark trust pair → the team
+// photographs → the CTA, so the page has a rhythm and beige is left to the
+// header and footer. Copy is unchanged and verbatim from the blueprint.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TrustPanel from '../components/TrustPanel.astro';
 import FamilyCta from '../components/products/FamilyCta.astro';
 
-const bodyParagraphs = [
+const [lede, ...bodyParagraphs] = [
   'PropagAfrica Technologies supplies the grafting tubes, clips, nursery consumables, propagation systems, sanitation products and monitoring tools that commercial nurseries, flower farms and fruit and vegetable growers run on, with stock held in Kenya and Ethiopia and technical support from setup through to season one.',
   'We work with commercial flower growers, vegetable and fruit growers, nurseries and propagation labs, agri-businesses and distributors, and research and training institutions — supplying products sourced from established manufacturers, alongside the technical expertise to specify, install and troubleshoot the systems around them.',
   'Our team supports customers on-site, virtually and at the farm, from choosing the right tube and clip for a graft run through to designing and installing a full propagation system and its monitoring.',
 ];
+
+// Operating facts, each already stated in blueprint.md — the Global section,
+// Section 2 and Section 9's "Includes" line. Nothing new is asserted.
+const FACTS = [
+  'Seven product families',
+  'Stock held in Kenya and Ethiopia',
+  'On-site, virtual and farm-based support',
+];
+
+const lead = {
+  src: '/images/about/nairobi-hub.jpg',
+  alt: 'The PropagAfrica Technologies stock and dispatch hub in Nairobi, Kenya',
+};
 
 const photos = [
   {
@@ -22,11 +37,10 @@ const photos = [
     src: '/images/about/team-02.jpg',
     alt: 'A PropagAfrica Technologies technician working with propagation equipment on site',
   },
-  {
-    src: '/images/about/nairobi-hub.jpg',
-    alt: 'The PropagAfrica Technologies stock and dispatch hub in Nairobi, Kenya',
-  },
 ];
+
+const NATIVE_WIDTH = 1200;
+const NATIVE_HEIGHT = 900;
 ---
 
 <BaseLayout
@@ -35,11 +49,51 @@ const photos = [
 >
   <section class="about-hero">
     <div class="about-hero-inner">
-      <p class="eyebrow">About PropagAfrica Technologies</p>
-      <h1>Propagation inputs and systems for East African horticulture</h1>
-      {bodyParagraphs.map((paragraph) => (
-        <p class="body">{paragraph}</p>
+      <div class="hero-head" data-reveal>
+        <p class="eyebrow">About PropagAfrica Technologies</p>
+        <h1>Propagation inputs and systems for East African horticulture</h1>
+      </div>
+      <p class="lede" data-reveal style="--reveal-delay: 80ms">
+        {lede}
+      </p>
+    </div>
+
+    <ul class="facts" data-reveal-group>
+      {FACTS.map((fact, i) => (
+        <li data-reveal style={`--reveal-delay: ${i * 60}ms`}>
+          <span class="fact-n">{String(i + 1).padStart(2, '0')}</span>
+          <span class="fact-text">{fact}</span>
+        </li>
       ))}
+    </ul>
+  </section>
+
+  <section class="about-lead">
+    <figure data-reveal>
+      <img
+        src={lead.src}
+        alt={lead.alt}
+        width={NATIVE_WIDTH}
+        height={NATIVE_HEIGHT}
+        loading="eager"
+        decoding="async"
+      />
+      <figcaption>{lead.alt}</figcaption>
+    </figure>
+  </section>
+
+  <section class="about-approach">
+    <div class="about-approach-inner">
+      <p class="eyebrow" data-reveal>
+        How we work
+      </p>
+      <div class="approach-cols" data-reveal-group>
+        {bodyParagraphs.map((paragraph, i) => (
+          <p data-reveal style={`--reveal-delay: ${i * 80}ms`}>
+            {paragraph}
+          </p>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -48,70 +102,170 @@ const photos = [
   <section class="about-photos">
     <div class="about-photos-inner">
       <ul class="photo-grid" data-reveal-group>
-        {photos.map((photo) => (
-          <li data-reveal>
-            <img src={photo.src} alt={photo.alt} loading="lazy" />
+        {photos.map((photo, i) => (
+          <li data-reveal style={`--reveal-delay: ${i * 80}ms`}>
+            <img
+              src={photo.src}
+              alt={photo.alt}
+              width={NATIVE_WIDTH}
+              height={NATIVE_HEIGHT}
+              loading="lazy"
+              decoding="async"
+            />
           </li>
         ))}
       </ul>
-    </div>
-  </section>
-
-  <section class="about-contact">
-    <div class="about-contact-inner" data-reveal>
-      <h2>Contact</h2>
-      <address>
-        <a href="tel:+254722861682">+254 722 861 682</a>
-        <br />
-        <a href="mailto:info@propagafrica.com">info@propagafrica.com</a>
-        <br />
-        Nairobi, Kenya
-        <br />
-        Stock held in Kenya and Ethiopia
-      </address>
       <FamilyCta />
     </div>
   </section>
 </BaseLayout>
 
 <style>
+  /* ---------- hero ---------- */
   .about-hero {
-    padding: var(--space-6) 0 var(--space-5);
-    border-bottom: 1px solid var(--rule);
+    background: var(--white);
+    padding: var(--space-6) 0 0;
   }
 
-  .about-hero-inner {
+  .about-hero-inner,
+  .about-approach-inner,
+  .about-photos-inner {
     max-width: var(--content-max);
     margin: 0 auto;
     padding: 0 var(--side-gutter);
   }
 
-  .about-hero-inner h1 {
-    margin-top: var(--space-2);
-    max-width: 28ch;
+  .about-hero-inner {
+    display: grid;
+    gap: var(--space-3);
   }
 
-  .about-hero-inner .body {
+  /* The heading leads and the opening paragraph sits beside it rather than
+     under it, so the page opens as a spread instead of a column of prose. */
+  @media (min-width: 900px) {
+    .about-hero-inner {
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: var(--space-6);
+      align-items: end;
+    }
+  }
+
+  .about-hero h1 {
+    margin-top: var(--space-2);
+    max-width: 18ch;
+  }
+
+  .lede {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--soft);
+  }
+
+  /* Three operating facts as a ruled strip under the heading — the page's one
+     piece of hard information, where the contact block used to repeat the
+     footer. */
+  .facts {
+    list-style: none;
+    max-width: var(--content-max);
+    margin: var(--space-5) auto 0;
+    padding: 0 var(--side-gutter);
+    display: grid;
+    gap: 0;
+  }
+
+  @media (min-width: 720px) {
+    .facts {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-4);
+    }
+  }
+
+  .facts li {
+    display: grid;
+    grid-template-columns: 2.25rem 1fr;
+    align-items: baseline;
+    padding: var(--space-2) 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .fact-n {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--green);
+  }
+
+  .fact-text {
+    font-size: 15.5px;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    line-height: 1.35;
+  }
+
+  /* ---------- lead photograph ---------- */
+  .about-lead {
+    background: var(--white);
+    padding: var(--space-5) 0 var(--space-6);
+  }
+
+  .about-lead figure {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 0 var(--side-gutter);
+  }
+
+  .about-lead img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 21 / 9;
+    object-fit: cover;
+    border-radius: var(--radius-l);
+    box-shadow: var(--shadow-soft);
+    background: var(--green-dark);
+  }
+
+  .about-lead figcaption {
+    margin-top: var(--space-2);
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--soft);
+  }
+
+  /* ---------- how we work ---------- */
+  .about-approach {
+    background: var(--green-pale);
+    padding: var(--space-6) 0;
+  }
+
+  .approach-cols {
     margin-top: var(--space-3);
-    max-width: 62ch;
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 900px) {
+    .approach-cols {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-5);
+    }
+  }
+
+  .approach-cols p {
+    margin: 0;
     font-size: 17px;
     line-height: 1.7;
     color: var(--ink);
   }
 
-  .about-hero-inner .body:first-of-type {
-    margin-top: var(--space-4);
-  }
-
+  /* ---------- team photographs ---------- */
   .about-photos {
-    padding: var(--space-6) 0;
     background: var(--white);
-  }
-
-  .about-photos-inner {
-    max-width: var(--content-max);
-    margin: 0 auto;
-    padding: 0 var(--side-gutter);
+    padding: var(--space-6) 0 var(--space-7);
   }
 
   .photo-grid {
@@ -125,37 +279,32 @@ const photos = [
 
   @media (min-width: 720px) {
     .photo-grid {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 
+  /* height: auto is load-bearing — the width/height attributes map to CSS
+     presentational hints, and a used height of 900px would otherwise beat
+     aspect-ratio and render these portrait. */
   .photo-grid img {
     display: block;
     width: 100%;
+    height: auto;
     aspect-ratio: 4 / 3;
     object-fit: cover;
-    border-radius: var(--radius-s);
+    border-radius: var(--radius-l);
+    background: var(--green-dark);
   }
 
-  .about-contact {
-    padding: var(--space-6) 0 var(--space-7);
-  }
+  @media (prefers-reduced-motion: no-preference) {
+    .about-lead img,
+    .photo-grid img {
+      transition: transform 600ms ease;
+    }
 
-  .about-contact-inner {
-    max-width: var(--content-max);
-    margin: 0 auto;
-    padding: 0 var(--side-gutter);
-  }
-
-  address {
-    font-style: normal;
-    margin-top: var(--space-3);
-    font-size: 15px;
-    line-height: 1.8;
-    color: var(--ink);
-  }
-
-  address a {
-    color: var(--green);
+    .about-lead figure:hover img,
+    .photo-grid li:hover img {
+      transform: scale(1.02);
+    }
   }
 </style>

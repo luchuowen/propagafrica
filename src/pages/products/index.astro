@@ -36,7 +36,6 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
               <img src={f.img} alt="" loading="lazy" />
             </div>
             <div class="product-body">
-              <p class="tagline">{f.tagline}</p>
               <h2>
                 <a href={f.href}>{f.name}</a>
               </h2>
@@ -209,23 +208,6 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
     flex-direction: column;
     flex: 1;
     text-align: center;
-  }
-
-  /* The flyer tagline as the card's eyebrow, with two lines reserved so every
-     family name in the row sits on the same baseline. */
-  .tagline {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    min-height: 2.9em;
-    margin: 0 0 var(--space-1);
-    font-family: var(--f-mono);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    line-height: 1.45;
-    text-transform: uppercase;
-    color: var(--soft);
   }
 
   .product-body h2 {

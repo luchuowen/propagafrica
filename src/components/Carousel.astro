@@ -578,6 +578,25 @@ function assetVariants(src: string) {
     );
 
     render();
-    startAutoplay();
+
+    // Autoplay waits until the carousel is actually on screen. It used to start
+    // at page load, so a carousel far down the page had already advanced by the
+    // time it was scrolled to and opened on, say, 04 / 08 — the numbering made
+    // that look like a bug. Now the first thing anyone sees is 01.
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            io.disconnect();
+            startAutoplay();
+          });
+        },
+        { threshold: 0.25 },
+      );
+      io.observe(root);
+    } else {
+      startAutoplay();
+    }
   });
 </script>
