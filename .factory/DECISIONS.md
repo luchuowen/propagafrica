@@ -170,3 +170,19 @@ since") instead of the bare word.
 - The keyboard-traversal test excluded `disabled` but not `tabindex="-1"`, so it expected the
   honeypot to be Tab-reachable. A field deliberately out of the tab order is not a control a
   keyboard user should reach.
+
+## Propagation journey is one looping line, not a grid (2026-09-16)
+
+The six steps sit on a single full-bleed row that translates continuously from
+01 to 06 and starts over. A second, inert copy of the six follows the first, so
+`translateX(-50%)` loops with no seam; every step carries a trailing margin
+rather than the row using `gap`, which is what makes the two halves exactly
+equal. The row pauses on hover and focus-within, and under
+`prefers-reduced-motion: reduce` the clones are hidden and the six become a
+plain scroll-snapped row — every step stays in the DOM, in order, either way.
+
+The edges dissolve with `mask-image`, not a painted overlay. That needed the
+`no-forbidden-ui` gate narrowed: it now fails a gradient in `background`,
+`background-image`, `border-image`, `fill` or `stroke`, and lets one through in
+`mask-image`, which is an alpha ramp rather than decoration. The CLAUDE.md ban
+on gradients still means paint.

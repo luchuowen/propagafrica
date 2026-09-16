@@ -1,9 +1,10 @@
 ---
-// The propagation journey: six numbered steps, all visible at once. It was a
-// three-at-a-time carousel, which hid half the sequence behind autoplay — a
-// numbered process is the one thing a carousel should never hide. The step
-// markers sit on the section ground under each photograph and are joined by
-// a hairline that runs through the gutter, never across a photograph.
+// The propagation journey: six numbered steps on one line, looping continuously
+// from 01 to 06 and round again. It was a three-at-a-time carousel, then a
+// static grid; the loop keeps the whole sequence in one reading order while the
+// section edges fade the cards out rather than cutting them off. A second,
+// inert copy of the six steps follows the first so the track can translate
+// exactly half its width and start over with no visible seam.
 interface Step {
   src: string;
   alt: string;
@@ -17,13 +18,17 @@ interface Props {
 
 const { steps } = Astro.props;
 
+// Seconds for one pass through the six steps. At the card widths below this is
+// roughly 30px a second — slow enough to read a caption as it goes past.
+const LOOP_SECONDS = 48;
+
 // Same responsive sources as Carousel.astro: every process photo ships at
 // 1200x900 per docs/image-manifest.md, and scripts/generate-image-variants.mjs
 // (astro:build:done hook) writes a WebP copy plus a 640w WebP and same-format
 // fallback next to it in dist/.
 const NATIVE_WIDTH = 1200;
 const NATIVE_HEIGHT = 900;
-const SIZES = '(min-width: 900px) 33vw, (min-width: 620px) 50vw, 100vw';
+const SIZES = '(min-width: 1540px) 230px, (min-width: 1270px) 15vw, 190px';
 
 function assetVariants(src: string) {
   const match = src.match(/\.(jpe?g|png)$/i);
@@ -35,52 +40,104 @@ function assetVariants(src: string) {
     fallbackSmall: `${base}-640${ext}`,
   };
 }
+
+// The clones carry the same image URLs, so they come straight off the cache and
+// never pop in mid-loop.
+const cycle = [
+  ...steps.map((step) => ({ step, clone: false })),
+  ...steps.map((step) => ({ step, clone: true })),
+];
 ---
 
-<ol class="journey-steps">
-  {steps.map((step) => {
-    const { webp, webpSmall, fallbackSmall } = assetVariants(step.src);
-    return (
-      <li class="step">
-        <div class="shot">
-          <picture>
-            <source
-              type="image/webp"
-              srcset={`${webpSmall} 640w, ${webp} ${NATIVE_WIDTH}w`}
-              sizes={SIZES}
-            />
-            <img
-              src={step.src}
-              srcset={`${fallbackSmall} 640w, ${step.src} ${NATIVE_WIDTH}w`}
-              sizes={SIZES}
-              width={NATIVE_WIDTH}
-              height={NATIVE_HEIGHT}
-              alt={step.alt}
-              loading="lazy"
-              decoding="async"
-            />
-          </picture>
-        </div>
-        <p class="marker">
-          <span class="num">{step.step.padStart(2, '0')}</span>
-        </p>
-        <p class="caption">{step.caption}</p>
-      </li>
-    );
-  })}
-</ol>
+<!-- Focusable because the row scrolls: with motion it is a tab stop that pauses
+the loop, and with reduced motion it is the only way to scroll the row by
+keyboard (axe: scrollable-region-focusable). -->
+<div
+  class="journey-marquee"
+  role="group"
+  aria-label="The propagation journey, six steps"
+  tabindex="0"
+>
+  <ol class="journey-steps" style={`--loop-duration: ${LOOP_SECONDS}s`}>
+    {cycle.map(({ step, clone }) => {
+      const { webp, webpSmall, fallbackSmall } = assetVariants(step.src);
+      return (
+        <li class="step" data-clone={clone ? '' : null} aria-hidden={clone ? 'true' : null}>
+          <div class="shot">
+            <picture>
+              <source
+                type="image/webp"
+                srcset={`${webpSmall} 640w, ${webp} ${NATIVE_WIDTH}w`}
+                sizes={SIZES}
+              />
+              <img
+                src={step.src}
+                srcset={`${fallbackSmall} 640w, ${step.src} ${NATIVE_WIDTH}w`}
+                sizes={SIZES}
+                width={NATIVE_WIDTH}
+                height={NATIVE_HEIGHT}
+                alt={clone ? '' : step.alt}
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+          </div>
+          <p class="marker">
+            <span class="num">{step.step.padStart(2, '0')}</span>
+          </p>
+          <p class="caption">{step.caption}</p>
+        </li>
+      );
+    })}
+  </ol>
+</div>
 
 <style>
+  /* The viewport runs the full width of the section. The mask is an alpha ramp,
+     not paint: it dissolves a card as it reaches either edge instead of
+     chopping it off at the overflow boundary. Vertical padding keeps the card
+     shadows clear of the clip. */
+  .journey-marquee:focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 2px;
+  }
+
+  .journey-marquee {
+    --fade: clamp(var(--space-3), 8vw, var(--space-8));
+
+    overflow: hidden;
+    padding: var(--space-1) 0 var(--space-2);
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent 0,
+      black var(--fade),
+      black calc(100% - var(--fade)),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      90deg,
+      transparent 0,
+      black var(--fade),
+      black calc(100% - var(--fade)),
+      transparent 100%
+    );
+  }
+
+  /* width: max-content keeps the track its true length, and the trailing
+     margin on every step — rather than a gap — makes the two halves exactly
+     equal, which is what lets translateX(-50%) loop seamlessly. */
   .journey-steps {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-4) var(--space-3);
+    display: flex;
+    width: max-content;
   }
 
   .step {
+    flex: 0 0 auto;
+    width: clamp(190px, 15vw, 230px);
+    margin-right: var(--space-2);
     display: flex;
     flex-direction: column;
   }
@@ -100,17 +157,6 @@ function assetVariants(src: string) {
     object-fit: cover;
   }
 
-  /* The same slow zoom the photo cards elsewhere on this page carry. */
-  @media (prefers-reduced-motion: no-preference) {
-    .shot img {
-      transition: transform 600ms ease;
-    }
-
-    .step:hover .shot img {
-      transform: scale(1.045);
-    }
-  }
-
   .marker {
     position: relative;
     display: flex;
@@ -118,6 +164,25 @@ function assetVariants(src: string) {
     justify-content: center;
     height: 44px;
     margin: var(--space-2) 0 0;
+  }
+
+  /* The connector runs from the centre of one marker to the centre of the next,
+     through the gutter and never across a photograph. The percentage resolves
+     against the card width, so 50% + the margin lands on the next marker. */
+  .marker::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    right: calc((50% + var(--space-2)) * -1);
+    top: 50%;
+    height: 1px;
+    background: color-mix(in srgb, var(--green) 22%, transparent);
+  }
+
+  /* Nothing follows the last card, whether that is a clone or — with the clones
+     hidden below — step 06. */
+  .step:last-child .marker::after {
+    display: none;
   }
 
   .num {
@@ -141,66 +206,57 @@ function assetVariants(src: string) {
   .caption {
     margin: var(--space-2) 0 0;
     text-align: center;
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 600;
     letter-spacing: -0.015em;
     line-height: 1.3;
   }
 
-  /* The connector runs from one step marker to the next, through the gutter,
-     and stops at the end of each row. The breakpoints below do not overlap,
-     so each row-edge rule stands on its own. */
-  @media (min-width: 620px) and (max-width: 899px) {
+  @media (prefers-reduced-motion: no-preference) {
     .journey-steps {
-      grid-template-columns: repeat(2, 1fr);
+      animation: journey-loop var(--loop-duration) linear infinite;
     }
 
-    .marker::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      right: calc(var(--space-3) * -1);
-      top: 50%;
-      height: 1px;
-      background: color-mix(in srgb, var(--green) 22%, transparent);
+    /* Pointing at the row or tabbing into it stops the loop, so a caption can
+       be read at rest. */
+    .journey-marquee:hover .journey-steps,
+    .journey-marquee:focus-within .journey-steps {
+      animation-play-state: paused;
     }
 
-    /* First step in a row starts at its own marker, last one ends at it, so
-       the line never runs off into the margin. */
-    .step:nth-child(2n + 1) .marker::after {
-      left: 50%;
+    .shot img {
+      transition: transform 600ms ease;
     }
 
-    .step:nth-child(2n) .marker::after,
-    .step:last-child .marker::after {
-      right: 50%;
+    .step:hover .shot img {
+      transform: scale(1.045);
+    }
+
+    @keyframes journey-loop {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
     }
   }
 
-  @media (min-width: 900px) {
-    .journey-steps {
-      grid-template-columns: repeat(3, 1fr);
+  /* No motion: the duplicate half comes out and the six steps become a plain
+     swipeable row. */
+  @media (prefers-reduced-motion: reduce) {
+    .journey-marquee {
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
     }
 
-    .marker::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      right: calc(var(--space-3) * -1);
-      top: 50%;
-      height: 1px;
-      background: color-mix(in srgb, var(--green) 22%, transparent);
+    .step {
+      scroll-snap-align: center;
     }
 
-    /* First step in a row starts at its own marker, last one ends at it, so
-       the line never runs off into the margin. */
-    .step:nth-child(3n + 1) .marker::after {
-      left: 50%;
-    }
-
-    .step:nth-child(3n) .marker::after,
-    .step:last-child .marker::after {
-      right: 50%;
+    .step[data-clone] {
+      display: none;
     }
   }
 </style>
