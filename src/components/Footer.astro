@@ -14,12 +14,10 @@ import { HONEYPOT_FIELD, TIMESTAMP_FIELD } from '../lib/quotation/schema';
 
 const year = new Date().getFullYear();
 
-// Split the same NAV_ITEMS the header uses into two footer columns —
-// discovery pages vs. company-facing pages — echoing the multi-column
-// link grouping Owen pointed at (NAVAC Global's own footer). Still one
-// source of truth: order and labels can't drift from the header.
-const EXPLORE_ITEMS = NAV_ITEMS.slice(0, 4);
-const COMPANY_ITEMS = NAV_ITEMS.slice(4);
+// One sitemap column, in header order, from the same NAV_ITEMS the header
+// uses — so labels and order can't drift. It was two columns ("Explore" and
+// "Company"); the second held two links, which left it reading as a stub next
+// to the others.
 
 const SOCIALS = [
   {
@@ -51,112 +49,98 @@ const SOCIALS = [
           with technical support and stock held in Kenya and Ethiopia.
         </p>
         <address>
-          Nairobi, Kenya
-          <br />
           <a href="tel:+254722861682">+254 722 861 682</a>
           <br />
           <a href="mailto:info@propagafrica.com">info@propagafrica.com</a>
         </address>
-      </div>
-
-      <div class="footer-col footer-explore" data-reveal>
-        <p class="eyebrow">Explore</p>
-        <ul>
-          {EXPLORE_ITEMS.map((item) => (
-            <li>
-              <a href={item.href}>{item.label}</a>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div class="footer-col footer-company-links" data-reveal>
-        <p class="eyebrow">Company</p>
-        <ul>
-          {COMPANY_ITEMS.map((item) => (
-            <li>
-              <a href={item.href}>{item.label}</a>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div class="footer-col footer-connect" data-reveal>
-        <p class="eyebrow">Connect</p>
         <ul class="social-list">
           {SOCIALS.map((social) => (
             <li>
-              <span
-                class="social-icon"
-                aria-disabled="true"
-                title={`${social.name} — account not yet live`}
-              >
+              <a class="social-icon" href="#" aria-label={social.name}>
                 <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
                   <path d={social.path} />
                 </svg>
-                <span class="sr-only">{social.name} — account not yet live</span>
-              </span>
+              </a>
             </li>
           ))}
         </ul>
-        <p class="social-note">Accounts launching soon.</p>
-        <a class="btn footer-cta" href="/contact/">
-          Request a Quotation
-        </a>
       </div>
 
-      <div class="footer-col footer-newsletter" data-reveal>
-        <p class="eyebrow">Newsletter</p>
-        <p class="blurb">Occasional notes on stock, seasons and new product lines.</p>
+      <div class="footer-col footer-sitemap" data-reveal>
+        <p class="eyebrow">Sitemap</p>
+        <ul>
+          {NAV_ITEMS.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
 
-        <form
-          id="newsletter-form"
-          class="newsletter-form"
-          method="post"
-          action="/api/subscribe-newsletter"
-        >
-          <label for="newsletter-email" class="sr-only">
-            Email address
-          </label>
-          <div class="newsletter-row">
-            <input
-              id="newsletter-email"
-              name="email"
-              type="email"
-              autocomplete="email"
-              placeholder="you@company.com"
-              maxlength="254"
-              required
-              aria-describedby="newsletter-status"
-            />
-            <button type="submit" class="newsletter-submit">
-              Subscribe
-            </button>
-          </div>
+      <div class="footer-col footer-actions" data-reveal>
+        <div class="action-panel">
+          <p class="eyebrow">Newsletter</p>
+          <p class="blurb">Occasional notes on stock, seasons and new product lines.</p>
 
-          <div class="honeypot" aria-hidden="true">
-            {/* The quotation form carries a honeypot with the same field name,
-                and the footer renders on that page too — so the id here is
-                prefixed to keep it unique in the document. The name is what
-                the script and the endpoint read, and it is unchanged. */}
-            <label for={`newsletter-${HONEYPOT_FIELD}`}>Leave this field blank</label>
-            <input
-              id={`newsletter-${HONEYPOT_FIELD}`}
-              name={HONEYPOT_FIELD}
-              type="text"
-              tabindex="-1"
-              autocomplete="off"
-            />
-          </div>
-          <input type="hidden" id={TIMESTAMP_FIELD} name={TIMESTAMP_FIELD} value="" />
+          <form
+            id="newsletter-form"
+            class="newsletter-form"
+            method="post"
+            action="/api/subscribe-newsletter"
+          >
+            <label for="newsletter-email" class="sr-only">
+              Email address
+            </label>
+            <div class="newsletter-row">
+              <input
+                id="newsletter-email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                placeholder="you@company.com"
+                maxlength="254"
+                required
+                aria-describedby="newsletter-status"
+              />
+              <button type="submit" class="newsletter-submit">
+                Subscribe
+              </button>
+            </div>
 
-          <p
-            id="newsletter-status"
-            class="newsletter-status"
-            role="alert"
-            aria-live="assertive"
-          ></p>
-        </form>
+            <div class="honeypot" aria-hidden="true">
+              {/* The quotation form carries a honeypot with the same field name,
+                  and the footer renders on that page too — so the id here is
+                  prefixed to keep it unique in the document. The name is what
+                  the script and the endpoint read, and it is unchanged. */}
+              <label for={`newsletter-${HONEYPOT_FIELD}`}>Leave this field blank</label>
+              <input
+                id={`newsletter-${HONEYPOT_FIELD}`}
+                name={HONEYPOT_FIELD}
+                type="text"
+                tabindex="-1"
+                autocomplete="off"
+              />
+            </div>
+            <input type="hidden" id={TIMESTAMP_FIELD} name={TIMESTAMP_FIELD} value="" />
+
+            <p
+              id="newsletter-status"
+              class="newsletter-status"
+              role="alert"
+              aria-live="assertive"
+            ></p>
+          </form>
+
+          <hr class="action-rule" />
+
+          <p class="blurb">Ready to order? Tell us your crop, volume and site.</p>
+          <a class="footer-cta" href="/contact/">
+            Request a Quotation
+            <span class="btn-arrow" aria-hidden="true">
+              &rarr;
+            </span>
+          </a>
+        </div>
       </div>
     </div>
 
@@ -252,39 +236,38 @@ const SOCIALS = [
     padding: var(--space-6) var(--side-gutter) var(--space-3);
   }
 
+  /* Three zones: the brand block, one sitemap column, and both actions boxed
+     together in a panel on the right. It was five columns of very unequal
+     weight, which left the four short ones floating beside a brand column
+     twice their height. */
   .footer-grid {
     display: grid;
-    /* One column on the narrowest phones. Two 1fr tracks inside a 320px
-       viewport leave a 116px column, which "Request a Quotation" (nowrap,
-       163px) pushed straight past the viewport edge. */
     grid-template-columns: 1fr;
-    /* Top-align every column instead of the grid default (stretch): each
-       column's heading (or the wordmark, in the brand column) sits on the
-       same line across the row, the way NAVAC Global's own footer does —
-       stretching or centering left the shorter columns' headings drifting
-       to a different height than the taller ones next to them. */
     align-items: start;
     gap: var(--space-5);
   }
 
-  @media (min-width: 520px) {
-    .footer-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
   @media (min-width: 720px) {
     .footer-grid {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 1fr 1fr;
       gap: var(--space-4);
+    }
+
+    /* The action panel takes the full width under the other two until there
+       is room for a third track. */
+    .footer-actions {
+      grid-column: 1 / -1;
     }
   }
 
   @media (min-width: 960px) {
     .footer-grid {
-      /* Connect gets extra room so "Request a Quotation" sits on one line
-         instead of wrapping inside a narrower track. */
-      grid-template-columns: 1.3fr 0.9fr 0.7fr 1.4fr 1.1fr;
+      grid-template-columns: 1.1fr 0.75fr 1.15fr;
+      gap: var(--space-5);
+    }
+
+    .footer-actions {
+      grid-column: auto;
     }
   }
 
@@ -347,27 +330,36 @@ const SOCIALS = [
     white-space: nowrap;
   }
 
-  /* Social icons: deliberately non-interactive spans, not <a href="#">. The accounts don't
-     exist yet, so a real link would either 404 or go nowhere — a muted, labelled placeholder
-     is the honest version until Owen has pages to point these at. */
-  /* Specificity note: needs to beat ".footer-col ul" above (which sets flex-direction: column),
-     so this is qualified with .footer-col rather than left as a bare .social-list rule. */
+  /* Specificity note: needs to beat ".footer-col ul" above (which sets
+     flex-direction: column), so this is qualified with .footer-col rather than
+     left as a bare .social-list rule. */
   .footer-col .social-list {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 10px;
+    margin-top: var(--space-3);
   }
 
-  .social-icon {
+  /* The accounts are not live yet, so these point at "#" — but they are real
+     buttons: they fill green on hover, take a focus ring, and press in on
+     :active, so the control never feels dead under the pointer. */
+  .footer-col .social-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
+    width: 38px;
+    height: 38px;
     border: 1px solid var(--rule);
-    border-radius: 999px;
+    border-radius: 50%;
+    background: var(--white);
     color: var(--soft);
-    cursor: default;
+  }
+
+  .footer-col .social-icon:hover,
+  .footer-col .social-icon:focus-visible {
+    background: var(--green);
+    border-color: var(--green);
+    color: var(--paper);
   }
 
   .social-icon svg {
@@ -380,27 +372,40 @@ const SOCIALS = [
     stroke-linejoin: round;
   }
 
-  .social-note {
-    font-size: 12px;
-    color: var(--soft);
-    margin: var(--space-2) 0 0;
+  /* Both actions in one object, so the footer has a single place to "do
+     something" instead of a button adrift in a nav column. */
+  .action-panel {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-l);
+    padding: var(--space-3);
   }
 
-  /* The Connect column's own CTA, echoing NAVAC Global's "Request a
-     Briefing" pill — same button colours as everywhere else on the site,
-     just rounder (--radius-l, the same radius the nav filter pills use)
-     to read as a pill rather than the square-cornered primary button. */
+  .action-panel .blurb {
+    max-width: none;
+  }
+
+  .action-rule {
+    margin: var(--space-3) 0;
+    border: 0;
+    border-top: 1px solid var(--rule);
+  }
+
   /* .footer-col a (above) sets color: var(--ink) with specificity (class +
      type) that a bare .footer-cta class can't outrank — qualified with the
      parent class here so the button's paper-on-green text actually wins. */
   .footer-col .footer-cta {
-    display: inline-block;
-    margin-top: var(--space-3);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+    width: 100%;
+    margin-top: var(--space-2);
     text-decoration: none;
-    font-size: 13px;
-    white-space: nowrap;
-    padding: 10px 16px;
-    border-radius: var(--radius-l);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 11px 18px;
+    border-radius: var(--radius-s);
     background: var(--green);
     color: var(--paper);
     border: 1px solid var(--green);
@@ -410,6 +415,34 @@ const SOCIALS = [
     background: var(--green-dark);
     border-color: var(--green-dark);
     color: var(--paper);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .footer-col .social-icon,
+    .footer-col .footer-cta {
+      transition:
+        background-color 250ms ease,
+        border-color 250ms ease,
+        color 250ms ease,
+        transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .footer-col .social-icon:hover {
+      transform: translateY(-2px);
+    }
+
+    .footer-col .social-icon:active,
+    .footer-col .footer-cta:active {
+      transform: scale(0.94);
+    }
+
+    .footer-cta .btn-arrow {
+      transition: transform 300ms cubic-bezier(0.2, 0.7, 0.3, 1);
+    }
+
+    .footer-cta:hover .btn-arrow {
+      transform: translateX(3px);
+    }
   }
 
   .newsletter-form {
@@ -434,10 +467,10 @@ const SOCIALS = [
     font-family: var(--f-sans);
     font-size: 14px;
     color: var(--ink);
-    background: var(--paper);
+    background: var(--white);
     border: 1px solid var(--rule);
-    border-radius: 0;
-    padding: 9px 10px;
+    border-radius: var(--radius-s);
+    padding: 10px 12px;
   }
 
   @media (min-width: 720px) {

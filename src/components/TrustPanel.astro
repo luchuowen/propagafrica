@@ -3,27 +3,46 @@
 // blueprint.md's Product Reference lists, verbatim. Shared by the homepage
 // and the About page (blueprint.md Section 12) so the markup and the list
 // content aren't retyped on the second page.
+//
+// The two lists used to sit side by side at identical weight, which made the
+// section read as one table split in half with nothing leading. They are now a
+// dark/light pair: the reasons carry the section on --green-dark, the
+// audiences answer on white. Both are numbered, so each line has a left edge
+// to sit against instead of trailing off into empty ground.
 import { WHY_PARTNER, TARGET_MARKETS } from '../data/trust';
+
+const PANELS = [
+  {
+    tone: 'dark',
+    eyebrow: 'Why us',
+    heading: 'Why partner with PropagAfrica',
+    items: WHY_PARTNER,
+  },
+  {
+    tone: 'light',
+    eyebrow: 'Target markets',
+    heading: 'Who we supply',
+    items: TARGET_MARKETS,
+  },
+] as const;
 ---
 
 <section class="trust">
   <div class="trust-inner" data-reveal-group>
-    <div class="trust-col" data-reveal>
-      <h2>Why partner with Us</h2>
-      <ul class="check-list">
-        {WHY_PARTNER.map((item) => (
-          <li>{item}</li>
-        ))}
-      </ul>
-    </div>
-    <div class="trust-col" data-reveal>
-      <h2>Who we supply</h2>
-      <ul class="check-list">
-        {TARGET_MARKETS.map((item) => (
-          <li>{item}</li>
-        ))}
-      </ul>
-    </div>
+    {PANELS.map((panel) => (
+      <div class:list={['trust-panel', panel.tone]} data-reveal>
+        <p class="eyebrow">{panel.eyebrow}</p>
+        <h2>{panel.heading}</h2>
+        <ol class="trust-list">
+          {panel.items.map((item, i) => (
+            <li>
+              <span class="trust-n">{String(i + 1).padStart(2, '0')}</span>
+              <span class="trust-item">{item}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    ))}
   </div>
 </section>
 
@@ -38,33 +57,100 @@ import { WHY_PARTNER, TARGET_MARKETS } from '../data/trust';
     margin: 0 auto;
     padding: 0 var(--side-gutter);
     display: grid;
-    gap: var(--space-5);
+    gap: var(--space-3);
   }
 
   @media (min-width: 720px) {
     .trust-inner {
       grid-template-columns: repeat(2, 1fr);
-      gap: var(--space-6);
-      align-items: center;
+      align-items: stretch;
     }
   }
 
-  .check-list {
+  /* Both panels carry a 1px border — transparent on the dark one — so their
+     padding boxes start on the same pixel and every row in the left panel
+     lines up with its opposite number on the right. */
+  .trust-panel {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-4);
+    border: 1px solid transparent;
+    border-radius: var(--radius-l);
+  }
+
+  @media (min-width: 720px) {
+    .trust-panel {
+      padding: var(--space-5) var(--space-4);
+    }
+  }
+
+  .trust-panel.dark {
+    background: var(--green-dark);
+    color: var(--paper);
+  }
+
+  .trust-panel.light {
+    background: var(--white);
+    border-color: var(--rule);
+  }
+
+  .trust-panel .eyebrow {
+    margin: 0 0 var(--space-1);
+  }
+
+  .trust-panel.dark .eyebrow {
+    color: var(--paper);
+    opacity: 0.62;
+  }
+
+  .trust-panel h2 {
+    margin: 0;
+    font-size: 23px;
+    letter-spacing: -0.022em;
+    line-height: 1.25;
+  }
+
+  .trust-panel.dark h2 {
+    color: var(--paper);
+  }
+
+  .trust-list {
     list-style: none;
-    margin: var(--space-2) 0 0;
+    margin: var(--space-3) 0 0;
     padding: 0;
+  }
+
+  /* A fixed first column keeps every numeral and every label on the same two
+     vertical rules, in both panels. */
+  .trust-list li {
     display: grid;
-    gap: 0;
-  }
-
-  .check-list li {
-    padding: 6px 0;
+    grid-template-columns: 2.25rem 1fr;
+    align-items: baseline;
+    padding: var(--space-2) 0;
     border-top: 1px solid var(--rule);
-    font-size: 15px;
-    line-height: 1.5;
   }
 
-  .check-list li:first-child {
-    border-top: none;
+  .trust-panel.dark .trust-list li {
+    border-top-color: color-mix(in srgb, var(--paper) 22%, transparent);
+  }
+
+  .trust-n {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--green);
+  }
+
+  /* --mint-bright on --green-dark is 3.76:1 — under AA for 11px text. Lifting
+     it towards paper takes the numeral to 5.3:1 while it still reads as the
+     accent rather than plain white. */
+  .trust-panel.dark .trust-n {
+    color: color-mix(in srgb, var(--mint-bright) 70%, var(--paper));
+  }
+
+  .trust-item {
+    font-size: 15.5px;
+    line-height: 1.45;
   }
 </style>
