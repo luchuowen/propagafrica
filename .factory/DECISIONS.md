@@ -161,3 +161,10 @@ instead of opened one at a time. `isYes()` reads `.checked` instead of
 `.value === 'yes'` — the calculation logic itself is untouched. All locked
 copy (disclaimer, hints, packaging note) is unchanged, same show/hide
 behaviour per field as before.
+
+## About team photos reverted to their pre-rebuild size (2026-09-16)
+
+Owner call. The About rebuild (session 9) widened `.photo-grid` from
+`repeat(3, 1fr)` to `repeat(2, 1fr)` and `--radius-s` to `--radius-l` for
+the two team photographs — with only two photos, that read as too large.
+Reverted both to the pre-rebuild values; nothing else on the page changed.
