@@ -12,9 +12,9 @@ Nav: Home / Products / Tools / Field Notes / About / Contact
 
 ## Section 1 -- Homepage (/)
 
-Eyebrow: "Propagation inputs and systems, East Africa"
-H1: "Propagation supplies for nurseries and flower farms across Kenya and Ethiopia"
-Sub-head: "PropagAfrica Technologies supplies the grafting tubes, clips, nursery consumables, propagation systems, sanitation products and monitoring tools that commercial growers depend on, with technical support and stock held in both countries."
+Eyebrow: "Propagation inputs and systems, Africa"
+H1: "Propagation supplies for nurseries and flower farms across Africa"
+Sub-head: "PropagAfrica Technologies supplies the grafting tubes, clips, nursery consumables, propagation systems, sanitation products and monitoring tools that commercial growers across Africa depend on, with technical support and stock held in Kenya and Ethiopia."
 Primary CTA: "Request a Quotation". Secondary CTA: "Browse products".
 Hero carousel captions (5 slides, hero-01..05.jpg):
 
@@ -40,7 +40,7 @@ Hero carousel captions (5 slides, hero-01..05.jpg):
 
 Eyebrow: "Full range"
 H1: "Everything a propagation nursery runs on"
-Sub: "Seven product families, sourced and stocked for commercial growers in Kenya and Ethiopia. Filter by what you grow, or browse the full range below."
+Sub: "Seven product families for commercial growers across Africa, sourced and stocked in Kenya and Ethiopia. Filter by what you grow, or browse the full range below."
 Shop-by-crop filter: Roses and ornamentals / Vegetables and cucurbits / Fruit trees / Nursery and facility supplies (client-side tag filter; systems, sanitation, monitoring and services tagged "Nursery and facility supplies").
 7 cards in flyer order: name, card descriptor, "View range" link, key-products preview (first 4 bullets of that family). The card descriptor is a 90-107 character line drawn from that family's own flyer copy below -- its intro, key products, specifications and packaging -- so the seven cards read as an even two lines each. It adds no fact that is not already in this file. Each family page still opens with its own verbatim intro and tagline, unchanged; the cards no longer repeat the tagline. Descriptors: Grafting Tubes -- "Medical-grade silicone tubes in 3.5mm to 8.5mm, for roses, ornamentals, vegetables and fruit trees." Grafting Clips -- "Precision clips in five types, sized by stem diameter for strong unions on roses, vegetables and trees." Nursery Consumables -- "Trays, pots, labels, ties, domes and cutting tools for a clean, efficient and productive nursery." Propagation Systems -- "Misting, climate control, irrigation and benching, designed and installed for your site and crop." Sanitation Products -- "Disinfectants, footbaths, water treatment and PPE for a disease-free nursery, in 5L to 1,000L packs." Propagation Monitoring -- "Temperature, humidity, VPD and soil-moisture sensors on a dashboard you can check from a phone." Technical Services -- "Training, nursery setup and design, crop protocols and troubleshooting, on-site or virtual."
 
@@ -120,7 +120,7 @@ Full calculator input fields and logic are specified in the Build Workbook's Cal
 
 Eyebrow: "Field Notes"
 H1: "Practical guidance for propagation nurseries"
-Sub: "Short, practical articles on grafting, propagation environment and nursery operations, written for growers in Kenya and Ethiopia."
+Sub: "Short, practical articles on grafting, propagation environment and nursery operations, written for growers across Africa."
 5 articles listed below in full -- publish exactly as written, do not shorten or paraphrase.
 
 ### Article -- choosing-the-right-graft-tube-size
@@ -171,7 +171,7 @@ PropagAfrica designs and installs propagation systems in this order and can also
 ## Section 12 -- About (/about/)
 
 Eyebrow: "About PropagAfrica Technologies"
-H1: "Propagation inputs and systems for East African horticulture"
+H1: "Propagation inputs and systems for African horticulture"
 Body: "PropagAfrica Technologies supplies the grafting tubes, clips, nursery consumables, propagation systems, sanitation products and monitoring tools that commercial nurseries, flower farms and fruit and vegetable growers run on, with stock held in Kenya and Ethiopia and technical support from setup through to season one.
 We work with commercial flower growers, vegetable and fruit growers, nurseries and propagation labs, agri-businesses and distributors, and research and training institutions -- supplying products sourced from established manufacturers, alongside the technical expertise to specify, install and troubleshoot the systems around them.
 Our team supports customers on-site, virtually and at the farm, from choosing the right tube and clip for a graft run through to designing and installing a full propagation system and its monitoring."

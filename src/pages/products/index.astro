@@ -7,15 +7,15 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
 
 <BaseLayout
   title="Products"
-  description="Seven product families, sourced and stocked for commercial growers in Kenya and Ethiopia. Filter by what you grow, or browse the full range below."
+  description="Seven product families for commercial growers across Africa, sourced and stocked in Kenya and Ethiopia. Filter by what you grow, or browse the full range below."
 >
   <section class="hub">
     <div class="hub-inner">
       <p class="eyebrow">Full range</p>
       <h1>Everything a propagation nursery runs on</h1>
       <p class="hub-sub">
-        Seven product families, sourced and stocked for commercial growers in Kenya and Ethiopia.
-        Filter by what you grow, or browse the full range below.
+        Seven product families for commercial growers across Africa, sourced and stocked in Kenya
+        and Ethiopia. Filter by what you grow, or browse the full range below.
       </p>
 
       <div class="filter-pills" role="group" aria-label="Filter products by what you grow">
@@ -97,6 +97,15 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
     flex-wrap: wrap;
     gap: var(--space-2);
     margin-top: var(--space-5);
+  }
+
+  /* The crop filter only ever narrows this page's own 7-card grid — on a
+     phone it's a row of chips that cost more vertical space than the
+     filtering saves. Desktop is unchanged. */
+  @media (max-width: 640px) {
+    .filter-pills {
+      display: none;
+    }
   }
 
   .pill {

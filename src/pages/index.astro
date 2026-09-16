@@ -147,16 +147,19 @@ const outcomes = [
 const families = PRODUCT_FAMILIES.filter((f) => f.slug !== 'technical-services');
 
 // Services 3-up — blueprint.md Section 9, first three "Our Services" bullets.
+// `short` only differs from `full` where the full line wraps to two lines on
+// a phone while its siblings sit on one — a mobile-only display swap, not a
+// reword of the locked copy, which still ships in full for desktop.
 const services = [
-  'Propagation training and workshops',
-  'On-site technical support',
-  'Nursery setup and design',
+  { full: 'Propagation training and workshops', short: 'Propagation training' },
+  { full: 'On-site technical support', short: 'On-site technical support' },
+  { full: 'Nursery setup and design', short: 'Nursery setup and design' },
 ];
 ---
 
 <BaseLayout
-  title="Propagation supplies for nurseries and flower farms across Kenya and Ethiopia"
-  description="PropagAfrica Technologies supplies the grafting tubes, clips, nursery consumables, propagation systems, sanitation products and monitoring tools that commercial growers depend on, with technical support and stock held in both countries."
+  title="Propagation supplies for nurseries and flower farms across Africa"
+  description="PropagAfrica Technologies supplies the grafting tubes, clips, nursery consumables, propagation systems, sanitation products and monitoring tools that commercial growers across Africa depend on, with technical support and stock held in Kenya and Ethiopia."
   jsonLd={jsonLd}
 >
   <!-- Hero -->
@@ -164,7 +167,7 @@ const services = [
     <Carousel slides={heroSlides} label="Featured product ranges" variant="hero" />
     <div class="hero-copy">
       <div class="hero-copy-inner">
-        <h1>Propagation supplies for nurseries and flower farms across Kenya and Ethiopia</h1>
+        <h1>Propagation supplies for nurseries and flower farms across Africa</h1>
         <!-- blueprint.md Section 1 sub-head is locked, verbatim copy — kept in full for
              desktop. The mobile-only line below is a condensed reading of the same
              sentence, not a rewrite, swapped in purely by CSS so the full copy still
@@ -172,11 +175,11 @@ const services = [
         <p class="hero-sub hero-sub-full">
           PropagAfrica Technologies supplies the grafting tubes, clips, nursery consumables,
           propagation systems, sanitation products and monitoring tools that commercial growers
-          depend on, with technical support and stock held in both countries.
+          across Africa depend on, with technical support and stock held in Kenya and Ethiopia.
         </p>
         <p class="hero-sub hero-sub-short">
-          Grafting supplies, nursery consumables and monitoring tools, with technical support and
-          stock held in Kenya and Ethiopia.
+          Grafting supplies, nursery consumables and monitoring tools for growers across Africa,
+          with stock held in Kenya and Ethiopia.
         </p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="/contact/">
@@ -334,7 +337,10 @@ const services = [
             <li class="service" data-reveal>
               <a class="service-row" href="/products/technical-services/">
                 <span class="service-n">{String(i + 1).padStart(2, '0')}</span>
-                <span class="service-title">{s}</span>
+                <span class="service-title">
+                  <span class="service-title-full">{s.full}</span>
+                  <span class="service-title-short">{s.short}</span>
+                </span>
                 <span class="service-arrow" aria-hidden="true">
                   &rarr;
                 </span>
@@ -1013,6 +1019,20 @@ const services = [
     line-height: 1.3;
   }
 
+  .service-title-short {
+    display: none;
+  }
+
+  @media (max-width: 640px) {
+    .service-title-full {
+      display: none;
+    }
+
+    .service-title-short {
+      display: inline;
+    }
+  }
+
   .service-arrow {
     font-size: 18px;
     line-height: 1;
@@ -1105,8 +1125,12 @@ const services = [
       margin-right: auto;
     }
 
+    /* The crop filter only ever narrows a 6-card grid that already fits one
+       mobile screen without scrolling far — on a phone it's a row of chips
+       that cost more vertical space than the filtering saves. Desktop is
+       unchanged. */
     .filter-pills {
-      justify-content: center;
+      display: none;
     }
 
     .monitoring-copy {

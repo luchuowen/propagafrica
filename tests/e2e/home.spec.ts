@@ -19,7 +19,7 @@ test.describe('home page', () => {
     await page.goto('/');
     const h1 = page.locator('h1');
     await expect(h1).toHaveText(
-      'Propagation supplies for nurseries and flower farms across Kenya and Ethiopia',
+      'Propagation supplies for nurseries and flower farms across Africa',
     );
   });
 
