@@ -206,3 +206,22 @@ fills on hover. The heading link stretches over the whole card, so there is one
 link per card and it keeps the focus ring. Homepage teaser and /products/ share
 the design; only the hub adds the key-products list. Filter pills went white to
 match.
+
+## Facilities cards, monitoring readings and the dark-section button (2026-09-16)
+
+The grid carousel's card was a beige slab holding 13.5px grey text, with the
+prev/next arrows sitting on top of the first and last photographs. It is now
+the same white mount the product grid uses: photograph inset on --radius-m,
+caption on the card's own white in --ink at 15px, led by a mono NN / NN index
+so the row reads as one numbered set. The arrows moved to a rail above the row,
+right-aligned, and ride up beside the section heading from 900px; nothing
+overlaps a photograph any more. A hairline progress rule under the row marks
+position, and counts only the lanes actually on screen, since below 900px a
+grid carousel shows one.
+
+The monitoring readings dropped to 14px mono over a 10px label and the second
+one reads "Average zone temp 24.6C" (blueprint.md Section 1 updated), so both
+sit on one line; they never wrap mid-value, so the pair goes single-column
+below 520px rather than pushing the longer figure off a 320px screen. The
+section's CTA became .btn-on-dark - paper fill, --green-dark ink, the arrow
+sliding on hover - because on --green-dark a green button disappears.

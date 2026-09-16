@@ -282,11 +282,14 @@ const services = [
           </div>
           <div>
             <dt>Example reading</dt>
-            <dd>Average zone temperature 24.6&deg;C</dd>
+            <dd>Average zone temp 24.6&deg;C</dd>
           </div>
         </dl>
-        <a class="link-arrow light" href="/products/monitoring/">
-          See Propagation Monitoring &rarr;
+        <a class="btn btn-on-dark" href="/products/monitoring/">
+          See Propagation Monitoring
+          <span class="btn-arrow" aria-hidden="true">
+            &rarr;
+          </span>
         </a>
       </div>
       <div class="monitoring-media" data-reveal style="--reveal-delay: 120ms">
@@ -448,6 +451,33 @@ const services = [
   .btn-ghost {
     color: var(--paper);
     border-color: rgba(255, 255, 255, 0.55);
+  }
+
+  /* The solid counterpart to .btn-primary, for the dark sections: on
+     --green-dark a green fill disappears, so the paper takes the fill and the
+     green becomes the ink. */
+  .btn-on-dark {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    background: var(--paper);
+    color: var(--green-dark);
+    border-color: var(--paper);
+  }
+
+  .btn-on-dark:hover {
+    background: var(--mint);
+    border-color: var(--mint);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .btn-arrow {
+      transition: transform 300ms cubic-bezier(0.2, 0.7, 0.3, 1);
+    }
+
+    .btn-on-dark:hover .btn-arrow {
+      transform: translateX(3px);
+    }
   }
 
   .btn-ghost:hover {
@@ -816,11 +846,19 @@ const services = [
     max-width: 52ch;
   }
 
+  /* One column on a narrow screen: the readings never wrap mid-value, so two
+     columns below ~520px would push the longer figure past the viewport. */
   .readings {
     margin: var(--space-4) 0 0;
     display: grid;
     gap: var(--space-2);
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (min-width: 520px) {
+    .readings {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   .readings > div {
@@ -830,19 +868,27 @@ const services = [
 
   .readings dt {
     font-family: var(--f-mono);
-    font-size: 10.5px;
-    letter-spacing: 0.1em;
+    font-size: 10px;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--paper);
-    opacity: 0.68;
+    opacity: 0.62;
   }
 
+  /* Both readings sit on one line at every width the two-column grid holds —
+     the mono figure is the point, so it never wraps mid-value. */
   .readings dd {
-    margin: 2px 0 0;
+    margin: 6px 0 0;
     font-family: var(--f-mono);
-    font-size: 16px;
+    font-size: 14px;
+    letter-spacing: -0.01em;
     font-variant-numeric: tabular-nums;
+    white-space: nowrap;
     color: var(--paper);
+  }
+
+  .monitoring .btn-on-dark {
+    margin-top: var(--space-4);
   }
 
   .monitoring-media img {
