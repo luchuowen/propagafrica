@@ -235,3 +235,13 @@ commit (`083281d`, the same one `claude/eloquent-euler-cc6v7j` — this repo's
 misconfigured GitHub default branch — still points at). All of the above was
 done after resetting it onto `origin/main` (tip `8a8217a`, includes the
 `claude/og-card` work), which is what the live site actually runs.
+
+## Positioning broadened to "Africa"; operational facts untouched (2026-09-16)
+
+Owner call: reframe market-facing copy (hero, About, Products/Field Notes
+hub subs, meta) from "Kenya and Ethiopia" to "across Africa" — but leave
+every operational fact as Kenya and Ethiopia (stock, Nairobi HQ/hub, the
+contact form's Country field, JSON-LD `areaServed`, facility captions).
+The homepage "Facilities in use" heading also stays Kenya/Ethiopia — every
+photo under it is captioned to one of those two, so broadening it would
+overclaim what the carousel shows.
