@@ -142,3 +142,13 @@ fixed 2.25rem first column, so every row lines up with its opposite number, and
 both panels carry a 1px border - transparent on the dark one - so their padding
 boxes start on the same pixel. --mint-bright numerals on --green-dark measure
 3.76:1, under AA at 11px, so they are mixed 70/30 towards --paper for 5.3:1.
+
+## The journey loop shows three steps, not six (2026-09-16)
+
+Six 190-230px cards on screen at once read as a wall of thumbnails. The step is
+now clamp(260px, 31vw, 560px) with a --space-3 gutter, so roughly three are on
+screen at any moment and each photograph has room; the caption went back up to
+17px. The loop slowed to 72s to hold the same ~40px a second now that a full
+pass covers more ground. Nothing else about the loop changed - still six steps
+plus an inert clone half, still paused on hover and focus, still a scroll-
+snapped row under prefers-reduced-motion.
