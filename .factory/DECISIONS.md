@@ -186,3 +186,23 @@ The edges dissolve with `mask-image`, not a painted overlay. That needed the
 `background-image`, `border-image`, `fill` or `stroke`, and lets one through in
 `mask-image`, which is an alpha ramp rather than decoration. The CLAUDE.md ban
 on gradients still means paint.
+
+## Product family cards: white mount, rebalanced card copy (2026-09-16)
+
+The seven cards carried the family's verbatim flyer intro. Those run 63 to 167
+characters, so the grid was ragged and one card did most of the talking. Card
+descriptors are now a separate 90-107 character line in families.ts, every fact
+drawn from that family's own flyer copy already in blueprint.md - intro, key
+products, specifications, packaging. Nothing new is asserted, and each family
+page still opens with its own verbatim intro, unchanged. blueprint.md Section 2
+carries the seven descriptors so the copy still has one source.
+
+The card is a white mount with the photograph inset on --radius-m, not a beige
+block with the photograph bled to its edge: the owner asked for less beige. The
+flyer tagline moved up to a mono eyebrow with a terra dot, with two lines
+reserved so every family name in a row sits on the same baseline; the CTA is
+pinned to the card's bottom edge as a green label plus an outlined arrow that
+fills on hover. The heading link stretches over the whole card, so there is one
+link per card and it keeps the focus ring. Homepage teaser and /products/ share
+the design; only the hub adds the key-products list. Filter pills went white to
+match.

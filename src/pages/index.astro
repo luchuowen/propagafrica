@@ -232,13 +232,17 @@ const services = [
               <img src={f.img} alt="" loading="lazy" />
             </div>
             <div class="product-body">
+              <p class="product-tagline">{f.tagline}</p>
               <h3>
                 <a href={f.href}>{f.name}</a>
               </h3>
-              <p>{f.descriptor}</p>
-              <a class="link-arrow" href={f.href}>
-                View range &rarr;
-              </a>
+              <p class="product-descriptor">{f.descriptor}</p>
+              <span class="product-foot">
+                <span>View range</span>
+                <span class="product-arrow" aria-hidden="true">
+                  &rarr;
+                </span>
+              </span>
             </div>
           </li>
         ))}
@@ -552,7 +556,7 @@ const services = [
     padding: 8px 16px;
     border-radius: var(--radius-l);
     border: 1px solid var(--rule);
-    background: var(--paper);
+    background: var(--white);
     color: var(--ink);
     cursor: pointer;
   }
@@ -588,19 +592,24 @@ const services = [
     }
   }
 
+  /* A white mount with the photograph inset on it, rather than a beige block
+     with the photograph bled to its edge. The card is the quiet part; the
+     photograph and the green CTA carry the weight. */
   .product-card {
+    position: relative;
     display: flex;
     flex-direction: column;
     border: 1px solid var(--rule);
-    border-radius: var(--radius-m);
-    overflow: hidden;
-    background: var(--paper);
+    border-radius: var(--radius-l);
+    padding: 10px;
+    background: var(--white);
   }
 
   .product-media {
     display: block;
     aspect-ratio: 4 / 3;
     overflow: hidden;
+    border-radius: var(--radius-m);
     background: var(--mint);
   }
 
@@ -611,30 +620,133 @@ const services = [
     display: block;
   }
 
+  @media (prefers-reduced-motion: no-preference) {
+    .product-card {
+      transition:
+        transform 300ms cubic-bezier(0.2, 0.7, 0.3, 1),
+        box-shadow 300ms ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .product-media img {
+      transition: transform 600ms ease;
+    }
+
+    .product-card:hover .product-media img {
+      transform: scale(1.04);
+    }
+
+    .product-arrow {
+      transition:
+        background-color 300ms ease,
+        border-color 300ms ease,
+        color 300ms ease,
+        transform 300ms cubic-bezier(0.2, 0.7, 0.3, 1);
+    }
+
+    .product-card:hover .product-arrow {
+      transform: translateX(3px);
+    }
+  }
+
   .product-body {
     display: flex;
     flex-direction: column;
     flex: 1;
-    padding: var(--space-3);
+    padding: var(--space-3) 14px 14px;
+  }
+
+  /* The family's own flyer tagline, as the card's eyebrow. Two lines are
+     reserved for it whether it needs them or not, so every family name in the
+     row sits on the same baseline. */
+  .product-tagline {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    min-height: 2.9em;
+    margin: 0 0 var(--space-1);
+    font-family: var(--f-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    line-height: 1.45;
+    text-transform: uppercase;
+    color: var(--soft);
+  }
+
+  .product-tagline::before {
+    content: '';
+    flex: 0 0 auto;
+    width: 6px;
+    height: 6px;
+    margin-top: 0.4em;
+    border-radius: 50%;
+    background: var(--terra);
   }
 
   .product-body h3 {
-    font-size: 18px;
+    font-size: 21px;
+    letter-spacing: -0.022em;
+    line-height: 1.2;
   }
 
   .product-body h3 a {
     text-decoration: none;
   }
 
+  /* The whole card is the target; the heading link carries the accessible
+     name and the focus ring. */
+  .product-body h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-l);
+  }
+
   .product-body h3 a:hover {
     text-decoration: underline;
   }
 
-  .product-body p {
+  .product-descriptor {
     margin-top: var(--space-2);
-    font-size: 14.5px;
-    line-height: 1.55;
+    font-size: 15px;
+    line-height: 1.6;
     color: var(--soft);
+  }
+
+  /* Pinned to the bottom of the card so every "View range" in the row lines
+     up, whatever the descriptor does. */
+  .product-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin-top: auto;
+    padding-top: var(--space-3);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--green);
+  }
+
+  .product-arrow {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+    color: var(--green);
+  }
+
+  .product-card:hover .product-arrow {
+    background: var(--green);
+    border-color: var(--green);
+    color: var(--white);
   }
 
   .filter-empty {
@@ -650,16 +762,6 @@ const services = [
     font-size: 14px;
     color: var(--green);
     text-decoration: none;
-  }
-
-  /* Pin the CTA to the bottom of the card instead of letting it sit right
-     under whichever description happens to be shortest — the grid stretches
-     every card to match the tallest one already (CSS Grid default), so this
-     is what actually lines every "View range" link up, without touching a
-     word of the (verbatim, blueprint.md) descriptor copy. */
-  .product-body .link-arrow {
-    margin-top: auto;
-    padding-top: var(--space-3);
   }
 
   .link-arrow:hover {
