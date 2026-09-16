@@ -225,3 +225,18 @@ sit on one line; they never wrap mid-value, so the pair goes single-column
 below 520px rather than pushing the longer figure off a 320px screen. The
 section's CTA became .btn-on-dark - paper fill, --green-dark ink, the arrow
 sliding on hover - because on --green-dark a green button disappears.
+
+## Technical Services is a ruled index, not three boxes (2026-09-16)
+
+The 3-up was three tinted cards about 310px tall holding one 17px label each -
+roughly 85% empty - and the tints used --terra and --gold as full-card fills,
+which the token contract reserves for dots and small graphic details. Neither
+the flyer nor blueprint.md carries body copy per service, so the fix was a form
+that suits a short label rather than a bigger box.
+
+It is now a ruled index: hairline rows the width of the column, a mono numeral
+in --green, the label at 19px, and an outlined arrow that fills green on hover
+while the row indents. The trailing text link became the standard
+.btn-primary, and .btn-arrow now slides on any button rather than only the one
+on dark. The three accent colours survive where they belong - the tri-colour
+bar under the hero and the outcome panels.
