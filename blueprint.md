@@ -176,7 +176,13 @@ Body: "PropagAfrica Technologies supplies the grafting tubes, clips, nursery con
 We work with commercial flower growers, vegetable and fruit growers, nurseries and propagation labs, agri-businesses and distributors, and research and training institutions -- supplying products sourced from established manufacturers, alongside the technical expertise to specify, install and troubleshoot the systems around them.
 Our team supports customers on-site, virtually and at the farm, from choosing the right tube and clip for a graft run through to designing and installing a full propagation system and its monitoring."
 Why partner list and Target markets list: verbatim, see Product Reference section below.
-Contact block: phone, email, Nairobi Kenya, stock held in Kenya and Ethiopia.
+No contact block: the footer carries phone, email and the strap line on every page, and
+Section 13 is the contact page, so repeating it here was a third copy. The operating facts
+appear instead as a ruled strip under the H1 -- "Seven product families" (Section 2),
+"Stock held in Kenya and Ethiopia" (Global) and "On-site, virtual and farm-based support"
+(Section 9 Includes). Page order: hero spread, facts strip, lead photograph
+(nairobi-hub.jpg), "How we work" prose band, Why partner / Who we supply, team
+photographs, Request a Quotation.
 
 ## Section 13 -- Contact (/contact/)
 
