@@ -108,6 +108,7 @@ Owner call, checked against a reference file: the brand type is Inter
 throughout (this design direction's token comment already says so — "no
 serif anywhere" — so no second typeface was introduced). Two real gaps
 found and fixed rather than a cosmetic pass:
+
 - `functions/src/render.ts` (the no-JS form-submission fallback page — a
   real destination, not a dead end) hard-coded
   `-apple-system, system-ui, sans-serif` instead of the site's Inter, so a
