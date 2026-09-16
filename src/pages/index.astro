@@ -334,7 +334,6 @@ const services = [
             </li>
           ))}
         </ul>
-        <p class="services-note">On-site, virtual and farm-based support</p>
         <a class="btn btn-primary services-all" href="/products/technical-services/">
           See all Technical Services
           <span class="btn-arrow" aria-hidden="true">
@@ -896,20 +895,20 @@ const services = [
      Halving the measure brings the arrow back to the text, and the photograph
      gives the section the image every other band on this page has. */
   .services {
-    padding: var(--space-6) 0;
+    padding: var(--space-5) 0;
     background: var(--white);
   }
 
   .services-inner {
     display: grid;
     gap: var(--space-4);
-    align-items: start;
   }
 
   @media (min-width: 900px) {
     .services-inner {
-      grid-template-columns: 0.95fr 1.05fr;
-      gap: var(--space-6);
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: var(--space-5);
+      align-items: stretch;
     }
   }
 
@@ -918,10 +917,8 @@ const services = [
   }
 
   /* height: auto so the intrinsic size does not beat aspect-ratio — the same
-     presentational-hint trap the About page photographs hit. */
-  /* Portrait only once the photograph is a column beside the index. Stacked on
-     a phone a 4:5 crop is most of a screen on its own, so it lands there as a
-     landscape band instead. */
+     presentational-hint trap the About page photographs hit. Stacked, the
+     photograph is a landscape band: a tall crop is most of a phone screen. */
   .services-fig img {
     display: block;
     width: 100%;
@@ -932,34 +929,35 @@ const services = [
     background: var(--green-dark);
   }
 
+  /* Beside the index the photograph takes its height from the column next to
+     it rather than from a ratio of its own. A fixed 4:5 made it the taller of
+     the two by ~200px, and that surplus was dead white space under the CTA —
+     the section was sized by the picture instead of by its content. */
   @media (min-width: 900px) {
+    .services-fig {
+      position: relative;
+      min-height: 100%;
+    }
+
     .services-fig img {
-      aspect-ratio: 4 / 5;
+      position: absolute;
+      inset: 0;
+      height: 100%;
+      aspect-ratio: auto;
     }
   }
 
   .services-intro {
-    margin: var(--space-3) 0 0;
-    max-width: 46ch;
-    font-size: 17px;
-    line-height: 1.65;
-    color: var(--soft);
-  }
-
-  /* blueprint.md Section 9 "Includes", set as a spec label rather than body
-     copy — it qualifies the list above it, it is not another sentence. */
-  .services-note {
-    margin: var(--space-3) 0 0;
-    font-family: var(--f-mono);
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    margin: var(--space-2) 0 0;
+    max-width: 44ch;
+    font-size: 16px;
+    line-height: 1.6;
     color: var(--soft);
   }
 
   .services-list {
     list-style: none;
-    margin: var(--space-4) 0 0;
+    margin: var(--space-3) 0 0;
     padding: 0;
     border-top: 1px solid var(--rule);
   }
@@ -973,7 +971,7 @@ const services = [
     grid-template-columns: 2.5rem 1fr auto;
     align-items: center;
     gap: var(--space-2);
-    padding: var(--space-3) 0;
+    padding: 14px 0;
     text-decoration: none;
     color: var(--ink);
   }
@@ -1022,7 +1020,7 @@ const services = [
     display: inline-flex;
     align-items: center;
     gap: var(--space-1);
-    margin-top: var(--space-4);
+    margin-top: var(--space-3);
   }
 
   /* ---------- CTA band ---------- */
