@@ -65,7 +65,7 @@ import {
             placeholder={field.placeholder}
             maxlength={field.maxLength}
             required={field.required}
-            rows={5}
+            rows={4}
             aria-describedby={errorId}
             aria-required={field.required}
           ></textarea>
@@ -380,11 +380,33 @@ import {
 </script>
 
 <style>
+  /* Name/Company and Email/Phone pair up as two columns; Country,
+     Enquiring-about and Message each force their own full-width row via
+     [data-field] below — no change to the field list or its order, so a
+     future field is placed by its own type (a short text/email/tel field
+     pairs, a select/multi-select/textarea spans). */
   .quote-form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    max-width: 640px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2) var(--space-3);
+  }
+
+  .field[data-field='country'],
+  .field[data-field='enquiringAbout'],
+  .field[data-field='message'] {
+    grid-column: 1 / -1;
+  }
+
+  .form-status,
+  .submit-row,
+  .privacy-note {
+    grid-column: 1 / -1;
+  }
+
+  @media (max-width: 560px) {
+    .quote-form {
+      grid-template-columns: 1fr;
+    }
   }
 
   .field {
@@ -405,25 +427,37 @@ import {
     padding: 0;
   }
 
+  /* Wrapping chips rather than one checkbox per line — the seven options
+     read at a glance in two rows instead of stretching the card down
+     seven lines. Still plain checkboxes underneath: same name/value pairs,
+     same keyboard and screen-reader behaviour, only the layout changed. */
   fieldset {
     border: none;
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column;
-    gap: 6px;
+    flex-wrap: wrap;
+    gap: 8px;
   }
 
   .checkbox-option {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-l);
+  }
+
+  .checkbox-option:has(:checked) {
+    border-color: var(--green);
+    background: var(--mint);
   }
 
   .checkbox-option label {
     font-family: var(--f-sans);
-    font-size: 15px;
-    font-weight: 400;
+    font-size: 13.5px;
+    font-weight: 500;
   }
 
   .required {
@@ -451,6 +485,7 @@ import {
   .checkbox-option input {
     width: auto;
     padding: 0;
+    accent-color: var(--green);
   }
 
   textarea {

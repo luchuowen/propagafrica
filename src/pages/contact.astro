@@ -57,6 +57,7 @@ import QuoteForm from '../components/quote/QuoteForm.astro';
   .contact-hero {
     padding: var(--space-6) 0 var(--space-5);
     border-bottom: 1px solid var(--rule);
+    background: var(--white);
   }
 
   .contact-hero-inner {
@@ -98,24 +99,24 @@ import QuoteForm from '../components/quote/QuoteForm.astro';
     }
   }
 
-  /* Both the form and the direct-contact panel are paper-toned cards
-     sitting on the section's white ground — the same "card vs. section"
-     contrast used for the product/tools/field-notes cards elsewhere, so
-     the form doesn't sit as bare fields directly on the page background. */
+  /* Both the form and the direct-contact panel are white cards sitting on
+     the section's white ground, distinguished by border + shadow only —
+     the same "card vs. section" contrast used for the product/tools/
+     field-notes cards elsewhere, none of which use --paper as a card fill. */
   .contact-form-card {
-    background: var(--paper);
+    background: var(--white);
     border: 1px solid var(--rule);
-    border-radius: var(--radius-m);
+    border-radius: var(--radius-l);
     box-shadow: var(--shadow-soft);
     padding: var(--space-4);
   }
 
   .contact-panel {
     border: 1px solid var(--rule);
-    border-radius: var(--radius-m);
+    border-radius: var(--radius-l);
     box-shadow: var(--shadow-soft);
     overflow: hidden;
-    background: var(--paper);
+    background: var(--white);
   }
 
   .panel-media img {

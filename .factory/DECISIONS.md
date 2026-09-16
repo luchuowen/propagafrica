@@ -168,3 +168,32 @@ Owner call. The About rebuild (session 9) widened `.photo-grid` from
 `repeat(3, 1fr)` to `repeat(2, 1fr)` and `--radius-s` to `--radius-l` for
 the two team photographs — with only two photos, that read as too large.
 Reverted both to the pre-rebuild values; nothing else on the page changed.
+
+A third team photo (`team-03.jpg`) now fills the grid's third cell —
+reused from `/products/technical-services/01.jpg` (a technician walking a
+customer through a controller on site), a real, already-vetted brand photo
+rather than a generated one. Added to `docs/image-manifest.md` alongside
+the other two.
+
+## Contact page rebuilt: no beige, compact paired-field form (2026-09-16)
+
+Owner call ("1/10"), reviewed against a screenshotted mockup first. The
+whole page was the one place still using `--paper` as a card fill —
+`.contact-hero`, `.contact-form-card` and `.contact-panel` are all
+`--white` now (radius bumped `--radius-m` → `--radius-l` to match).
+
+`QuoteForm.astro`'s seven fields were one full-width column; `.quote-form`
+is now a 2-column grid, with Country/Enquiring-about/Message forced to
+`grid-column: 1 / -1` via their existing `[data-field]` attribute — Name
+pairs with Company, Email with Phone, entirely through CSS (the field
+list, order and the render loop are untouched). The seven-option
+"Enquiring about" checkbox list was one option per line; the `<fieldset>`
+now wraps as chips (still plain checkboxes — same name/value pairs, same
+keyboard behaviour), highlighted via `:has(:checked)` rather than a script
+change. Textarea trimmed 5 rows → 4. No copy changed.
+
+## Journey loop captions: lighter and smaller (2026-09-16)
+
+Owner call. `.caption` in `JourneySteps.astro` was 17px/600 weight, reading
+heavier than the mono step numerals beside it; now 14px/400, tracking and
+line-height adjusted to match.
