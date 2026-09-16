@@ -67,6 +67,7 @@ filename and extension. No code changes needed.**
 | `/public/images/products/technical-services/04.jpg`                           | 4:3    | 1000w | Technical Services                               |
 | `/public/images/about/team-01.jpg`                                            | 4:3    | 1200w | About                                            |
 | `/public/images/about/team-02.jpg`                                            | 4:3    | 1200w | About                                            |
+| `/public/images/about/team-03.jpg`                                            | 4:3    | 1200w | About                                            |
 | `/public/images/about/nairobi-hub.jpg`                                        | 4:3    | 1200w | About                                            |
 | `/public/images/field-notes/choosing-the-right-graft-tube-size/cover.jpg`     | 16:9   | 1200w | Field Notes article                              |
 | `/public/images/field-notes/humidity-and-vpd-during-rooting/cover.jpg`        | 16:9   | 1200w | Field Notes article                              |
