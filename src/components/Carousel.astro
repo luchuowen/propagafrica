@@ -424,6 +424,12 @@ function assetVariants(src: string) {
     color: var(--soft);
   }
 
+  @media (max-width: 640px) {
+    [data-variant='grid'] .caption {
+      text-align: center;
+    }
+  }
+
   .caption.is-active {
     opacity: 1;
     visibility: visible;
