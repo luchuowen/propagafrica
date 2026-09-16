@@ -1105,8 +1105,12 @@ const services = [
       margin-right: auto;
     }
 
+    /* The crop filter only ever narrows a 6-card grid that already fits one
+       mobile screen without scrolling far — on a phone it's a row of chips
+       that cost more vertical space than the filtering saves. Desktop is
+       unchanged. */
     .filter-pills {
-      justify-content: center;
+      display: none;
     }
 
     .monitoring-copy {

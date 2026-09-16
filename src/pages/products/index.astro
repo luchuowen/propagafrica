@@ -99,6 +99,15 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
     margin-top: var(--space-5);
   }
 
+  /* The crop filter only ever narrows this page's own 7-card grid — on a
+     phone it's a row of chips that cost more vertical space than the
+     filtering saves. Desktop is unchanged. */
+  @media (max-width: 640px) {
+    .filter-pills {
+      display: none;
+    }
+  }
+
   .pill {
     font-family: var(--f-sans);
     font-weight: 600;
