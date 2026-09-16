@@ -88,3 +88,16 @@ than the product grid it sits above; now `clamp(220px, 25vw, 360px)`, which
 lands within a few px of a product card's own ~357px at content-max. The
 `sizes` attr on its `<picture>` was updated to match, so it doesn't fetch a
 wider image than it now displays.
+
+## Footer newsletter card stretched to match the brand column (2026-09-16)
+
+The action panel (Newsletter + Request a Quotation) is grid-aligned with
+`align-items: start`, so it only ever stood as tall as its own content —
+ending well short of the brand column's social icons. `.footer-actions` now
+`align-self: stretch`es at the 960px 3-column breakpoint, and
+`.action-panel` is a `height: 100%` flex column with the CTA half
+(`.action-bottom`) pinned by `margin-top: auto`, so any extra height opens
+as one gap there instead of stranding content or padding the card's foot.
+The card also gained `box-shadow: var(--shadow-soft)` — the one shared
+shadow token, not an ad-hoc value — so it reads as a raised object against
+the beige footer rather than a flat bordered box.
