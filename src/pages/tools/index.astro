@@ -28,8 +28,11 @@ import { TOOLS } from '../../data/tools';
                 <a href={tool.href}>{tool.name}</a>
               </h2>
               <p class="descriptor">{tool.description}</p>
-              <a class="link-arrow" href={tool.href}>
-                Open calculator &rarr;
+              <a class="tool-cta" href={tool.href}>
+                Open calculator
+                <span class="tool-arrow" aria-hidden="true">
+                  &rarr;
+                </span>
               </a>
             </div>
           </li>
@@ -83,7 +86,7 @@ import { TOOLS } from '../../data/tools';
     border: 1px solid var(--rule);
     border-radius: var(--radius-m);
     overflow: hidden;
-    background: var(--paper);
+    background: var(--white);
     display: flex;
     flex-direction: column;
   }
@@ -128,23 +131,37 @@ import { TOOLS } from '../../data/tools';
     color: var(--soft);
   }
 
-  .link-arrow {
-    display: inline-block;
-    margin-top: var(--space-3);
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--green);
-    text-decoration: none;
-  }
-
   /* Pin the CTA to the same bottom edge on both cards instead of wherever
      it lands after that tool's own description length. */
-  .tool-body .link-arrow {
+  .tool-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
     margin-top: auto;
-    padding-top: var(--space-3);
+    padding: 11px 18px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--paper);
+    background: var(--green);
+    border: 1px solid var(--green);
+    border-radius: var(--radius-s);
   }
 
-  .link-arrow:hover {
-    text-decoration: underline;
+  .tool-cta:hover {
+    background: var(--green-dark);
+    border-color: var(--green-dark);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .tool-arrow {
+      display: inline-block;
+      transition: transform 300ms cubic-bezier(0.2, 0.7, 0.3, 1);
+    }
+
+    .tool-cta:hover .tool-arrow {
+      transform: translateX(3px);
+    }
   }
 </style>

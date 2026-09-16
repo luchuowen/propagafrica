@@ -127,3 +127,13 @@ Separately: the /products/ hub's cards were the tallest thing on the page —
 (`f.keyBullets.join(' · ')`) instead of a `<ul>`, and `.product-body`'s
 padding/margins were trimmed (space-3 → space-2 in three places), cutting
 card height by roughly a third with the same facts still visible.
+
+## Tools hub cards: no beige, solid CTA button (2026-09-16)
+
+Owner picked from 3 screenshotted options (a throwaway preview page, deleted
+after — never a route). `.tool-card` was the one card on the site still on
+`--paper`; it's `--white` now, matching every other card. The trailing
+"Open calculator →" text link is a full-width `.tool-cta` button (green
+fill, `--radius-s`, the arrow nudges right on hover like `.btn`'s elsewhere)
+rather than a link, pinned to the same bottom edge on both cards regardless
+of description length.
