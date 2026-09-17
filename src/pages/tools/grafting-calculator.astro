@@ -25,6 +25,7 @@ const PACKAGING_NOTE =
         sub="Work out tube and clip quantities for your next graft run, by crop group and stem size."
         image="/images/products/grafting-tubes/01.jpg"
         imageAlt="PRO-ROSE silicone grafting tubes sized by diameter for a propagation run"
+        howItWorks="Enter your crop group, stem diameter and the number of grafts you're planning. The calculator matches you to the right tube and clip combination, then works out how many of each to order, including a wastage allowance you can adjust to your own graft take rate."
       />
 
       <noscript>
@@ -90,20 +91,20 @@ const PACKAGING_NOTE =
           <p class="hint" data-hint>
             Enter the number of grafts planned to see quantities.
           </p>
-          <dl class="result-list" data-result-list hidden>
-            <div class="row">
-              <dt>Recommended product</dt>
+          <dl class="stat-grid" data-result-list hidden>
+            <div class="stat-tile">
+              <dt>Product</dt>
               <dd class="mono" data-product-code></dd>
             </div>
-            <div class="row">
-              <dt>Recommended clip</dt>
+            <div class="stat-tile">
+              <dt>Clip</dt>
               <dd data-clip-type></dd>
             </div>
-            <div class="row">
+            <div class="stat-tile">
               <dt>Tubes needed</dt>
               <dd class="mono" data-tubes></dd>
             </div>
-            <div class="row">
+            <div class="stat-tile">
               <dt>Clips needed</dt>
               <dd class="mono" data-clips></dd>
             </div>
@@ -249,7 +250,13 @@ const PACKAGING_NOTE =
   /* Inputs on the left, a live answer panel on the right — the two things a
      calculator is, side by side instead of stacked with a rule between them.
      Below 900px there isn't room for both at once, so it drops to a single
-     column in reading order: fill in the form, then see what it worked out. */
+     column in reading order: fill in the form, then see what it worked out.
+     `align-items: stretch` (the grid default) plus each panel's own flex
+     column and the CTA's `margin-top: auto` is what keeps the results panel
+     the same height as the form regardless of how much the results panel
+     actually has to show — the taller panel sets the row height, the
+     shorter one stretches to match, same technique as the footer's
+     newsletter card (DECISIONS.md). */
   .calculator {
     margin-top: var(--space-5);
     display: grid;
@@ -259,10 +266,21 @@ const PACKAGING_NOTE =
   @media (min-width: 900px) {
     .calculator {
       grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
-      align-items: start;
+      background: var(--white);
+      box-shadow: var(--shadow-soft);
+      border-radius: var(--radius-l);
+      padding: var(--space-4);
+    }
+
+    .form-panel {
+      border: none;
+      border-radius: 0;
+      padding: 0 var(--space-4) 0 0;
+      border-right: 1px solid var(--rule);
     }
 
     .results-panel {
+      border: none;
       position: sticky;
       top: calc(var(--space-4) + 68px);
     }
@@ -279,6 +297,8 @@ const PACKAGING_NOTE =
 
   .form-panel,
   .results-panel {
+    display: flex;
+    flex-direction: column;
     border: 1px solid var(--rule);
     border-radius: var(--radius-l);
     padding: var(--space-4);
@@ -306,23 +326,29 @@ const PACKAGING_NOTE =
 
   form {
     display: grid;
-    gap: var(--space-3);
+    gap: var(--space-4);
   }
 
   .field {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 5px;
   }
 
   .field[hidden] {
     display: none;
   }
 
+  /* A small mono uppercase label reads as a spec caption, not a heavy
+     sentence-case instruction — the same weight shift the trust panel and
+     journey captions already went through this session. */
   label {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
     font-weight: 600;
-    font-size: 14px;
-    color: var(--ink);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--soft);
   }
 
   input,
@@ -344,42 +370,44 @@ const PACKAGING_NOTE =
 
   .hint {
     color: var(--soft);
-    font-size: 15px;
+    font-size: 14px;
     line-height: 1.55;
   }
 
-  .result-list {
+  /* Results as a 2x2 grid of stat tiles instead of a stacked list of
+     label/value rows — the same fact set reads in half the vertical space,
+     which is most of what keeps this panel from outgrowing the form. */
+  .stat-grid {
     margin: 0;
     display: grid;
-    gap: 2px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border-radius: var(--radius-s);
+    overflow: hidden;
   }
 
-  .result-list[hidden] {
+  .stat-grid[hidden] {
     display: none;
   }
 
-  .result-list .row {
-    padding: var(--space-2) 0;
-    border-top: 1px solid var(--rule);
-  }
-
-  .result-list .row:first-child {
-    border-top: none;
-    padding-top: 0;
+  .stat-tile {
+    background: var(--white);
+    padding: var(--space-2);
   }
 
   dt {
     font-family: var(--f-mono);
-    font-size: 10.5px;
+    font-size: 9.5px;
     font-weight: 600;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--soft);
   }
 
   dd {
-    margin: 2px 0 0;
-    font-size: 20px;
+    margin: 3px 0 0;
+    font-size: 16px;
     font-weight: 700;
     letter-spacing: -0.01em;
     color: var(--ink);
@@ -394,20 +422,20 @@ const PACKAGING_NOTE =
     margin: var(--space-3) 0 0;
     padding-top: var(--space-3);
     border-top: 1px solid var(--rule);
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.6;
     color: var(--soft);
   }
 
   .disclaimer {
-    margin: var(--space-3) 0 0;
-    font-size: 12.5px;
+    margin: var(--space-2) 0 0;
+    font-size: 11.5px;
     line-height: 1.6;
     color: var(--soft);
   }
 
   .btn-primary {
-    margin-top: var(--space-3);
+    margin-top: auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -415,7 +443,7 @@ const PACKAGING_NOTE =
     width: 100%;
     text-decoration: none;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 14px;
     padding: 12px 22px;
     border-radius: var(--radius-s);
     background: var(--green);

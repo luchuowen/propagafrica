@@ -22,6 +22,7 @@ import { CELL_COUNTS } from '../../lib/tools/consumables-planner';
         sub="Work out trays, pots, labels, domes and ties for your next propagation batch."
         image="/images/products/nursery-consumables/hero.jpg"
         imageAlt="Propagation trays and nursery consumables ready for a new batch"
+        howItWorks="Enter the number of cuttings or seedlings you're propagating and your tray cell count. The planner works out how many trays, pots, labels, humidity domes and ties you'll need for the batch, including a wastage allowance you can adjust and a few yes/no questions that add or remove items from the list."
       />
 
       <noscript>
@@ -84,24 +85,24 @@ import { CELL_COUNTS } from '../../lib/tools/consumables-planner';
           <p class="hint" data-hint>
             Enter the number of cuttings or seedlings to propagate to see quantities.
           </p>
-          <dl class="result-list" data-result-list hidden>
-            <div class="row" data-row-trays hidden>
+          <dl class="stat-grid" data-result-list hidden>
+            <div class="stat-tile" data-row-trays hidden>
               <dt>Trays</dt>
               <dd class="mono" data-trays></dd>
             </div>
-            <div class="row" data-row-pots hidden>
+            <div class="stat-tile" data-row-pots hidden>
               <dt>Pots</dt>
               <dd class="mono" data-pots></dd>
             </div>
-            <div class="row" data-row-labels hidden>
+            <div class="stat-tile" data-row-labels hidden>
               <dt>Labels</dt>
               <dd class="mono" data-labels></dd>
             </div>
-            <div class="row" data-row-domes hidden>
+            <div class="stat-tile" data-row-domes hidden>
               <dt>Domes</dt>
               <dd class="mono" data-domes></dd>
             </div>
-            <div class="row" data-row-ties hidden>
+            <div class="stat-tile" data-row-ties hidden>
               <dt>Ties</dt>
               <dd class="mono" data-ties></dd>
             </div>
@@ -243,7 +244,13 @@ import { CELL_COUNTS } from '../../lib/tools/consumables-planner';
   /* Inputs on the left, a live answer panel on the right — the two things a
      calculator is, side by side instead of stacked with a rule between them.
      Below 900px there isn't room for both at once, so it drops to a single
-     column in reading order: fill in the form, then see what it worked out. */
+     column in reading order: fill in the form, then see what it worked out.
+     `align-items: stretch` (the grid default) plus each panel's own flex
+     column and the CTA's `margin-top: auto` is what keeps the results panel
+     the same height as the form regardless of how much the results panel
+     actually has to show — the taller panel sets the row height, the
+     shorter one stretches to match, same technique as the footer's
+     newsletter card (DECISIONS.md). */
   .calculator {
     margin-top: var(--space-5);
     display: grid;
@@ -253,10 +260,21 @@ import { CELL_COUNTS } from '../../lib/tools/consumables-planner';
   @media (min-width: 900px) {
     .calculator {
       grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
-      align-items: start;
+      background: var(--white);
+      box-shadow: var(--shadow-soft);
+      border-radius: var(--radius-l);
+      padding: var(--space-4);
+    }
+
+    .form-panel {
+      border: none;
+      border-radius: 0;
+      padding: 0 var(--space-4) 0 0;
+      border-right: 1px solid var(--rule);
     }
 
     .results-panel {
+      border: none;
       position: sticky;
       top: calc(var(--space-4) + 68px);
     }
@@ -271,6 +289,8 @@ import { CELL_COUNTS } from '../../lib/tools/consumables-planner';
 
   .form-panel,
   .results-panel {
+    display: flex;
+    flex-direction: column;
     border: 1px solid var(--rule);
     border-radius: var(--radius-l);
     padding: var(--space-4);
@@ -298,19 +318,25 @@ import { CELL_COUNTS } from '../../lib/tools/consumables-planner';
 
   form {
     display: grid;
-    gap: var(--space-3);
+    gap: var(--space-4);
   }
 
   .field {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 5px;
   }
 
+  /* A small mono uppercase label reads as a spec caption, not a heavy
+     sentence-case instruction — the same weight shift the trust panel and
+     journey captions already went through this session. */
   label {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
     font-weight: 600;
-    font-size: 14px;
-    color: var(--ink);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--soft);
   }
 
   input,
@@ -359,42 +385,46 @@ import { CELL_COUNTS } from '../../lib/tools/consumables-planner';
 
   .hint {
     color: var(--soft);
-    font-size: 15px;
+    font-size: 14px;
     line-height: 1.55;
   }
 
-  .result-list {
+  /* Results as a grid of stat tiles instead of a stacked list of
+     label/value rows — the same facts read in less vertical space, which is
+     most of what keeps this panel from outgrowing the form. An odd row
+     count (a toggle turns one item off) just leaves the last tile alone in
+     its row rather than stretching to fill it. */
+  .stat-grid {
     margin: 0;
     display: grid;
-    gap: 2px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border-radius: var(--radius-s);
+    overflow: hidden;
   }
 
-  .result-list[hidden] {
+  .stat-grid[hidden] {
     display: none;
   }
 
-  .result-list .row {
-    padding: var(--space-2) 0;
-    border-top: 1px solid var(--rule);
-  }
-
-  .result-list .row:first-child {
-    border-top: none;
-    padding-top: 0;
+  .stat-tile {
+    background: var(--white);
+    padding: var(--space-2);
   }
 
   dt {
     font-family: var(--f-mono);
-    font-size: 10.5px;
+    font-size: 9.5px;
     font-weight: 600;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--soft);
   }
 
   dd {
-    margin: 2px 0 0;
-    font-size: 20px;
+    margin: 3px 0 0;
+    font-size: 16px;
     font-weight: 700;
     letter-spacing: -0.01em;
     color: var(--ink);
@@ -406,14 +436,14 @@ import { CELL_COUNTS } from '../../lib/tools/consumables-planner';
   }
 
   .disclaimer {
-    margin: var(--space-3) 0 0;
-    font-size: 12.5px;
+    margin: var(--space-2) 0 0;
+    font-size: 11.5px;
     line-height: 1.6;
     color: var(--soft);
   }
 
   .btn-primary {
-    margin-top: var(--space-3);
+    margin-top: auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -421,7 +451,7 @@ import { CELL_COUNTS } from '../../lib/tools/consumables-planner';
     width: 100%;
     text-decoration: none;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 14px;
     padding: 12px 22px;
     border-radius: var(--radius-s);
     background: var(--green);

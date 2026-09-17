@@ -1,25 +1,31 @@
 ---
-// The header shared by both calculator pages: eyebrow, H1, one-line sub and a
+// The header shared by both calculator pages: eyebrow, H1, one-line sub, a
 // contained photograph (not full-bleed — these are working tool pages, not
-// product marketing pages, so the photo illustrates rather than dominates).
+// product marketing pages, so the photo illustrates rather than dominates)
+// and a short "how it works" paragraph beside it — the photo alone left a
+// wide dead gap to its right at desktop widths once it's capped at 560px.
 interface Props {
   eyebrow: string;
   title: string;
   sub: string;
   image: string;
   imageAlt: string;
+  howItWorks: string;
 }
 
-const { eyebrow, title, sub, image, imageAlt } = Astro.props;
+const { eyebrow, title, sub, image, imageAlt, howItWorks } = Astro.props;
 ---
 
 <header class="tool-intro">
   <p class="eyebrow">{eyebrow}</p>
   <h1>{title}</h1>
   <p class="tool-sub">{sub}</p>
-  <figure class="tool-photo">
-    <img src={image} alt={imageAlt} loading="eager" />
-  </figure>
+  <div class="tool-media-row">
+    <figure class="tool-photo">
+      <img src={image} alt={imageAlt} loading="eager" />
+    </figure>
+    <p class="tool-how">{howItWorks}</p>
+  </div>
 </header>
 
 <style>
@@ -40,10 +46,18 @@ const { eyebrow, title, sub, image, imageAlt } = Astro.props;
     max-width: 60ch;
   }
 
+  .tool-media-row {
+    margin-top: var(--space-4);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
   .tool-photo {
-    margin: var(--space-4) 0 0;
+    flex: 1 1 480px;
+    max-width: 560px;
     aspect-ratio: 16 / 9;
-    max-width: 640px;
     overflow: hidden;
     border-radius: var(--radius-m);
     background: var(--mint);
@@ -54,5 +68,15 @@ const { eyebrow, title, sub, image, imageAlt } = Astro.props;
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+
+  .tool-how {
+    flex: 1 1 260px;
+    min-width: 240px;
+    margin: 0;
+    padding-top: var(--space-1);
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--soft);
   }
 </style>

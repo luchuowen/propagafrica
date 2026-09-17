@@ -39,15 +39,58 @@ import QuoteForm from '../components/quote/QuoteForm.astro';
           />
         </div>
         <h2>Talk to us directly</h2>
-        <address>
-          <a href="tel:+254722861682">+254 722 861 682</a> (Emily)
-          <br />
-          <a href="mailto:info@propagafrica.com">info@propagafrica.com</a>
-          <br />
+        <div class="contact-methods">
+          <a class="method-card" href="tel:+254722861682">
+            <span class="method-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                <path
+                  d="M4.5 3h2.7l1 3.4-1.7 1.4a10.5 10.5 0 0 0 4.7 4.7l1.4-1.7 3.4 1v2.7c0 .8-.7 1.4-1.5 1.3-3-.4-5.8-1.8-8-4-2.2-2.2-3.6-5-4-8C3.1 3.7 3.7 3 4.5 3Z"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+            <span class="method-text">
+              <span class="method-label">Call us</span>
+              <span class="method-value">
+                +254 722 861 682 <span class="method-note">(Emily)</span>
+              </span>
+            </span>
+          </a>
+          <a class="method-card" href="mailto:info@propagafrica.com">
+            <span class="method-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                <rect
+                  x="3"
+                  y="4.5"
+                  width="14"
+                  height="11"
+                  rx="1.5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                />
+                <path
+                  d="m3.5 5.5 6 5 6-5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+            <span class="method-text">
+              <span class="method-label">Email us</span>
+              <span class="method-value">info@propagafrica.com</span>
+            </span>
+          </a>
+        </div>
+        <p class="location-line">
           Nairobi, Kenya — East Africa Hub
           <br />
           Regional stock hubs in Kenya and Ethiopia
-        </address>
+        </p>
       </aside>
     </div>
   </section>
@@ -131,15 +174,79 @@ import QuoteForm from '../components/quote/QuoteForm.astro';
     font-size: 1.05rem;
   }
 
-  .contact-panel address {
-    font-style: normal;
-    margin: var(--space-2) var(--space-3) var(--space-3);
-    font-size: 15px;
-    line-height: 1.8;
+  .contact-methods {
+    display: grid;
+    gap: var(--space-2);
+    margin: var(--space-3) var(--space-3) 0;
+  }
+
+  .method-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-m);
+    text-decoration: none;
     color: var(--ink);
   }
 
-  .contact-panel address a {
+  @media (prefers-reduced-motion: no-preference) {
+    .method-card {
+      transition:
+        border-color 200ms ease,
+        background-color 200ms ease;
+    }
+  }
+
+  .method-card:hover {
+    border-color: var(--green);
+    background: var(--mint);
+  }
+
+  .method-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--mint);
     color: var(--green);
+  }
+
+  .method-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .method-label {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--soft);
+  }
+
+  .method-value {
+    font-size: 14.5px;
+    font-weight: 600;
+    overflow-wrap: break-word;
+  }
+
+  .method-note {
+    font-weight: 400;
+    color: var(--soft);
+  }
+
+  .location-line {
+    margin: var(--space-3) var(--space-3) var(--space-3);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--soft);
   }
 </style>
