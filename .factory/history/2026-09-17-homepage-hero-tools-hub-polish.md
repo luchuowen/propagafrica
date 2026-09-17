@@ -28,8 +28,7 @@ wired to the whole carousel root, not the removed buttons, so both still
 work unchanged.
 
 First pass made each dot's clickable box the same 7px as its visible
-circle — Lighthouse's `target-size` audit failed the home page (97, not
-100) on that alone. Fixed by keeping each `<button>` at a full 24x24px hit
+circle — Lighthouse's `target-size` audit failed the home page (97, not 100) on that alone. Fixed by keeping each `<button>` at a full 24x24px hit
 area with the small dot drawn via `::after`, centred inside — the touch
 target is generous without the marker looking heavy. Re-ran Lighthouse
 directly (not just the axe-core Playwright suite, which doesn't cover this
