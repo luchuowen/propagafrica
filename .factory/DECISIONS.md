@@ -39,75 +39,13 @@ rebuild are archived in
 `.factory/history/2026-09-16-tools-calculators-contact-first-pass.md` —
 those decisions still hold except where a later entry here supersedes them.
 
-## Journey loop captions: lighter and smaller (2026-09-16)
-
-Owner call. `.caption` in `JourneySteps.astro` was 17px/600 weight, reading
-heavier than the mono step numerals beside it; now 14px/400, tracking and
-line-height adjusted to match.
-
-## Trust panel list items: lighter and smaller (2026-09-16)
-
-Owner call. `.trust-item` (the "Why partner with PropagAfrica" / "Who we
-supply" list text, shared by Home and About) was 15.5px with no explicit
-weight; now 14px/400 explicitly, so it can't inherit heavier from
-elsewhere. Headings and eyebrows on the same panel are unchanged.
-
-## Hero carousel: dots instead of arrows, Ken Burns motion (2026-09-16)
-
-Owner call — the hero's overlay prev/next circles read as dated slideshow
-chrome. Removed for the hero variant only (`Carousel.astro`'s grid variant
-— facilities, journey — keeps its own rail arrows, a separate, already
-above-the-photo control unaffected by this). Replaced with a `role="group"`
-row of small dot buttons that jump straight to a slide on click; touch
-swipe and the existing ArrowLeft/ArrowRight keyboard handling were already
-wired to the whole carousel root, not the removed buttons, so both still
-work unchanged.
-
-First pass made each dot's clickable box the same 7px as its visible
-circle — Lighthouse's `target-size` audit failed the home page (97, not 100) on that alone. Fixed by keeping each `<button>` at a full 24x24px hit
-area with the small dot drawn via `::after`, centred inside — the touch
-target is generous without the marker looking heavy. Re-ran Lighthouse
-directly (not just the axe-core Playwright suite, which doesn't cover this
-audit) to confirm 100 again before shipping.
-
-Also added a continuous slow zoom-and-pan ("Ken Burns") on the hero's
-active `<img>` — 9s, alternating direction by slide index (even/odd) so
-five slides don't all drift identically — layered under `.frame`'s own
-crossfade/scale entrance rather than replacing it. Hero only; the grid
-variant already has its own hover-zoom for the same "alive photograph"
-effect at thumbnail scale. Skipped entirely under
-`prefers-reduced-motion: reduce`, same as every other motion in this file.
-
-## Hero band height capped off the viewport, not the photo's aspect ratio (2026-09-17)
-
-The hero's `.media` was a flat `aspect-ratio: 16/9` at full viewport width —
-810px tall at a 1440px-wide laptop, near-100vh on a 13" MacBook (a forbidden
-pattern per CLAUDE.md invariants) and leaving nothing else on screen at first
-paint. From 641px up it's now `height: clamp(480px, 64vh, 640px)` with
-`aspect-ratio: auto`; `.frame img`'s existing `object-fit: cover` absorbs
-whatever crop results, so nothing else needed to change. Mobile
-(`max-width: 640px`, its own `min-height: 560px` for copy overflow room)
-untouched.
-
-## `process-04.jpg` had a ~10px black vignette baked into the file (2026-09-17)
-
-The homepage journey card's fourth photo showed black bars on both sides —
-not a CSS/object-fit issue (the other five process photos, and `.shot img`'s
-`object-fit: cover`, were already correct) but a ~10px black border baked
-into that one source JPEG on all four edges. `object-fit: cover` on a 4:3
-image in the loop's 3:2 card crops top/bottom to fill, which happened to
-clear the top/bottom border but left the left/right border visible. Fixed
-by cropping the border out with `sharp` (`extract` a 1174×880 region inset
-10–13px per side to preserve the 4:3 ratio, then `resize` back to the
-manifest's 1200×900) and overwriting the file in place — same path,
-filename and dimensions, no code change.
-
-## Tools hub card body text centred (2026-09-17)
-
-Owner call from a screenshot. `.tool-body` (heading, descriptor, CTA) was
-left-aligned text in a flex column; the CTA already read centred (full-width
-button). Added `align-items: center; text-align: center` to `.tool-body` so
-the heading and description centre to match.
+Journey loop caption weight, trust panel list text weight, the hero
+carousel's dots-instead-of-arrows + Ken Burns motion (and the target-size
+Lighthouse fix that came with it), the hero band's viewport-relative
+height cap, the `process-04.jpg` vignette crop, and the Tools hub card
+text centring are archived in
+`.factory/history/2026-09-17-homepage-hero-tools-hub-polish.md` — those
+decisions still hold.
 
 ## Both calculator pages redesigned again: elevated card, stat-grid results (2026-09-17)
 
@@ -247,3 +185,25 @@ Us") swapped in purely by CSS under 640px, the same `.heading-full`/
 `.heading-mobile` technique the homepage hero's full/short sub-head
 already uses — not a reword, a shorter reading of the same heading for
 the width it doesn't fit at.
+
+## Footer brand blurb missed the nested-max-width fix; newsletter collapses like sitemap (2026-09-17)
+
+Owner caught one the walk-through above missed: `.footer-company .blurb`
+(the brand paragraph) still read left-anchored on mobile. Same bug as
+`.monitoring h2` etc. — `.blurb`'s own `max-width: 34ch` is narrower than
+the column at mobile widths, so `.footer-company`'s `text-align: center`
+only centred the wrapped lines inside that still-flush-left box.
+`.footer-company .blurb` now gets `margin-left/right: auto` too. Re-swept
+every other `max-width: <n>ch` rule this session touched or added to
+confirm none had the same gap (several are already paired correctly,
+some don't bind at mobile widths at all, and the services-index ones are
+deliberately left structural/uncentred — see the entry above).
+
+Also: the newsletter card (email form) now collapses behind a
+`Newsletter` toggle on mobile, exactly like the sitemap column already
+does — same button-not-`<details>` reasoning (Chromium drops a closed
+`<details>`'s content from the Tab order even when forced to paint), same
+`aria-expanded`/chevron-rotate pattern, same ≤720px breakpoint, reusing
+`.sitemap-chevron`. Only the blurb + form collapse (`#newsletter-body`);
+the "Ready to order? / Request a Quotation" CTA below stays always
+visible — it's the primary conversion path, not newsletter content.
