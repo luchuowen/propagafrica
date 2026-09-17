@@ -122,7 +122,7 @@ const SOCIALS = [
                   name="email"
                   type="email"
                   autocomplete="email"
-                  placeholder="you@company.com"
+                  placeholder="Enter Your Email"
                   maxlength="254"
                   required
                   aria-describedby="newsletter-status"
@@ -673,6 +673,39 @@ const SOCIALS = [
 
     .footer-grid {
       gap: var(--space-4);
+    }
+
+    /* Brand column: text-align centres the blurb/address text and the
+       wordmark itself (an inline-flex element, so it centres like any other
+       inline content); the icon row is its own flex container and needs
+       justify-content rather than text-align to centre. */
+    .footer-company {
+      text-align: center;
+    }
+
+    .footer-col .social-list {
+      justify-content: center;
+    }
+
+    /* The sitemap toggle is a space-between row (label left, chevron right)
+       so the affordance reads clearly at full width; centred, the label and
+       its chevron sit together instead of stretching apart. */
+    .footer-sitemap {
+      text-align: center;
+    }
+
+    .sitemap-toggle {
+      justify-content: center;
+      gap: var(--space-1);
+    }
+
+    /* The newsletter card's prose centres; the functional email/button row
+       stays full-width and left-to-right — centring a form control itself
+       reads as broken, not premium. */
+    .action-top .eyebrow,
+    .action-top .blurb,
+    .action-bottom .blurb {
+      text-align: center;
     }
 
     .baseline-row {

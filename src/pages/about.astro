@@ -165,6 +165,24 @@ const NATIVE_HEIGHT = 900;
     color: var(--soft);
   }
 
+  /* .about-hero-inner only becomes a 2-column grid at 900px (above), so
+     centre up to that same point rather than the page's usual 640px mobile
+     breakpoint — otherwise a landscape phone or small tablet is still a
+     single stacked column but left-aligned. text-align alone doesn't centre
+     h1's own box (it caps its own width narrower than .hero-head via
+     max-width: 18ch), so it also needs auto margins. */
+  @media (max-width: 899px) {
+    .hero-head,
+    .lede {
+      text-align: center;
+    }
+
+    .about-hero h1 {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
   /* Three operating facts as a ruled strip under the heading — the page's one
      piece of hard information, where the contact block used to repeat the
      footer. */
@@ -254,6 +272,19 @@ const NATIVE_HEIGHT = 900;
     font-size: 17px;
     line-height: 1.7;
     color: var(--ink);
+  }
+
+  /* Mobile only — .approach-cols itself doesn't become 2 columns until
+     900px (above), so centre up to that same point and leave the desktop
+     layout completely untouched. */
+  @media (max-width: 899px) {
+    .about-approach-inner > .eyebrow {
+      text-align: center;
+    }
+
+    .approach-cols p {
+      text-align: center;
+    }
   }
 
   /* ---------- team photographs ---------- */

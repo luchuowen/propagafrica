@@ -122,6 +122,24 @@ import QuoteForm from '../components/quote/QuoteForm.astro';
     max-width: 56ch;
   }
 
+  /* Mobile only — text-align alone doesn't centre h1/.hero-sub's own boxes
+     (each caps its own width narrower than .contact-hero-inner via
+     max-width: 22ch/56ch), so both also need auto margins. Desktop is a
+     single unconstrained column already and is untouched above 640px. */
+  @media (max-width: 640px) {
+    .contact-hero-inner > .eyebrow,
+    .contact-hero-inner > h1,
+    .contact-hero-inner > .hero-sub {
+      text-align: center;
+    }
+
+    .contact-hero-inner > h1,
+    .contact-hero-inner > .hero-sub {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
   .contact {
     padding: var(--space-6) 0 var(--space-7);
     background: var(--white);
@@ -248,5 +266,15 @@ import QuoteForm from '../components/quote/QuoteForm.astro';
     font-size: 13.5px;
     line-height: 1.7;
     color: var(--soft);
+  }
+
+  /* Mobile only — the method cards themselves stay left-aligned internally
+     (icon, then text), the same "functional row" carve-out as the
+     newsletter form; the heading and the plain location text centre. */
+  @media (max-width: 640px) {
+    .contact-panel h2,
+    .location-line {
+      text-align: center;
+    }
   }
 </style>

@@ -95,4 +95,14 @@ const { eyebrow, title, tagline, intro, image, imageAlt } = Astro.props;
     opacity: 0.92;
     max-width: 56ch;
   }
+
+  /* Mobile only — .hero-inner's own 640px cap doesn't bind below that width
+     (the box is already full-width there), so text-align alone is enough
+     to centre everything inside it; vertical position (flex-end on
+     .hero-body) is untouched. */
+  @media (max-width: 640px) {
+    .hero-inner {
+      text-align: center;
+    }
+  }
 </style>

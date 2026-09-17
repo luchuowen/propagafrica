@@ -65,6 +65,25 @@ import { FIELD_NOTES } from '../../data/field-notes/articles';
     max-width: 60ch;
   }
 
+  /* text-align only centres each block's own wrapped lines within its own
+     box — h1 and .hub-sub each cap their own width narrower than
+     .hub-inner (26ch/60ch), so both also need auto margins to sit centred
+     rather than flush left with centred text staggered inside a
+     left-anchored box. */
+  @media (max-width: 640px) {
+    .hub-inner > .eyebrow,
+    .hub-inner > h1,
+    .hub-inner > .hub-sub {
+      text-align: center;
+    }
+
+    .hub-inner > h1,
+    .hub-inner > .hub-sub {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
   .note-grid {
     list-style: none;
     margin: var(--space-5) 0 0;

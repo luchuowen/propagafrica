@@ -79,4 +79,24 @@ const { eyebrow, title, sub, image, imageAlt, howItWorks } = Astro.props;
     line-height: 1.65;
     color: var(--soft);
   }
+
+  /* text-align only centres each block's own wrapped lines within its own
+     box — h1 and .tool-sub each cap their own width narrower than
+     .tool-intro (26ch/60ch), so both also need auto margins to sit centred
+     rather than flush left with centred text staggered inside a
+     left-anchored box. */
+  @media (max-width: 640px) {
+    .tool-intro > .eyebrow,
+    .tool-intro > h1,
+    .tool-intro > .tool-sub,
+    .tool-how {
+      text-align: center;
+    }
+
+    .tool-intro > h1,
+    .tool-intro > .tool-sub {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
 </style>
