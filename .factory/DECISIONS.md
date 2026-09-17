@@ -206,7 +206,7 @@ Owner call from screenshots, several small changes across one round:
   pill (`:has(:checked)`/`:has(:focus-visible)` targeting the label, same
   as before). Same name/value pairs, same keyboard behaviour.
 - Dropped the `WE USE WHAT YOU SEND HERE TO PREPARE A QUOTATION. NOTHING
-  ELSE.` line under the submit button — not a blueprint.md-locked line,
+ELSE.` line under the submit button — not a blueprint.md-locked line,
   read as legal boilerplate the redesign didn't need.
 - Swapped this component's remaining `--ink-soft` (the superseded
   "Blueprint" token — see tokens.css) for the current `--soft` on the
@@ -228,7 +228,7 @@ Owner call from screenshots, several small changes across one round:
   up `--radius-l` + `--shadow-soft` (the About lead-photo treatment); the
   CTA moved from a bare border-top rule to a `--mint` card, the one tinted
   ground the palette allows, same idea as the calculator results panels.
-  Follow-up not done here: the Field Notes *hub* (`index.astro`)'s cards
+  Follow-up not done here: the Field Notes _hub_ (`index.astro`)'s cards
   still fill with `--paper`, the same leftover the Tools hub cards had
   before an earlier pass this session — only the inner article template
   was in scope this round.
