@@ -194,3 +194,41 @@ per page explaining what the calculator does — rendered beside the photo
 in a `flex-wrap` row (stacks below the photo under ~860px, where the two
 no longer fit side by side). Used by both calculator pages; no other page
 imports this component.
+
+## Contact form pills, panel and Field Notes template: compacted (2026-09-17)
+
+Owner call from screenshots, several small changes across one round:
+
+- **QuoteForm's "Enquiring about" checkboxes**: the square checkbox next to
+  each pill's text is now visually hidden (clip-rect, not `display: none`,
+  so it stays in the tab order and keeps its own focus) rather than
+  removed — the `<label>` itself is the whole clickable, checked-state
+  pill (`:has(:checked)`/`:has(:focus-visible)` targeting the label, same
+  as before). Same name/value pairs, same keyboard behaviour.
+- Dropped the `WE USE WHAT YOU SEND HERE TO PREPARE A QUOTATION. NOTHING
+  ELSE.` line under the submit button — not a blueprint.md-locked line,
+  read as legal boilerplate the redesign didn't need.
+- Swapped this component's remaining `--ink-soft` (the superseded
+  "Blueprint" token — see tokens.css) for the current `--soft` on the
+  three rules that still had it, while already in the file for the above.
+- **Contact panel** ("Talk to us directly"): the phone number and email
+  were two lines of an `<address>` block; now two `.method-card` tiles —
+  a mint icon badge (phone/envelope, inline SVG, `currentColor` stroke)
+  plus a mono micro-label and the value, each the whole `<a>` target. The
+  Nairobi/regional-hub lines stay as plain text below, not cards — those
+  aren't contact methods.
+- **About page**: removed the lead photo's visible `<figcaption>` (it
+  just repeated the `alt` text as an all-caps mono line under the photo);
+  the `alt` attribute itself is untouched.
+- **Field Notes article template** (`[slug].astro`): was the one
+  remaining page sitting on the body's `--paper` straight through header,
+  cover photo and body copy — every other rebuilt page (About, Contact,
+  Products, Tools) runs its content on `--white` and leaves `--paper` to
+  the header/footer only. `.note` is `--white` now; the cover photo picked
+  up `--radius-l` + `--shadow-soft` (the About lead-photo treatment); the
+  CTA moved from a bare border-top rule to a `--mint` card, the one tinted
+  ground the palette allows, same idea as the calculator results panels.
+  Follow-up not done here: the Field Notes *hub* (`index.astro`)'s cards
+  still fill with `--paper`, the same leftover the Tools hub cards had
+  before an earlier pass this session — only the inner article template
+  was in scope this round.

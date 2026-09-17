@@ -81,6 +81,9 @@ const jsonLd = articleJsonLd({
       <div class="note-cta">
         <a class="btn btn-primary" href="/contact/">
           Request a Quotation
+          <span class="btn-arrow" aria-hidden="true">
+            &rarr;
+          </span>
         </a>
       </div>
 
@@ -101,8 +104,13 @@ const jsonLd = articleJsonLd({
 </BaseLayout>
 
 <style>
+  /* Every other rebuilt page (About, Contact, Products, Tools) runs its
+     content on --white and leaves --paper to the header and footer only —
+     this page was the one place still sitting on the body's beige straight
+     through the header, cover photo and article copy, all one flat tone. */
   .note {
-    padding: var(--space-6) 0 var(--space-7);
+    background: var(--white);
+    padding: var(--space-6) 0 var(--space-8);
   }
 
   .note-inner {
@@ -122,14 +130,19 @@ const jsonLd = articleJsonLd({
   .dek {
     margin-top: var(--space-3);
     font-size: 18px;
+    line-height: 1.6;
     color: var(--soft);
   }
 
+  /* Elevated like the About page's own lead photograph, rather than a flat
+     inset rectangle — the same --shadow-soft/--radius-l pairing used for
+     every other hero-scale photo on the rebuilt pages. */
   .note-media {
     margin-top: var(--space-5);
     aspect-ratio: 16 / 9;
     overflow: hidden;
-    border-radius: var(--radius-m);
+    border-radius: var(--radius-l);
+    box-shadow: var(--shadow-soft);
     background: var(--mint);
     max-width: 68ch;
   }
@@ -156,15 +169,21 @@ const jsonLd = articleJsonLd({
     margin-top: 0;
   }
 
+  /* The one tinted ground the palette allows, not a return to --paper — the
+     same treatment the calculator results panels use to mark a block as a
+     distinct destination rather than more body copy. */
   .note-cta {
     max-width: 68ch;
     margin-top: var(--space-6);
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--rule);
+    padding: var(--space-4);
+    border-radius: var(--radius-l);
+    background: var(--mint);
   }
 
   .btn-primary {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
     text-decoration: none;
     font-weight: 700;
     font-size: 15px;
@@ -180,9 +199,20 @@ const jsonLd = articleJsonLd({
     border-color: var(--green-dark);
   }
 
+  @media (prefers-reduced-motion: no-preference) {
+    .btn-arrow {
+      display: inline-block;
+      transition: transform 300ms cubic-bezier(0.2, 0.7, 0.3, 1);
+    }
+
+    .btn-primary:hover .btn-arrow {
+      transform: translateX(3px);
+    }
+  }
+
   .related {
     max-width: 68ch;
-    margin-top: var(--space-6);
+    margin-top: var(--space-5);
     padding-top: var(--space-4);
     border-top: 1px solid var(--rule);
   }
