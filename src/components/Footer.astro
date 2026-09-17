@@ -104,57 +104,77 @@ const SOCIALS = [
       <div class="footer-col footer-actions" data-reveal>
         <div class="action-panel">
           <div class="action-top">
-            <p class="eyebrow">Newsletter</p>
-            <p class="blurb">Occasional notes on stock, seasons and new product lines.</p>
-
-            <form
-              id="newsletter-form"
-              class="newsletter-form"
-              method="post"
-              action="/api/subscribe-newsletter"
+            <!-- Same button + class toggle as the sitemap column, for the same
+                 reason: a closed <details> is excluded from the Tab order in
+                 Chromium even when forced to paint, so a real disclosure
+                 needs its own button. The form is the second-tallest thing
+                 in a stacked mobile footer (after the sitemap list), so it
+                 starts closed there too; the toggle is only interactive
+                 below 720px — on desktop it's a static label and the form
+                 stays open. -->
+            <p class="eyebrow newsletter-label">Newsletter</p>
+            <button
+              type="button"
+              class="newsletter-toggle eyebrow"
+              id="newsletter-toggle"
+              aria-expanded="false"
+              aria-controls="newsletter-body"
             >
-              <label for="newsletter-email" class="sr-only">
-                Email address
-              </label>
-              <div class="newsletter-row">
-                <input
-                  id="newsletter-email"
-                  name="email"
-                  type="email"
-                  autocomplete="email"
-                  placeholder="Enter Your Email"
-                  maxlength="254"
-                  required
-                  aria-describedby="newsletter-status"
-                />
-                <button type="submit" class="newsletter-submit">
-                  Subscribe
-                </button>
-              </div>
+              Newsletter
+              <span class="sitemap-chevron" aria-hidden="true"></span>
+            </button>
+            <div id="newsletter-body">
+              <p class="blurb">Occasional notes on stock, seasons and new product lines.</p>
 
-              <div class="honeypot" aria-hidden="true">
-                {/* The quotation form carries a honeypot with the same field name,
-                    and the footer renders on that page too — so the id here is
-                    prefixed to keep it unique in the document. The name is what
-                    the script and the endpoint read, and it is unchanged. */}
-                <label for={`newsletter-${HONEYPOT_FIELD}`}>Leave this field blank</label>
-                <input
-                  id={`newsletter-${HONEYPOT_FIELD}`}
-                  name={HONEYPOT_FIELD}
-                  type="text"
-                  tabindex="-1"
-                  autocomplete="off"
-                />
-              </div>
-              <input type="hidden" id={TIMESTAMP_FIELD} name={TIMESTAMP_FIELD} value="" />
+              <form
+                id="newsletter-form"
+                class="newsletter-form"
+                method="post"
+                action="/api/subscribe-newsletter"
+              >
+                <label for="newsletter-email" class="sr-only">
+                  Email address
+                </label>
+                <div class="newsletter-row">
+                  <input
+                    id="newsletter-email"
+                    name="email"
+                    type="email"
+                    autocomplete="email"
+                    placeholder="Enter Your Email"
+                    maxlength="254"
+                    required
+                    aria-describedby="newsletter-status"
+                  />
+                  <button type="submit" class="newsletter-submit">
+                    Subscribe
+                  </button>
+                </div>
 
-              <p
-                id="newsletter-status"
-                class="newsletter-status"
-                role="alert"
-                aria-live="assertive"
-              ></p>
-            </form>
+                <div class="honeypot" aria-hidden="true">
+                  {/* The quotation form carries a honeypot with the same field name,
+                      and the footer renders on that page too — so the id here is
+                      prefixed to keep it unique in the document. The name is what
+                      the script and the endpoint read, and it is unchanged. */}
+                  <label for={`newsletter-${HONEYPOT_FIELD}`}>Leave this field blank</label>
+                  <input
+                    id={`newsletter-${HONEYPOT_FIELD}`}
+                    name={HONEYPOT_FIELD}
+                    type="text"
+                    tabindex="-1"
+                    autocomplete="off"
+                  />
+                </div>
+                <input type="hidden" id={TIMESTAMP_FIELD} name={TIMESTAMP_FIELD} value="" />
+
+                <p
+                  id="newsletter-status"
+                  class="newsletter-status"
+                  role="alert"
+                  aria-live="assertive"
+                ></p>
+              </form>
+            </div>
           </div>
 
           <div class="action-bottom">
@@ -194,6 +214,15 @@ const SOCIALS = [
     sitemapToggle.addEventListener('click', () => {
       const isOpen = sitemapList.classList.toggle('is-open');
       sitemapToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+  }
+
+  const newsletterToggle = document.querySelector<HTMLButtonElement>('#newsletter-toggle');
+  const newsletterBody = document.querySelector<HTMLElement>('#newsletter-body');
+  if (newsletterToggle && newsletterBody) {
+    newsletterToggle.addEventListener('click', () => {
+      const isOpen = newsletterBody.classList.toggle('is-open');
+      newsletterToggle.setAttribute('aria-expanded', String(isOpen));
     });
   }
 
@@ -332,7 +361,8 @@ const SOCIALS = [
      button — so it is genuinely out of the tab order on desktop (a
      `display: none` element is never a Tab stop), not just visually inert.
      The static label above takes its place there. */
-  .sitemap-toggle {
+  .sitemap-toggle,
+  .newsletter-toggle {
     display: none;
     width: 100%;
     margin: 0;
@@ -345,11 +375,13 @@ const SOCIALS = [
   }
 
   @media (max-width: 720px) {
-    .sitemap-label {
+    .sitemap-label,
+    .newsletter-label {
       display: none;
     }
 
-    .sitemap-toggle {
+    .sitemap-toggle,
+    .newsletter-toggle {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -367,7 +399,8 @@ const SOCIALS = [
       transition: transform 150ms ease;
     }
 
-    .sitemap-toggle[aria-expanded='true'] .sitemap-chevron {
+    .sitemap-toggle[aria-expanded='true'] .sitemap-chevron,
+    .newsletter-toggle[aria-expanded='true'] .sitemap-chevron {
       transform: rotate(-135deg);
     }
 
@@ -377,6 +410,16 @@ const SOCIALS = [
 
     #sitemap-list.is-open {
       display: flex;
+    }
+
+    /* The form is the second-tallest thing in a stacked mobile footer
+       (after the sitemap list) — same collapse-by-default treatment. */
+    #newsletter-body {
+      display: none;
+    }
+
+    #newsletter-body.is-open {
+      display: block;
     }
   }
 
@@ -678,9 +721,17 @@ const SOCIALS = [
     /* Brand column: text-align centres the blurb/address text and the
        wordmark itself (an inline-flex element, so it centres like any other
        inline content); the icon row is its own flex container and needs
-       justify-content rather than text-align to centre. */
+       justify-content rather than text-align to centre. .blurb caps its
+       own width at 34ch (narrower than the column at mobile widths), so
+       text-align alone left it centred *within* a box that itself still
+       sat flush left — margin auto centres the box too. */
     .footer-company {
       text-align: center;
+    }
+
+    .footer-company .blurb {
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .footer-col .social-list {
@@ -694,7 +745,8 @@ const SOCIALS = [
       text-align: center;
     }
 
-    .sitemap-toggle {
+    .sitemap-toggle,
+    .newsletter-toggle {
       justify-content: center;
       gap: var(--space-1);
     }
