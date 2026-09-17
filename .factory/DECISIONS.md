@@ -165,3 +165,32 @@ Owner call from a screenshot. `.tool-body` (heading, descriptor, CTA) was
 left-aligned text in a flex column; the CTA already read centred (full-width
 button). Added `align-items: center; text-align: center` to `.tool-body` so
 the heading and description centre to match.
+
+## Both calculator pages redesigned again: elevated card, stat-grid results (2026-09-17)
+
+Owner picked "Option A" from 3 screenshotted directions (a throwaway
+`/tools/redesign-preview` route, deleted after — same pattern as the Tools
+hub card pick, never shipped as a route). At ≥900px `.calculator` is now one
+`--shadow-soft`-elevated white card (not two separately bordered panels)
+with a single hairline `border-right` dividing form from results, rather
+than a bordered box each; below 900px each panel keeps its own bordered
+card as before. Field labels became a small mono uppercase caption
+(10.5px) instead of 14px bold sentence case — the same weight/size move
+already applied to the trust panel and journey captions this session.
+Results moved from a stacked `dt`/`dd` row list to a 2-column stat-tile
+grid (hairline-divided, `--white` tiles on a `--rule` background) — the
+same facts in roughly half the vertical space, which combined with
+`align-items: stretch` (the grid default) and the CTA's `margin-top: auto`
+(the footer newsletter card's pinning technique) is what keeps the results
+panel from ever reading taller or shorter than the form panel, whatever
+the results panel actually has to show. Applied identically to both
+`grafting-calculator.astro` and `consumables-planner.astro` — the
+Consumables Planner's stat grid just renders fewer tiles when a toggle
+zeroes an item out, rather than needing different markup.
+
+`ToolIntro.astro`'s photo was capped at 560px wide and left a dead gap
+beside it at desktop widths. Added a `howItWorks` prop — a short paragraph
+per page explaining what the calculator does — rendered beside the photo
+in a `flex-wrap` row (stacks below the photo under ~860px, where the two
+no longer fit side by side). Used by both calculator pages; no other page
+imports this component.
