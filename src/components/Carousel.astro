@@ -277,6 +277,19 @@ function assetVariants(src: string) {
     }
   }
 
+  /* A 16:9 crop at full viewport width is nearly a 100vh hero on laptop
+     screens (a forbidden pattern — CLAUDE.md invariants) — 1440px wide gives
+     810px tall, leaving nothing else on screen at first paint. From here up,
+     size the band off the viewport height instead of the photo's aspect
+     ratio, capped so it stays a band rather than filling the window: the
+     object-fit: cover crop on .frame img absorbs whatever ratio results. */
+  @media (min-width: 641px) {
+    [data-variant='hero'] .media {
+      aspect-ratio: auto;
+      height: clamp(480px, 64vh, 640px);
+    }
+  }
+
   [data-variant='grid'] .lane:nth-child(n + 2) {
     display: none;
   }
