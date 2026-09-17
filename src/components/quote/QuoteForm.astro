@@ -115,7 +115,16 @@ import {
     <button type="submit" class="submit">
       Send the request
     </button>
-    <p class="mono call-line">Or call +254 722 861 682 · info@propagafrica.com</p>
+    <p class="mono call-line">
+      Or call{' '}
+      <a class="call-link" href="tel:+254722861682">
+        +254 722 861 682
+      </a>{' '}
+      ·
+      <a class="call-link" href="mailto:info@propagafrica.com">
+        info@propagafrica.com
+      </a>
+    </p>
   </div>
 </form>
 
@@ -475,6 +484,25 @@ import {
     }
   }
 
+  /* Flex-wrap sizes each pill to its own label length, so on a narrow phone
+     only the two shortest options ("Grafting Tubes"/"Grafting Clips") ever
+     share a row — the other five each fall onto a row of their own, a tall
+     stack for seven options. A fixed 2-column grid keeps every option the
+     same compact size regardless of label length instead. */
+  @media (max-width: 640px) {
+    fieldset {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+
+    .checkbox-option label {
+      padding: 7px 10px;
+      font-size: 12.5px;
+      text-align: center;
+    }
+  }
+
   .checkbox-option:has(:checked) label {
     border-color: var(--green);
     background: var(--mint);
@@ -574,6 +602,31 @@ import {
     margin: 0;
     font-size: 12px;
     color: var(--soft);
+  }
+
+  /* Deliberate tel:/mailto: links, styled our own way, rather than relying
+     on Safari's automatic phone-number detection — which injects its own
+     underlined, differently-coloured link into plain text on iOS only, not
+     other browsers. No underline by default (a colour/weight shift is
+     enough of a "this is tappable" cue); it returns on hover/focus for the
+     added affordance a pointer gives. */
+  .call-link {
+    color: var(--green);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .call-link:hover,
+  .call-link:focus-visible {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 560px) {
+    .submit-row {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
   }
 
   .success {

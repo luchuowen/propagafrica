@@ -41,6 +41,13 @@ const { toolText, toolHref, quoteHref = '/contact/' } = Astro.props;
     max-width: 52ch;
   }
 
+  @media (max-width: 640px) {
+    .family-cta {
+      align-items: center;
+      text-align: center;
+    }
+  }
+
   .tool-link:hover {
     text-decoration: underline;
   }

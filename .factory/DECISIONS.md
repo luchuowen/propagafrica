@@ -32,69 +32,12 @@ font-consistency audit (self-hosted Inter on the no-JS fallback page, form
 controls inheriting it, /products/ card compaction) are archived in
 `.factory/history/2026-09-16-session9-tail.md` — those decisions still hold.
 
-## Tools hub cards: no beige, solid CTA button (2026-09-16)
-
-Owner picked from 3 screenshotted options (a throwaway preview page, deleted
-after — never a route). `.tool-card` was the one card on the site still on
-`--paper`; it's `--white` now, matching every other card. The trailing
-"Open calculator →" text link is a full-width `.tool-cta` button (green
-fill, `--radius-s`, the arrow nudges right on hover like `.btn`'s elsewhere)
-rather than a link, pinned to the same bottom edge on both cards regardless
-of description length.
-
-## Both calculator pages rebuilt: two-panel layout, no beige (2026-09-16)
-
-Owner call — full redesign, not a restyle. Both `/tools/grafting-calculator/`
-and `/tools/consumables-planner/` were a single beige (`--paper`) column:
-image, a plain vertical form with `--paper`-filled inputs, a rule, then a
-plain two-column definition list of results. Now: `.tool-page` is `--white`
-like the hub; the form sits in a white bordered `.form-panel`; the live
-answer sits beside it in a `--mint`-tinted `.results-panel` (sticky at
-≥900px, stacks below the form under that) so the panel that changes as you
-type reads as a distinct, tinted object rather than more of the same form.
-Inputs/selects moved from `--paper` to `--white` fill, matching QuoteForm's
-already-established convention. Result rows became stat blocks — a small
-mono uppercase label over a large bold value — instead of a plain
-label/value row, and the CTA is the same full-width `.btn-primary` pattern
-as the Tools hub cards.
-
-Consumables Planner's three yes/no facts (potting-on, humidity domes,
-staked) were three separate "No / Yes" `<select>`s; they're checkboxes now
-(`accent-color: var(--green)`), read at a glance in one `.toggle-group`
-instead of opened one at a time. `isYes()` reads `.checked` instead of
-`.value === 'yes'` — the calculation logic itself is untouched. All locked
-copy (disclaimer, hints, packaging note) is unchanged, same show/hide
-behaviour per field as before.
-
-## About team photos reverted to their pre-rebuild size (2026-09-16)
-
-Owner call. The About rebuild (session 9) widened `.photo-grid` from
-`repeat(3, 1fr)` to `repeat(2, 1fr)` and `--radius-s` to `--radius-l` for
-the two team photographs — with only two photos, that read as too large.
-Reverted both to the pre-rebuild values; nothing else on the page changed.
-
-A third team photo (`team-03.jpg`) now fills the grid's third cell —
-reused from `/products/technical-services/01.jpg` (a technician walking a
-customer through a controller on site), a real, already-vetted brand photo
-rather than a generated one. Added to `docs/image-manifest.md` alongside
-the other two.
-
-## Contact page rebuilt: no beige, compact paired-field form (2026-09-16)
-
-Owner call ("1/10"), reviewed against a screenshotted mockup first. The
-whole page was the one place still using `--paper` as a card fill —
-`.contact-hero`, `.contact-form-card` and `.contact-panel` are all
-`--white` now (radius bumped `--radius-m` → `--radius-l` to match).
-
-`QuoteForm.astro`'s seven fields were one full-width column; `.quote-form`
-is now a 2-column grid, with Country/Enquiring-about/Message forced to
-`grid-column: 1 / -1` via their existing `[data-field]` attribute — Name
-pairs with Company, Email with Phone, entirely through CSS (the field
-list, order and the render loop are untouched). The seven-option
-"Enquiring about" checkbox list was one option per line; the `<fieldset>`
-now wraps as chips (still plain checkboxes — same name/value pairs, same
-keyboard behaviour), highlighted via `:has(:checked)` rather than a script
-change. Textarea trimmed 5 rows → 4. No copy changed.
+Session 9's first-pass Tools hub card fix, the calculator pages' first
+two-panel rebuild (since redesigned again — see below), the About team
+photo revert/third-photo addition, and the Contact page's first no-beige
+rebuild are archived in
+`.factory/history/2026-09-16-tools-calculators-contact-first-pass.md` —
+those decisions still hold except where a later entry here supersedes them.
 
 ## Journey loop captions: lighter and smaller (2026-09-16)
 
@@ -232,3 +175,75 @@ ELSE.` line under the submit button — not a blueprint.md-locked line,
   still fill with `--paper`, the same leftover the Tools hub cards had
   before an earlier pass this session — only the inner article template
   was in scope this round.
+
+## Sitewide mobile-centring pass, desktop untouched everywhere (2026-09-17)
+
+Owner walked every page by screenshot, ending in "confirm all pages have
+the same behaviour on mobile ... fix it now, I'm launching." Every fix
+below is inside a `max-width` media query — never a bare/unscoped rule —
+so desktop is provably unchanged; several were verified with side-by-side
+mobile/desktop screenshots specifically because this was called out as a
+hard constraint.
+
+**The recurring bug, worth remembering**: `text-align: center` on an
+ancestor only centres a block's own wrapped lines _within its own box_ —
+it does not centre the box itself. Several headings (`.monitoring h2`,
+family/hub page `h1`s, `.hero-standfirst`, etc.) cap their own width
+narrower than their container via `max-width: <n>ch`, so a block with a
+notably wide gap between it and the container edge needs `margin-left/
+right: auto` too, or its text reads centred while the box itself sits
+flush left with the lines staggered inside it. Where a component's own
+`max-width` doesn't actually bind at mobile widths (wider in ch than the
+mobile viewport), text-align alone was left to do the job rather than
+adding an inert rule.
+
+**Breakpoint choice**: the page's usual `max-width: 640px` mobile
+breakpoint, _except_ where the section has its own desktop breakpoint
+below that — `.monitoring-inner` and `.about-hero-inner`/`.approach-cols`
+don't go 2-column until 900px, so centring them stopped at 640px would
+have left a 641–899px gap (a landscape phone or small tablet) still
+single-column but left-aligned; those three use `max-width: 899px`
+instead, matching the point each section's own grid actually switches.
+
+**What centred**: home's monitoring spotlight (copy + h2 + body, the
+900px case above) and its stat labels; the Products/Tools/Field-Notes
+hub intros (`eyebrow`/`h1`/`.hub-sub`, `.hub-inner > ` scoped so the
+card grids beneath are untouched); `ToolIntro` (both calculator pages);
+the About hero (900px case) and its "How we work" section (900px case,
+text only — the 2-column split itself is untouched); the Contact hero,
+its `QuoteForm` submit row (button + call line, `max-width: 560px` to
+match `.quote-form`'s own single-column point) and its "Talk to us
+directly" panel (heading + the plain location text only — the method
+cards keep their icon-left, text-left row, the same "functional row
+stays as it is" carve-out the newsletter form already had); the Field
+Notes article header (title block only, not the body/CTA/related);
+every product family page's `FamilyHero` and closing `FamilyCta`
+(shared components, so all seven pages picked this up at once); and the
+404 page's `PageHero`.
+
+**What deliberately did not**: any data table, definition list or
+numbered/lettered structural row (family-page spec tables, the
+homepage's services index, the readings grid); the `Related` and 404
+quick-links lists, left as plain link lists; a family page's deeper
+"Choosing a size" sub-section (prose, only on 2 of 7 pages, not part of
+the walk-through — a real but low-priority gap); the Field Notes hub's
+own `--paper` card fill (unrelated to centring, still outstanding, see
+the entry above).
+
+**Three other fixes from the same walk-through**: (1) QuoteForm's phone
+and email in the "Or call ..." line were plain text that Safari alone
+auto-links (iOS-only, underlined, its own default styling) — now
+deliberate `tel:`/`mailto:` anchors styled once (`.call-link`, no
+underline by default, underline back on hover/focus) so the behaviour
+and appearance are ours on every browser, not Safari's. (2) The
+"Enquiring about" pills' `flex-wrap` sized each one to its own label, so
+on a phone only "Grafting Tubes"/"Grafting Clips" ever shared a row —
+seven options read as seven-ish stacked rows. `max-width: 640px` swaps
+`fieldset` to a fixed 2-column grid there (desktop keeps flex-wrap), so
+it's always a compact 4-row block regardless of label length. (3) The
+first `TrustPanel` heading ("Why partner with PropagAfrica") wraps to 2
+lines at mobile widths; added a `headingMobile` field ("Why Partner with
+Us") swapped in purely by CSS under 640px, the same `.heading-full`/
+`.heading-mobile` technique the homepage hero's full/short sub-head
+already uses — not a reword, a shorter reading of the same heading for
+the width it doesn't fit at.

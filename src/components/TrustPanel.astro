@@ -14,11 +14,16 @@ const PANELS = [
   {
     eyebrow: 'Why us',
     heading: 'Why partner with PropagAfrica',
+    // Wraps to 2 lines at mobile widths; a shorter reading of the same
+    // heading (not a reword — swapped in purely by CSS, same as the
+    // homepage hero's own full/short sub-head) keeps it on one line there.
+    headingMobile: 'Why Partner with Us',
     items: WHY_PARTNER,
   },
   {
     eyebrow: 'Target markets',
     heading: 'Who we supply',
+    headingMobile: 'Who we supply',
     items: TARGET_MARKETS,
   },
 ] as const;
@@ -29,7 +34,10 @@ const PANELS = [
     {PANELS.map((panel) => (
       <div class="trust-panel" data-reveal>
         <p class="eyebrow">{panel.eyebrow}</p>
-        <h2>{panel.heading}</h2>
+        <h2>
+          <span class="heading-full">{panel.heading}</span>
+          <span class="heading-mobile">{panel.headingMobile}</span>
+        </h2>
         <ol class="trust-list">
           {panel.items.map((item, i) => (
             <li>
@@ -91,6 +99,20 @@ const PANELS = [
     letter-spacing: -0.022em;
     line-height: 1.25;
     color: var(--paper);
+  }
+
+  .heading-mobile {
+    display: none;
+  }
+
+  @media (max-width: 640px) {
+    .heading-full {
+      display: none;
+    }
+
+    .heading-mobile {
+      display: inline;
+    }
   }
 
   .trust-list {

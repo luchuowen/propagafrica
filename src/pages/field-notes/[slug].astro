@@ -134,6 +134,17 @@ const jsonLd = articleJsonLd({
     color: var(--soft);
   }
 
+  /* Mobile only — the header (eyebrow/title/dek) centres; the cover photo,
+     article body, CTA and related list stay as they are, the same
+     long-form-reading carve-out every other page's body copy gets. */
+  @media (max-width: 640px) {
+    .note-header {
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+  }
+
   /* Elevated like the About page's own lead photograph, rather than a flat
      inset rectangle — the same --shadow-soft/--radius-l pairing used for
      every other hero-scale photo on the rebuilt pages. */

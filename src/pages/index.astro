@@ -1134,19 +1134,6 @@ const services = [
       display: none;
     }
 
-    .monitoring-copy {
-      text-align: center;
-    }
-
-    .monitoring-body {
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .readings {
-      text-align: center;
-    }
-
     .services-body {
       text-align: center;
     }
@@ -1154,6 +1141,34 @@ const services = [
     .services-intro {
       margin-left: auto;
       margin-right: auto;
+    }
+  }
+
+  /* The monitoring spotlight's own two-column layout only starts at 900px
+     (`.monitoring-inner`, above), so centring it at the shared 640px
+     breakpoint left a 641–899px gap — a landscape phone or small tablet —
+     where it was still a single stacked column but left-aligned with a
+     ragged right edge. Centred up to the same 900px this section itself
+     switches at, not the shared 640px used elsewhere on the page. */
+  @media (max-width: 899px) {
+    .monitoring-copy {
+      text-align: center;
+    }
+
+    /* text-align on the ancestor only centres a block's own wrapped lines
+       within its own box — it doesn't centre the box itself. h2 and
+       .monitoring-body are both narrower than the column via their own
+       max-width/ch caps, so each also needs auto margins to sit centred
+       rather than flush left with its (now-centred) text staggered inside
+       a left-anchored box. */
+    .monitoring h2,
+    .monitoring-body {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .readings {
+      text-align: center;
     }
   }
 </style>

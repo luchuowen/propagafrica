@@ -103,6 +103,24 @@ import { PRODUCT_FAMILIES, CROP_ALL, CROP_TAGS } from '../../data/products/famil
     .filter-pills {
       display: none;
     }
+
+    /* text-align only centres each block's own wrapped lines within its
+       own box — h1 and .hub-sub each cap their own width narrower than
+       .hub-inner (26ch/60ch), so both also need auto margins to sit
+       centred rather than flush left with centred text staggered inside a
+       left-anchored box (the same fix the homepage's monitoring spotlight
+       needed for the same reason). */
+    .hub-inner > .eyebrow,
+    .hub-inner > h1,
+    .hub-inner > .hub-sub {
+      text-align: center;
+    }
+
+    .hub-inner > h1,
+    .hub-inner > .hub-sub {
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
 
   .pill {
