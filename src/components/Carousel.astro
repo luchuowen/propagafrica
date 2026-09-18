@@ -86,17 +86,34 @@ function assetVariants(src: string) {
           {slides.map((slide, i) => {
             const { webp, webpSmall, fallbackSmall } = assetVariants(slide.src);
             const isFirstPaint = variant === 'hero' && lane === 0 && i === 0;
+            // Every hero frame sits stacked at inset:0 inside the above-the-fold
+            // .media box, so native loading="lazy" can't help the other slides —
+            // the browser's lazy-load heuristic only checks an element's
+            // geometry against the viewport, not its opacity, and every frame
+            // here IS in the viewport from first paint. Left as loading="lazy"
+            // srcset/src, all four other slides downloaded alongside the actual
+            // LCP image, starving it of bandwidth (measured: home page LCP 8.2s
+            // vs. 97-100 performance on every other route). Deferred hero frames
+            // carry no src/srcset at all — the script below hydrates them after
+            // `load`, once the real LCP image has had the connection to itself.
+            // width/height still reserve the box, so this costs no CLS.
+            const deferHydration = variant === 'hero' && !isFirstPaint;
+            const webpSrcset = `${webpSmall} 640w, ${webp} ${nativeWidth}w`;
+            const imgSrcset = `${fallbackSmall} 640w, ${slide.src} ${nativeWidth}w`;
             return (
               <div class:list={['frame', i === lane && 'is-active']} data-index={i}>
                 <picture>
                   <source
                     type="image/webp"
-                    srcset={`${webpSmall} 640w, ${webp} ${nativeWidth}w`}
+                    srcset={deferHydration ? undefined : webpSrcset}
+                    data-srcset={deferHydration ? webpSrcset : undefined}
                     sizes={sizes}
                   />
                   <img
-                    src={slide.src}
-                    srcset={`${fallbackSmall} 640w, ${slide.src} ${nativeWidth}w`}
+                    src={deferHydration ? undefined : slide.src}
+                    srcset={deferHydration ? undefined : imgSrcset}
+                    data-src={deferHydration ? slide.src : undefined}
+                    data-srcset={deferHydration ? imgSrcset : undefined}
                     sizes={sizes}
                     width={nativeWidth}
                     height={nativeHeight}
@@ -595,6 +612,31 @@ function assetVariants(src: string) {
     let index = 0;
     let timer: number | null = null;
 
+    // Hero frames past the first carry data-src/data-srcset instead of the
+    // real attributes (see the template) so the browser's preload scanner
+    // never discovers them — otherwise they'd download alongside the actual
+    // LCP image regardless of loading="lazy", since they're geometrically
+    // in the viewport from first paint. Hydrated once, after `load` gives
+    // the real LCP image a clear run at the connection; user interaction
+    // hydrates immediately too, so a fast manual jump never shows blank.
+    let hydrated = false;
+    function hydrateDeferredImages() {
+      if (hydrated) return;
+      hydrated = true;
+      root.querySelectorAll<HTMLSourceElement>('source[data-srcset]').forEach((source) => {
+        source.srcset = source.dataset.srcset ?? '';
+        delete source.dataset.srcset;
+      });
+      root.querySelectorAll<HTMLImageElement>('img[data-src]').forEach((img) => {
+        if (img.dataset.srcset) {
+          img.srcset = img.dataset.srcset;
+          delete img.dataset.srcset;
+        }
+        img.src = img.dataset.src ?? '';
+        delete img.dataset.src;
+      });
+    }
+
     function render() {
       lanes.forEach((lane, laneOffset) => {
         const target = (index + laneOffset) % slideCount;
@@ -644,6 +686,7 @@ function assetVariants(src: string) {
     // killing it for good, so the carousel keeps advancing on its own
     // afterwards instead of going static the moment someone touches it.
     function onUserInteraction(action: () => void) {
+      hydrateDeferredImages();
       stopAutoplay();
       action();
       startAutoplay();
@@ -693,6 +736,15 @@ function assetVariants(src: string) {
     );
 
     render();
+
+    // No-op for the grid variant (nothing carries data-src there). For the
+    // hero variant, gives the LCP image the connection to itself; falls
+    // back to an immediate hydrate if `load` already fired before this ran.
+    if (document.readyState === 'complete') {
+      hydrateDeferredImages();
+    } else {
+      window.addEventListener('load', hydrateDeferredImages, { once: true });
+    }
 
     // Autoplay waits until the carousel is actually on screen. It used to start
     // at page load, so a carousel far down the page had already advanced by the

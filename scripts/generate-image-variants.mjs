@@ -9,11 +9,18 @@ import { readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
 
-// Only the carousel's three photo sets — the ones Carousel.astro's <picture>
-// markup actually references. Product/about photography still ships as
-// plain JPGs (a separate, larger change per the Sep-15 image-performance
-// commit's own "remaining opportunity" note).
+// The carousel's three photo sets — the ones Carousel.astro's <picture>
+// markup references.
 const CAROUSEL_DIRS = ['hero', 'process', 'facility'];
+// The homepage Product-families grid reuses each family's full-size page
+// hero photo as a small thumbnail card with no responsive source at all
+// (the Sep-15 image-performance commit's own "remaining opportunity" note,
+// picked up by the Sep-18 pre-launch perf audit: Lighthouse's image-delivery
+// insight flagged grafting-tubes/hero.jpg specifically — a 1000x750 file
+// serving a 613x459 card). Every family folder's own hero.jpg/hero.png gets
+// the same WebP + 640w treatment as the carousels; index.astro's product
+// grid picks up the small variant below.
+const PRODUCT_HERO_NAMES = ['hero.jpg', 'hero.jpeg', 'hero.png'];
 const SMALL_WIDTH = 640;
 const QUALITY = 78;
 
@@ -66,10 +73,36 @@ async function processFile(file) {
   await Promise.all(jobs);
 }
 
+async function collectProductHeroImages(productsRoot) {
+  let familyDirs;
+  try {
+    familyDirs = await readdir(productsRoot, { withFileTypes: true });
+  } catch {
+    return [];
+  }
+  const files = [];
+  for (const entry of familyDirs) {
+    if (!entry.isDirectory()) continue;
+    const dir = path.join(productsRoot, entry.name);
+    for (const name of PRODUCT_HERO_NAMES) {
+      const candidate = path.join(dir, name);
+      try {
+        await stat(candidate);
+        files.push(candidate);
+      } catch {
+        // this family doesn't use this filename — fine, try the next
+      }
+    }
+  }
+  return files;
+}
+
 export async function generateImageVariants(imagesRoot) {
-  const targets = (
+  const carouselTargets = (
     await Promise.all(CAROUSEL_DIRS.map((name) => collectImages(path.join(imagesRoot, name))))
   ).flat();
+  const productHeroTargets = await collectProductHeroImages(path.join(imagesRoot, 'products'));
+  const targets = [...carouselTargets, ...productHeroTargets];
 
   if (targets.length === 0) return;
   await Promise.all(targets.map(processFile));
