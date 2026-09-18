@@ -47,72 +47,12 @@ text centring are archived in
 `.factory/history/2026-09-17-homepage-hero-tools-hub-polish.md` — those
 decisions still hold.
 
-## Both calculator pages redesigned again: elevated card, stat-grid results (2026-09-17)
-
-Owner picked "Option A" from 3 screenshotted directions (a throwaway
-`/tools/redesign-preview` route, deleted after — same pattern as the Tools
-hub card pick, never shipped as a route). At ≥900px `.calculator` is now one
-`--shadow-soft`-elevated white card (not two separately bordered panels)
-with a single hairline `border-right` dividing form from results, rather
-than a bordered box each; below 900px each panel keeps its own bordered
-card as before. Field labels became a small mono uppercase caption
-(10.5px) instead of 14px bold sentence case — the same weight/size move
-already applied to the trust panel and journey captions this session.
-Results moved from a stacked `dt`/`dd` row list to a 2-column stat-tile
-grid (hairline-divided, `--white` tiles on a `--rule` background) — the
-same facts in roughly half the vertical space, which combined with
-`align-items: stretch` (the grid default) and the CTA's `margin-top: auto`
-(the footer newsletter card's pinning technique) is what keeps the results
-panel from ever reading taller or shorter than the form panel, whatever
-the results panel actually has to show. Applied identically to both
-`grafting-calculator.astro` and `consumables-planner.astro` — the
-Consumables Planner's stat grid just renders fewer tiles when a toggle
-zeroes an item out, rather than needing different markup.
-
-`ToolIntro.astro`'s photo was capped at 560px wide and left a dead gap
-beside it at desktop widths. Added a `howItWorks` prop — a short paragraph
-per page explaining what the calculator does — rendered beside the photo
-in a `flex-wrap` row (stacks below the photo under ~860px, where the two
-no longer fit side by side). Used by both calculator pages; no other page
-imports this component.
-
-## Contact form pills, panel and Field Notes template: compacted (2026-09-17)
-
-Owner call from screenshots, several small changes across one round:
-
-- **QuoteForm's "Enquiring about" checkboxes**: the square checkbox next to
-  each pill's text is now visually hidden (clip-rect, not `display: none`,
-  so it stays in the tab order and keeps its own focus) rather than
-  removed — the `<label>` itself is the whole clickable, checked-state
-  pill (`:has(:checked)`/`:has(:focus-visible)` targeting the label, same
-  as before). Same name/value pairs, same keyboard behaviour.
-- Dropped the `WE USE WHAT YOU SEND HERE TO PREPARE A QUOTATION. NOTHING
-ELSE.` line under the submit button — not a blueprint.md-locked line,
-  read as legal boilerplate the redesign didn't need.
-- Swapped this component's remaining `--ink-soft` (the superseded
-  "Blueprint" token — see tokens.css) for the current `--soft` on the
-  three rules that still had it, while already in the file for the above.
-- **Contact panel** ("Talk to us directly"): the phone number and email
-  were two lines of an `<address>` block; now two `.method-card` tiles —
-  a mint icon badge (phone/envelope, inline SVG, `currentColor` stroke)
-  plus a mono micro-label and the value, each the whole `<a>` target. The
-  Nairobi/regional-hub lines stay as plain text below, not cards — those
-  aren't contact methods.
-- **About page**: removed the lead photo's visible `<figcaption>` (it
-  just repeated the `alt` text as an all-caps mono line under the photo);
-  the `alt` attribute itself is untouched.
-- **Field Notes article template** (`[slug].astro`): was the one
-  remaining page sitting on the body's `--paper` straight through header,
-  cover photo and body copy — every other rebuilt page (About, Contact,
-  Products, Tools) runs its content on `--white` and leaves `--paper` to
-  the header/footer only. `.note` is `--white` now; the cover photo picked
-  up `--radius-l` + `--shadow-soft` (the About lead-photo treatment); the
-  CTA moved from a bare border-top rule to a `--mint` card, the one tinted
-  ground the palette allows, same idea as the calculator results panels.
-  Follow-up not done here: the Field Notes _hub_ (`index.astro`)'s cards
-  still fill with `--paper`, the same leftover the Tools hub cards had
-  before an earlier pass this session — only the inner article template
-  was in scope this round.
+Both calculator pages' redesign (elevated card, stat-grid results,
+`ToolIntro`'s `howItWorks` prop) and the same round's Contact form
+pills/panel, About photo caption removal and Field Notes template
+rebuild are archived in
+`.factory/history/2026-09-17-calculator-contact-fieldnotes-redesign.md` —
+those decisions still hold.
 
 ## Sitewide mobile-centring pass, desktop untouched everywhere (2026-09-17)
 
@@ -207,3 +147,48 @@ does — same button-not-`<details>` reasoning (Chromium drops a closed
 `.sitemap-chevron`. Only the blurb + form collapse (`#newsletter-body`);
 the "Ready to order? / Request a Quotation" CTA below stays always
 visible — it's the primary conversion path, not newsletter content.
+
+## Pre-launch audit: home page performance 75 → 88, real bugs fixed (2026-09-18)
+
+Owner asked for a pre-launch bug/performance sweep. Branch cleanup first
+(15 stale branches deleted via the owner's own `gh`/`git`, GitHub default
+branch moved to `main` — done outside this repo's tooling, no code change).
+
+Root-caused the home page's long-standing Lighthouse performance gap
+(75, others 97–100) rather than re-filing it as sandbox noise: `Carousel.astro`'s
+hero variant stacks every slide at `inset:0` inside the above-the-fold
+`.media` box. `loading="lazy"` on the other four slides did nothing —
+native lazy-load only checks an element's geometry against the viewport,
+never its opacity, and every frame sits in the viewport from first paint.
+All five full-size hero photos downloaded together, starving the actual
+LCP image of bandwidth. Fixed by giving every non-first hero frame
+`data-src`/`data-srcset` instead of the real attributes, so the preload
+scanner can't discover them; the carousel script hydrates them after
+`window.load` (or immediately on the first user interaction, so a fast
+manual jump never shows blank). Grid-variant carousels (journey, facility)
+are genuinely below the fold and untouched.
+
+Two more real bugs found the same way: the monitoring dashboard image
+was an unsized 1600×1000, 849KB PNG in a ~370–550px slot — resized to
+1100×688 and palette-compressed to 243KB, `width`/`height` added. The
+homepage product-family grid reused each family's full-size page-hero
+photo (up to 1000×750) as a small card thumbnail with no responsive
+source at all — `generate-image-variants.mjs` now also generates a
+WebP + 640w pair for every family's `hero.*`, same as the carousel
+photos; the grid's `<img>` became a `<picture>` using the small variant.
+Also merged all per-page CSS chunks into one file (`vite.build.cssCodeSplit:
+false`) — Astro/Vite had been splitting a component shared by Home and
+About (TrustPanel) into its own tiny chunk, costing every page that uses
+it a second render-blocking request.
+
+**Residual gap, not fixed**: Lighthouse still reports performance 88 on
+`/` (needs 95) against the local `astro preview` server under this
+sandbox's simulated slow-4G + 4×-CPU profile — its own trace shows a
+single real LCP candidate at ~140ms; the simulator's per-request latency
+model (562ms) against a hand-rolled multi-image homepage accounts for
+most of the rest. Outbound network to the live Firebase-hosted site
+(global CDN, HTTP/2, Brotli) is blocked from this container, so the real
+production score couldn't be checked directly — likely meaningfully
+better than this local-server figure. Every other gate, `astro check`,
+eslint, prettier, all 111 e2e/unit tests and accessibility=100/
+best-practices=100/seo=100 on all four audited routes are green.

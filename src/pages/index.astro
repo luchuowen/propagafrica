@@ -146,6 +146,18 @@ const outcomes = [
 // not a stocked product) still appears in full on /products/.
 const families = PRODUCT_FAMILIES.filter((f) => f.slug !== 'technical-services');
 
+// This grid's cards show each family's own page-hero photo at thumbnail
+// size — scripts/generate-image-variants.mjs now generates a WebP + 640w
+// pair for every family's hero.jpg/png alongside the source (same pattern
+// as the carousel photos), so the small card never has to ship the same
+// full-bleed-hero-sized file the family page itself uses.
+function productThumbVariants(src: string) {
+  const match = src.match(/\.(jpe?g|png)$/i);
+  const ext = match ? match[0] : '.jpg';
+  const base = src.slice(0, -ext.length);
+  return { webpSmall: `${base}-640.webp`, fallbackSmall: `${base}-640${ext}` };
+}
+
 // Services 3-up — blueprint.md Section 9, first three "Our Services" bullets.
 // `short` only differs from `full` where the full line wraps to two lines on
 // a phone while its siblings sit on one — a mobile-only display swap, not a
@@ -238,25 +250,31 @@ const services = [
       </div>
 
       <ul class="product-grid" data-product-grid data-reveal-group>
-        {families.map((f) => (
-          <li class="product-card" data-product-card data-tags={f.tags.join('|')} data-reveal>
-            <div class="product-media">
-              <img src={f.img} alt="" loading="lazy" />
-            </div>
-            <div class="product-body">
-              <h3>
-                <a href={f.href}>{f.name}</a>
-              </h3>
-              <p class="product-descriptor">{f.descriptor}</p>
-              <span class="product-foot">
-                <span>View range</span>
-                <span class="product-arrow" aria-hidden="true">
-                  &rarr;
+        {families.map((f) => {
+          const { webpSmall, fallbackSmall } = productThumbVariants(f.img);
+          return (
+            <li class="product-card" data-product-card data-tags={f.tags.join('|')} data-reveal>
+              <div class="product-media">
+                <picture>
+                  <source type="image/webp" srcset={webpSmall} />
+                  <img src={fallbackSmall} alt="" loading="lazy" decoding="async" />
+                </picture>
+              </div>
+              <div class="product-body">
+                <h3>
+                  <a href={f.href}>{f.name}</a>
+                </h3>
+                <p class="product-descriptor">{f.descriptor}</p>
+                <span class="product-foot">
+                  <span>View range</span>
+                  <span class="product-arrow" aria-hidden="true">
+                    &rarr;
+                  </span>
                 </span>
-              </span>
-            </div>
-          </li>
-        ))}
+              </div>
+            </li>
+          );
+        })}
       </ul>
       <p class="filter-empty" data-filter-empty hidden>
         No product families match that filter.
@@ -307,7 +325,10 @@ const services = [
         <img
           src="/images/products/monitoring/dashboard.png"
           alt="PropagAfrica Monitoring dashboard showing temperature, humidity and VPD readings"
+          width="1100"
+          height="688"
           loading="lazy"
+          decoding="async"
         />
       </div>
     </div>

@@ -70,4 +70,17 @@ export default defineConfig({
     }),
     imageVariants(),
   ],
+  vite: {
+    build: {
+      // Default per-page CSS chunking splits a component shared by two pages
+      // (e.g. TrustPanel, used by Home and About) into its own tiny chunk —
+      // every page using it then pays a second render-blocking request for
+      // a few KB, which Lighthouse's mobile/slow-4G simulation prices at
+      // ~400ms of pure per-request latency (found in the 2026-09-18
+      // pre-launch perf audit). One stylesheet per build, fetched once and
+      // cached across every page a visitor navigates to next, costs only a
+      // few extra KB on pages that don't need every rule.
+      cssCodeSplit: false,
+    },
+  },
 });
